@@ -1,0 +1,43 @@
+name: 💾 Backup automático Firestore
+
+on:
+  schedule:
+    # Corre todos los días a las 3:00 AM (hora Argentina = UTC-3, entonces 06:00 UTC)
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    # También permite ejecutarlo manualmente desde GitHub
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # necesario para hacer commit del backup
+
+    steps:
+      - name: 📥 Checkout del repositorio
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: 🟢 Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 Instalar dependencias
+        run: npm install firebase-admin
+
+      - name: 💾 Ejecutar backup
+        env:
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+          FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+        run: node backup/backup.js
+
+      - name: 📤 Guardar backup en el repositorio
+        run: |
+          git config user.name "Pecan Manager Bot"
+          git config user.email "backup-bot@pecan-manager.com"
+          git add backups/
+          git diff --staged --quiet || git commit -m "💾 Backup automático $(date +'%Y-%m-%d %H:%M UTC')"
+          git push
