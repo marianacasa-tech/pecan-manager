@@ -1,25 +1,1644 @@
 {
   "meta": {
-    "fecha": "2026-03-13T01:58:17.201Z",
-    "fecha_legible": "12/3/2026, 10:58:17",
+    "fecha": "2026-03-13T02:02:18.924Z",
+    "fecha_legible": "12/3/2026, 11:02:18",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
   },
   "colecciones": {
-    "clientes": [],
-    "proveedores": [],
-    "entradas_fabrica": [],
-    "salidas_fabrica": [],
+    "clientes": [
+      {
+        "_id": "KzlNuzrNct4PXVmddFy7",
+        "nombre": "Sebastian Romano",
+        "cuit": "30712065874",
+        "localidad": "san miguel de tucuman",
+        "provincia": "Tucumán",
+        "email": "sebastian@tecnocrop.com",
+        "telefono": "0381155745314",
+        "creado": "2026-03-05T23:34:22.673Z"
+      },
+      {
+        "_id": "gc1kva1Z9SOJ4eHaKzu2",
+        "nombre": "mariana casadey",
+        "cuit": "20288836657",
+        "localidad": "yerba buena",
+        "provincia": "Tucumán",
+        "email": "marianacasadey@hotmail.com",
+        "telefono": "3815746572",
+        "creado": "2026-03-07T12:31:47.939Z"
+      }
+    ],
+    "proveedores": [
+      {
+        "_id": "9WSifBtPm93G1EWP2vzH",
+        "nombre": "disrimap",
+        "cuit": "302458695",
+        "rubro": "chocolates",
+        "telefono": "",
+        "email": "",
+        "observaciones": "",
+        "creado": "2026-03-08T21:37:25.634Z"
+      },
+      {
+        "_id": "W3YgCoMh0XJJDOR1wxA7",
+        "nombre": "Edet",
+        "cuit": "30258987",
+        "rubro": "",
+        "telefono": "381578965",
+        "email": "",
+        "observaciones": "",
+        "creado": "2026-03-08T21:33:44.147Z"
+      }
+    ],
+    "entradas_fabrica": [
+      {
+        "_id": "2W36Pr7HfAevNCOXTsqd",
+        "fecha": "2026-03-07",
+        "propietario": "PROPIO",
+        "variedad": "Mahan",
+        "kg": 3000,
+        "humedad": 3,
+        "observaciones": "",
+        "num_remito": "R-0019",
+        "creado": "2026-03-07T13:34:20.334Z"
+      },
+      {
+        "_id": "TNHkDY6okhosLUn1hNSO",
+        "fecha": "2026-03-10",
+        "propietario": "mariana casadey",
+        "variedad": "Shoshoni",
+        "kg": 10000,
+        "humedad": 3,
+        "observaciones": "",
+        "num_remito": "R-0033",
+        "creado": "2026-03-10T14:37:09.236Z"
+      },
+      {
+        "_id": "UcU52xYfY7NUeLVSu5hS",
+        "fecha": "2026-03-06",
+        "propietario": "PROPIO",
+        "variedad": "Wichita",
+        "kg": 1000,
+        "humedad": 3,
+        "observaciones": "",
+        "num_remito": "R-0002",
+        "creado": "2026-03-06T23:07:50.855Z"
+      },
+      {
+        "_id": "ZJtpqRCmXsodpVdKMkLd",
+        "fecha": "2026-03-08",
+        "propietario": "Sebastian Romano",
+        "variedad": "Western Schley",
+        "kg": 5000,
+        "humedad": 6,
+        "observaciones": "",
+        "num_remito": "R-0022",
+        "creado": "2026-03-08T22:37:54.209Z"
+      },
+      {
+        "_id": "cmikPIWPeTD9APOptroC",
+        "fecha": "2026-03-06",
+        "propietario": "Sebastian Romano",
+        "variedad": "Mahan",
+        "kg": 3000,
+        "humedad": 3,
+        "observaciones": "",
+        "num_remito": "R-0003",
+        "creado": "2026-03-06T23:08:48.227Z"
+      },
+      {
+        "_id": "eNTyDgtt25yGcKqhToLG",
+        "fecha": "2026-03-10",
+        "propietario": "Sebastian Romano",
+        "variedad": "Wichita",
+        "kg": 1000,
+        "humedad": null,
+        "observaciones": "",
+        "num_remito": "R-0035",
+        "creado": "2026-03-10T15:01:01.644Z"
+      },
+      {
+        "_id": "hdj8kcrn4EXFImVfxZ74",
+        "fecha": "2026-03-07",
+        "propietario": "mariana casadey",
+        "variedad": "Wichita",
+        "kg": 1000,
+        "humedad": 3,
+        "observaciones": "",
+        "num_remito": "R-0007",
+        "creado": "2026-03-07T12:32:18.774Z"
+      },
+      {
+        "_id": "iycxJGJ5eDDhm9gwxDIX",
+        "fecha": "2026-03-06",
+        "propietario": "Sebastian Romano",
+        "variedad": "Sioux",
+        "kg": 3000,
+        "humedad": 5,
+        "observaciones": "",
+        "num_remito": "R-0003",
+        "creado": "2026-03-06T23:08:48.227Z"
+      },
+      {
+        "_id": "k5FZQ9JXhNPSA9JrSAw6",
+        "fecha": "2026-03-07",
+        "propietario": "mariana casadey",
+        "variedad": "Shoshoni",
+        "kg": 1000,
+        "humedad": 4,
+        "observaciones": "",
+        "num_remito": "R-0007",
+        "creado": "2026-03-07T12:32:18.774Z"
+      },
+      {
+        "_id": "mhQXNl8rxoW64U4RaEH1",
+        "fecha": "2026-03-06",
+        "propietario": "PROPIO",
+        "variedad": "Shoshoni",
+        "kg": 1000,
+        "observaciones": "",
+        "num_remito": "R-0002",
+        "creado": "2026-03-06T23:07:50.855Z",
+        "humedad": 2
+      }
+    ],
+    "salidas_fabrica": [
+      {
+        "_id": "1poEP9KzPLf6Un1HfVtG",
+        "fecha": "2026-03-07",
+        "propietario": "Sebastian Romano",
+        "variedad": "Mahan",
+        "kg_cascara": 3000,
+        "enteras": 1500,
+        "part_grandes": 100,
+        "part_chicas": 100,
+        "danadas": 0,
+        "podridas": 0,
+        "total_pelado": 1700,
+        "pct_kernel": "56.67",
+        "pct_partido": "11.76",
+        "pct_podrido": "0.00",
+        "creado": "2026-03-07T00:06:50.250Z",
+        "liquidacion_id": "qfzcQt8EHaJL872z70Ib"
+      },
+      {
+        "_id": "4FLbZ3VtP5D9ZObapQh2",
+        "fecha": "2026-03-12",
+        "propietario": "Sebastian Romano",
+        "variedad": "Western Schley",
+        "kg_cascara": 1000,
+        "enteras": 500,
+        "part_grandes": 0,
+        "part_chicas": 0,
+        "danadas": 0,
+        "podridas": 0,
+        "total_pelado": 500,
+        "pct_kernel": "50.00",
+        "pct_partido": "0.00",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260312-012",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 100,
+            "label": "bolsas"
+          },
+          {
+            "id": "0cPXv9ENRFupq1fbOKs9",
+            "cantidad": 50,
+            "label": "cajas"
+          }
+        ],
+        "creado": "2026-03-12T14:44:29.183Z",
+        "liquidacion_id": "u7bGxAtzXdDP8iBcXJXE"
+      },
+      {
+        "_id": "6Vp7H5QdIBmbYTxnXVip",
+        "fecha": "2026-03-08",
+        "propietario": "PROPIO",
+        "variedad": "Wichita",
+        "kg_cascara": 500,
+        "enteras": 250,
+        "part_grandes": 100,
+        "part_chicas": 50,
+        "danadas": 20,
+        "podridas": 0,
+        "total_pelado": 420,
+        "pct_kernel": "84.00",
+        "pct_partido": "35.71",
+        "pct_podrido": "0.00",
+        "creado": "2026-03-08T13:59:47.245Z"
+      },
+      {
+        "_id": "6jYJxvWe3ugZwQYwhY5y",
+        "fecha": "2026-03-07",
+        "propietario": "mariana casadey",
+        "variedad": "Wichita",
+        "kg_cascara": 1000,
+        "enteras": 500,
+        "part_grandes": 100,
+        "part_chicas": 100,
+        "danadas": 100,
+        "podridas": 100,
+        "total_pelado": 900,
+        "pct_kernel": "90.00",
+        "pct_partido": "22.22",
+        "pct_podrido": "11.11",
+        "creado": "2026-03-07T12:34:47.653Z"
+      },
+      {
+        "_id": "A4cPbfPCIPmzRbg1kUZm",
+        "fecha": "2026-03-06",
+        "propietario": "Sebastian Romano",
+        "variedad": "Sioux",
+        "kg_cascara": 3000,
+        "enteras": 1000,
+        "part_grandes": 200,
+        "part_chicas": 200,
+        "danadas": 20,
+        "podridas": 50,
+        "total_pelado": 1470,
+        "pct_kernel": "49.00",
+        "pct_partido": "27.21",
+        "pct_podrido": "3.40",
+        "creado": "2026-03-06T23:55:37.270Z",
+        "liquidacion_id": "qfzcQt8EHaJL872z70Ib"
+      },
+      {
+        "_id": "OsOQ4n2QQ1nXALvJsXem",
+        "fecha": "2026-03-10",
+        "propietario": "mariana casadey",
+        "variedad": "Shoshoni",
+        "kg_cascara": 5000,
+        "enteras": 2500,
+        "part_grandes": 1000,
+        "part_chicas": 1000,
+        "danadas": 200,
+        "podridas": 60,
+        "total_pelado": 4760,
+        "pct_kernel": "95.20",
+        "pct_partido": "42.02",
+        "pct_podrido": "1.26",
+        "lote_id": "LOT-FAB-20260310-005",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 940,
+            "label": "bolsas"
+          },
+          {
+            "id": "0cPXv9ENRFupq1fbOKs9",
+            "cantidad": 470,
+            "label": "cajas"
+          }
+        ],
+        "creado": "2026-03-10T14:39:46.562Z"
+      },
+      {
+        "_id": "UMmd96ypl7Jkc6zKPtnd",
+        "fecha": "2026-03-08",
+        "propietario": "Sebastian Romano",
+        "variedad": "Western Schley",
+        "kg_cascara": 1000,
+        "enteras": 200,
+        "part_grandes": 50,
+        "part_chicas": 20,
+        "danadas": 20,
+        "podridas": 20,
+        "total_pelado": 310,
+        "pct_kernel": "31.00",
+        "pct_partido": "22.58",
+        "pct_podrido": "6.45",
+        "lote_id": "LOT-FAB-20260308-003",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 58,
+            "label": "bolsas"
+          },
+          {
+            "id": "0cPXv9ENRFupq1fbOKs9",
+            "cantidad": 29,
+            "label": "cajas"
+          }
+        ],
+        "creado": "2026-03-08T22:39:02.133Z",
+        "liquidacion_id": "qfzcQt8EHaJL872z70Ib"
+      },
+      {
+        "_id": "WU2jiYQ0nmDlRbdyvLDV",
+        "fecha": "2026-03-07",
+        "propietario": "mariana casadey",
+        "variedad": "Shoshoni",
+        "kg_cascara": 1000,
+        "enteras": 500,
+        "part_grandes": 100,
+        "part_chicas": 100,
+        "danadas": 100,
+        "podridas": 100,
+        "total_pelado": 900,
+        "pct_kernel": "90.00",
+        "pct_partido": "22.22",
+        "pct_podrido": "11.11",
+        "creado": "2026-03-07T12:53:39.347Z"
+      },
+      {
+        "_id": "Wdu2OeOobIBPksJSTbB4",
+        "fecha": "2026-03-06",
+        "propietario": "PROPIO",
+        "variedad": "Shoshoni",
+        "kg_cascara": 1000,
+        "enteras": 400,
+        "part_grandes": 200,
+        "part_chicas": 100,
+        "danadas": 100,
+        "podridas": 20,
+        "total_pelado": 820,
+        "pct_kernel": "82.00",
+        "pct_partido": "36.59",
+        "pct_podrido": "2.44",
+        "creado": "2026-03-06T23:18:32.616Z"
+      },
+      {
+        "_id": "b3oBLMnhrxIessdoa0qj",
+        "fecha": "2026-03-08",
+        "propietario": "PROPIO",
+        "variedad": "Mahan",
+        "kg_cascara": 1000,
+        "enteras": 500,
+        "part_grandes": 100,
+        "part_chicas": 100,
+        "danadas": 100,
+        "podridas": 50,
+        "total_pelado": 850,
+        "pct_kernel": "85.00",
+        "pct_partido": "23.53",
+        "pct_podrido": "5.88",
+        "creado": "2026-03-08T13:54:54.930Z"
+      },
+      {
+        "_id": "cmNc2VJlyNSSHlmWLDCA",
+        "fecha": "2026-03-08",
+        "propietario": "PROPIO",
+        "variedad": "Wichita",
+        "kg_cascara": 100,
+        "enteras": 10,
+        "part_grandes": 10,
+        "part_chicas": 10,
+        "danadas": 10,
+        "podridas": 0,
+        "total_pelado": 40,
+        "pct_kernel": "40.00",
+        "pct_partido": "50.00",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260308-002",
+        "creado": "2026-03-08T14:37:06.027Z"
+      },
+      {
+        "_id": "d5CyRlCIVaT5FlwD7p24",
+        "fecha": "2026-03-07",
+        "propietario": "PROPIO",
+        "variedad": "Mahan",
+        "kg_cascara": 2000,
+        "enteras": 500,
+        "part_grandes": 100,
+        "part_chicas": 100,
+        "danadas": 100,
+        "podridas": 50,
+        "total_pelado": 850,
+        "pct_kernel": "42.50",
+        "pct_partido": "23.53",
+        "pct_podrido": "5.88",
+        "creado": "2026-03-07T13:34:52.024Z"
+      },
+      {
+        "_id": "ilKGatvh9wQfIyO16qEZ",
+        "fecha": "2026-03-08",
+        "propietario": "PROPIO",
+        "variedad": "Wichita",
+        "kg_cascara": 100,
+        "enteras": 50,
+        "part_grandes": 0,
+        "part_chicas": 0,
+        "danadas": 0,
+        "podridas": 0,
+        "total_pelado": 50,
+        "pct_kernel": "50.00",
+        "pct_partido": "0.00",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260308-004",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 10,
+            "label": "bolsas"
+          }
+        ],
+        "creado": "2026-03-08T22:41:00.743Z"
+      },
+      {
+        "_id": "kLTEMlFLZBNedA4Zgc8Z",
+        "fecha": "2026-03-08",
+        "propietario": "PROPIO",
+        "variedad": "Wichita",
+        "kg_cascara": 100,
+        "enteras": 20,
+        "part_grandes": 20,
+        "part_chicas": 10,
+        "danadas": 10,
+        "podridas": 0,
+        "total_pelado": 60,
+        "pct_kernel": "60.00",
+        "pct_partido": "50.00",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260308-001",
+        "creado": "2026-03-08T14:27:19.789Z"
+      },
+      {
+        "_id": "lwrXHmtlzgqFMRBNXVzE",
+        "fecha": "2026-03-12",
+        "propietario": "Sebastian Romano",
+        "variedad": "Wichita",
+        "kg_cascara": 1000,
+        "enteras": 250,
+        "part_grandes": 250,
+        "part_chicas": 0,
+        "danadas": 0,
+        "podridas": 0,
+        "total_pelado": 500,
+        "pct_kernel": "50.00",
+        "pct_partido": "50.00",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260312-011",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 100,
+            "label": "bolsas"
+          },
+          {
+            "id": "0cPXv9ENRFupq1fbOKs9",
+            "cantidad": 50,
+            "label": "cajas"
+          }
+        ],
+        "creado": "2026-03-12T14:26:33.712Z",
+        "liquidacion_id": "OmNTUeSyoiDwrOejnQ21"
+      }
+    ],
     "retiros_maquila": [],
-    "liquidaciones_maquila": [],
-    "recetas": [],
-    "insumos": [],
-    "tandas_cocina": [],
-    "compras": [],
-    "compras_nuez": [],
-    "ventas": [],
-    "cobros": [],
-    "config": []
+    "liquidaciones_maquila": [
+      {
+        "_id": "OmNTUeSyoiDwrOejnQ21",
+        "cliente": "Sebastian Romano",
+        "fecha": "2026-03-12",
+        "num_liquidacion": "LIQ-0016",
+        "kg_cascara": 1000,
+        "precio_kg": 3000,
+        "total_servicio": 3000000,
+        "forma_pago": "Efectivo",
+        "observaciones": "",
+        "creado": "2026-03-12T14:26:52.948Z"
+      },
+      {
+        "_id": "u7bGxAtzXdDP8iBcXJXE",
+        "cliente": "Sebastian Romano",
+        "fecha": "2026-03-12",
+        "num_liquidacion": "LIQ-0017",
+        "kg_cascara": 1000,
+        "precio_kg": 6000,
+        "total_servicio": 6000000,
+        "forma_pago": "Efectivo",
+        "observaciones": "",
+        "creado": "2026-03-12T14:45:10.335Z"
+      }
+    ],
+    "recetas": [
+      {
+        "_id": "DdHndtIU5V3y2nRItFNH",
+        "descripcion": "",
+        "creado": "2026-03-08T13:14:04.707Z",
+        "nombre": "Pecan Garrapiñado",
+        "insumos": [
+          {
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "nombre": "Azucar",
+            "cantidad": 1.2,
+            "unidad": "kg"
+          },
+          {
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "nombre": "Agua",
+            "cantidad": 0.5,
+            "unidad": "l"
+          },
+          {
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "nombre": "Bolsa Polipropileno",
+            "cantidad": 0.4,
+            "unidad": "u"
+          }
+        ]
+      },
+      {
+        "_id": "nEcIJUPYxV7SLvIV2zcP",
+        "descripcion": "",
+        "creado": "2026-03-08T13:28:04.019Z",
+        "nombre": "Pecan Tostado salado",
+        "insumos": [
+          {
+            "insumo_id": "FWRpi32rFH6KBhdYmDjM",
+            "nombre": "Sal",
+            "cantidad": 0.036,
+            "unidad": "kg"
+          },
+          {
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "nombre": "Agua",
+            "cantidad": 0.084,
+            "unidad": "l"
+          },
+          {
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "nombre": "Bolsa Polipropileno",
+            "cantidad": 0.4,
+            "unidad": "u"
+          }
+        ]
+      },
+      {
+        "_id": "wEJeQWHwy1G9P2R0LLG5",
+        "descripcion": "",
+        "creado": "2026-03-08T13:24:35.662Z",
+        "nombre": "Pecan con Chocolate Semiamargo",
+        "insumos": [
+          {
+            "insumo_id": "nd7NEWbpA51DRrmoEoDe",
+            "nombre": "Chocolate Semiamargo Baño",
+            "cantidad": 1.3,
+            "unidad": "kg"
+          },
+          {
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "nombre": "Bolsa Polipropileno",
+            "cantidad": 0.4,
+            "unidad": "u"
+          }
+        ]
+      }
+    ],
+    "insumos": [
+      {
+        "_id": "0cPXv9ENRFupq1fbOKs9",
+        "nombre": "Caja Carton 10 kg",
+        "unidad": "u",
+        "packaging": true,
+        "creado": "2026-03-08T22:35:13.560Z",
+        "stock_actual": 169
+      },
+      {
+        "_id": "FWRpi32rFH6KBhdYmDjM",
+        "nombre": "Sal",
+        "unidad": "kg",
+        "creado": "2026-03-08T13:26:53.385Z",
+        "stock_actual": 99.892,
+        "packaging": false
+      },
+      {
+        "_id": "YYbZJUzPqOqZACGH6KD1",
+        "nombre": "Bolsa Polipropileno",
+        "unidad": "u",
+        "packaging": true,
+        "creado": "2026-03-08T22:34:49.660Z",
+        "stock_actual": 349.5999999999997
+      },
+      {
+        "_id": "nd7NEWbpA51DRrmoEoDe",
+        "nombre": "Chocolate Semiamargo Baño",
+        "unidad": "kg",
+        "creado": "2026-03-08T13:23:37.574Z",
+        "stock_actual": 122.4
+      },
+      {
+        "_id": "p8bV1TTPZXd8hIWCX1OB",
+        "nombre": "Sal",
+        "unidad": "kg",
+        "stock_actual": 100,
+        "creado": "2026-03-07T15:09:05.435Z"
+      },
+      {
+        "_id": "qdZf2Q6o7ByDNPPc7AuH",
+        "nombre": "Agua",
+        "unidad": "l",
+        "creado": "2026-03-07T15:10:25.012Z",
+        "stock_actual": 94.448
+      },
+      {
+        "_id": "qkjirFvH2ZswS3cZ2H7z",
+        "nombre": "Azucar",
+        "unidad": "kg",
+        "creado": "2026-03-07T15:08:43.376Z",
+        "stock_actual": 88.69999999999999
+      }
+    ],
+    "tandas_cocina": [
+      {
+        "_id": "3GhFrIfb8sisoxU6QkEq",
+        "fecha": "2026-03-08",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "receta_nombre": "Pecan Garrapiñado",
+        "categoria_nuez": "part_grandes",
+        "kg_nuez": 1.8,
+        "kg_producido": 2.9,
+        "insumos_usados": [
+          {
+            "nombre": "Azucar",
+            "cantidad": 1.2,
+            "unidad": "kg",
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z"
+          },
+          {
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "unidad": "l",
+            "nombre": "Agua",
+            "cantidad": 0.5
+          }
+        ],
+        "observaciones": "",
+        "creado": "2026-03-08T13:58:48.884Z"
+      },
+      {
+        "_id": "OTDVCvOF8oXESJKAmzg0",
+        "fecha": "2026-03-08",
+        "receta_id": "wEJeQWHwy1G9P2R0LLG5",
+        "receta_nombre": "Pecan con Chocolate Semiamargo",
+        "categoria_nuez": "enteras",
+        "kg_nuez": 1.25,
+        "kg_producido": 2.5,
+        "insumos_usados": [
+          {
+            "insumo_id": "nd7NEWbpA51DRrmoEoDe",
+            "nombre": "Chocolate Semiamargo Baño",
+            "cantidad": 1.3,
+            "unidad": "kg"
+          }
+        ],
+        "observaciones": "",
+        "creado": "2026-03-08T13:36:33.975Z"
+      },
+      {
+        "_id": "OnObNBPPAtxgxWU3PstJ",
+        "fecha": "2026-03-03",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "receta_nombre": "Pecan Garrapiñado",
+        "categoria_nuez": "part_chicas",
+        "kg_nuez": 1.9,
+        "kg_producido": 2,
+        "insumos_usados": [
+          {
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "unidad": "kg",
+            "nombre": "Azucar",
+            "cantidad": 1.2
+          },
+          {
+            "cantidad": 0.5,
+            "nombre": "Agua",
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "unidad": "l"
+          },
+          {
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "unidad": "u",
+            "nombre": "Bolsa Polipropileno",
+            "cantidad": 0.4
+          }
+        ],
+        "observaciones": "",
+        "lote_id": "LOT-COC-20260308-004",
+        "nro_tanda": 1,
+        "creado": "2026-03-08T23:19:54.580Z"
+      },
+      {
+        "_id": "QtiCJTxo8ApElst6vmWJ",
+        "fecha": "2026-03-08",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "receta_nombre": "Pecan Garrapiñado",
+        "categoria_nuez": "enteras",
+        "kg_nuez": 1.8,
+        "kg_producido": 2.9,
+        "insumos_usados": [
+          {
+            "unidad": "kg",
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "nombre": "Azucar",
+            "cantidad": 1.2
+          },
+          {
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "nombre": "Agua",
+            "cantidad": 0.5,
+            "unidad": "l"
+          }
+        ],
+        "observaciones": "",
+        "creado": "2026-03-08T13:35:30.057Z"
+      },
+      {
+        "_id": "bwzRzVW5gizvwQRlMJOE",
+        "fecha": "2026-03-08",
+        "receta_id": "nEcIJUPYxV7SLvIV2zcP",
+        "receta_nombre": "Pecan Tostado salado",
+        "categoria_nuez": "part_grandes",
+        "kg_nuez": 2.65,
+        "kg_producido": 2.65,
+        "insumos_usados": [
+          {
+            "unidad": "kg",
+            "cantidad": 0.036,
+            "insumo_id": "FWRpi32rFH6KBhdYmDjM",
+            "nombre": "Sal"
+          },
+          {
+            "unidad": "l",
+            "cantidad": 0.084,
+            "nombre": "Agua",
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH"
+          }
+        ],
+        "observaciones": "",
+        "creado": "2026-03-08T13:49:55.770Z"
+      },
+      {
+        "_id": "fJwsaUTVnDBoIc4KsxmU",
+        "fecha": "2026-03-08",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "receta_nombre": "Pecan Garrapiñado",
+        "categoria_nuez": "enteras",
+        "kg_nuez": 1.9,
+        "kg_producido": 2.3,
+        "insumos_usados": [
+          {
+            "cantidad": 1.2,
+            "nombre": "Azucar",
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "unidad": "kg"
+          },
+          {
+            "unidad": "l",
+            "cantidad": 0.5,
+            "nombre": "Agua",
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH"
+          },
+          {
+            "cantidad": 0.4,
+            "nombre": "Bolsa Polipropileno",
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "unidad": "u"
+          }
+        ],
+        "observaciones": "",
+        "lote_id": "LOT-COC-20260308-003",
+        "nro_tanda": 3,
+        "creado": "2026-03-08T23:15:28.114Z"
+      },
+      {
+        "_id": "hgZ0osPj15BZEeyAjLLy",
+        "fecha": "2026-03-08",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "receta_nombre": "Pecan Garrapiñado",
+        "categoria_nuez": "enteras",
+        "kg_nuez": 1.9,
+        "kg_producido": 2.2,
+        "insumos_usados": [
+          {
+            "cantidad": 1.2,
+            "nombre": "Azucar",
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "unidad": "kg"
+          },
+          {
+            "unidad": "l",
+            "cantidad": 0.5,
+            "nombre": "Agua",
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH"
+          },
+          {
+            "cantidad": 0.4,
+            "nombre": "Bolsa Polipropileno",
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "unidad": "u"
+          }
+        ],
+        "observaciones": "",
+        "lote_id": "LOT-COC-20260308-003",
+        "nro_tanda": 2,
+        "creado": "2026-03-08T23:15:28.114Z"
+      },
+      {
+        "_id": "lUAET82clp3sFn07Z8G8",
+        "fecha": "2026-03-08",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "receta_nombre": "Pecan Garrapiñado",
+        "categoria_nuez": "enteras",
+        "kg_nuez": 1.8,
+        "kg_producido": 1.9,
+        "insumos_usados": [
+          {
+            "nombre": "Azucar",
+            "cantidad": 1.2,
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "unidad": "kg"
+          },
+          {
+            "nombre": "Agua",
+            "cantidad": 0.5,
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "unidad": "l"
+          },
+          {
+            "cantidad": 0.4,
+            "nombre": "Bolsa Polipropileno",
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "unidad": "u"
+          }
+        ],
+        "observaciones": "",
+        "lote_id": "LOT-COC-20260308-001",
+        "creado": "2026-03-08T22:49:18.901Z"
+      },
+      {
+        "_id": "ogAFrCDvTXjB1A1HL6HA",
+        "fecha": "2026-03-08",
+        "receta_id": "nEcIJUPYxV7SLvIV2zcP",
+        "receta_nombre": "Pecan Tostado salado",
+        "categoria_nuez": "enteras",
+        "kg_nuez": 2.65,
+        "kg_producido": 2.65,
+        "insumos_usados": [
+          {
+            "unidad": "kg",
+            "nombre": "Sal",
+            "insumo_id": "FWRpi32rFH6KBhdYmDjM",
+            "cantidad": 0.036
+          },
+          {
+            "nombre": "Agua",
+            "cantidad": 0.084,
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "unidad": "l"
+          }
+        ],
+        "observaciones": "",
+        "creado": "2026-03-08T13:36:06.912Z"
+      },
+      {
+        "_id": "siXTg7uyLLuGNBxqT3fQ",
+        "fecha": "2026-03-08",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "receta_nombre": "Pecan Garrapiñado",
+        "categoria_nuez": "enteras",
+        "kg_nuez": 1.9,
+        "kg_producido": 2.9,
+        "insumos_usados": [
+          {
+            "cantidad": 1.2,
+            "unidad": "kg",
+            "nombre": "Azucar",
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z"
+          },
+          {
+            "nombre": "Agua",
+            "unidad": "l",
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "cantidad": 0.5
+          },
+          {
+            "cantidad": 0.4,
+            "nombre": "Bolsa Polipropileno",
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "unidad": "u"
+          }
+        ],
+        "observaciones": "",
+        "lote_id": "LOT-COC-20260308-002",
+        "creado": "2026-03-08T23:07:19.768Z"
+      },
+      {
+        "_id": "tjzQ1f46s6ZdkdQCDmPC",
+        "fecha": "2026-03-08",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "receta_nombre": "Pecan Garrapiñado",
+        "categoria_nuez": "enteras",
+        "kg_nuez": 1.9,
+        "kg_producido": 2,
+        "insumos_usados": [
+          {
+            "cantidad": 1.2,
+            "nombre": "Azucar",
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "unidad": "kg"
+          },
+          {
+            "unidad": "l",
+            "cantidad": 0.5,
+            "nombre": "Agua",
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH"
+          },
+          {
+            "cantidad": 0.4,
+            "nombre": "Bolsa Polipropileno",
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "unidad": "u"
+          }
+        ],
+        "observaciones": "",
+        "lote_id": "LOT-COC-20260308-003",
+        "nro_tanda": 1,
+        "creado": "2026-03-08T23:15:28.114Z"
+      }
+    ],
+    "compras": [
+      {
+        "_id": "PtjGLBSvKPnRcIQdwdnD",
+        "fecha": "2026-03-08",
+        "proveedor": "disrimap",
+        "nro_factura": "3698",
+        "iva_pct": 21,
+        "monto_neto": 65000,
+        "monto_iva": 13650,
+        "monto_total": 78650,
+        "forma_pago": "efectivo",
+        "estado": "pendiente",
+        "vencimiento": "2026-04-08",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "insumo",
+            "descripcion": "Chocolate Semiamargo Baño",
+            "insumo_id": "nd7NEWbpA51DRrmoEoDe",
+            "insumo_nombre": "Chocolate Semiamargo Baño",
+            "unidad": "kg",
+            "cat_nuez": "",
+            "cantidad": 25,
+            "precio_unitario": 2600,
+            "subtotal": 65000
+          }
+        ],
+        "creado": "2026-03-08T21:39:49.484Z"
+      },
+      {
+        "_id": "WKWLPr5VviWHd1d9tPfQ",
+        "fecha": "2026-03-15",
+        "proveedor": "disrimap",
+        "nro_factura": "",
+        "iva_pct": 21,
+        "monto_neto": 4500000,
+        "monto_iva": 945000,
+        "monto_total": 5445000,
+        "forma_pago": "efectivo",
+        "estado": "pagado",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "insumo",
+            "descripcion": "Caja Carton 10 kg",
+            "insumo_id": "0cPXv9ENRFupq1fbOKs9",
+            "insumo_nombre": "Caja Carton 10 kg",
+            "unidad": "u",
+            "cat_nuez": "",
+            "cantidad": 1000,
+            "precio_unitario": 2500,
+            "subtotal": 2500000
+          },
+          {
+            "tipo": "insumo",
+            "descripcion": "Bolsa Polipropileno",
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "insumo_nombre": "Bolsa Polipropileno",
+            "unidad": "u",
+            "cat_nuez": "",
+            "cantidad": 2000,
+            "precio_unitario": 1000,
+            "subtotal": 2000000
+          }
+        ],
+        "creado": "2026-03-08T22:36:47.212Z"
+      },
+      {
+        "_id": "gJDSAKNpkvzjZ9hAR50w",
+        "fecha": "2026-03-08",
+        "proveedor": "Edet",
+        "nro_factura": "1654",
+        "iva_pct": 27,
+        "monto_neto": 25000,
+        "monto_iva": 6750,
+        "monto_total": 31750,
+        "forma_pago": "efectivo",
+        "estado": "pagado",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "gasto_directo",
+            "descripcion": "Energía eléctrica",
+            "insumo_id": "",
+            "insumo_nombre": "",
+            "unidad": "u",
+            "cat_nuez": "",
+            "cantidad": 1,
+            "precio_unitario": 25000,
+            "subtotal": 25000
+          }
+        ],
+        "creado": "2026-03-08T21:36:39.386Z"
+      },
+      {
+        "_id": "xPaHj91TXar1HP0cjrTF",
+        "fecha": "2026-03-08",
+        "proveedor": "disrimap",
+        "nro_factura": "2566",
+        "iva_pct": 0,
+        "monto_neto": 600000,
+        "monto_iva": 0,
+        "monto_total": 600000,
+        "forma_pago": "efectivo",
+        "estado": "pagado",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "nuez_pelada",
+            "descripcion": "Nuez pelada — Entera",
+            "insumo_id": "",
+            "insumo_nombre": "",
+            "unidad": "kg",
+            "cat_nuez": "enteras",
+            "cantidad": 2500,
+            "precio_unitario": 240,
+            "subtotal": 600000
+          }
+        ],
+        "creado": "2026-03-08T21:41:36.218Z"
+      }
+    ],
+    "compras_nuez": [
+      {
+        "_id": "HjV2Uz7rvZ4ZfwMa7CMr",
+        "fecha": "2026-03-08",
+        "compra_id": "xPaHj91TXar1HP0cjrTF",
+        "cat_nuez": "enteras",
+        "kg": 2500,
+        "precio_unitario": 240,
+        "proveedor": "disrimap",
+        "creado": "2026-03-08T21:41:36.373Z"
+      }
+    ],
+    "ventas": [
+      {
+        "_id": "0EKcQUtHu2wZ8Gx1CzE7",
+        "fecha": "2026-03-09",
+        "cliente": "Sebastian Romano",
+        "cliente_cuit": "30712065874",
+        "cliente_localidad": "san miguel de tucuman",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "0381155745314",
+        "cliente_email": "sebastian@tecnocrop.com",
+        "nro_remito": "R-0027",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 10,
+            "precio_kg": 17000,
+            "subtotal": 170000,
+            "cajas": 1
+          },
+          {
+            "prod_key": "nuez_part_chicas",
+            "nombre": "Pecan Partido Chico",
+            "kg": 10,
+            "precio_kg": 15000,
+            "subtotal": 150000,
+            "cajas": 1
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 320000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 320000,
+        "forma_pago": "efectivo",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-03-09T15:22:43.123Z",
+        "estado": "cobrado",
+        "pagos": [
+          {
+            "fecha": "2026-03-09",
+            "monto": 320000,
+            "forma": "efectivo"
+          }
+        ]
+      },
+      {
+        "_id": "5TxfRGsBeTQuqvFdrqDc",
+        "fecha": "2026-03-09",
+        "cliente": "mariana casadey",
+        "nro_remito": "R-0024",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Nuez Entera",
+            "kg": 200,
+            "precio_kg": 17000,
+            "subtotal": 3400000,
+            "cajas": 20
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 5,
+        "flete": 50000,
+        "monto_sub": 3400000,
+        "monto_desc": 170000,
+        "monto_iva": 0,
+        "monto_total": 3280000,
+        "observaciones": "",
+        "creado": "2026-03-09T14:46:21.318Z",
+        "vencimiento": "2026-04-09",
+        "forma_pago": "efectivo",
+        "estado": "cobrado",
+        "pagos": [
+          {
+            "fecha": "2026-03-09",
+            "monto": 3280000,
+            "forma": "efectivo",
+            "obs": "",
+            "nroRecibo": "REC-0028"
+          }
+        ]
+      },
+      {
+        "_id": "5p3ao7A6KkWGLsAfHJ8j",
+        "fecha": "2026-03-10",
+        "cliente": "Sebastian Romano",
+        "cliente_cuit": "30712065874",
+        "cliente_localidad": "san miguel de tucuman",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "0381155745314",
+        "cliente_email": "sebastian@tecnocrop.com",
+        "nro_remito": "R-0030",
+        "items": [
+          {
+            "prod_key": "nuez_part_grandes",
+            "nombre": "Pecan Partido Grande",
+            "kg": 10,
+            "precio_kg": 16000,
+            "subtotal": 160000,
+            "cajas": 1
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 160000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 160000,
+        "forma_pago": "efectivo",
+        "estado": "cobrado",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-03-10T13:50:16.288Z"
+      },
+      {
+        "_id": "HjFLhtqQ2CYZrt3L043h",
+        "fecha": "2026-03-10",
+        "cliente": "Sebastian Romano",
+        "cliente_cuit": "30712065874",
+        "cliente_localidad": "san miguel de tucuman",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "0381155745314",
+        "cliente_email": "sebastian@tecnocrop.com",
+        "nro_remito": "R-0031",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 10,
+            "precio_kg": 17000,
+            "subtotal": 170000,
+            "cajas": 1
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 170000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 170000,
+        "forma_pago": "efectivo",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-03-10T13:51:33.409Z",
+        "estado": "cobrado",
+        "pagos": [
+          {
+            "fecha": "2026-03-10",
+            "monto": 170000,
+            "forma": "efectivo",
+            "obs": "",
+            "nroRecibo": "REC-0034"
+          }
+        ]
+      },
+      {
+        "_id": "KI0K8EfcccyBcIJuYpNP",
+        "fecha": "2026-03-09",
+        "cliente": "Sebastian Romano",
+        "nro_remito": "R-0025",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Nuez Entera",
+            "kg": 25,
+            "precio_kg": 17000,
+            "subtotal": 425000,
+            "cajas": 3
+          }
+        ],
+        "iva_pct": 21,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 425000,
+        "monto_desc": 0,
+        "monto_iva": 89250,
+        "monto_total": 514250,
+        "forma_pago": "efectivo",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-03-09T14:50:09.193Z",
+        "estado": "cobrado",
+        "pagos": [
+          {
+            "forma": "efectivo",
+            "monto": 180000,
+            "fecha": "2026-03-09"
+          },
+          {
+            "fecha": "2026-03-09",
+            "monto": 334250,
+            "forma": "efectivo"
+          }
+        ]
+      },
+      {
+        "_id": "L390FZl7utzu4kS6IUEK",
+        "fecha": "2026-03-15",
+        "cliente": "Sebastian Romano",
+        "cliente_cuit": "30712065874",
+        "cliente_localidad": "san miguel de tucuman",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "0381155745314",
+        "cliente_email": "sebastian@tecnocrop.com",
+        "nro_remito": "R-0032",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 50,
+            "precio_kg": 17000,
+            "subtotal": 850000,
+            "cajas": 5
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 850000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 850000,
+        "forma_pago": "efectivo",
+        "estado": "cobrado",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-03-10T14:33:43.669Z"
+      },
+      {
+        "_id": "aITHnheJgk1kZiqOMhNe",
+        "fecha": "2026-03-10",
+        "cliente": "Sebastian Romano",
+        "cliente_cuit": "30712065874",
+        "cliente_localidad": "san miguel de tucuman",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "0381155745314",
+        "cliente_email": "sebastian@tecnocrop.com",
+        "nro_remito": "R-0029",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 20,
+            "precio_kg": 17000,
+            "subtotal": 340000,
+            "cajas": 2
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 340000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 340000,
+        "forma_pago": "efectivo",
+        "estado": "cobrado",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-03-10T13:44:40.046Z"
+      },
+      {
+        "_id": "cRAUDpxBV27amVcuNt9R",
+        "fecha": "2026-03-09",
+        "cliente": "Sebastian Romano",
+        "nro_remito": "R-0023",
+        "items": [
+          {
+            "prod_key": "nuez_part_grandes",
+            "nombre": "Nuez Partida Grande",
+            "kg": 5,
+            "precio_kg": 16000,
+            "subtotal": 80000,
+            "cajas": 1
+          },
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Nuez Entera",
+            "kg": 10,
+            "precio_kg": 17000,
+            "subtotal": 170000,
+            "cajas": 1
+          },
+          {
+            "prod_key": "nuez_danadas",
+            "nombre": "Nuez Dañada",
+            "kg": 15,
+            "precio_kg": 12000,
+            "subtotal": 180000,
+            "cajas": 1
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 430000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 430000,
+        "forma_pago": "efectivo",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-03-09T14:42:58.959Z",
+        "estado": "cobrado",
+        "pagos": [
+          {
+            "forma": "efectivo",
+            "fecha": "2026-03-09",
+            "monto": 165750
+          },
+          {
+            "fecha": "2026-03-09",
+            "monto": 264250,
+            "forma": "efectivo"
+          }
+        ]
+      },
+      {
+        "_id": "qTRe3CVHpCOpf529Ye7A",
+        "fecha": "2026-03-09",
+        "cliente": "mariana casadey",
+        "cliente_cuit": "20288836657",
+        "cliente_localidad": "yerba buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3815746572",
+        "cliente_email": "marianacasadey@hotmail.com",
+        "nro_remito": "R-0026",
+        "items": [
+          {
+            "prod_key": "nuez_part_grandes",
+            "nombre": "Nuez Partida Grande",
+            "kg": 50,
+            "precio_kg": 16000,
+            "subtotal": 800000,
+            "cajas": 5
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 800000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 800000,
+        "forma_pago": "efectivo",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-03-09T14:56:50.672Z",
+        "estado": "cuenta_corriente",
+        "pagos": []
+      },
+      {
+        "_id": "t0nmwLhb5qkbJYFFd4IE",
+        "fecha": "2026-03-09",
+        "cliente": "Sebastian Romano",
+        "cliente_cuit": "30712065874",
+        "cliente_localidad": "san miguel de tucuman",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "0381155745314",
+        "cliente_email": "sebastian@tecnocrop.com",
+        "nro_remito": "R-0028",
+        "items": [
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 5,
+            "precio_kg": 22000,
+            "subtotal": 110000,
+            "cajas": 1
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 110000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 110000,
+        "forma_pago": "efectivo",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-03-09T15:25:49.951Z",
+        "estado": "cobrado",
+        "pagos": [
+          {
+            "fecha": "2026-03-10",
+            "monto": 110000,
+            "forma": "efectivo",
+            "obs": "",
+            "nroRecibo": "REC-0033"
+          }
+        ]
+      }
+    ],
+    "cobros": [
+      {
+        "_id": "4XnNSEqXKJYxbuhoSXB2",
+        "tipo": "nota_credito",
+        "cliente": "mariana casadey",
+        "fecha": "2026-03-10",
+        "importe": 2000,
+        "motivo": "devolucion",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "NC-0002",
+        "creado": "2026-03-10T15:06:40.020Z"
+      },
+      {
+        "_id": "BaXP99A6FkIZKktyLz0u",
+        "tipo": "cobro_automatico",
+        "cliente": "Sebastian Romano",
+        "fecha": "2026-03-15",
+        "importe": 850000,
+        "medio": "efectivo",
+        "referencia": "R-0032",
+        "obs": "Cobro automático por venta cobrada en el momento",
+        "nro_cobro": "COB-0001",
+        "ref_remito": "R-0032",
+        "creado": "2026-03-10T14:33:44.259Z"
+      },
+      {
+        "_id": "ZzVqychTGsCPIVhfksVX",
+        "tipo": "cobro_automatico",
+        "cliente": "Sebastian Romano",
+        "fecha": "2026-03-12",
+        "importe": 6000000,
+        "medio": "Efectivo",
+        "referencia": "LIQ-0017",
+        "obs": "Cobro automático — Maquila LIQ-0017",
+        "nro_cobro": "COB-0011",
+        "liq_id": "u7bGxAtzXdDP8iBcXJXE",
+        "creado": "2026-03-12T14:45:10.951Z"
+      },
+      {
+        "_id": "et63g0Mr712kSmPLgP1p",
+        "tipo": "cobro",
+        "cliente": "Sebastian Romano",
+        "fecha": "2026-03-16",
+        "importe": 250000,
+        "medio": "efectivo",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0010",
+        "creado": "2026-03-12T14:41:15.597Z"
+      },
+      {
+        "_id": "yGzBqXpgn5ny2W8mobYW",
+        "tipo": "cobro",
+        "cliente": "Sebastian Romano",
+        "fecha": "2026-03-12",
+        "importe": 5044250,
+        "medio": "efectivo",
+        "referencia": "liquidacion 16",
+        "obs": "",
+        "nro_cobro": "COB-0008",
+        "creado": "2026-03-12T14:34:36.159Z"
+      }
+    ],
+    "config": [
+      {
+        "_id": "cat_gasto_directo",
+        "lista": [
+          "Energía eléctrica",
+          "Gas",
+          "Agua",
+          "Mano de obra",
+          "Mantenimiento",
+          "Combustible",
+          "Flete"
+        ]
+      },
+      {
+        "_id": "cat_gasto_indirecto",
+        "lista": [
+          "Alquiler",
+          "Teléfono/Internet",
+          "Honorarios",
+          "Seguros",
+          "Papelería",
+          "Impuestos/tasas",
+          "Publicidad"
+        ]
+      },
+      {
+        "_id": "cat_inversion",
+        "lista": [
+          "Maquinaria",
+          "Infraestructura",
+          "Herramientas",
+          "Rodados",
+          "Equipamiento informático",
+          "Obra civil"
+        ]
+      },
+      {
+        "_id": "cobros_nro",
+        "ultimo": 11
+      },
+      {
+        "_id": "envasado",
+        "cap_bolsa": 5,
+        "bolsas_caja": 2,
+        "ins_bolsa_id": "YYbZJUzPqOqZACGH6KD1",
+        "ins_bolsa_nombre": "Bolsa Polipropileno",
+        "ins_caja_id": "0cPXv9ENRFupq1fbOKs9",
+        "ins_caja_nombre": "Caja Carton 10 kg"
+      },
+      {
+        "_id": "liquidaciones",
+        "ultimo": 17
+      },
+      {
+        "_id": "lista_precios",
+        "nuez_part_grandes": 16000,
+        "nuez_danadas": 12000,
+        "nuez_part_chicas": 15000,
+        "nuez_enteras": 17000,
+        "receta_DdHndtIU5V3y2nRItFNH": 22000,
+        "receta_nEcIJUPYxV7SLvIV2zcP": 25000,
+        "receta_wEJeQWHwy1G9P2R0LLG5": 25000
+      },
+      {
+        "_id": "lotes_coc",
+        "ultimo": 4
+      },
+      {
+        "_id": "lotes_fab",
+        "ultimo": 12
+      },
+      {
+        "_id": "recibos",
+        "ultimo": 34
+      },
+      {
+        "_id": "remitos",
+        "ultimo": 36
+      }
+    ]
   }
 }
