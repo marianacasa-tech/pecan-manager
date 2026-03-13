@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-03-13T02:02:18.924Z",
-    "fecha_legible": "12/3/2026, 11:02:18",
+    "fecha": "2026-03-13T07:59:29.988Z",
+    "fecha_legible": "13/3/2026, 04:59:29",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -487,7 +487,21 @@
         "liquidacion_id": "OmNTUeSyoiDwrOejnQ21"
       }
     ],
-    "retiros_maquila": [],
+    "retiros_maquila": [
+      {
+        "_id": "17LcgeHSDKc09Lc2QlkB",
+        "cliente": "Sebastian Romano",
+        "fecha": "2026-03-12",
+        "num_remito": "R-0036",
+        "enteras": 2950,
+        "part_grandes": 600,
+        "part_chicas": 320,
+        "danadas": 40,
+        "observaciones": "",
+        "estado": "activo",
+        "creado": "2026-03-12T14:43:08.290Z"
+      }
+    ],
     "liquidaciones_maquila": [
       {
         "_id": "OmNTUeSyoiDwrOejnQ21",
