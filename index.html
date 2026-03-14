@@ -89,10 +89,25 @@
   .remito-num{background:var(--brown);color:#fff9f0;padding:3px 10px;border-radius:6px;font-size:.82rem;font-weight:700;font-family:'DM Sans',sans-serif;letter-spacing:.04em;}
 
   @media(max-width:600px){
-    header{padding:0 16px;}main{padding:16px 12px;}
+    header{padding:0 12px;height:auto;min-height:56px;flex-wrap:wrap;gap:6px;padding-top:8px;padding-bottom:8px;}
+    header h1{font-size:1.1rem;}
+    header>div{gap:8px;}
+    nav{padding:0 8px;}
+    nav button{padding:10px 12px;font-size:.8rem;}
+    main{padding:12px 8px;}
+    .card{padding:16px 12px;}
     .form-grid{grid-template-columns:1fr;}
     .metrics-grid{grid-template-columns:1fr 1fr;}
+    #cobros-kpis{grid-template-columns:1fr!important;}
     .var-header,.variedad-row{grid-template-columns:1fr 90px 90px 32px;}
+    [style*="grid-template-columns"]{grid-template-columns:1fr!important;}
+    /* Excepciones que necesitan scroll horizontal en lugar de colapsar */
+    .table-wrap [style*="grid-template-columns"],
+    .no-collapse[style*="grid-template-columns"]{grid-template-columns:unset!important;}
+    .variedad-row{grid-template-columns:1fr 90px 90px 32px!important;}
+    .btn-actions{flex-direction:column;}
+    .btn-actions .btn{width:100%;}
+    #indicadores-live>div{flex-direction:column;gap:12px;}
   }
 </style>
 </head>
@@ -1690,11 +1705,11 @@ function buildClienteInfo(prop){
   }
   return info;
 }
-function generarPDF(datos){
+function generarPDF(datos, enviarWA=false){
   const {jsPDF}=window.jspdf;
   const p=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
   p.setFillColor(61,43,31);p.rect(0,0,210,35,'F');
-  p.setTextColor(255,249,240);p.setFontSize(22);p.setFont('helvetica','bold');p.text('PECAN MANAGER',20,16);
+  p.setTextColor(255,249,240);p.setFontSize(22);p.setFont('helvetica','bold');p.text('TECNOCROP S.A.',20,16);
   p.setFontSize(10);p.setFont('helvetica','normal');p.text('Pelado y Valor Agregado de Pecan',20,23);
   p.setFontSize(14);p.setFont('helvetica','bold');p.text('REMITO N° '+datos.num,190,16,{align:'right'});
   p.setFontSize(10);p.setFont('helvetica','normal');p.text('Fecha: '+datos.fecha,190,23,{align:'right'});
@@ -1721,8 +1736,15 @@ function generarPDF(datos){
   p.text('Firma del cliente',50,261,{align:'center'});p.text('Firma y sello empresa',160,261,{align:'center'});
   p.setFillColor(61,43,31);p.rect(0,280,210,17,'F');
   p.setTextColor(255,249,240);p.setFontSize(8);
-  p.text('Pecan Manager — '+new Date().toLocaleDateString('es-AR'),105,290,{align:'center'});
+  p.text('Tecnocrop S.A. — '+new Date().toLocaleDateString('es-AR'),105,290,{align:'center'});
   p.save('remito-'+datos.num+'.pdf');
+  if(enviarWA){
+    const cli=clientesCache.find(c=>c.nombre===datos.propietario);
+    const tel=(cli?.telefono||'').replace(/\D/g,'');
+    const base=tel?'https://wa.me/54'+tel:'https://wa.me/';
+    const msg='Adjuntamos remito de ingreso N° '+datos.num+' — '+EMPRESA.nombre;
+    setTimeout(()=>window.open(base+'?text='+encodeURIComponent(msg),'_blank'),800);
+  }
 }
 
 // ---- ENTRADAS ----
@@ -1786,7 +1808,8 @@ window.cargarEntradas=async function(){
       tbody.innerHTML+=`<tr class="remito-group-header">
         <td colspan="8">📄 <span class="remito-num">${e.num_remito||'—'}</span> &nbsp; ${e.fecha} &nbsp;
         <span class="badge ${e.propietario==='PROPIO'?'badge-green':'badge-amber'}">${e.propietario}</span>
-        <button class="btn btn-pdf btn-sm" style="margin-left:10px;" onclick="reimprimirRemito('${e.num_remito}')">🖨️ Reimprimir</button>
+        <button class="btn btn-pdf btn-sm" style="margin-left:10px;" onclick="reimprimirRemito('${e.num_remito}')" title="Descargar PDF">🖨️ Reimprimir</button>
+        <button class="btn btn-sm" style="background:#25D366;color:#fff;margin-left:4px;" onclick="reimprimirRemito('${e.num_remito}',true)" title="Descargar PDF y abrir WhatsApp">💬</button>
         </td></tr>`;
     }
     const esc=s=>(s||'').replace(/'/g,"\\'");
@@ -1844,7 +1867,7 @@ window.guardarEdicionEntrada=async function(){
 }
 
 // ---- REIMPRIMIR — reconstruye desde Firestore ----
-window.reimprimirRemito=async function(numRemito){
+window.reimprimirRemito=async function(numRemito, enviarWA=false){
   const snap=await getDocs(query(collection(db,'entradas_fabrica'),where('num_remito','==',numRemito)));
   if(snap.empty){showAlert('No se encontró el remito','error');return;}
   const lineas=[];let fecha='',prop='',obs='';
@@ -1852,7 +1875,7 @@ window.reimprimirRemito=async function(numRemito){
     const e=d.data();fecha=e.fecha;prop=e.propietario;obs=e.observaciones||'';
     lineas.push({variedad:e.variedad,kg:e.kg,humedad:e.humedad});
   });
-  generarPDF({num:numRemito,fecha,propietario:prop,clienteInfo:buildClienteInfo(prop),lineas,observaciones:obs});
+  generarPDF({num:numRemito,fecha,propietario:prop,clienteInfo:buildClienteInfo(prop),lineas,observaciones:obs},enviarWA);
   showAlert('🖨️ Remito '+numRemito+' descargado');
 }
 
@@ -2501,7 +2524,8 @@ window.cargarPanelMaquila=async function(){
         <td><strong>${tot.toFixed(2)} kg</strong></td>
         <td><span class="badge ${r.estado==='activo'?'badge-green':'badge-amber'}">${r.estado==='activo'?'Activo':'Liquidado'}</span></td>
         <td style="display:flex;gap:5px;">
-          <button class="btn btn-pdf btn-sm" onclick="reimprimirRetiro('${r.id}')">🖨️</button>
+          <button class="btn btn-pdf btn-sm" onclick="reimprimirRetiro('${r.id}')" title="Descargar PDF">🖨️</button>
+          <button class="btn btn-sm" style="background:#25D366;color:#fff;" onclick="reimprimirRetiro('${r.id}',true)" title="Descargar PDF y abrir WhatsApp">💬</button>
           <button class="btn btn-edit btn-sm" onclick="abrirEditarRetiro('${r.id}','${r.fecha}',${r.enteras||0},${r.part_grandes||0},${r.part_chicas||0},${r.danadas||0},'${r.observaciones||''}','${r.num_remito||''}')">✏️</button>
           <button class="btn btn-danger btn-sm" onclick="eliminar('retiros_maquila','${r.id}',cargarPanelMaquila)">🗑️</button>
         </td>
@@ -2535,7 +2559,8 @@ window.cargarPanelMaquila=async function(){
         <td><strong>$${parseFloat(l.total_servicio||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</strong></td>
         <td>${l.forma_pago||'—'}</td>
         <td style="display:flex;gap:4px;">
-          <button class="btn btn-pdf btn-sm" onclick="reimprimirLiquidacion('${l.id}')">🖨️</button>
+          <button class="btn btn-pdf btn-sm" onclick="reimprimirLiquidacion('${l.id}')" title="Descargar PDF">🖨️</button>
+          <button class="btn btn-sm" style="background:#25D366;color:#fff;" onclick="reimprimirLiquidacion('${l.id}',true)" title="Descargar PDF y abrir WhatsApp">💬</button>
           <button class="btn btn-danger btn-sm" onclick="eliminarLiquidacion('${l.id}')">🗑️</button>
         </td>
       </tr>`;
@@ -2607,26 +2632,26 @@ window.guardarRetiro=async function(){
       enteras:ent,part_grandes:pg,part_chicas:pc,danadas:dan,
       observaciones:obs,estado:'activo',creado:serverTimestamp()
     });
-    generarPDFRetiro({num,fecha,cliente,enteras:ent,part_grandes:pg,part_chicas:pc,danadas:dan,obs});
+    generarPDFRetiro({num,fecha,cliente,enteras:ent,part_grandes:pg,part_chicas:pc,danadas:dan,obs},false);
     showAlert('✅ Retiro registrado — Remito '+num+' generado');
     cerrarModal('modal-retiro');
     cargarPanelMaquila();
   }catch(e){showAlert('Error al guardar: '+e.message,'error');}
 }
 
-window.reimprimirRetiro=async function(id){
+window.reimprimirRetiro=async function(id, enviarWA=false){
   const snap=await getDoc(doc(db,'retiros_maquila',id));
   if(!snap.exists()){showAlert('No se encontró el retiro','error');return;}
   const r=snap.data();
-  generarPDFRetiro({num:r.num_remito,fecha:r.fecha,cliente:r.cliente,enteras:r.enteras||0,part_grandes:r.part_grandes||0,part_chicas:r.part_chicas||0,danadas:r.danadas||0,obs:r.observaciones||''});
+  generarPDFRetiro({num:r.num_remito,fecha:r.fecha,cliente:r.cliente,enteras:r.enteras||0,part_grandes:r.part_grandes||0,part_chicas:r.part_chicas||0,danadas:r.danadas||0,obs:r.observaciones||''},enviarWA);
 }
 
-function generarPDFRetiro(d){
+function generarPDFRetiro(d, enviarWA=false){
   const {jsPDF}=window.jspdf;
   const p=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
   p.setFillColor(61,43,31);p.rect(0,0,210,35,'F');
   p.setTextColor(255,249,240);p.setFontSize(20);p.setFont('helvetica','bold');
-  p.text('PECAN MANAGER',20,15);
+  p.text('TECNOCROP S.A.',20,15);
   p.setFontSize(10);p.setFont('helvetica','normal');p.text('Pelado y Valor Agregado de Pecan',20,23);
   p.setFontSize(13);p.setFont('helvetica','bold');p.text('REMITO DE ENTREGA N° '+d.num,190,15,{align:'right'});
   p.setFontSize(10);p.setFont('helvetica','normal');p.text('Fecha: '+d.fecha,190,23,{align:'right'});
@@ -2663,8 +2688,15 @@ function generarPDFRetiro(d){
   p.text('Firma del cliente',50,261,{align:'center'});p.text('Firma y sello empresa',160,261,{align:'center'});
   p.setFillColor(61,43,31);p.rect(0,280,210,17,'F');
   p.setTextColor(255,249,240);p.setFontSize(8);
-  p.text('Pecan Manager — '+new Date().toLocaleDateString('es-AR'),105,290,{align:'center'});
+  p.text('Tecnocrop S.A. — '+new Date().toLocaleDateString('es-AR'),105,290,{align:'center'});
   p.save('entrega-'+d.num+'.pdf');
+  if(enviarWA){
+    const cli=clientesCache.find(c=>c.nombre===d.cliente);
+    const tel=(cli?.telefono||'').replace(/\D/g,'');
+    const base=tel?'https://wa.me/54'+tel:'https://wa.me/';
+    const msg='Adjuntamos remito de entrega N° '+d.num+' — '+EMPRESA.nombre;
+    setTimeout(()=>window.open(base+'?text='+encodeURIComponent(msg),'_blank'),800);
+  }
 }
 
 // ---- LIQUIDACIÓN FINAL ----
@@ -2753,7 +2785,7 @@ function _abrirComprobanteMaquila({nro,fecha,cliente,importe,medio,ref,obs}){
       <div style="flex:1;text-align:center;border-top:1px solid #999;padding-top:6px;font-size:.75rem;color:#888;">Firma del cliente</div>
       <div style="flex:1;text-align:center;border-top:1px solid #999;padding-top:6px;font-size:.75rem;color:#888;">Firma y sello empresa</div>
     </div>
-    <div class="footer">Pecan Manager — ${new Date().toLocaleDateString('es-AR')}</div>
+    <div class="footer">Tecnocrop S.A. — ${new Date().toLocaleDateString('es-AR')}</div>
   </div>
   <div style="text-align:center;margin-top:12px;">
     <button onclick="window.print()" style="padding:8px 20px;background:#3d2b1f;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.9rem;">🖨️ Imprimir</button>
@@ -2864,7 +2896,8 @@ window.guardarLiquidacion=async function(){
     }
 
     // Generar PDF liquidación
-    generarPDFLiquidacion({num,fecha,cliente,lotes,retiros,precio,kgTotal,totalServicio,pago,obs});
+    const _cliTel=(clientesCache.find(c=>c.nombre===cliente)||{}).telefono||'';
+    generarPDFLiquidacion({num,fecha,cliente,clienteTel:_cliTel,lotes,retiros,precio,kgTotal,totalServicio,pago,obs});
 
     const msgEstado=estadoCobro==='cobrado'?'— cobrado y registrado':'— registrado en cuenta corriente';
     showAlert(`✅ Liquidación ${num} generada ${msgEstado}`);
@@ -2874,7 +2907,7 @@ window.guardarLiquidacion=async function(){
   }catch(e){showAlert('Error: '+e.message,'error');}
 }
 
-function generarPDFLiquidacion(d){
+function generarPDFLiquidacion(d, enviarWA=false){
   const {jsPDF}=window.jspdf;
   const p=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
   const fF=f=>f&&f!=='0000-01-01'?f.split('-').reverse().join('/'):'—';
@@ -2883,7 +2916,7 @@ function generarPDFLiquidacion(d){
   // Header
   p.setFillColor(61,43,31);p.rect(0,0,210,35,'F');
   p.setTextColor(255,249,240);p.setFontSize(20);p.setFont('helvetica','bold');
-  p.text('PECAN MANAGER',20,15);
+  p.text('TECNOCROP S.A.',20,15);
   p.setFontSize(10);p.setFont('helvetica','normal');p.text('Pelado y Valor Agregado de Pecan',20,23);
   p.setFontSize(13);p.setFont('helvetica','bold');p.text('LIQUIDACIÓN '+d.num,190,15,{align:'right'});
   p.setFontSize(10);p.setFont('helvetica','normal');p.text('Fecha: '+fF(d.fecha),190,23,{align:'right'});
@@ -3019,8 +3052,14 @@ function generarPDFLiquidacion(d){
   p.text('Firma del cliente',50,y,{align:'center'});p.text('Firma y sello empresa',160,y,{align:'center'});
   p.setFillColor(61,43,31);p.rect(0,280,210,17,'F');
   p.setTextColor(255,249,240);p.setFontSize(8);
-  p.text('Pecan Manager — '+new Date().toLocaleDateString('es-AR'),105,290,{align:'center'});
+  p.text('Tecnocrop S.A. — '+new Date().toLocaleDateString('es-AR'),105,290,{align:'center'});
   p.save('liquidacion-'+d.num+'.pdf');
+  if(enviarWA){
+    const tel=(d.clienteTel||'').replace(/\D/g,'');
+    const base=tel?'https://wa.me/54'+tel:'https://wa.me/';
+    const msg='Adjuntamos liquidación N° '+d.num+' — '+EMPRESA.nombre;
+    setTimeout(()=>window.open(base+'?text='+encodeURIComponent(msg),'_blank'),800);
+  }
 }
 
 window.cargarLiquidaciones=async function(){
@@ -3054,7 +3093,8 @@ window.cargarLiquidaciones=async function(){
       <td>${l.forma_pago||'—'}</td>
       <td>${estadoBadge}</td>
       <td style="display:flex;gap:5px;flex-wrap:wrap;">
-        <button class="btn btn-pdf btn-sm" onclick="reimprimirLiquidacion('${d.id}')">🖨️</button>
+        <button class="btn btn-pdf btn-sm" onclick="reimprimirLiquidacion('${d.id}')" title="Descargar PDF">🖨️</button>
+        <button class="btn btn-sm" style="background:#25D366;color:#fff;" onclick="reimprimirLiquidacion('${d.id}',true)" title="Descargar PDF y abrir WhatsApp">💬</button>
         <button class="btn btn-edit btn-sm" onclick="abrirEditarLiquidacion('${d.id}','${l.fecha}',${l.precio_kg},'${l.forma_pago}','${(l.observaciones||'').replace(/'/g,"\\'")}')">✏️</button>
         <button class="btn btn-danger btn-sm" onclick="eliminarLiquidacion('${d.id}')">🗑️</button>
       </td>
@@ -3127,7 +3167,7 @@ window.guardarEdicionLiquidacion=async function(){
 }
 
 // ---- REIMPRIMIR LIQUIDACIÓN ----
-window.reimprimirLiquidacion=async function(id){
+window.reimprimirLiquidacion=async function(id, enviarWA=false){
   const snapLiq=await getDoc(doc(db,'liquidaciones_maquila',id));
   if(!snapLiq.exists()){showAlert('No se encontró la liquidación','error');return;}
   const l=snapLiq.data();
@@ -3162,7 +3202,10 @@ window.reimprimirLiquidacion=async function(id){
   });
   const lotes=Object.values(lotesMap).sort((a,b)=>a.fecha.localeCompare(b.fecha));
 
-  generarPDFLiquidacion({num:l.num_liquidacion,fecha:l.fecha,cliente:l.cliente,lotes,retiros,precio:l.precio_kg,kgTotal:l.kg_cascara,totalServicio:l.total_servicio,pago:l.forma_pago,obs:l.observaciones||''});
+  // Buscar teléfono del cliente
+  const cliSnap=clientesCache.find(c=>c.nombre===l.cliente);
+  const clienteTel=cliSnap?.telefono||'';
+  generarPDFLiquidacion({num:l.num_liquidacion,fecha:l.fecha,cliente:l.cliente,clienteTel,lotes,retiros,precio:l.precio_kg,kgTotal:l.kg_cascara,totalServicio:l.total_servicio,pago:l.forma_pago,obs:l.observaciones||''},enviarWA);
   showAlert('🖨️ Liquidación '+l.num_liquidacion+' descargada');
 }
 
@@ -5111,6 +5154,7 @@ window.abrirRemitoModal=function(v){
 
   const html=`<!DOCTYPE html><html><head><meta charset="UTF-8">
   <title>Remito ${v.nro_remito}</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"><\/script>
   <style>
     *{box-sizing:border-box;margin:0;padding:0;}
     body{font-family:Arial,sans-serif;font-size:13px;color:#333;padding:30px;}
@@ -5161,22 +5205,27 @@ window.abrirRemitoModal=function(v){
     <div>Forma de pago: <strong>${formaPagoLabel[v.forma_pago]||v.forma_pago}</strong> &nbsp;|&nbsp; Estado: <strong>${estadoLabel[v.estado]||v.estado}</strong></div>
     <div>${v.observaciones?'Obs: '+v.observaciones:''}</div>
   </div>
-  <div style="margin-top:30px;display:flex;gap:12px;">
+  <div style="margin-top:30px;display:flex;gap:12px;flex-wrap:wrap;" class="no-print">
     <button onclick="window.print()" style="padding:10px 20px;background:#7a4a1e;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;">🖨️ Imprimir / Guardar PDF</button>
-    <button onclick="enviarWhatsApp()" style="padding:10px 20px;background:#25D366;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;">💬 Enviar por WhatsApp</button>
+    <button id="btn-wa" style="padding:10px 20px;background:#25D366;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-family:sans-serif;">💬 Enviar por WhatsApp</button>
   </div>
-  <script>
-    const _ventaData=${JSON.stringify({...v,empresa:EMPRESA})};
-    function enviarWhatsApp(){
-      const emp=_ventaData.empresa;
-      const items=(_ventaData.items||[]).map(it=>'• '+it.nombre+': '+parseFloat(it.kg).toFixed(2)+'kg @ $'+parseFloat(it.precio_kg).toFixed(2)+'/kg = $'+parseFloat(it.subtotal).toFixed(2)).join('%0A');
-      const totales=(_ventaData.descuento_pct>0?'Descuento '+_ventaData.descuento_pct+'%: -$'+parseFloat(_ventaData.monto_desc).toFixed(2)+'%0A':'')+(_ventaData.iva_pct>0?'IVA '+_ventaData.iva_pct+'%: $'+parseFloat(_ventaData.monto_iva).toFixed(2)+'%0A':'')+(_ventaData.flete>0?'Flete: $'+parseFloat(_ventaData.flete).toFixed(2)+'%0A':'')+'*TOTAL: $'+parseFloat(_ventaData.monto_total).toFixed(2)+'*';
-      const msg='*Remito '+_ventaData.nro_remito+'* — '+(_ventaData.fecha||'').split('-').reverse().join('/')+'%0A'+emp.nombre+'%0ACUIT: '+emp.cuit+'%0A%0ACliente: *'+_ventaData.cliente+'*%0A%0A'+items+'%0A%0A'+totales+'%0A%0AForma de pago: '+_ventaData.forma_pago;
-      // Buscar tel del cliente en la página padre si está disponible
-      window.open('https://wa.me/?text='+msg,'_blank');
-    }
-  <'+'\/script>
-  <\/body><\/html>`;
+  <scr`+'ipt>'+`
+    const _vd=${JSON.stringify({...v,empresa:EMPRESA})};
+    document.getElementById('btn-wa').addEventListener('click',function(){
+      const emp=_vd.empresa;
+      const items=(_vd.items||[]).map(it=>'• '+it.nombre+': '+parseFloat(it.kg).toFixed(2)+'kg @ $'+parseFloat(it.precio_kg).toFixed(2)+'/kg = $'+parseFloat(it.subtotal).toFixed(2)).join('%0A');
+      const totales=(_vd.descuento_pct>0?'Descuento '+_vd.descuento_pct+'%: -$'+parseFloat(_vd.monto_desc).toFixed(2)+'%0A':'')+(_vd.iva_pct>0?'IVA '+_vd.iva_pct+'%: $'+parseFloat(_vd.monto_iva).toFixed(2)+'%0A':'')+(_vd.flete>0?'Flete: $'+parseFloat(_vd.flete).toFixed(2)+'%0A':'')+'*TOTAL: $'+parseFloat(_vd.monto_total).toFixed(2)+'*';
+      const msg='*Remito '+_vd.nro_remito+'* — '+(_vd.fecha||'').split('-').reverse().join('/')+'%0A'+emp.nombre+'%0ACUIT: '+emp.cuit+'%0A%0ACliente: *'+_vd.cliente+'*%0A%0A'+items+'%0A%0A'+totales+'%0A%0AForma de pago: '+_vd.forma_pago;
+      const tel=(_vd.cliente_telefono||'').replace(/\D/g,'');
+      const base=tel?'https://wa.me/54'+tel:'https://wa.me/';
+      // 1. Descargar PDF
+      const nombre='Remito-'+_vd.nro_remito+'.pdf';
+      html2pdf().set({filename:nombre,margin:10,image:{type:'jpeg',quality:.95},html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4'}}).from(document.querySelector('.doc-print')||document.body).save();
+      // 2. Abrir WhatsApp luego de un momento para que arranque la descarga
+      setTimeout(function(){ window.open(base+'?text='+msg,'_blank'); }, 800);
+    });
+  <`+'/scr'+'ipt>'+`
+  </body></html>`;
 
   const win=window.open('','_blank','width=800,height=700');
   win.document.write(html);win.document.close();
@@ -5551,6 +5600,7 @@ window.imprimirComprobante=function(){
   const w=window.open('','_blank','width=600,height=500');
   w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
   <title>${tipoLabel[c.tipo]||'Comprobante'} ${c.nro_cobro||''}<\/title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"><\/script>
   <style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;font-size:13px;color:#333;padding:30px;max-width:560px;margin:0 auto;}
   .hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid #7a4a1e;}
   .emp strong{font-size:15px;color:#7a4a1e;display:block;margin-bottom:3px;}.emp{font-size:11px;color:#666;line-height:1.8;}
@@ -5575,8 +5625,34 @@ window.imprimirComprobante=function(){
   ${c.referencia?`<div class="row"><span style="color:#666;">Referencia<\/span><span>${c.referencia}<\/span><\/div>`:''}
   ${c.obs?`<div class="row"><span style="color:#666;">Observaciones<\/span><span>${c.obs}<\/span><\/div>`:''}
   <div class="monto"><div class="lbl">${c.tipo==='nota_credito'?'Importe nota de crédito':'Total cobrado'}<\/div><div class="val">$ ${parseFloat(c.importe||0).toLocaleString('es-AR',{minimumFractionDigits:2})}<\/div><\/div>
-  <div style="margin-top:24px;" class="no-print"><button onclick="window.print()" style="padding:10px 24px;background:#7a4a1e;color:#fff;border:none;border-radius:6px;cursor:pointer;">🖨️ Imprimir<\/button><\/div>
-  <script>setTimeout(()=>window.print(),400);<\/script>
+  <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap;" class="no-print">
+    <button onclick="window.print()" style="padding:10px 24px;background:#7a4a1e;color:#fff;border:none;border-radius:6px;cursor:pointer;">🖨️ Imprimir<\/button>
+    <button id="btn-wa-cobro" style="padding:10px 20px;background:#25D366;color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:sans-serif;font-size:13px;">💬 Enviar por WhatsApp<\/button>
+  <\/div>
+  <scr`+'ipt>'+`
+    const _cd=${JSON.stringify({...c,empresa:EMPRESA})};
+    document.getElementById('btn-wa-cobro').addEventListener('click',function(){
+      const emp=_cd.empresa;
+      const tipo=_cd.tipo==='nota_credito'?'Nota de Crédito':'Recibo de Cobro';
+      const medio={efectivo:'Efectivo',transferencia:'Transferencia bancaria',cheque:'Cheque',otro:'Otro'}[_cd.medio]||_cd.medio||'';
+      const motivo={devolucion:'Devolución de mercadería',descuento:'Descuento posterior',correccion:'Corrección de facturación',ajuste:'Ajuste comercial',otro:'Otro'}[_cd.motivo]||_cd.motivo||'';
+      const fecha=(_cd.fecha||'').split('-').reverse().join('/');
+      let msg='*'+tipo+' '+(_cd.nro_cobro||'')+'*%0A';
+      msg+=emp.nombre+'%0ACUIT: '+emp.cuit+'%0A%0A';
+      msg+='Cliente: *'+_cd.cliente+'*%0A';
+      msg+='Fecha: '+fecha+'%0A';
+      if(_cd.tipo==='nota_credito') msg+='Motivo: '+motivo+'%0A';
+      else msg+='Medio de pago: '+medio+'%0A';
+      if(_cd.referencia) msg+='Referencia: '+_cd.referencia+'%0A';
+      if(_cd.obs) msg+='Obs: '+_cd.obs+'%0A';
+      msg+='%0A*'+(_cd.tipo==='nota_credito'?'Importe NC':'Total cobrado')+': $ '+parseFloat(_cd.importe||0).toLocaleString('es-AR',{minimumFractionDigits:2})+'*';
+      // 1. Descargar PDF
+      const nombre=tipo.replace(/ /g,'-')+'-'+(_cd.nro_cobro||'cobro')+'.pdf';
+      html2pdf().set({filename:nombre,margin:10,image:{type:'jpeg',quality:.95},html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4'}}).from(document.body).save();
+      // 2. Abrir WhatsApp luego de un momento
+      setTimeout(function(){ window.open('https://wa.me/?text='+msg,'_blank'); }, 800);
+    });
+  `+'</scr'+'ipt>'+`
   <\/body><\/html>`);
   w.document.close();
 }
