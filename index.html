@@ -5133,6 +5133,9 @@ function fmtMoneda(v){return'$ '+parseFloat(v||0).toLocaleString('es-AR',{minimu
 function fmtFecha(f){return f?f.split('-').reverse().join('/'):''}
 
 window.abrirRemitoModal=function(v){
+  // Leer teléfono fresco desde clientesCache (por si fue editado después de crear la venta)
+  const _cliActual=clientesCache.find(c=>c.nombre===v.cliente);
+  if(_cliActual) v={...v, cliente_telefono:_cliActual.telefono||''};
   // Construir HTML del remito e imprimir en ventana nueva
   const formaPagoLabel={efectivo:'Efectivo',transferencia:'Transferencia',cheque:'Cheque',cuenta_corriente:'Cuenta Corriente'};
   const estadoLabel={cobrado:'Cobrado ✅',cuenta_corriente:'Cuenta Corriente ⏳'};
@@ -5570,6 +5573,9 @@ window.eliminarCobro=async function(id){
 
 // ---- COMPROBANTE ----
 window.abrirComprobante=function(c){
+  // Leer teléfono fresco desde clientesCache
+  const _cliAct=clientesCache.find(x=>x.nombre===c.cliente);
+  if(_cliAct) c={...c, cliente_telefono:_cliAct.telefono||''};
   _compCurrent=c;
   const tipoLabel={cobro:'Recibo de cobro',cobro_automatico:'Recibo de cobro',nota_credito:'Nota de crédito'};
   const motivoLabel={devolucion:'Devolución de mercadería',descuento:'Descuento posterior',correccion:'Corrección de facturación',ajuste:'Ajuste comercial',otro:'Otro'};
@@ -5592,7 +5598,10 @@ window.abrirComprobante=function(c){
 }
 
 window.imprimirComprobante=function(){
-  const c=_compCurrent; if(!c) return;
+  let c=_compCurrent; if(!c) return;
+  // Teléfono siempre fresco
+  const _cliImp=clientesCache.find(x=>x.nombre===c.cliente);
+  if(_cliImp) c={...c, cliente_telefono:_cliImp.telefono||''};
   const tipoLabel={cobro:'Recibo de Cobro',cobro_automatico:'Recibo de Cobro',nota_credito:'Nota de Crédito'};
   const medioLabel={efectivo:'Efectivo',transferencia:'Transferencia bancaria',cheque:'Cheque',otro:'Otro'};
   const motivoLabel={devolucion:'Devolución de mercadería',descuento:'Descuento posterior',correccion:'Corrección de facturación',ajuste:'Ajuste comercial',otro:'Otro'};
@@ -5650,7 +5659,9 @@ window.imprimirComprobante=function(){
       const nombre=tipo.replace(/ /g,'-')+'-'+(_cd.nro_cobro||'cobro')+'.pdf';
       html2pdf().set({filename:nombre,margin:10,image:{type:'jpeg',quality:.95},html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4'}}).from(document.body).save();
       // 2. Abrir WhatsApp luego de un momento
-      setTimeout(function(){ window.open('https://wa.me/?text='+msg,'_blank'); }, 800);
+      const _telCob=(_cd.cliente_telefono||'').replace(/\D/g,'');
+      const _baseWACob=_telCob?'https://wa.me/54'+_telCob:'https://wa.me/';
+      setTimeout(function(){ window.open(_baseWACob+'?text='+msg,'_blank'); }, 800);
     });
   `+'</scr'+'ipt>'+`
   <\/body><\/html>`);
