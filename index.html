@@ -1668,13 +1668,21 @@ onAuthStateChanged(auth, async user=>{
     try{
       const userDoc=await getDoc(doc(db,'usuarios',user.uid));
       if(userDoc.exists()){
-        _currentRol=userDoc.data().rol||'fabrica';
+        const data=userDoc.data();
+        // Verificar si el usuario está activo
+        if(data.activo===false){
+          await signOut(auth);
+          document.getElementById('login-error').textContent='Tu cuenta está deshabilitada. Contactá al administrador.';
+          return;
+        }
+        _currentRol=data.rol||'fabrica';
       } else {
         // Primer login — crear doc con rol por defecto
         await setDoc(doc(db,'usuarios',user.uid),{
           nombre: user.displayName||user.email,
           email:  user.email,
           rol:    'fabrica',
+          activo: true,
           creado: serverTimestamp()
         });
         _currentRol='fabrica';
@@ -1820,22 +1828,30 @@ window.cargarUsuarios=async function(){
         <th style="padding:10px 14px;text-align:left;">Email</th>
         <th style="padding:10px 14px;text-align:left;">Rol actual</th>
         <th style="padding:10px 14px;text-align:left;">Cambiar rol</th>
+        <th style="padding:10px 14px;text-align:left;">Estado</th>
       </tr></thead><tbody>`;
 
     usuarios.forEach(u=>{
       const rolActual=roles.find(r=>r.val===u.rol)||roles[1];
       const esSelf=u.id===_currentUser?.uid;
+      const activo=u.activo!==false;
       const opts=roles.map(r=>`<option value="${r.val}" ${u.rol===r.val?'selected':''}>${r.lbl}</option>`).join('');
-      html+=`<tr style="border-bottom:1px solid var(--border);">
+      html+=`<tr style="border-bottom:1px solid var(--border);${!activo?'opacity:.55;background:#fdf0f0;':''}">
         <td style="padding:10px 14px;font-weight:600;">${u.nombre||'—'} ${esSelf?'<span style="font-size:.72rem;color:var(--text2);">(vos)</span>':''}</td>
         <td style="padding:10px 14px;color:var(--text2);">${u.email||'—'}</td>
         <td style="padding:10px 14px;"><span style="background:${rolActual.color};color:#fff9f0;padding:3px 10px;border-radius:12px;font-size:.78rem;font-weight:600;">${rolActual.lbl}</span></td>
         <td style="padding:10px 14px;">
-          ${esSelf?'<span style="color:var(--text2);font-size:.82rem;">No podés cambiar tu propio rol</span>':`
+          ${esSelf?'<span style="color:var(--text2);font-size:.82rem;">—</span>':`
           <div style="display:flex;gap:8px;align-items:center;">
-            <select id="rol-${u.id}" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:.85rem;background:var(--bg);">${opts}</select>
-            <button onclick="cambiarRol('${u.id}')" style="padding:6px 14px;background:var(--brown);color:#fff9f0;border:none;border-radius:6px;cursor:pointer;font-size:.82rem;">Guardar</button>
+            <select id="rol-${u.id}" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:.85rem;background:var(--bg);" ${!activo?'disabled':''}>${opts}</select>
+            <button onclick="cambiarRol('${u.id}')" style="padding:6px 14px;background:var(--brown);color:#fff9f0;border:none;border-radius:6px;cursor:pointer;font-size:.82rem;" ${!activo?'disabled':''}>Guardar</button>
           </div>`}
+        </td>
+        <td style="padding:10px 14px;">
+          ${esSelf?'<span style="color:var(--text2);font-size:.82rem;">—</span>':`
+          <button onclick="toggleActivo('${u.id}',${activo})" style="padding:6px 14px;background:${activo?'#8b2e2e':'#3a6b35'};color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:.82rem;">
+            ${activo?'🔒 Deshabilitar':'✅ Habilitar'}
+          </button>`}
         </td>
       </tr>`;
     });
@@ -1858,6 +1874,18 @@ window.cambiarRol=async function(uid){
     cargarUsuarios();
   }catch(e){
     showAlert('Error al actualizar rol: '+e.message,'error');
+  }
+}
+
+window.toggleActivo=async function(uid, activoActual){
+  const accion=activoActual?'deshabilitar':'habilitar';
+  if(!confirm('¿Confirmás '+accion+' este usuario?')) return;
+  try{
+    await updateDoc(doc(db,'usuarios',uid),{activo:!activoActual});
+    showAlert('✅ Usuario '+(activoActual?'deshabilitado':'habilitado')+' correctamente');
+    cargarUsuarios();
+  }catch(e){
+    showAlert('Error: '+e.message,'error');
   }
 }
 document.getElementById('ent-fecha').value=today();
