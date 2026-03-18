@@ -88,6 +88,10 @@
   /* Badge número de remito */
   .remito-num{background:var(--brown);color:#fff9f0;padding:3px 10px;border-radius:6px;font-size:.82rem;font-weight:700;font-family:'DM Sans',sans-serif;letter-spacing:.04em;}
 
+  /* Login */
+  #login-screen input:focus{border-color:var(--brown);outline:none;box-shadow:0 0 0 3px rgba(61,43,31,.12);}
+  #login-screen button:hover{opacity:.92;}
+
   @media(max-width:600px){
     header{padding:0 12px;height:auto;min-height:56px;flex-wrap:wrap;gap:6px;padding-top:8px;padding-bottom:8px;}
     header h1{font-size:1.1rem;}
@@ -112,26 +116,73 @@
 </style>
 </head>
 <body>
+
+<!-- ══ PANTALLA DE LOGIN ══════════════════════════════════════════════════ -->
+<div id="login-screen" style="display:none;min-height:100vh;background:var(--bg);align-items:center;justify-content:center;padding:20px;">
+  <div style="background:var(--card);border-radius:16px;padding:40px 36px;width:100%;max-width:400px;box-shadow:0 8px 40px rgba(61,43,31,.15);">
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="font-size:2.5rem;margin-bottom:8px;">🌰</div>
+      <h1 style="font-family:'Playfair Display',serif;color:var(--brown);font-size:1.6rem;">Pecan Manager</h1>
+      <p style="color:var(--text2);font-size:.88rem;margin-top:4px;">Tecnocrop S.A.</p>
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <label style="font-size:.8rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;">Email</label>
+      <input id="login-email" type="email" placeholder="tu@email.com" onkeydown="loginKeyEnter(event)"
+        style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:.95rem;margin-top:6px;background:var(--bg);outline:none;font-family:'DM Sans',sans-serif;">
+    </div>
+    <div style="margin-bottom:8px;">
+      <label style="font-size:.8rem;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;">Contraseña</label>
+      <input id="login-pass" type="password" placeholder="••••••••" onkeydown="loginKeyEnter(event)"
+        style="width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:.95rem;margin-top:6px;background:var(--bg);outline:none;font-family:'DM Sans',sans-serif;">
+    </div>
+    <div id="login-error" style="color:var(--red);font-size:.83rem;min-height:20px;margin-bottom:8px;"></div>
+
+    <button onclick="loginEmail()" style="width:100%;padding:12px;background:var(--brown);color:#fff9f0;border:none;border-radius:8px;font-size:.95rem;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:12px;">
+      Iniciar sesión
+    </button>
+
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+      <div style="flex:1;height:1px;background:var(--border);"></div>
+      <span style="font-size:.78rem;color:var(--text2);">o</span>
+      <div style="flex:1;height:1px;background:var(--border);"></div>
+    </div>
+
+    <button onclick="loginGoogle()" style="width:100%;padding:11px;background:#fff;color:#3c4043;border:1.5px solid var(--border);border-radius:8px;font-size:.92rem;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:10px;">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg>
+      Continuar con Google
+    </button>
+  </div>
+</div>
+
+<!-- ══ APP SHELL ══════════════════════════════════════════════════════════ -->
+<div id="app-shell" style="display:none;">
 <header>
   <h1>🌰 Pecan Manager</h1>
   <div style="display:flex;align-items:center;gap:12px;">
     <button onclick="showSection('backup',this)" style="background:transparent;border:1.5px solid rgba(255,249,240,.4);color:#fff9f0;border-radius:8px;padding:6px 14px;font-size:.82rem;cursor:pointer;display:flex;align-items:center;gap:6px;" title="Backup y restauración">💾 Backup</button>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:1px;">
+      <span id="user-name" style="font-size:.82rem;color:#fff9f0;font-weight:600;"></span>
+      <span id="user-rol" style="font-size:.72rem;color:var(--amber2);"></span>
+    </div>
+    <button onclick="cerrarSesion()" style="background:transparent;border:1.5px solid rgba(255,249,240,.3);color:#fff9f0;border-radius:8px;padding:5px 12px;font-size:.78rem;cursor:pointer;" title="Cerrar sesión">🚪 Salir</button>
     <span id="conn-status">Conectando...</span>
   </div>
 </header>
 <nav>
-  <button class="active" onclick="showSection('dashboard',this)">📊 Dashboard</button>
-  <button onclick="showSection('clientes',this)">👥 Clientes</button>
-  <button onclick="showSection('entradas',this)">📥 Entradas Fábrica</button>
-  <button onclick="showSection('salidas',this)">⚙️ Producción Fábrica</button>
-  <button onclick="showSection('stock-fabrica',this)">🏭 Stock Fábrica</button>
-  <button onclick="showSection('stock-vendible',this)">🏷️ Stock Vendible</button>
-  <button onclick="showSection('maquila',this)">🔄 Maquila</button>
-  <button onclick="showSection('cocina',this)">👩‍🍳 Cocina</button>
-  <button onclick="showSection('insumos',this)">📦 Insumos</button>
-  <button onclick="showSection('gastos',this)">💰 Gastos</button>
-  <button onclick="showSection('ventas',this)">🛒 Ventas</button>
-  <button onclick="showSection('cobros',this)">💵 Cobros</button>
+  <button class="active" data-sec="dashboard" onclick="showSection('dashboard',this)">📊 Dashboard</button>
+  <button data-sec="clientes" onclick="showSection('clientes',this)">👥 Clientes</button>
+  <button data-sec="entradas" onclick="showSection('entradas',this)">📥 Entradas Fábrica</button>
+  <button data-sec="salidas" onclick="showSection('salidas',this)">⚙️ Producción Fábrica</button>
+  <button data-sec="stock-fabrica" onclick="showSection('stock-fabrica',this)">🏭 Stock Fábrica</button>
+  <button data-sec="stock-vendible" onclick="showSection('stock-vendible',this)">🏷️ Stock Vendible</button>
+  <button data-sec="maquila" onclick="showSection('maquila',this)">🔄 Maquila</button>
+  <button data-sec="cocina" onclick="showSection('cocina',this)">👩‍🍳 Cocina</button>
+  <button data-sec="insumos" onclick="showSection('insumos',this)">📦 Insumos</button>
+  <button data-sec="gastos" onclick="showSection('gastos',this)">💰 Gastos</button>
+  <button data-sec="ventas" onclick="showSection('ventas',this)">🛒 Ventas</button>
+  <button data-sec="cobros" onclick="showSection('cobros',this)">💵 Cobros</button>
+  <button data-sec="usuarios" onclick="showSection('usuarios',this)">👥 Usuarios</button>
 </nav>
 <main>
   <div class="alert" id="alert-box"></div>
@@ -1113,7 +1164,17 @@
     </div>
   </div>
 
+  <!-- USUARIOS -->
+  <div class="section" id="sec-usuarios">
+    <div class="card">
+      <h2>👥 Gestión de usuarios</h2>
+      <p style="color:var(--text2);font-size:.88rem;margin-bottom:20px;">Administrá los accesos y roles de cada usuario. Los cambios se aplican en el próximo inicio de sesión.</p>
+      <div id="usuarios-lista"><div class="loading">Cargando usuarios...</div></div>
+    </div>
+  </div>
+
 </main>
+</div><!-- fin app-shell -->
 
 <!-- MODAL EDITAR PROVEEDOR -->
 <div class="modal-overlay" id="modal-edit-prov">
@@ -1532,6 +1593,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, getDocsFromServer, deleteDoc, doc, getDoc, setDoc, updateDoc, query, orderBy, where, writeBatch, runTransaction, serverTimestamp, deleteField } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBQNW-BpEqoyYAj0sbC60dhVTDKsgpg5BA",
@@ -1544,8 +1606,138 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-document.getElementById('conn-status').textContent='✅ Conectado';
-document.getElementById('conn-status').style.color='#a8d8a8';
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
+
+// ── ROLES Y PERMISOS ────────────────────────────────────────────────────────
+const PERMISOS = {
+  admin:    ['dashboard','clientes','entradas','salidas','stock-fabrica','stock-vendible','maquila','cocina','insumos','gastos','ventas','cobros','backup','usuarios'],
+  fabrica:  ['salidas'],
+  cocina:   ['cocina'],
+};
+
+let _currentUser = null;
+let _currentRol  = null;
+
+function getRolLabel(rol){
+  return {admin:'Administrador', fabrica:'Operario Fábrica', cocina:'Operario Cocina'}[rol] || rol;
+}
+
+function puedeVer(seccion){
+  if(!_currentRol) return false;
+  return (PERMISOS[_currentRol]||[]).includes(seccion);
+}
+
+function firstSection(){
+  const secs = PERMISOS[_currentRol]||[];
+  return secs[0]||'dashboard';
+}
+
+// ── PANTALLA DE LOGIN ────────────────────────────────────────────────────────
+function mostrarLogin(){
+  document.getElementById('app-shell').style.display='none';
+  document.getElementById('login-screen').style.display='flex';
+}
+
+function mostrarApp(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-shell').style.display='block';
+  aplicarPermisos();
+  const first=firstSection();
+  const btn=document.querySelector(`nav button[data-sec="${first}"]`);
+  if(btn) btn.click();
+  else showSection(first, document.querySelector('nav button'));
+}
+
+function aplicarPermisos(){
+  // Mostrar/ocultar tabs según rol
+  document.querySelectorAll('nav button[data-sec]').forEach(btn=>{
+    const sec=btn.getAttribute('data-sec');
+    btn.style.display=puedeVer(sec)?'':'none';
+  });
+  // Actualizar info usuario en header
+  document.getElementById('user-name').textContent=_currentUser?.displayName||_currentUser?.email||'Usuario';
+  document.getElementById('user-rol').textContent=getRolLabel(_currentRol);
+}
+
+// ── OBSERVADOR DE SESIÓN ─────────────────────────────────────────────────────
+onAuthStateChanged(auth, async user=>{
+  if(user){
+    _currentUser=user;
+    // Leer rol desde Firestore
+    try{
+      const userDoc=await getDoc(doc(db,'usuarios',user.uid));
+      if(userDoc.exists()){
+        _currentRol=userDoc.data().rol||'fabrica';
+      } else {
+        // Primer login — crear doc con rol por defecto
+        await setDoc(doc(db,'usuarios',user.uid),{
+          nombre: user.displayName||user.email,
+          email:  user.email,
+          rol:    'fabrica',
+          creado: serverTimestamp()
+        });
+        _currentRol='fabrica';
+      }
+    }catch(e){
+      _currentRol='fabrica';
+    }
+    document.getElementById('conn-status').textContent='✅ Conectado';
+    document.getElementById('conn-status').style.color='#a8d8a8';
+    mostrarApp();
+    cargarInicialApp();
+  } else {
+    _currentUser=null;
+    _currentRol=null;
+    mostrarLogin();
+  }
+});
+
+async function cargarInicialApp(){
+  await cargarClientesSelects();
+  initCocinaCache();
+  cargarCatGastos();
+  cargarConfigEnvasado();
+  cargarPrecios();
+}
+
+// ── ACCIONES DE AUTH ─────────────────────────────────────────────────────────
+window.loginEmail=async function(){
+  const email=document.getElementById('login-email').value.trim();
+  const pass=document.getElementById('login-pass').value;
+  const err=document.getElementById('login-error');
+  err.textContent='';
+  if(!email||!pass){err.textContent='Completá email y contraseña';return;}
+  try{
+    await signInWithEmailAndPassword(auth,email,pass);
+  }catch(e){
+    const msgs={
+      'auth/invalid-credential':'Email o contraseña incorrectos',
+      'auth/user-not-found':'No existe una cuenta con ese email',
+      'auth/wrong-password':'Contraseña incorrecta',
+      'auth/too-many-requests':'Demasiados intentos. Esperá unos minutos',
+    };
+    err.textContent=msgs[e.code]||'Error al iniciar sesión';
+  }
+}
+
+window.loginGoogle=async function(){
+  const err=document.getElementById('login-error');
+  err.textContent='';
+  try{
+    await signInWithPopup(auth,googleProvider);
+  }catch(e){
+    if(e.code!=='auth/popup-closed-by-user') err.textContent='Error al iniciar sesión con Google';
+  }
+}
+
+window.cerrarSesion=async function(){
+  await signOut(auth);
+}
+
+window.loginKeyEnter=function(e){
+  if(e.key==='Enter') window.loginEmail();
+}
 
 let clientesCache=[];
 let variedades=['Wichita','Cheyenne','Western Schley','Shoshoni','Mahan','Sioux','Otra'];
@@ -1579,9 +1771,17 @@ async function siguienteNumRemito(){
 
 // ---- NAV ----
 window.showSection=function(id,btn){
+  // Verificar permiso
+  if(_currentRol && !puedeVer(id)){
+    showAlert('No tenés permisos para acceder a esta sección','error');
+    return;
+  }
   document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
-  document.getElementById('sec-'+id).classList.add('active');btn.classList.add('active');
+  const sec=document.getElementById('sec-'+id);
+  if(!sec) return;
+  sec.classList.add('active');
+  if(btn) btn.classList.add('active');
   if(id==='clientes') cargarClientes();
   if(id==='entradas'){cargarClientesSelects();cargarEntradas();}
   if(id==='salidas'){cargarClientesSelects();cargarSalidas();cargarConfigEnvasado();}
@@ -1595,6 +1795,70 @@ window.showSection=function(id,btn){
   if(id==='ventas'){ventaTab('nueva');initVentas();}
   if(id==='cobros'){initCobros();}
   if(id==='backup'){initBackup();}
+  if(id==='usuarios'){cargarUsuarios();}
+}
+
+// ── GESTIÓN DE USUARIOS ──────────────────────────────────────────────────────
+window.cargarUsuarios=async function(){
+  const cont=document.getElementById('usuarios-lista');
+  cont.innerHTML='<div class="loading">Cargando...</div>';
+  try{
+    const snap=await getDocsFromServer(collection(db,'usuarios'));
+    const usuarios=[];
+    snap.forEach(d=>usuarios.push({id:d.id,...d.data()}));
+    usuarios.sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||''));
+
+    const roles=[
+      {val:'admin',   lbl:'Administrador',     color:'var(--brown)'},
+      {val:'fabrica', lbl:'Operario Fábrica',   color:'var(--amber)'},
+      {val:'cocina',  lbl:'Operario Cocina',    color:'var(--green)'},
+    ];
+
+    let html=`<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:.88rem;">
+      <thead><tr style="background:var(--brown);color:#fff9f0;">
+        <th style="padding:10px 14px;text-align:left;">Usuario</th>
+        <th style="padding:10px 14px;text-align:left;">Email</th>
+        <th style="padding:10px 14px;text-align:left;">Rol actual</th>
+        <th style="padding:10px 14px;text-align:left;">Cambiar rol</th>
+      </tr></thead><tbody>`;
+
+    usuarios.forEach(u=>{
+      const rolActual=roles.find(r=>r.val===u.rol)||roles[1];
+      const esSelf=u.id===_currentUser?.uid;
+      const opts=roles.map(r=>`<option value="${r.val}" ${u.rol===r.val?'selected':''}>${r.lbl}</option>`).join('');
+      html+=`<tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:10px 14px;font-weight:600;">${u.nombre||'—'} ${esSelf?'<span style="font-size:.72rem;color:var(--text2);">(vos)</span>':''}</td>
+        <td style="padding:10px 14px;color:var(--text2);">${u.email||'—'}</td>
+        <td style="padding:10px 14px;"><span style="background:${rolActual.color};color:#fff9f0;padding:3px 10px;border-radius:12px;font-size:.78rem;font-weight:600;">${rolActual.lbl}</span></td>
+        <td style="padding:10px 14px;">
+          ${esSelf?'<span style="color:var(--text2);font-size:.82rem;">No podés cambiar tu propio rol</span>':`
+          <div style="display:flex;gap:8px;align-items:center;">
+            <select id="rol-${u.id}" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:.85rem;background:var(--bg);">${opts}</select>
+            <button onclick="cambiarRol('${u.id}')" style="padding:6px 14px;background:var(--brown);color:#fff9f0;border:none;border-radius:6px;cursor:pointer;font-size:.82rem;">Guardar</button>
+          </div>`}
+        </td>
+      </tr>`;
+    });
+
+    html+='</tbody></table></div>';
+    if(usuarios.length===0) html='<p style="color:var(--text2);text-align:center;padding:20px;">No hay usuarios registrados aún.</p>';
+    cont.innerHTML=html;
+  }catch(e){
+    cont.innerHTML='<p style="color:var(--red);">Error cargando usuarios: '+e.message+'</p>';
+  }
+}
+
+window.cambiarRol=async function(uid){
+  const sel=document.getElementById('rol-'+uid);
+  if(!sel) return;
+  const nuevoRol=sel.value;
+  try{
+    await updateDoc(doc(db,'usuarios',uid),{rol:nuevoRol});
+    showAlert('✅ Rol actualizado correctamente');
+    cargarUsuarios();
+  }catch(e){
+    showAlert('Error al actualizar rol: '+e.message,'error');
+  }
 }
 document.getElementById('ent-fecha').value=today();
 document.getElementById('sal-fecha').value=today();
@@ -5921,13 +6185,7 @@ window.imprimirCtaCte=async function(){
 }
 
 
-// Init
-cargarDashboard();
-cargarClientesSelects();
-initCocinaCache();
-cargarCatGastos();
-cargarConfigEnvasado();
-cargarPrecios();
+// Init — movido a cargarInicialApp() que se llama post-login
 
 // ============================================================
 // BACKUP Y RESTAURACIÓN
