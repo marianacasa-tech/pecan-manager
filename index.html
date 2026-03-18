@@ -92,7 +92,14 @@
   #login-screen input:focus{border-color:var(--brown);outline:none;box-shadow:0 0 0 3px rgba(61,43,31,.12);}
   #login-screen button:hover{opacity:.92;}
 
+  /* Header conn-status y textos opcionales */
+  .hdr-conn{font-size:.82rem;color:var(--amber2);font-weight:500;}
+
   @media(max-width:600px){
+    .hdr-conn{display:none!important;}
+    .hdr-txt{display:none!important;}
+    header h1{font-size:.95rem;}
+    #user-name{max-width:90px!important;}
     header{padding:0 12px;height:auto;min-height:56px;flex-wrap:wrap;gap:6px;padding-top:8px;padding-bottom:8px;}
     header h1{font-size:1.1rem;}
     header>div{gap:8px;}
@@ -159,14 +166,14 @@
 <div id="app-shell" style="display:none;">
 <header>
   <h1>🌰 Pecan Manager</h1>
-  <div style="display:flex;align-items:center;gap:12px;">
-    <button onclick="showSection('backup',this)" style="background:transparent;border:1.5px solid rgba(255,249,240,.4);color:#fff9f0;border-radius:8px;padding:6px 14px;font-size:.82rem;cursor:pointer;display:flex;align-items:center;gap:6px;" title="Backup y restauración">💾 Backup</button>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <button onclick="showSection('backup',this)" style="background:transparent;border:1.5px solid rgba(255,249,240,.4);color:#fff9f0;border-radius:8px;padding:6px 10px;font-size:.82rem;cursor:pointer;display:flex;align-items:center;gap:5px;" title="Backup y restauración">💾 <span class="hdr-txt">Backup</span></button>
     <div style="display:flex;flex-direction:column;align-items:flex-end;gap:1px;">
-      <span id="user-name" style="font-size:.82rem;color:#fff9f0;font-weight:600;"></span>
-      <span id="user-rol" style="font-size:.72rem;color:var(--amber2);"></span>
+      <span id="user-name" style="font-size:.78rem;color:#fff9f0;font-weight:600;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+      <span id="user-rol" style="font-size:.68rem;color:var(--amber2);"></span>
     </div>
-    <button onclick="cerrarSesion()" style="background:transparent;border:1.5px solid rgba(255,249,240,.3);color:#fff9f0;border-radius:8px;padding:5px 12px;font-size:.78rem;cursor:pointer;" title="Cerrar sesión">🚪 Salir</button>
-    <span id="conn-status">Conectando...</span>
+    <button onclick="cerrarSesion()" style="background:transparent;border:1.5px solid rgba(255,249,240,.3);color:#fff9f0;border-radius:8px;padding:5px 10px;font-size:.78rem;cursor:pointer;white-space:nowrap;" title="Cerrar sesión">🚪 <span class="hdr-txt">Salir</span></button>
+    <span id="conn-status" class="hdr-conn">Conectando...</span>
   </div>
 </header>
 <nav>
