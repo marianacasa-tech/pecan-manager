@@ -764,6 +764,16 @@
           <div class="form-group"><label>N° Factura / Comprobante</label>
             <input type="text" id="gas-nro-factura" placeholder="Ej: A-0001-00012345">
           </div>
+          <div class="form-group"><label>Moneda *</label>
+            <select id="gas-moneda" onchange="toggleTCField()">
+              <option value="ARS">🇦🇷 Pesos (ARS)</option>
+              <option value="USD">🇺🇸 Dólares (USD)</option>
+            </select>
+          </div>
+          <div class="form-group" id="gas-tc-group" style="display:none;">
+            <label>Tipo de cambio referencial</label>
+            <input type="number" id="gas-tc" placeholder="Ej: 1500" step="0.01" min="0">
+          </div>
           <div class="form-group"><label>% IVA</label>
             <select id="gas-iva">
               <option value="0">0% — Sin IVA</option>
@@ -809,6 +819,7 @@
             <div>Subtotal neto: <strong id="gas-tot-neto">$ 0,00</strong></div>
             <div>IVA: <strong id="gas-tot-iva">$ 0,00</strong></div>
             <div style="font-size:1.05rem;">TOTAL: <strong id="gas-tot-total" style="color:var(--brown);">$ 0,00</strong></div>
+            <div id="gas-tot-ars" style="display:none;font-size:.88rem;color:var(--text2);"></div>
           </div>
         </div>
 
@@ -1231,6 +1242,41 @@
     <div style="display:flex;gap:12px;margin-top:20px;">
       <button class="btn btn-primary" onclick="guardarEdicionPago()">💾 Guardar</button>
       <button class="btn btn-secondary" onclick="cerrarModal('modal-edit-pago')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PAGOS USD -->
+<div class="modal-overlay" id="modal-pagos-usd">
+  <div class="modal" style="max-width:620px;">
+    <h2>💵 Pagos en cuenta corriente USD</h2>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;padding:12px 16px;background:var(--bg2);border-radius:8px;font-size:.88rem;">
+      <div><span style="color:var(--text2);">Proveedor:</span> <strong id="pu-proveedor">—</strong></div>
+      <div><span style="color:var(--text2);">Total deuda:</span> <strong id="pu-total-usd" style="color:#1a5276;">—</strong></div>
+    </div>
+    <div id="pu-saldo"></div>
+    <div id="pu-historial" style="margin:12px 0;max-height:200px;overflow-y:auto;"></div>
+    <div style="border-top:2px solid var(--border);padding-top:16px;margin-top:8px;">
+      <div style="font-weight:700;font-size:.88rem;color:var(--brown2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:12px;">Registrar nuevo pago</div>
+      <div class="form-grid">
+        <div class="form-group"><label>Fecha *</label><input type="date" id="pu-fecha"></div>
+        <div class="form-group"><label>Monto pagado (ARS) *</label>
+          <input type="number" id="pu-ars" placeholder="0.00" step="0.01" min="0" oninput="calcEquivUSD()">
+        </div>
+        <div class="form-group"><label>Tipo de cambio del día *</label>
+          <input type="number" id="pu-tc" placeholder="Ej: 1500" step="0.01" min="0" oninput="calcEquivUSD()">
+        </div>
+        <div class="form-group"><label>Equivalente USD</label>
+          <div style="padding:10px 14px;background:var(--bg2);border-radius:8px;font-weight:700;color:#1a5276;" id="pu-usd-equiv">—</div>
+        </div>
+        <div class="form-group full"><label>Observaciones</label>
+          <input type="text" id="pu-obs" placeholder="Opcional...">
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:12px;">
+        <button class="btn btn-primary" onclick="registrarPagoUSD()">💾 Registrar pago</button>
+        <button class="btn btn-secondary" onclick="cerrarModal('modal-pagos-usd')">Cerrar</button>
+      </div>
     </div>
   </div>
 </div>
@@ -4799,11 +4845,14 @@ window.guardarCompra=async function(){
     const batch=writeBatch(db);
 
     // Guardar compra
+    const moneda=document.getElementById('gas-moneda').value||'ARS';
+    const tcRef=moneda==='USD'?(parseFloat(document.getElementById('gas-tc').value)||0):0;
     const compraRef=doc(collection(db,'compras'));
     batch.set(compraRef,{
       fecha,
       proveedor:document.getElementById('gas-proveedor').value||'',
       nro_factura:document.getElementById('gas-nro-factura').value.trim(),
+      moneda, tc_referencial:tcRef,
       iva_pct:ivaPct,monto_neto:neto,monto_iva,monto_total,
       forma_pago:document.getElementById('gas-forma-pago').value,
       estado:document.getElementById('gas-estado').value,
@@ -4846,6 +4895,10 @@ window.guardarCompra=async function(){
     document.getElementById('gas-proveedor').value='';
     document.getElementById('gas-iva').value='21';
     document.getElementById('gas-estado').value='pagado';
+    document.getElementById('gas-moneda').value='ARS';
+    document.getElementById('gas-tc').value='';
+    document.getElementById('gas-tc-group').style.display='none';
+    document.getElementById('gas-tot-ars').style.display='none';
     document.getElementById('gas-items-form').innerHTML='';
     recalcTotales();
     cargarCompras();
@@ -4884,19 +4937,27 @@ window.cargarCompras=async function(){
     const tiposBadges=(c.items||[]).map(it=>`<span style="font-size:.75rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:2px 7px;">${_tipoLabel[it.tipo]||it.tipo}</span>`).join(' ');
     const itemsResumen=(c.items||[]).map(it=>it.descripcion).join(', ');
 
+    const moneda=c.moneda||'ARS';
+    const simbolo=moneda==='USD'?'USD ':'$';
+    const esCuentaCorrienteUSD=moneda==='USD'&&c.forma_pago==='credito';
     tbody.innerHTML+=`<tr ${vencida?'style="background:#fff8f0;"':''}>
       <td>${c.fecha}</td>
       <td>${c.proveedor||'—'}</td>
       <td><span class="remito-num">${c.nro_factura||'—'}</span></td>
       <td style="font-size:.8rem;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${itemsResumen}">${tiposBadges}</td>
-      <td>$${(c.monto_neto||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</td>
-      <td>$${(c.monto_iva||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</td>
-      <td><strong>$${(c.monto_total||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</strong></td>
+      <td>${simbolo}${(c.monto_neto||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</td>
+      <td>${simbolo}${(c.monto_iva||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</td>
+      <td><strong>${simbolo}${(c.monto_total||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</strong>
+        ${moneda==='USD'?'<span class="badge" style="background:#1a5276;color:#fff;margin-left:4px;font-size:.7rem;">USD</span>':''}
+      </td>
       <td style="font-size:.82rem;">${c.forma_pago||'—'}</td>
       <td>${estadoBadge}</td>
       <td style="font-size:.82rem;${vencida?'color:#c0392b;font-weight:700;':''}">${c.vencimiento||'—'}</td>
-      <td style="display:flex;gap:4px;">
-        <button class="btn btn-edit btn-sm" title="Actualizar pago" onclick="abrirEditarPago('${d.id}','${c.estado}','${c.vencimiento||''}','${c.forma_pago||'efectivo'}')">💳</button>
+      <td style="display:flex;gap:4px;flex-wrap:wrap;">
+        ${esCuentaCorrienteUSD
+          ?`<button class="btn btn-edit btn-sm" title="Ver/registrar pagos" style="background:#1a5276;color:#fff;" onclick="abrirPagosUSD('${d.id}','${(c.proveedor||'').replace(/'/g,"\\'")}',${c.monto_total||0})">💵 Pagos</button>`
+          :`<button class="btn btn-edit btn-sm" title="Actualizar pago" onclick="abrirEditarPago('${d.id}','${c.estado}','${c.vencimiento||''}','${c.forma_pago||'efectivo'}')">💳</button>`
+        }
         <button class="btn btn-danger btn-sm" onclick="eliminar('compras','${d.id}',cargarCompras)">🗑️</button>
       </td>
     </tr>`;
@@ -4917,6 +4978,103 @@ window.cargarCompras=async function(){
 window.limpiarFiltrosGastos=function(){
   ['f-gas-tipo','f-gas-estado','f-gas-mes'].forEach(id=>document.getElementById(id).value='');
   cargarCompras();
+}
+
+// ── MONEDA / TC ──────────────────────────────────────────────────────────────
+window.toggleTCField=function(){
+  const moneda=document.getElementById('gas-moneda').value;
+  document.getElementById('gas-tc-group').style.display=moneda==='USD'?'':'none';
+  if(moneda!=='USD') document.getElementById('gas-tot-ars').style.display='none';
+  recalcTotales();
+}
+
+// ── PAGOS USD EN CUENTA CORRIENTE ────────────────────────────────────────────
+let _pagosUSDCompraId=null;
+
+window.abrirPagosUSD=async function(compraId, proveedor, totalUSD){
+  _pagosUSDCompraId=compraId;
+  document.getElementById('pu-proveedor').textContent=proveedor||'—';
+  document.getElementById('pu-total-usd').textContent='USD '+parseFloat(totalUSD).toLocaleString('es-AR',{minimumFractionDigits:2});
+  document.getElementById('pu-fecha').value=today();
+  document.getElementById('pu-ars').value='';
+  document.getElementById('pu-tc').value='';
+  document.getElementById('pu-obs').value='';
+  document.getElementById('pu-usd-equiv').textContent='—';
+  await cargarPagosUSD(compraId, totalUSD);
+  document.getElementById('modal-pagos-usd').classList.add('open');
+}
+
+async function cargarPagosUSD(compraId, totalUSD){
+  const snap=await getDocsFromServer(query(collection(db,'pagos_usd'),where('compra_id','==',compraId)));
+  const pagos=[];
+  snap.forEach(d=>pagos.push({id:d.id,...d.data()}));
+  pagos.sort((a,b)=>(a.fecha||'').localeCompare(b.fecha||''));
+  let totalPagadoUSD=0;
+  let html='';
+  if(pagos.length){
+    html='<table style="width:100%;border-collapse:collapse;font-size:.83rem;"><thead><tr style="background:var(--brown);color:#fff9f0;"><th style="padding:6px 10px;text-align:left;">Fecha</th><th style="padding:6px 10px;text-align:right;">Monto ARS</th><th style="padding:6px 10px;text-align:right;">TC</th><th style="padding:6px 10px;text-align:right;">USD cancelado</th><th style="padding:6px 10px;">Obs</th><th></th></tr></thead><tbody>';
+    pagos.forEach(p=>{
+      totalPagadoUSD+=p.usd_cancelado||0;
+      html+=`<tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:6px 10px;">${p.fecha||'—'}</td>
+        <td style="padding:6px 10px;text-align:right;">$${(p.monto_ars||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</td>
+        <td style="padding:6px 10px;text-align:right;">$${(p.tc||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</td>
+        <td style="padding:6px 10px;text-align:right;font-weight:700;color:#1a5276;">USD ${(p.usd_cancelado||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</td>
+        <td style="padding:6px 10px;color:var(--text2);font-size:.8rem;">${p.obs||'—'}</td>
+        <td style="padding:4px;"><button class="btn btn-danger btn-sm" onclick="eliminarPagoUSD('${p.id}','${compraId}',${totalUSD})">🗑️</button></td>
+      </tr>`;
+    });
+    html+='</tbody></table>';
+  }
+  const saldo=totalUSD-totalPagadoUSD;
+  const saldoColor=saldo<=0.005?'var(--green)':'var(--red)';
+  document.getElementById('pu-historial').innerHTML=html||'<p style="color:var(--text2);font-size:.85rem;padding:8px 0;">Sin pagos registrados aún.</p>';
+  document.getElementById('pu-saldo').innerHTML=`
+    <div style="display:flex;gap:20px;flex-wrap:wrap;padding:12px 16px;background:var(--bg2);border-radius:8px;font-size:.88rem;margin-top:8px;">
+      <div>Pagado: <strong style="color:var(--green);">USD ${totalPagadoUSD.toLocaleString('es-AR',{minimumFractionDigits:2})}</strong></div>
+      <div>Saldo pendiente: <strong style="color:${saldoColor};">USD ${Math.max(0,saldo).toLocaleString('es-AR',{minimumFractionDigits:2})}</strong></div>
+    </div>`;
+  if(saldo<=0.005) await updateDoc(doc(db,'compras',compraId),{estado:'pagado'});
+}
+
+window.calcEquivUSD=function(){
+  const ars=parseFloat(document.getElementById('pu-ars').value)||0;
+  const tc=parseFloat(document.getElementById('pu-tc').value)||0;
+  document.getElementById('pu-usd-equiv').textContent=tc>0?'= USD '+(ars/tc).toLocaleString('es-AR',{minimumFractionDigits:2}):'—';
+}
+
+window.registrarPagoUSD=async function(){
+  const compraId=_pagosUSDCompraId; if(!compraId) return;
+  const fecha=document.getElementById('pu-fecha').value;
+  const ars=parseFloat(document.getElementById('pu-ars').value)||0;
+  const tc=parseFloat(document.getElementById('pu-tc').value)||0;
+  const obs=document.getElementById('pu-obs').value.trim();
+  if(!fecha||!ars||!tc){showAlert('Completá fecha, monto y tipo de cambio','error');return;}
+  try{
+    await addDoc(collection(db,'pagos_usd'),{
+      compra_id:compraId,fecha,monto_ars:ars,tc,usd_cancelado:ars/tc,obs,creado:serverTimestamp()
+    });
+    showAlert('✅ Pago registrado');
+    const compraDoc=await getDoc(doc(db,'compras',compraId));
+    const totalUSD=compraDoc.data()?.monto_total||0;
+    document.getElementById('pu-ars').value='';
+    document.getElementById('pu-tc').value='';
+    document.getElementById('pu-obs').value='';
+    document.getElementById('pu-usd-equiv').textContent='—';
+    await cargarPagosUSD(compraId,totalUSD);
+    cargarCompras();
+  }catch(e){showAlert('Error: '+e.message,'error');}
+}
+
+window.eliminarPagoUSD=async function(pagoId,compraId,totalUSD){
+  if(!confirm('¿Eliminar este pago?')) return;
+  try{
+    await deleteDoc(doc(db,'pagos_usd',pagoId));
+    await updateDoc(doc(db,'compras',compraId),{estado:'pendiente'});
+    await cargarPagosUSD(compraId,totalUSD);
+    cargarCompras();
+    showAlert('Pago eliminado');
+  }catch(e){showAlert('Error: '+e.message,'error');}
 }
 
 // ---- EDITAR PAGO ----
@@ -6233,7 +6391,7 @@ const COLECCIONES_BACKUP = [
   'recetas','insumos','tandas_cocina',
   'compras','compras_nuez',
   'ventas','cobros',
-  'config'
+  'config','pagos_usd'
 ];
 
 let _restoreData = null;
