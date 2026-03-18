@@ -1275,6 +1275,7 @@
       </div>
       <div style="display:flex;gap:12px;margin-top:12px;">
         <button class="btn btn-primary" onclick="registrarPagoUSD()">💾 Registrar pago</button>
+        <button class="btn btn-secondary" onclick="generarExtractoPagosUSD()">📄 Extracto PDF</button>
         <button class="btn btn-secondary" onclick="cerrarModal('modal-pagos-usd')">Cerrar</button>
       </div>
     </div>
@@ -4990,6 +4991,9 @@ window.toggleTCField=function(){
 
 // ── PAGOS USD EN CUENTA CORRIENTE ────────────────────────────────────────────
 let _pagosUSDCompraId=null;
+let _pagosUSDCache=[];
+let _pagosUSDTotal=0;
+let _pagosUSDProveedor='';
 
 window.abrirPagosUSD=async function(compraId, proveedor, totalUSD){
   _pagosUSDCompraId=compraId;
@@ -5009,6 +5013,10 @@ async function cargarPagosUSD(compraId, totalUSD){
   const pagos=[];
   snap.forEach(d=>pagos.push({id:d.id,...d.data()}));
   pagos.sort((a,b)=>(a.fecha||'').localeCompare(b.fecha||''));
+  // Guardar en cache para PDF
+  _pagosUSDCache=pagos;
+  _pagosUSDTotal=totalUSD;
+  _pagosUSDProveedor=document.getElementById('pu-proveedor').textContent||'';
   let totalPagadoUSD=0;
   let html='';
   if(pagos.length){
@@ -5075,6 +5083,65 @@ window.eliminarPagoUSD=async function(pagoId,compraId,totalUSD){
     cargarCompras();
     showAlert('Pago eliminado');
   }catch(e){showAlert('Error: '+e.message,'error');}
+}
+
+window.generarExtractoPagosUSD=function(){
+  const pagos=_pagosUSDCache;
+  const totalUSD=_pagosUSDTotal;
+  const proveedor=_pagosUSDProveedor;
+  if(!pagos.length){showAlert('No hay pagos para exportar','error');return;}
+  const {jsPDF}=window.jspdf;
+  const p=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const fF=f=>f?f.split('-').reverse().join('/'):'—';
+  const fN=v=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:2});
+  // Header
+  p.setFillColor(61,43,31);p.rect(0,0,210,35,'F');
+  p.setTextColor(255,249,240);p.setFontSize(18);p.setFont('helvetica','bold');
+  p.text('TECNOCROP S.A.',20,14);
+  p.setFontSize(9);p.setFont('helvetica','normal');
+  p.text('Pelado y Valor Agregado de Pecan',20,22);
+  p.setFontSize(12);p.setFont('helvetica','bold');p.text('EXTRACTO DE PAGOS',190,14,{align:'right'});
+  p.setFontSize(9);p.setFont('helvetica','normal');p.text('Fecha: '+new Date().toLocaleDateString('es-AR'),190,22,{align:'right'});
+  // Proveedor
+  p.setTextColor(61,43,31);p.setFontSize(9);p.setFont('helvetica','bold');p.text('PROVEEDOR',20,46);
+  p.setDrawColor(200,129,26);p.line(20,48,190,48);
+  p.setFont('helvetica','bold');p.setFontSize(12);p.text(proveedor,20,57);
+  p.setFontSize(9);p.setFont('helvetica','normal');p.setTextColor(100,100,100);
+  p.text('Deuda original: USD '+fN(totalUSD),20,65);
+  // Encabezado tabla
+  let y=75;
+  p.setFillColor(61,43,31);p.rect(20,y,170,8,'F');
+  p.setTextColor(255,249,240);p.setFontSize(8);p.setFont('helvetica','bold');
+  p.text('FECHA',24,y+5.5);p.text('MONTO PAGADO (ARS)',70,y+5.5);
+  p.text('TIPO DE CAMBIO',120,y+5.5);p.text('USD CANCELADO',188,y+5.5,{align:'right'});
+  y+=12;
+  // Filas
+  let totUSD=0,totARS=0;
+  pagos.forEach((pg,i)=>{
+    if(i%2===0){p.setFillColor(245,240,232);p.rect(20,y-5,170,9,'F');}
+    p.setTextColor(61,43,31);p.setFont('helvetica','normal');p.setFontSize(8);
+    p.text(fF(pg.fecha),24,y);
+    p.text('$ '+fN(pg.monto_ars),70,y);
+    p.text('$ '+fN(pg.tc),120,y);
+    p.text('USD '+fN(pg.usd_cancelado),188,y,{align:'right'});
+    if(pg.obs){y+=5;p.setTextColor(120,100,80);p.setFontSize(7);p.text('  Obs: '+pg.obs,24,y);p.setTextColor(61,43,31);p.setFontSize(8);}
+    totUSD+=pg.usd_cancelado||0;totARS+=pg.monto_ars||0;
+    y+=9;if(y>265){p.addPage();y=20;}
+  });
+  // Totales
+  p.setDrawColor(200,129,26);p.line(20,y,190,y);y+=8;
+  p.setFont('helvetica','bold');p.setFontSize(9);p.setTextColor(61,43,31);
+  p.text('TOTAL PAGADO EN ARS:',100,y,{align:'right'});p.text('$ '+fN(totARS),188,y,{align:'right'});y+=8;
+  p.text('TOTAL USD CANCELADO:',100,y,{align:'right'});p.setTextColor(26,82,118);p.text('USD '+fN(totUSD),188,y,{align:'right'});y+=8;
+  const saldo=Math.max(0,totalUSD-totUSD);
+  if(saldo<=0.005) p.setTextColor(58,107,53); else p.setTextColor(139,46,46);
+  p.text('SALDO PENDIENTE:',100,y,{align:'right'});p.text('USD '+fN(saldo),188,y,{align:'right'});
+  // Footer
+  p.setFillColor(61,43,31);p.rect(0,280,210,17,'F');
+  p.setTextColor(255,249,240);p.setFontSize(8);p.setFont('helvetica','normal');
+  p.text('Tecnocrop S.A. — '+new Date().toLocaleDateString('es-AR'),105,290,{align:'center'});
+  p.save('extracto-'+proveedor.replace(/\s+/g,'-')+'-'+new Date().toISOString().slice(0,10)+'.pdf');
+  showAlert('📄 Extracto descargado');
 }
 
 // ---- EDITAR PAGO ----
