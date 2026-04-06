@@ -38,7 +38,7 @@ const COLECCIONES = [
   'retiros_maquila', 'liquidaciones_maquila',
   'recetas', 'insumos', 'tandas_cocina',
   'compras', 'compras_nuez',
-  'ventas', 'cobros', 'config', 'pagos_usd',
+  'ventas', 'cobros', 'config', 'pagos_usd', 'cotizaciones',
 ];
 
 // ── Función principal ────────────────────────────────────────────────────────
