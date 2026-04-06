@@ -191,6 +191,7 @@
   <button data-sec="ventas" onclick="showSection('ventas',this)">🛒 Ventas</button>
   <button data-sec="cobros" onclick="showSection('cobros',this)">💵 Cobros</button>
   <button data-sec="usuarios" onclick="showSection('usuarios',this)">👥 Usuarios</button>
+  <button data-sec="cotizador" onclick="showSection('cotizador',this)">🧮 Cotizador</button>
 </nav>
 <main>
   <div class="alert" id="alert-box"></div>
@@ -1192,6 +1193,172 @@
     </div>
   </div>
 
+
+  <!-- COTIZADOR -->
+  <div class="section" id="sec-cotizador">
+
+    <!-- CALCULADORA -->
+    <div class="card">
+      <h2>🧮 Calculadora de precio máximo</h2>
+      <p style="color:var(--text2);font-size:.88rem;margin-bottom:20px;">Ingresá los parámetros de producción y rentabilidad para calcular el precio máximo a pagar por kg de nuez con cáscara.</p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>% Kernel sano sobre kg c/c</label>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input type="number" id="calc-pct-kernel" placeholder="Ej: 45" step="0.1" min="0" max="100" oninput="calcPrecioMax()" style="flex:1;">
+            <span style="color:var(--text2);font-size:.9rem;">%</span>
+          </div>
+          <div style="font-size:.75rem;color:var(--text2);margin-top:4px;">Rendimiento total de kernel comercializable</div>
+        </div>
+        <div class="form-group">
+          <label>% Partido sobre kernel sano</label>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input type="number" id="calc-pct-partido" placeholder="Ej: 40" step="0.1" min="0" max="100" oninput="calcPrecioMax()" style="flex:1;">
+            <span style="color:var(--text2);font-size:.9rem;">%</span>
+          </div>
+          <div style="font-size:.75rem;color:var(--text2);margin-top:4px;">Del kernel sano, cuánto es partido</div>
+        </div>
+        <div class="form-group">
+          <label>Precio de venta kernel entero ($/kg)</label>
+          <input type="number" id="calc-precio-entero" placeholder="0.00" step="0.01" min="0" oninput="calcPrecioMax()">
+        </div>
+        <div class="form-group">
+          <label>Precio de venta kernel partido ($/kg)</label>
+          <input type="number" id="calc-precio-partido" placeholder="0.00" step="0.01" min="0" oninput="calcPrecioMax()">
+        </div>
+        <div class="form-group">
+          <label>Costo de pelado ($/kg c/c)</label>
+          <input type="number" id="calc-costo-pelado" placeholder="0.00" step="0.01" min="0" oninput="calcPrecioMax()">
+          <div style="font-size:.75rem;color:var(--text2);margin-top:4px;">Mano de obra + servicios por kg procesado</div>
+        </div>
+        <div class="form-group">
+          <label>% Retorno sobre inversión deseado</label>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input type="number" id="calc-margen" placeholder="Ej: 20" step="0.1" min="0" oninput="calcPrecioMax()" style="flex:1;">
+            <span style="color:var(--text2);font-size:.9rem;">%</span>
+          </div>
+          <div style="font-size:.75rem;color:var(--text2);margin-top:4px;">Ganancia / (precio c/c + costo pelado)</div>
+        </div>
+      </div>
+
+      <!-- Resultado -->
+      <div id="calc-resultado" style="display:none;margin-top:20px;">
+        <div style="background:var(--brown);border-radius:12px;padding:20px 24px;color:#fff9f0;">
+          <div style="font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;opacity:.8;margin-bottom:6px;">Precio máximo a pagar</div>
+          <div style="font-size:2.2rem;font-weight:800;font-family:'Playfair Display',serif;" id="calc-precio-max-val">$ 0,00</div>
+          <div style="font-size:.85rem;opacity:.75;margin-top:4px;">por kg de nuez con cáscara</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:16px;">
+          <div class="metric-card"><div class="val" id="calc-r-entero" style="font-size:1rem;">—</div><div class="lbl">Kernel entero / kg c/c</div></div>
+          <div class="metric-card"><div class="val" id="calc-r-partido" style="font-size:1rem;">—</div><div class="lbl">Kernel partido / kg c/c</div></div>
+          <div class="metric-card"><div class="val" id="calc-r-ingreso" style="font-size:1rem;">—</div><div class="lbl">Ingreso bruto / kg c/c</div></div>
+          <div class="metric-card"><div class="val" id="calc-r-ganancia" style="font-size:1rem;">—</div><div class="lbl">Ganancia / kg c/c</div></div>
+        </div>
+        <div style="margin-top:16px;padding:14px 18px;background:var(--bg2);border-radius:10px;font-size:.83rem;color:var(--text2);line-height:1.9;">
+          <strong style="color:var(--text);">Desglose por cada kg con cáscara comprado:</strong><br>
+          <span id="calc-desglose"></span>
+        </div>
+        <div class="btn-actions" style="margin-top:16px;">
+          <button class="btn btn-primary" onclick="usarPrecioCalculado()">📋 Usar este precio en cotización</button>
+        </div>
+      </div>
+
+      <div id="calc-sin-datos" style="margin-top:16px;padding:20px;text-align:center;color:var(--text2);font-size:.9rem;">
+        Completá los parámetros para ver el resultado
+      </div>
+    </div>
+
+    <!-- FORMULARIO COTIZACIÓN -->
+    <div class="card" id="card-form-cotizacion">
+      <h2>📋 Nueva cotización de compra</h2>
+
+      <!-- Encabezado -->
+      <div class="form-grid">
+        <div class="form-group"><label>Fecha *</label>
+          <input type="date" id="cot-fecha">
+        </div>
+        <div class="form-group"><label>N° Cotización</label>
+          <input type="text" id="cot-nro" readonly style="background:var(--bg2);color:var(--text2);">
+        </div>
+        <div class="form-group"><label>Cliente *</label>
+          <select id="cot-cliente"><option value="">— Seleccioná —</option></select>
+        </div>
+        <div class="form-group"><label>Validez hasta</label>
+          <input type="date" id="cot-validez">
+        </div>
+        <div class="form-group"><label>Moneda *</label>
+          <select id="cot-moneda" onchange="toggleCotTC()">
+            <option value="ARS">🇦🇷 Pesos (ARS)</option>
+            <option value="USD">🇺🇸 Dólares (USD)</option>
+          </select>
+        </div>
+        <div class="form-group" id="cot-tc-group" style="display:none;">
+          <label>Tipo de cambio (ARS/USD)</label>
+          <input type="number" id="cot-tc" placeholder="Ej: 1500" step="0.01" min="0" oninput="recalcFilasCot()">
+        </div>
+        <div class="form-group"><label>Humedad máxima (%)</label>
+          <input type="number" id="cot-humedad" placeholder="Ej: 12" step="0.1" min="0" max="100">
+        </div>
+        <div class="form-group full"><label>Condiciones / Observaciones</label>
+          <textarea id="cot-obs" rows="2" placeholder="Condiciones de entrega, calidad mínima, etc." style="width:100%;padding:10px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.9rem;resize:vertical;background:var(--bg);"></textarea>
+        </div>
+      </div>
+
+      <!-- Filas de variedades -->
+      <div style="margin-top:18px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <div style="font-weight:700;color:var(--brown2);font-size:.85rem;text-transform:uppercase;letter-spacing:.05em;">Variedades cotizadas</div>
+          <button class="btn btn-secondary btn-sm" onclick="agregarFilaCot()">➕ Agregar variedad</button>
+        </div>
+        <div style="overflow-x:auto;">
+          <div style="min-width:480px;">
+            <div id="cot-header-grid" style="background:var(--brown);border-radius:8px 8px 0 0;display:grid;grid-template-columns:1fr 160px 160px 36px;gap:8px;padding:8px 12px;">
+              <span style="color:#fff9f0;font-size:.78rem;font-weight:700;">VARIEDAD</span>
+              <span style="color:#fff9f0;font-size:.78rem;font-weight:700;" id="cot-header-precio">PRECIO/kg</span>
+              <span style="color:#fff9f0;font-size:.78rem;font-weight:700;" id="cot-header-usd" style="display:none;"></span>
+              <span style="color:#fff9f0;font-size:.78rem;font-weight:700;">% KERNEL REF.</span>
+              <span></span>
+            </div>
+            <div id="cot-filas-container"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-actions" style="margin-top:16px;">
+        <button class="btn btn-primary" onclick="guardarCotizacion()">💾 Guardar cotización</button>
+        <button class="btn btn-secondary" onclick="limpiarCotizacion()">✖ Limpiar</button>
+      </div>
+    </div>
+
+    <!-- HISTORIAL -->
+    <div class="card">
+      <h2>📋 Historial de cotizaciones</h2>
+      <div class="filters">
+        <select id="f-cot-cliente" onchange="cargarCotizaciones()">
+          <option value="">Todos los clientes</option>
+        </select>
+        <select id="f-cot-estado" onchange="cargarCotizaciones()">
+          <option value="">Todos los estados</option>
+          <option value="vigente">✅ Vigente</option>
+          <option value="vencida">🔴 Vencida</option>
+        </select>
+        <button class="btn btn-secondary btn-sm" onclick="limpiarFiltrosCot()">✖ Limpiar</button>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr>
+            <th>N°</th><th>Fecha</th><th>Cliente</th><th>Variedad</th>
+            <th>Precio/kg</th><th>% Kernel</th><th>Hum. máx.</th><th>Validez</th><th>Estado</th><th></th>
+          </tr></thead>
+          <tbody id="tbl-cot-body">
+            <tr><td colspan="10" class="loading">Cargando...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
 </main>
 </div><!-- fin app-shell -->
 
@@ -1666,7 +1833,7 @@ const googleProvider = new GoogleAuthProvider();
 
 // ── ROLES Y PERMISOS ────────────────────────────────────────────────────────
 const PERMISOS = {
-  admin:    ['dashboard','clientes','entradas','salidas','stock-fabrica','stock-vendible','maquila','cocina','insumos','gastos','ventas','cobros','backup','usuarios'],
+  admin:    ['dashboard','clientes','entradas','salidas','stock-fabrica','stock-vendible','maquila','cocina','insumos','gastos','ventas','cobros','backup','usuarios','cotizador'],
   fabrica:  ['salidas'],
   cocina:   ['cocina'],
 };
@@ -1859,6 +2026,8 @@ window.showSection=function(id,btn){
   if(id==='cobros'){initCobros();}
   if(id==='backup'){initBackup();}
   if(id==='usuarios'){cargarUsuarios();}
+  if(id==='cotizador'){initCotizador();}
+  if(id==='cotizador'){calcCotizador();}
 }
 
 // ── GESTIÓN DE USUARIOS ──────────────────────────────────────────────────────
@@ -6446,6 +6615,449 @@ window.imprimirCtaCte=async function(){
 }
 
 
+// ============================================================
+// COTIZADOR DE NUEZ CON CÁSCARA
+// ============================================================
+window.calcCotizador=function(){
+  const kernel   = parseFloat(document.getElementById('cot-kernel').value)||0;
+  const pctPart  = parseFloat(document.getElementById('cot-pct-partido').value)||0;
+  const pEntero  = parseFloat(document.getElementById('cot-precio-entero').value)||0;
+  const pPartido = parseFloat(document.getElementById('cot-precio-partido').value)||0;
+  const cPelado  = parseFloat(document.getElementById('cot-costo-pelado').value)||0;
+  const margen   = parseFloat(document.getElementById('cot-margen').value)||0;
+  const moneda   = document.getElementById('cot-moneda').value;
+  const tc       = parseFloat(document.getElementById('cot-tc').value)||0;
+
+  document.getElementById('cot-tc-group').style.display=moneda==='USD'?'':'none';
+  const sim=moneda==='USD'?'USD':'$';
+  ['cot-sim-entero','cot-sim-partido','cot-sim-pelado'].forEach(id=>document.getElementById(id).textContent=sim);
+
+  const camposOk=kernel>0&&pEntero>0&&pPartido>0&&cPelado>0;
+  document.getElementById('cot-resultado').style.display=camposOk?'':'none';
+  document.getElementById('cot-sin-datos').style.display=camposOk?'none':'';
+  if(!camposOk) return;
+
+  // Cálculo por cada 1 kg de nuez c/cáscara
+  const kgKernel=kernel/100;
+  const kgPartido=kgKernel*pctPart/100;
+  const kgEntero=kgKernel-kgPartido;
+  const ingresoEnt=kgEntero*pEntero;
+  const ingresoPart=kgPartido*pPartido;
+  const ingresoBruto=ingresoEnt+ingresoPart;
+  const costos=cPelado;
+  const gananciaBruta=ingresoBruto-costos;
+  const precioMax=gananciaBruta/(1+margen/100);
+
+  const fN=(v,dec=2)=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+
+  document.getElementById('cot-res-principal').textContent=fN(precioMax);
+  document.getElementById('cot-res-moneda-label').textContent=sim+'/kg';
+
+  const secWrap=document.getElementById('cot-res-secundario-wrap');
+  if(moneda==='USD'&&tc>0){
+    secWrap.style.display='';
+    document.getElementById('cot-res-secundario').textContent='$ '+fN(precioMax*tc)+' ARS/kg';
+  } else if(moneda==='ARS'&&tc>0){
+    secWrap.style.display='';
+    document.getElementById('cot-res-secundario').textContent='USD '+fN(precioMax/tc)+'/kg';
+  } else {
+    secWrap.style.display='none';
+  }
+
+  const filas=[
+    {lbl:'Kernel sano obtenido',val:`${fN(kgKernel*1000,1)} g (${fN(kernel,1)}%)`,color:''},
+    {lbl:'→ Pecan Entero',val:`${fN(kgEntero*1000,1)} g × ${sim}${fN(pEntero)} = ${sim}${fN(ingresoEnt)}`,color:'var(--green)'},
+    {lbl:'→ Pecan Partido',val:`${fN(kgPartido*1000,1)} g × ${sim}${fN(pPartido)} = ${sim}${fN(ingresoPart)}`,color:'var(--amber)'},
+    {lbl:'Ingreso bruto total',val:`${sim}${fN(ingresoBruto)}`,color:'var(--brown)',bold:true},
+    {lbl:'Costo de pelado',val:`−${sim}${fN(costos)}`,color:'var(--red)'},
+    {lbl:'Ganancia bruta disponible',val:`${sim}${fN(gananciaBruta)}`,color:'var(--brown2)',bold:true},
+    {lbl:`Margen rentabilidad (${fN(margen,1)}%)`,val:`${sim}${fN(gananciaBruta-precioMax)}`,color:'var(--text2)'},
+    {lbl:'Precio máximo por kg c/c',val:`${sim}${fN(precioMax)}`,color:'var(--brown)',bold:true,big:true},
+  ];
+
+  document.getElementById('cot-detalle').innerHTML=filas.map(f=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-radius:6px;${f.big?'background:var(--bg2);margin-top:4px;':''}">
+      <span style="color:var(--text2);font-size:${f.big?'.9':'0.85'}rem;">${f.lbl}</span>
+      <span style="color:${f.color||'var(--text)'};font-weight:${f.bold?'700':'400'};font-size:${f.big?'1rem':'.88rem'};">${f.val}</span>
+    </div>`).join('');
+}
+
+
+// ============================================================
+// COTIZADOR DE COMPRA DE NUEZ CON CÁSCARA
+// ============================================================
+async function initCotizador(){
+  document.getElementById('cot-fecha').value=today();
+  try{
+    const cfgDoc=await getDoc(doc(db,'config','cotizaciones'));
+    const ultimo=cfgDoc.exists()?(cfgDoc.data().ultimo||0):0;
+    document.getElementById('cot-nro').value='COT-'+String(ultimo+1).padStart(4,'0');
+  }catch(e){document.getElementById('cot-nro').value='COT-0001';}
+  const sel=document.getElementById('cot-cliente');
+  while(sel.options.length>1) sel.remove(1);
+  clientesCache.forEach(c=>{const o=document.createElement('option');o.value=c.nombre;o.textContent=c.nombre;sel.appendChild(o);});
+  const fSel=document.getElementById('f-cot-cliente');
+  while(fSel.options.length>1) fSel.remove(1);
+  clientesCache.forEach(c=>{const o=document.createElement('option');o.value=c.nombre;o.textContent=c.nombre;fSel.appendChild(o);});
+  cargarCotizaciones();
+  // Fila inicial vacía
+  if(!document.querySelector('[id^="cot-fila-"]')) agregarFilaCot();
+}
+
+// ── CALCULADORA DE PRECIO MÁXIMO ─────────────────────────────────────────────
+window.calcPrecioMax=function(){
+  const pctKernel=(parseFloat(document.getElementById('calc-pct-kernel').value)||0)/100;
+  const pctPartido=(parseFloat(document.getElementById('calc-pct-partido').value)||0)/100;
+  const precioEntero=parseFloat(document.getElementById('calc-precio-entero').value)||0;
+  const precioPartido=parseFloat(document.getElementById('calc-precio-partido').value)||0;
+  const costoPelado=parseFloat(document.getElementById('calc-costo-pelado').value)||0;
+  const margen=(parseFloat(document.getElementById('calc-margen').value)||0)/100;
+
+  const sinDatos=document.getElementById('calc-sin-datos');
+  const resultado=document.getElementById('calc-resultado');
+
+  if(!pctKernel||!precioEntero||!precioPartido){
+    sinDatos.style.display='block';resultado.style.display='none';return;
+  }
+
+  // Por cada 1 kg con cáscara:
+  const kgEntero=pctKernel*(1-pctPartido);
+  const kgPartido=pctKernel*pctPartido;
+  const ingresoBruto=kgEntero*precioEntero+kgPartido*precioPartido;
+
+  // precio_max = ingresoBruto / (1 + margen) - costoPelado
+  const precioMaxCompra=ingresoBruto/(1+margen)-costoPelado;
+  const inversionTotal=precioMaxCompra+costoPelado;
+  const ganancia=ingresoBruto-inversionTotal;
+
+  const fmt=v=>'$'+v.toLocaleString('es-AR',{minimumFractionDigits:2});
+
+  sinDatos.style.display='none';resultado.style.display='block';
+
+  const color=precioMaxCompra>0?'#fff9f0':'#f8d7da';
+  document.getElementById('calc-precio-max-val').textContent=precioMaxCompra>0?fmt(precioMaxCompra):'No viable';
+  document.getElementById('calc-precio-max-val').style.color=color;
+
+  document.getElementById('calc-r-entero').textContent=(kgEntero*1000).toFixed(0)+' g';
+  document.getElementById('calc-r-partido').textContent=(kgPartido*1000).toFixed(0)+' g';
+  document.getElementById('calc-r-ingreso').textContent=fmt(ingresoBruto);
+  document.getElementById('calc-r-ganancia').textContent=fmt(ganancia);
+
+  const inversionVerif=Math.max(0,precioMaxCompra)+costoPelado;
+  const margenVerif=inversionVerif>0?(ganancia/inversionVerif*100).toFixed(2):0;
+  document.getElementById('calc-desglose').innerHTML=
+    `<strong>Ingresos por kg c/c:</strong><br>`+
+    `&nbsp;&nbsp;Kernel entero: ${(kgEntero*1000).toFixed(1)} g × ${fmt(precioEntero)}/kg = <strong>${fmt(kgEntero*precioEntero)}</strong><br>`+
+    `&nbsp;&nbsp;Kernel partido: ${(kgPartido*1000).toFixed(1)} g × ${fmt(precioPartido)}/kg = <strong>${fmt(kgPartido*precioPartido)}</strong><br>`+
+    `&nbsp;&nbsp;Ingreso bruto: <strong>${fmt(ingresoBruto)}</strong><br><br>`+
+    `<strong>Inversión por kg c/c:</strong><br>`+
+    `&nbsp;&nbsp;Precio compra nuez: <strong>${fmt(Math.max(0,precioMaxCompra))}</strong><br>`+
+    `&nbsp;&nbsp;Costo pelado: <strong>${fmt(costoPelado)}</strong><br>`+
+    `&nbsp;&nbsp;Inversión total: <strong>${fmt(inversionVerif)}</strong><br><br>`+
+    `<strong>Verificación:</strong><br>`+
+    `&nbsp;&nbsp;Ganancia = ${fmt(ingresoBruto)} - ${fmt(inversionVerif)} = <strong>${fmt(ganancia)}</strong><br>`+
+    `&nbsp;&nbsp;Retorno = ${fmt(ganancia)} / ${fmt(inversionVerif)} = <strong style="color:var(--green);">${margenVerif}%</strong>`;
+}
+
+// ── Filas de variedades en cotización ────────────────────────────────────────
+let _cotFilaIdx=0;
+const _varOpts=['Wichita','Cheyenne','Western Schley','Shoshoni','Mahan','Sioux','Mixta','Otra'];
+
+window.toggleCotTC=function(){
+  const moneda=document.getElementById('cot-moneda').value;
+  document.getElementById('cot-tc-group').style.display=moneda==='USD'?'':'none';
+  recalcFilasCot();
+}
+
+window.recalcFilasCot=function(){
+  const moneda=document.getElementById('cot-moneda').value;
+  const tc=parseFloat(document.getElementById('cot-tc').value)||0;
+  const esUSD=moneda==='USD';
+  // Actualizar grid de cada fila
+  const gridCols=esUSD?'1fr 130px 110px 110px 36px':'1fr 160px 160px 36px';
+  document.querySelectorAll('[id^="cot-fila-"]').forEach(div=>{
+    div.style.gridTemplateColumns=gridCols;
+  });
+  // Header
+  const headerDiv=document.getElementById('cot-header-grid');
+  if(headerDiv) headerDiv.style.gridTemplateColumns=gridCols;
+  const hPrecio=document.getElementById('cot-header-precio');
+  const hUSD=document.getElementById('cot-header-usd');
+  if(hPrecio) hPrecio.textContent=esUSD?'PRECIO ARS/kg':'PRECIO/kg';
+  if(hUSD){ hUSD.style.display=esUSD?'':'none'; hUSD.textContent='EQUIV. USD/kg'; }
+  // Celda USD
+  document.querySelectorAll('[id^="cot-usd-"]').forEach(el=>{
+    const idx=el.id.replace('cot-usd-','');
+    const ars=parseFloat(document.getElementById('cot-precio-'+idx)?.value)||0;
+    if(esUSD){
+      el.style.display='';
+      el.textContent=tc>0?'USD '+(ars/tc).toLocaleString('es-AR',{minimumFractionDigits:2}):'—';
+    } else {
+      el.style.display='none';
+    }
+  });
+}
+
+window.agregarFilaCot=function(precio='', pctKernel='', variedad=''){
+  const idx=_cotFilaIdx++;
+  const opts=_varOpts.map(v=>`<option value="${v}" ${v===variedad?'selected':''}>${v}</option>`).join('');
+  const div=document.createElement('div');
+  div.id='cot-fila-'+idx;
+  const _monedaActual=document.getElementById('cot-moneda').value;
+  const _gridActual=_monedaActual==='USD'?'1fr 130px 110px 110px 36px':'1fr 160px 160px 36px';
+  div.style.cssText=`display:grid;grid-template-columns:${_gridActual};gap:8px;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--bg2);align-items:center;min-width:480px;`;
+  div.innerHTML=`
+    <select id="cot-var-${idx}" style="padding:8px;border:1.5px solid var(--border);border-radius:6px;background:var(--bg);font-size:.88rem;">
+      ${opts}
+    </select>
+    <input type="number" id="cot-precio-${idx}" value="${precio}" placeholder="0.00" step="0.01" min="0"
+      oninput="recalcFilasCot()"
+      style="padding:8px;border:1.5px solid var(--border);border-radius:6px;font-size:.88rem;text-align:right;">
+    <div id="cot-usd-${idx}" style="display:none;padding:8px;background:var(--bg);border-radius:6px;font-size:.82rem;color:#1a5276;font-weight:600;text-align:right;">—</div>
+    <input type="number" id="cot-kernel-${idx}" value="${pctKernel}" placeholder="%" step="0.1" min="0" max="100"
+      style="padding:8px;border:1.5px solid var(--border);border-radius:6px;font-size:.88rem;text-align:right;">
+    <button onclick="document.getElementById('cot-fila-${idx}').remove()" style="background:var(--red);color:#fff;border:none;border-radius:6px;width:30px;height:30px;cursor:pointer;font-size:.9rem;">✕</button>`;
+  document.getElementById('cot-filas-container').appendChild(div);
+  recalcFilasCot();
+}
+
+window.usarPrecioCalculado=function(){
+  const precioMaxVal=document.getElementById('calc-precio-max-val').textContent;
+  if(precioMaxVal==='No viable'){showAlert('El precio calculado no es viable','error');return;}
+  const pctKernel=parseFloat(document.getElementById('calc-pct-kernel').value)||0;
+  const pctPartidoVal=parseFloat(document.getElementById('calc-pct-partido').value)||0;
+  const precioEntero=parseFloat(document.getElementById('calc-precio-entero').value)||0;
+  const precioPartido=parseFloat(document.getElementById('calc-precio-partido').value)||0;
+  const costoPelado=parseFloat(document.getElementById('calc-costo-pelado').value)||0;
+  const margen=(parseFloat(document.getElementById('calc-margen').value)||0)/100;
+  const kgEntero=(pctKernel/100)*(1-pctPartidoVal/100);
+  const kgPartido=(pctKernel/100)*(pctPartidoVal/100);
+  const ingresoBruto=kgEntero*precioEntero+kgPartido*precioPartido;
+  const precioMax=Math.max(0,ingresoBruto/(1+margen)-costoPelado);
+  // Agregar fila con el precio calculado
+  agregarFilaCot(precioMax.toFixed(2), pctKernel.toFixed(1));
+  document.getElementById('card-form-cotizacion').scrollIntoView({behavior:'smooth'});
+  showAlert('✅ Precio cargado — elegí la variedad en la fila agregada');
+}
+
+window.guardarCotizacion=async function(){
+  const fecha=document.getElementById('cot-fecha').value;
+  const cliente=document.getElementById('cot-cliente').value;
+  const moneda=document.getElementById('cot-moneda').value;
+  const tc=parseFloat(document.getElementById('cot-tc').value)||null;
+  // Leer filas de variedades
+  const filas=[];
+  document.querySelectorAll('[id^="cot-fila-"]').forEach(div=>{
+    const idx=div.id.replace('cot-fila-','');
+    const variedad=document.getElementById('cot-var-'+idx)?.value||'';
+    const precio=parseFloat(document.getElementById('cot-precio-'+idx)?.value)||0;
+    const pctKernel=parseFloat(document.getElementById('cot-kernel-'+idx)?.value)||null;
+    if(variedad&&precio) filas.push({variedad,precio_kg:precio,pct_kernel:pctKernel});
+  });
+  if(!fecha||!cliente){showAlert('Completá fecha y cliente','error');return;}
+  if(!filas.length){showAlert('Agregá al menos una variedad con precio','error');return;}
+  try{
+    const cfgRef=doc(db,'config','cotizaciones');
+    const cfgDoc=await getDoc(cfgRef);
+    const ultimo=cfgDoc.exists()?(cfgDoc.data().ultimo||0):0;
+    const nuevo=ultimo+1;
+    const num='COT-'+String(nuevo).padStart(4,'0');
+    await addDoc(collection(db,'cotizaciones'),{
+      num,fecha,cliente,moneda,
+      tc_cambio:tc,
+      filas,
+      // Mantener campo legacy para historial
+      variedad:filas.map(f=>f.variedad).join(', '),
+      precio_kg:filas[0]?.precio_kg||0,
+      pct_kernel:filas[0]?.pct_kernel||null,
+      humedad_max:parseFloat(document.getElementById('cot-humedad').value)||null,
+      validez:document.getElementById('cot-validez').value||'',
+      observaciones:document.getElementById('cot-obs').value.trim(),
+      calc_pct_kernel:parseFloat(document.getElementById('calc-pct-kernel').value)||null,
+      calc_pct_partido:parseFloat(document.getElementById('calc-pct-partido').value)||null,
+      calc_precio_entero:parseFloat(document.getElementById('calc-precio-entero').value)||null,
+      calc_precio_partido:parseFloat(document.getElementById('calc-precio-partido').value)||null,
+      calc_costo_pelado:parseFloat(document.getElementById('calc-costo-pelado').value)||null,
+      calc_margen:parseFloat(document.getElementById('calc-margen').value)||null,
+      creado:serverTimestamp()
+    });
+    await setDoc(cfgRef,{ultimo:nuevo},{merge:true});
+    showAlert('✅ Cotización '+num+' guardada');
+    limpiarCotizacion();
+    cargarCotizaciones();
+  }catch(e){showAlert('Error: '+e.message,'error');}
+}
+
+window.limpiarCotizacion=async function(){
+  ['cot-validez','cot-humedad','cot-obs','cot-tc'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('cot-fecha').value=today();
+  document.getElementById('cot-cliente').value='';
+  document.getElementById('cot-moneda').value='ARS';
+  document.getElementById('cot-tc-group').style.display='none';
+  document.getElementById('cot-filas-container').innerHTML='';
+  _cotFilaIdx=0;
+  agregarFilaCot(); // Siempre empieza con una fila vacía
+  try{
+    const cfgDoc=await getDoc(doc(db,'config','cotizaciones'));
+    const ultimo=cfgDoc.exists()?(cfgDoc.data().ultimo||0):0;
+    document.getElementById('cot-nro').value='COT-'+String(ultimo+1).padStart(4,'0');
+  }catch(e){}
+}
+
+window.limpiarFiltrosCot=function(){
+  document.getElementById('f-cot-cliente').value='';
+  document.getElementById('f-cot-estado').value='';
+  cargarCotizaciones();
+}
+
+window.cargarCotizaciones=async function(){
+  const tbody=document.getElementById('tbl-cot-body');
+  tbody.innerHTML='<tr><td colspan="10" class="loading">Cargando...</td></tr>';
+  const clienteF=document.getElementById('f-cot-cliente').value;
+  const estadoF=document.getElementById('f-cot-estado').value;
+  const hoy=today();
+  try{
+    const snap=await getDocsFromServer(query(collection(db,'cotizaciones'),orderBy('fecha','desc')));
+    const rows=[];
+    snap.forEach(d=>rows.push({id:d.id,...d.data()}));
+    const filtradas=rows.filter(c=>{
+      if(clienteF&&c.cliente!==clienteF) return false;
+      const vigente=!c.validez||c.validez>=hoy;
+      if(estadoF==='vigente'&&!vigente) return false;
+      if(estadoF==='vencida'&&vigente) return false;
+      return true;
+    });
+    if(!filtradas.length){
+      tbody.innerHTML='<tr><td colspan="10" style="text-align:center;color:var(--text2);padding:20px;">No hay cotizaciones</td></tr>';
+      return;
+    }
+    tbody.innerHTML='';
+    filtradas.forEach(c=>{
+      const vigente=!c.validez||c.validez>=hoy;
+      const estadoBadge=vigente
+        ?'<span class="badge badge-green">✅ Vigente</span>'
+        :'<span class="badge" style="background:#f8d7da;color:#721c24;">🔴 Vencida</span>';
+      const simbolo=c.moneda==='USD'?'USD ':'$';
+      tbody.innerHTML+=`<tr>
+        <td><span class="remito-num">${c.num||'—'}</span></td>
+        <td>${c.fecha||'—'}</td>
+        <td>${c.cliente||'—'}</td>
+        <td>${c.variedad||'—'}</td>
+        <td><strong>${simbolo}${parseFloat(c.precio_kg||0).toLocaleString('es-AR',{minimumFractionDigits:2})}/kg</strong>
+          ${c.moneda==='USD'?'<span class="badge" style="background:#1a5276;color:#fff;font-size:.7rem;margin-left:4px;">USD</span>':''}
+        </td>
+        <td>${c.pct_kernel!=null?c.pct_kernel+'%':'—'}</td>
+        <td>${c.humedad_max!=null?c.humedad_max+'%':'—'}</td>
+        <td style="${!vigente&&c.validez?'color:#c0392b;font-weight:600;':''}">${c.validez||'Sin límite'}</td>
+        <td>${estadoBadge}</td>
+        <td style="display:flex;gap:4px;">
+          <button class="btn btn-pdf btn-sm" onclick="imprimirCotizacion('${c.id}')" title="Descargar PDF">🖨️</button>
+          <button class="btn btn-danger btn-sm" onclick="eliminar('cotizaciones','${c.id}',cargarCotizaciones)">🗑️</button>
+        </td>
+      </tr>`;
+    });
+  }catch(e){tbody.innerHTML='<tr><td colspan="10" style="color:var(--red);">Error: '+e.message+'</td></tr>';}
+}
+
+window.imprimirCotizacion=async function(cotId){
+  const snap=await getDoc(doc(db,'cotizaciones',cotId));
+  if(!snap.exists()){showAlert('No se encontró la cotización','error');return;}
+  const c=snap.data();
+  const {jsPDF}=window.jspdf;
+  const p=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const fF=f=>f?f.split('-').reverse().join('/'):'—';
+  const fN=v=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:2});
+  const simbolo=c.moneda==='USD'?'USD ':'$';
+  // Header
+  p.setFillColor(61,43,31);p.rect(0,0,210,35,'F');
+  p.setTextColor(255,249,240);p.setFontSize(18);p.setFont('helvetica','bold');p.text('TECNOCROP S.A.',20,13);
+  p.setFontSize(8.5);p.setFont('helvetica','normal');
+  p.text('Pelado y Valor Agregado de Pecan',20,21);
+  p.text('Lucas Córdoba 1050, San Miguel de Tucumán | Tel: 3817030153',20,28);
+  p.setFontSize(13);p.setFont('helvetica','bold');p.text('COTIZACIÓN DE COMPRA',190,13,{align:'right'});
+  p.setFontSize(10);p.setFont('helvetica','normal');p.text(c.num||'',190,21,{align:'right'});
+  p.text('Fecha: '+fF(c.fecha),190,28,{align:'right'});
+  // Cliente
+  p.setTextColor(61,43,31);p.setFontSize(9);p.setFont('helvetica','bold');p.text('DESTINATARIO',20,45);
+  p.setDrawColor(200,129,26);p.line(20,47,190,47);
+  p.setFontSize(12);p.setFont('helvetica','bold');p.text(c.cliente||'—',20,56);
+  const cliObj=clientesCache.find(x=>x.nombre===c.cliente);
+  let cy=64;p.setFont('helvetica','normal');p.setFontSize(9);p.setTextColor(80,60,40);
+  if(cliObj?.cuit){p.text('CUIT: '+cliObj.cuit,20,cy);cy+=6;}
+  if(cliObj?.localidad){p.text(cliObj.localidad+(cliObj.provincia?', '+cliObj.provincia:''),20,cy);cy+=6;}
+  if(cliObj?.telefono){p.text('Tel: '+cliObj.telefono,20,cy);cy+=6;}
+  // Condiciones
+  let y=Math.max(cy+10,88);
+  const boxH=42;
+  p.setFillColor(245,240,232);p.rect(20,y,170,boxH,'F');
+  p.setDrawColor(200,129,26);p.rect(20,y,170,boxH,'S');
+  p.setTextColor(61,43,31);p.setFontSize(9);p.setFont('helvetica','bold');
+  p.text('CONDICIONES DE COMPRA',105,y+8,{align:'center'});
+  const condItems=[
+    ['Humedad maxima:',c.humedad_max!=null?c.humedad_max+'%':'Sin especificar'],
+    ['Validez:',c.validez?'Hasta el '+fF(c.validez):'Sin fecha limite'],
+    ['Moneda:',c.moneda==='USD'?'Dolares (USD)':'Pesos argentinos (ARS)'],
+  ];
+  let iy=y+18;
+  condItems.forEach(([lbl,val])=>{
+    p.setFont('helvetica','bold');p.text(lbl,30,iy);
+    p.setFont('helvetica','normal');p.text(val,82,iy);
+    iy+=8;
+  });
+  y+=boxH+12;
+
+  // Etiqueta tabla
+  p.setFontSize(9);p.setFont('helvetica','bold');p.setTextColor(61,43,31);
+  p.text('PRECIOS COTIZADOS',20,y);
+  p.setDrawColor(200,129,26);p.line(20,y+2,190,y+2);
+  y+=10;
+
+  // Tabla de variedades
+  const esUSD_pdf=c.moneda==='USD'&&c.tc_cambio;
+  const rowH=10; const hdrH=10;
+  p.setFillColor(61,43,31);p.rect(20,y,170,hdrH,'F');
+  p.setTextColor(255,249,240);p.setFontSize(8);p.setFont('helvetica','bold');
+  p.text('VARIEDAD',24,y+7);
+  p.text(esUSD_pdf?'PRECIO USD/kg':'PRECIO ARS/kg',145,y+7,{align:'right'});
+  p.text('% KERNEL REF.',188,y+7,{align:'right'});
+  y+=hdrH+2;
+  const filas=c.filas&&c.filas.length?c.filas:[{variedad:c.variedad||'—',precio_kg:c.precio_kg||0,pct_kernel:c.pct_kernel}];
+  filas.forEach((f,i)=>{
+    if(i%2===0){p.setFillColor(245,240,232);p.rect(20,y-1,170,rowH,'F');}
+    p.setTextColor(61,43,31);p.setFont('helvetica','normal');p.setFontSize(9);
+    p.text(f.variedad||'—',24,y+6);
+    p.setFont('helvetica','bold');
+    const precioMostrar=esUSD_pdf
+      ?'USD '+fN((f.precio_kg||0)/c.tc_cambio)
+      :'$'+fN(f.precio_kg||0);
+    p.text(precioMostrar,145,y+6,{align:'right'});
+    p.setFont('helvetica','normal');
+    p.text(f.pct_kernel!=null?f.pct_kernel+'%':'—',188,y+6,{align:'right'});
+    y+=rowH;
+  });
+  y+=8;
+  // Observaciones
+  if(c.observaciones){
+    p.setFontSize(9);p.setFont('helvetica','bold');p.setTextColor(61,43,31);p.text('OBSERVACIONES',20,y);
+    p.setDrawColor(200,129,26);p.line(20,y+2,190,y+2);
+    p.setFont('helvetica','normal');p.setTextColor(80,60,40);
+    const lines=p.splitTextToSize(c.observaciones,165);
+    p.text(lines,20,y+10);y+=10+lines.length*6+8;
+  }
+  // Firmas
+  y=Math.max(y+15,225);
+  p.setDrawColor(100,100,100);p.line(20,y,80,y);p.line(130,y,190,y);
+  p.setFontSize(8);p.setTextColor(100,100,100);
+  p.text('Firma del cliente',50,y+6,{align:'center'});
+  p.text('Firma y sello Tecnocrop S.A.',160,y+6,{align:'center'});
+  // Footer
+  p.setFillColor(61,43,31);p.rect(0,280,210,17,'F');
+  p.setTextColor(255,249,240);p.setFontSize(8);p.setFont('helvetica','normal');
+  p.text('Tecnocrop S.A. — CUIT: 30-71202936-2 — sebastian@tecnocrop.com',105,287,{align:'center'});
+  p.text('Generado el '+new Date().toLocaleDateString('es-AR'),105,293,{align:'center'});
+  p.save('cotizacion-'+(c.num||'COT')+'-'+c.cliente.replace(/\s+/g,'-')+'.pdf');
+}
+
 // Init — movido a cargarInicialApp() que se llama post-login
 
 // ============================================================
@@ -6458,7 +7070,7 @@ const COLECCIONES_BACKUP = [
   'recetas','insumos','tandas_cocina',
   'compras','compras_nuez',
   'ventas','cobros',
-  'config','pagos_usd'
+  'config','pagos_usd','cotizaciones'
 ];
 
 let _restoreData = null;
