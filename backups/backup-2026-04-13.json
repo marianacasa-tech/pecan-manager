@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-03-14T07:51:22.809Z",
-    "fecha_legible": "14/3/2026, 04:51:22",
+    "fecha": "2026-04-13T08:02:05.338Z",
+    "fecha_legible": "13/4/2026, 05:02:05",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -41,6 +41,16 @@
         "creado": "2026-03-08T21:37:25.634Z"
       },
       {
+        "_id": "Ny5uiVuNkbhw2ICBAiiP",
+        "nombre": "tinkuy",
+        "cuit": "",
+        "rubro": "",
+        "telefono": "",
+        "email": "",
+        "observaciones": "",
+        "creado": "2026-03-18T13:29:40.800Z"
+      },
+      {
         "_id": "W3YgCoMh0XJJDOR1wxA7",
         "nombre": "Edet",
         "cuit": "30258987",
@@ -49,6 +59,16 @@
         "email": "",
         "observaciones": "",
         "creado": "2026-03-08T21:33:44.147Z"
+      },
+      {
+        "_id": "a1wYaXmffqG6AKnt8qVh",
+        "nombre": "Dyfma",
+        "cuit": "30717842983",
+        "rubro": "Maquinaria",
+        "telefono": "3534118602",
+        "email": "info@dyfma.ar",
+        "observaciones": "",
+        "creado": "2026-03-18T13:16:21.508Z"
       }
     ],
     "entradas_fabrica": [
@@ -1122,6 +1142,66 @@
         "creado": "2026-03-08T21:36:39.386Z"
       },
       {
+        "_id": "kUAbfs1SxqRETqyfNAGs",
+        "fecha": "2026-03-18",
+        "proveedor": "tinkuy",
+        "nro_factura": "",
+        "moneda": "USD",
+        "tc_referencial": 1500,
+        "iva_pct": 0,
+        "monto_neto": 9000,
+        "monto_iva": 0,
+        "monto_total": 9000,
+        "forma_pago": "credito",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "nuez_pelada",
+            "descripcion": "Pecan pelado — Pecan Entero",
+            "insumo_id": "",
+            "insumo_nombre": "",
+            "unidad": "kg",
+            "cat_nuez": "enteras",
+            "cantidad": 2000,
+            "precio_unitario": 4.5,
+            "subtotal": 9000
+          }
+        ],
+        "creado": "2026-03-18T13:30:19.596Z",
+        "estado": "pagado"
+      },
+      {
+        "_id": "oBfgZ6X86vIEGA5obHDt",
+        "fecha": "2025-12-12",
+        "proveedor": "Dyfma",
+        "nro_factura": "",
+        "moneda": "USD",
+        "tc_referencial": 1500,
+        "iva_pct": 0,
+        "monto_neto": 53800,
+        "monto_iva": 0,
+        "monto_total": 53800,
+        "forma_pago": "credito",
+        "estado": "pendiente",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "inversion",
+            "descripcion": "Maquinaria",
+            "insumo_id": "",
+            "insumo_nombre": "",
+            "unidad": "u",
+            "cat_nuez": "",
+            "cantidad": 1,
+            "precio_unitario": 53800,
+            "subtotal": 53800
+          }
+        ],
+        "creado": "2026-03-18T13:19:35.697Z"
+      },
+      {
         "_id": "xPaHj91TXar1HP0cjrTF",
         "fecha": "2026-03-08",
         "proveedor": "disrimap",
@@ -1160,6 +1240,16 @@
         "precio_unitario": 240,
         "proveedor": "disrimap",
         "creado": "2026-03-08T21:41:36.373Z"
+      },
+      {
+        "_id": "fIWy1ylDsZoCCcAnbPXi",
+        "fecha": "2026-03-18",
+        "compra_id": "kUAbfs1SxqRETqyfNAGs",
+        "cat_nuez": "enteras",
+        "kg": 2000,
+        "precio_unitario": 4.5,
+        "proveedor": "tinkuy",
+        "creado": "2026-03-18T13:30:19.745Z"
       }
     ],
     "ventas": [
@@ -1725,6 +1815,10 @@
         "ultimo": 13
       },
       {
+        "_id": "cotizaciones",
+        "ultimo": 11
+      },
+      {
         "_id": "envasado",
         "cap_bolsa": 5,
         "bolsas_caja": 2,
@@ -1763,6 +1857,39 @@
         "_id": "remitos",
         "ultimo": 39
       }
-    ]
+    ],
+    "pagos_usd": [
+      {
+        "_id": "SHdrU49C0ztBa3f0Ck2X",
+        "compra_id": "oBfgZ6X86vIEGA5obHDt",
+        "fecha": "2026-02-20",
+        "monto_ars": 7150000,
+        "tc": 1405.2673,
+        "usd_cancelado": 5087.999984059972,
+        "obs": "",
+        "creado": "2026-03-18T13:39:24.537Z"
+      },
+      {
+        "_id": "aOdpmJEd2gAd3lqWHAsj",
+        "compra_id": "kUAbfs1SxqRETqyfNAGs",
+        "fecha": "2026-03-18",
+        "monto_ars": 9000000,
+        "tc": 1000,
+        "usd_cancelado": 9000,
+        "obs": "",
+        "creado": "2026-03-18T13:30:56.211Z"
+      },
+      {
+        "_id": "u6fZojQaZxS8FVATVJld",
+        "compra_id": "oBfgZ6X86vIEGA5obHDt",
+        "fecha": "2026-02-02",
+        "monto_ars": 8000000,
+        "tc": 1470.04,
+        "usd_cancelado": 5442.028788332291,
+        "obs": "",
+        "creado": "2026-03-18T13:27:57.076Z"
+      }
+    ],
+    "cotizaciones": []
   }
 }
