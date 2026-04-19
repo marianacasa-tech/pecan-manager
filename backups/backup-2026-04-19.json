@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-03-20T07:58:56.450Z",
-    "fecha_legible": "20/3/2026, 04:58:56",
+    "fecha": "2026-04-19T07:18:29.469Z",
+    "fecha_legible": "19/4/2026, 04:18:29",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -1815,6 +1815,10 @@
         "ultimo": 13
       },
       {
+        "_id": "cotizaciones",
+        "ultimo": 11
+      },
+      {
         "_id": "envasado",
         "cap_bolsa": 5,
         "bolsas_caja": 2,
@@ -1885,6 +1889,7 @@
         "obs": "",
         "creado": "2026-03-18T13:27:57.076Z"
       }
-    ]
+    ],
+    "cotizaciones": []
   }
 }
