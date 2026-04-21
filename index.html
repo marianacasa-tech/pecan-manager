@@ -48,7 +48,7 @@
   .badge-amber{background:#fff3cd;color:#856404;}
   .metrics-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-bottom:24px;}
   .metric-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;box-shadow:var(--shadow);}
-  .metric-card .val{font-family:'Playfair Display',serif;font-size:2rem;color:var(--amber);font-weight:700;}
+  .metric-card .val{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--amber);font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .metric-card .lbl{font-size:.8rem;color:var(--text2);font-weight:500;margin-top:4px;}
   .filters{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-end;}
   .filters .form-group{flex:1;min-width:140px;}
@@ -191,6 +191,7 @@
   <button data-sec="ventas" onclick="showSection('ventas',this)">🛒 Ventas</button>
   <button data-sec="cobros" onclick="showSection('cobros',this)">💵 Cobros</button>
   <button data-sec="usuarios" onclick="showSection('usuarios',this)">👥 Usuarios</button>
+  <button data-sec="resumen" onclick="showSection('resumen',this)">📊 Resumen</button>
   <button data-sec="cotizador" onclick="showSection('cotizador',this)">🧮 Cotizador</button>
 </nav>
 <main>
@@ -1194,6 +1195,116 @@
   </div>
 
 
+  <!-- RESUMEN EJECUTIVO -->
+  <div class="section" id="sec-resumen">
+
+    <!-- Selector de período -->
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+      <div>
+        <h2 style="margin:0;font-family:'Playfair Display',serif;">📊 Resumen ejecutivo</h2>
+        <div id="res-label" style="font-size:.82rem;color:var(--text2);margin-top:3px;"></div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <div style="display:flex;background:var(--bg2);border-radius:10px;padding:3px;gap:2px;">
+          <button id="rbtn-semana" onclick="setResPeriodo('semana')" style="padding:7px 16px;border:none;border-radius:7px;cursor:pointer;font-size:.83rem;font-family:'DM Sans',sans-serif;font-weight:600;background:var(--brown);color:#fff9f0;transition:all .2s;">Semana</button>
+          <button id="rbtn-mes" onclick="setResPeriodo('mes')" style="padding:7px 16px;border:none;border-radius:7px;cursor:pointer;font-size:.83rem;font-family:'DM Sans',sans-serif;font-weight:400;background:transparent;color:var(--text2);transition:all .2s;">Mes</button>
+          <button id="rbtn-anio" onclick="setResPeriodo('anio')" style="padding:7px 16px;border:none;border-radius:7px;cursor:pointer;font-size:.83rem;font-family:'DM Sans',sans-serif;font-weight:400;background:transparent;color:var(--text2);transition:all .2s;">Año</button>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="initResumen()" title="Actualizar">🔄</button>
+      </div>
+    </div>
+
+    <!-- ── FÁBRICA ─────────────────────────────────────────────────────── -->
+    <div class="card">
+      <div style="font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--brown2);margin-bottom:14px;">🏭 Fábrica</div>
+      <div class="metrics-grid">
+        <div class="metric-card"><div class="val" id="rf-entrada">—</div><div class="lbl">Kg c/c ingresados</div></div>
+        <div class="metric-card"><div class="val" id="rf-procesado">—</div><div class="lbl">Kg c/c procesados</div></div>
+        <div class="metric-card"><div class="val" id="rf-pendiente" style="color:var(--amber);">—</div><div class="lbl">Kg c/c pendientes</div></div>
+        <div class="metric-card"><div class="val" id="rf-kernel">—</div><div class="lbl">% Kernel promedio</div></div>
+      </div>
+    </div>
+
+    <!-- ── STOCK ──────────────────────────────────────────────────────── -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+
+      <!-- Stock vendible -->
+      <div class="card">
+        <div style="font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--brown2);margin-bottom:14px;">🏷️ Stock vendible</div>
+        <div style="display:flex;flex-direction:column;gap:8px;" id="res-stock-vendible">
+          <div class="loading">Cargando...</div>
+        </div>
+      </div>
+
+      <!-- Stock insumos -->
+      <div class="card">
+        <div style="font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--brown2);margin-bottom:14px;">📦 Insumos disponibles</div>
+        <div style="display:flex;flex-direction:column;gap:8px;" id="res-stock-insumos">
+          <div class="loading">Cargando...</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── VENTAS ─────────────────────────────────────────────────────── -->
+    <div class="card">
+      <div style="font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--brown2);margin-bottom:14px;">🛒 Ventas</div>
+      <div class="metrics-grid" style="margin-bottom:20px;">
+        <div class="metric-card"><div class="val" id="rv-total-kg">—</div><div class="lbl">Kg totales vendidos</div></div>
+        <div class="metric-card"><div class="val" id="rv-entero-kg">—</div><div class="lbl">Pecan entero</div></div>
+        <div class="metric-card"><div class="val" id="rv-pg-kg">—</div><div class="lbl">Partido grande</div></div>
+        <div class="metric-card"><div class="val" id="rv-pc-kg">—</div><div class="lbl">Partido chico</div></div>
+        <div class="metric-card"><div class="val" id="rv-dan-kg">—</div><div class="lbl">Dañado</div></div>
+        <div class="metric-card"><div class="val" id="rv-monto">—</div><div class="lbl">Monto total vendido</div></div>
+      </div>
+      <!-- Elaborados desglosados por receta -->
+      <div id="rv-elab-detalle" style="display:none;margin-bottom:20px;">
+        <div style="font-size:.75rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">🍫 Elaborados cocina vendidos</div>
+        <div id="rv-elab-grid" class="metrics-grid"></div>
+      </div>
+      <!-- Gráficos ventas -->
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start;">
+        <div>
+          <div style="font-size:.8rem;color:var(--text2);margin-bottom:8px;font-weight:600;">Evolución mensual de ventas</div>
+          <canvas id="chart-ventas-evol" height="200"></canvas>
+        </div>
+        <div>
+          <div style="font-size:.8rem;color:var(--text2);margin-bottom:8px;font-weight:600;">Distribución por categoría</div>
+          <canvas id="chart-ventas-torta" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SITUACIÓN ECONÓMICA ────────────────────────────────────────── -->
+    <div class="card">
+      <div style="font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--brown2);margin-bottom:14px;">💰 Situación económica</div>
+
+      <!-- Tarjetas ARS -->
+      <div style="font-size:.75rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">🇦🇷 Pesos</div>
+      <div class="metrics-grid" style="margin-bottom:20px;">
+        <div class="metric-card"><div class="val" id="re-ventas">—</div><div class="lbl">Ventas</div></div>
+        <div class="metric-card"><div class="val" id="re-cobrado">—</div><div class="lbl">Cobrado</div></div>
+        <div class="metric-card"><div class="val" id="re-por-cobrar" style="color:var(--amber);">—</div><div class="lbl">Por cobrar (cta. cte.)</div></div>
+        <div class="metric-card"><div class="val" id="re-gastos">—</div><div class="lbl">Gastos</div></div>
+        <div class="metric-card"><div class="val" id="re-deuda-prov-ars" style="color:var(--amber);">—</div><div class="lbl">Deuda proveedores ARS</div></div>
+        <div class="metric-card"><div class="val" id="re-resultado">—</div><div class="lbl">Resultado (ventas − gastos)</div></div>
+      </div>
+
+      <!-- Tarjetas USD -->
+      <div style="font-size:.75rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">🇺🇸 Dólares</div>
+      <div class="metrics-grid" style="margin-bottom:20px;">
+        <div class="metric-card"><div class="val" id="re-compras-usd">—</div><div class="lbl">Compras en USD</div></div>
+        <div class="metric-card"><div class="val" id="re-deuda-prov-usd" style="color:var(--amber);">—</div><div class="lbl">Deuda proveedores USD</div></div>
+        <div class="metric-card"><div class="val" id="re-pagado-usd">—</div><div class="lbl">Pagado en USD</div></div>
+      </div>
+
+      <!-- Gráfico económico -->
+      <div style="font-size:.8rem;color:var(--text2);margin-bottom:8px;font-weight:600;">Ventas vs Cobrado vs Gastos por mes</div>
+      <canvas id="chart-economico" height="160"></canvas>
+    </div>
+
+  </div>
+
   <!-- COTIZADOR -->
   <div class="section" id="sec-cotizador">
 
@@ -1833,7 +1944,7 @@ const googleProvider = new GoogleAuthProvider();
 
 // ── ROLES Y PERMISOS ────────────────────────────────────────────────────────
 const PERMISOS = {
-  admin:    ['dashboard','clientes','entradas','salidas','stock-fabrica','stock-vendible','maquila','cocina','insumos','gastos','ventas','cobros','backup','usuarios','cotizador'],
+  admin:    ['dashboard','clientes','entradas','salidas','stock-fabrica','stock-vendible','maquila','cocina','insumos','gastos','ventas','cobros','backup','usuarios','cotizador','resumen'],
   fabrica:  ['salidas'],
   cocina:   ['cocina'],
 };
@@ -2027,6 +2138,7 @@ window.showSection=function(id,btn){
   if(id==='backup'){initBackup();}
   if(id==='usuarios'){cargarUsuarios();}
   if(id==='cotizador'){initCotizador();}
+  if(id==='resumen'){initResumen();}
   if(id==='cotizador'){calcCotizador();}
 }
 
@@ -4029,7 +4141,7 @@ async function cargarRecetasSelect(){
   recetasCache.forEach(r=>{const o=document.createElement('option');o.value=r.id;o.textContent=r.nombre;fsel.appendChild(o);});
 }
 
-window.seleccionarReceta=function(){
+window.seleccionarReceta=async function(){
   const id=document.getElementById('coc-receta').value;
   const panel=document.getElementById('coc-insumos-panel');
   if(!id){panel.style.display='none';return;}
@@ -4037,12 +4149,38 @@ window.seleccionarReceta=function(){
   if(!rec||!rec.insumos?.length){panel.style.display='none';return;}
   panel.style.display='block';
   const lista=document.getElementById('coc-insumos-lista');
+  lista.innerHTML='<div class="loading" style="font-size:.82rem;">Calculando stock...</div>';
+
+  // Calcular stock real de insumos (igual que calcStockInsumos)
+  const [snapCompR, snapTandasR, snapSalidasR]=await Promise.all([
+    getDocsFromServer(collection(db,'compras')),
+    getDocsFromServer(collection(db,'tandas_cocina')),
+    getDocsFromServer(collection(db,'salidas_fabrica')),
+  ]);
+  const insEnt={}, insCoc={}, insFab={};
+  snapCompR.forEach(d=>{
+    (d.data().items||[]).forEach(it=>{
+      if(it.tipo==='insumo'&&it.insumo_id)
+        insEnt[it.insumo_id]=(insEnt[it.insumo_id]||0)+it.cantidad;
+    });
+  });
+  snapTandasR.forEach(d=>{
+    (d.data().insumos_usados||[]).forEach(it=>{
+      insCoc[it.insumo_id]=(insCoc[it.insumo_id]||0)+it.cantidad;
+    });
+  });
+  snapSalidasR.forEach(d=>{
+    (d.data().insumos_usados||[]).forEach(it=>{
+      insFab[it.id]=(insFab[it.id]||0)+it.cantidad;
+    });
+  });
+
   lista.innerHTML=rec.insumos.map(i=>{
-    const ins=insumosCache.find(x=>x.id===i.insumo_id)||{stock_actual:0};
-    const ok=ins.stock_actual>=i.cantidad;
+    const stockReal=(insEnt[i.insumo_id]||0)-(insCoc[i.insumo_id]||0)-(insFab[i.insumo_id]||0);
+    const ok=stockReal>=i.cantidad;
     return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-radius:6px;margin-bottom:4px;background:${ok?'#f0fff4':'#fff0f0'};">
       <span><strong>${i.nombre}</strong> — ${i.cantidad} ${i.unidad}</span>
-      <span style="font-size:.82rem;color:${ok?'var(--green)':'#c0392b'};">Stock: ${ins.stock_actual?.toFixed(2)||'0.00'} ${i.unidad} ${ok?'✔':'⚠️ insuficiente'}</span>
+      <span style="font-size:.82rem;color:${ok?'var(--green)':'#c0392b'};">Stock: ${stockReal.toFixed(2)} ${i.unidad} ${ok?'✔':'⚠️ insuficiente'}</span>
     </div>`;
   }).join('');
   verificarStockNuez();
@@ -4141,13 +4279,23 @@ window.guardarLoteCocina=async function(){
   const totalNuez=tandas.reduce((s,t)=>s+t.kgNuez,0);
   const totalProd=tandas.reduce((s,t)=>s+t.kgProd,0);
 
-  // Validar stock insumos (multiplica por cantidad de tandas)
+  // Validar stock insumos con stock calculado dinámicamente
+  const [_snapCmpV,_snapTanV,_snapSalV]=await Promise.all([
+    getDocsFromServer(collection(db,'compras')),
+    getDocsFromServer(collection(db,'tandas_cocina')),
+    getDocsFromServer(collection(db,'salidas_fabrica')),
+  ]);
+  const _iEnt={},_iCoc={},_iFab={};
+  _snapCmpV.forEach(d=>{(d.data().items||[]).forEach(it=>{if(it.tipo==='insumo'&&it.insumo_id) _iEnt[it.insumo_id]=(_iEnt[it.insumo_id]||0)+it.cantidad;});});
+  _snapTanV.forEach(d=>{(d.data().insumos_usados||[]).forEach(it=>{_iCoc[it.insumo_id]=(_iCoc[it.insumo_id]||0)+it.cantidad;});});
+  _snapSalV.forEach(d=>{(d.data().insumos_usados||[]).forEach(it=>{_iFab[it.id]=(_iFab[it.id]||0)+it.cantidad;});});
+
   const insuficientes=[];
   for(const i of (rec.insumos||[])){
-    const ins=insumosCache.find(x=>x.id===i.insumo_id);
+    const stockReal=(_iEnt[i.insumo_id]||0)-(_iCoc[i.insumo_id]||0)-(_iFab[i.insumo_id]||0);
     const necesita=i.cantidad*tandas.length;
-    if(!ins||ins.stock_actual<necesita)
-      insuficientes.push(`${i.nombre} (necesita ${necesita} ${i.unidad}, hay ${ins?.stock_actual?.toFixed(2)||0})`);
+    if(stockReal<necesita)
+      insuficientes.push(`${i.nombre} (necesita ${necesita} ${i.unidad}, hay ${stockReal.toFixed(2)})`);
   }
   if(insuficientes.length){showAlert('⚠️ Insumos insuficientes:\n'+insuficientes.join('\n'),'error');return;}
 
@@ -6682,6 +6830,405 @@ window.calcCotizador=function(){
     </div>`).join('');
 }
 
+
+// ============================================================
+// RESUMEN EJECUTIVO
+// ============================================================
+// ============================================================
+// RESUMEN EJECUTIVO
+// ============================================================
+let _resPeriodo='semana';
+let _chartVentasEvol=null, _chartVentasTorta=null, _chartEconomico=null;
+
+window.setResPeriodo=function(p){
+  _resPeriodo=p;
+  ['semana','mes','anio'].forEach(x=>{
+    const b=document.getElementById('rbtn-'+x);
+    if(!b) return;
+    const a=x===p;
+    b.style.background=a?'var(--brown)':'transparent';
+    b.style.color=a?'#fff9f0':'var(--text2)';
+    b.style.fontWeight=a?'600':'400';
+  });
+  initResumen();
+}
+
+async function initResumen(){
+  const hoy=new Date();
+  const hoyStr=hoy.toISOString().split('T')[0];
+  const anio=hoy.getFullYear();
+  let desdeStr='', label='';
+
+  if(_resPeriodo==='semana'){
+    const d=hoy.getDay()||7;
+    const lun=new Date(hoy); lun.setDate(hoy.getDate()-(d-1));
+    desdeStr=lun.toISOString().split('T')[0];
+    label='Semana: '+desdeStr.split('-').reverse().join('/')+' al '+hoyStr.split('-').reverse().join('/');
+  } else if(_resPeriodo==='mes'){
+    desdeStr=hoyStr.slice(0,7)+'-01';
+    label='Mes: '+hoy.toLocaleString('es-AR',{month:'long',year:'numeric'});
+  } else {
+    desdeStr=anio+'-01-01';
+    label='Año '+anio;
+  }
+
+  // Actualizar botones
+  ['semana','mes','anio'].forEach(x=>{
+    const b=document.getElementById('rbtn-'+x);
+    if(!b) return;
+    const a=x===_resPeriodo;
+    b.style.background=a?'var(--brown)':'transparent';
+    b.style.color=a?'#fff9f0':'var(--text2)';
+    b.style.fontWeight=a?'600':'400';
+  });
+  document.getElementById('res-label').textContent=label;
+
+  const fmtKg=v=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:0})+' kg';
+  const fmt=v=>{
+    const n=parseFloat(v||0);
+    if(Math.abs(n)>=1000000) return '$'+(n/1000000).toLocaleString('es-AR',{minimumFractionDigits:2})+' M';
+    return '$'+n.toLocaleString('es-AR',{minimumFractionDigits:0});
+  };
+  const fmtUSD=v=>{
+    const n=parseFloat(v||0);
+    if(Math.abs(n)>=1000000) return 'USD '+(n/1000000).toLocaleString('es-AR',{minimumFractionDigits:2})+' M';
+    return 'USD '+n.toLocaleString('es-AR',{minimumFractionDigits:2});
+  };
+
+  // Cargar todo en paralelo
+  const [snapEnt,snapSal,snapVent,snapCob,snapComp,snapPagosUSD,snapInsumos,snapTandas,snapComprasNuez]=await Promise.all([
+    getDocsFromServer(collection(db,'entradas_fabrica')),
+    getDocsFromServer(collection(db,'salidas_fabrica')),
+    getDocsFromServer(collection(db,'ventas')),
+    getDocsFromServer(collection(db,'cobros')),
+    getDocsFromServer(collection(db,'compras')),
+    getDocsFromServer(collection(db,'pagos_usd')),
+    getDocsFromServer(collection(db,'insumos')),
+    getDocsFromServer(collection(db,'tandas_cocina')),
+    getDocsFromServer(collection(db,'compras_nuez')),
+  ]);
+
+  // ── FÁBRICA ──────────────────────────────────────────────────────────────
+  let kgEnt=0, kgSal=0, kernelSum=0, kernelCnt=0;
+  let totEntProp=0, totSalProp=0;
+  snapEnt.forEach(d=>{
+    const e=d.data();
+    if(e.propietario==='PROPIO') totEntProp+=e.kg||0;
+    if(e.propietario==='PROPIO'&&e.fecha>=desdeStr) kgEnt+=e.kg||0;
+  });
+  snapSal.forEach(d=>{
+    const s=d.data();
+    if(s.propietario==='PROPIO') totSalProp+=s.kg_cascara||0;
+    if(s.propietario==='PROPIO'&&s.fecha>=desdeStr){
+      kgSal+=s.kg_cascara||0;
+      if(s.pct_kernel){kernelSum+=parseFloat(s.pct_kernel);kernelCnt++;}
+    }
+  });
+  const kgPend=Math.max(0,totEntProp-totSalProp);
+  const kernelProm=kernelCnt>0?(kernelSum/kernelCnt).toFixed(1)+'%':'—';
+
+  document.getElementById('rf-entrada').textContent=fmtKg(kgEnt);
+  document.getElementById('rf-procesado').textContent=fmtKg(kgSal);
+  document.getElementById('rf-pendiente').textContent=fmtKg(kgPend);
+  document.getElementById('rf-kernel').textContent=kernelProm;
+
+  // ── STOCK VENDIBLE — igual lógica que calcStockVendible() ───────────────
+  const _cats=['enteras','part_grandes','part_chicas','danadas'];
+  const _catLbl={enteras:'Pecan entero',part_grandes:'Partido grande',part_chicas:'Partido chico',danadas:'Dañado'};
+  const _catCol={enteras:'var(--green)',part_grandes:'var(--amber)',part_chicas:'#e07b00',danadas:'var(--red)'};
+
+  // Producción fábrica propia
+  const prodFab={enteras:0,part_grandes:0,part_chicas:0,danadas:0};
+  snapSal.forEach(d=>{
+    const s=d.data();
+    if(s.propietario!=='PROPIO') return;
+    _cats.forEach(c=>prodFab[c]+=s[c]||0);
+  });
+
+  // Pecan pelado comprada
+  const compNuez={enteras:0,part_grandes:0,part_chicas:0,danadas:0};
+  snapComprasNuez.forEach(d=>{
+    const c=d.data();
+    if(_cats.includes(c.cat_nuez)) compNuez[c.cat_nuez]+=c.kg||0;
+  });
+
+  // Consumo cocina por categoría + producción elaborados
+  const consumoCoc={enteras:0,part_grandes:0,part_chicas:0,danadas:0};
+  const porReceta={};
+  snapTandas.forEach(d=>{
+    const t=d.data();
+    if(_cats.includes(t.categoria_nuez)) consumoCoc[t.categoria_nuez]+=t.kg_nuez||0;
+    if(!porReceta[t.receta_nombre]) porReceta[t.receta_nombre]={producido:0,vendido:0};
+    porReceta[t.receta_nombre].producido+=t.kg_producido||0;
+  });
+
+  // Ventas: nuez pelada y elaborados
+  const vendNuez={enteras:0,part_grandes:0,part_chicas:0,danadas:0};
+  snapVent.forEach(d=>{
+    (d.data().items||[]).forEach(it=>{
+      const key=it.prod_key||'';
+      if(key.startsWith('nuez_')){
+        const cat=key.replace('nuez_','');
+        if(_cats.includes(cat)) vendNuez[cat]+=it.kg||0;
+      }
+      if(key.startsWith('receta_')&&porReceta[it.nombre])
+        porReceta[it.nombre].vendido+=it.kg||0;
+    });
+  });
+
+  // Stock neto pecan pelado
+  const stockNuez=_cats.map(c=>({
+    lbl:_catLbl[c], color:_catCol[c],
+    kg:Math.max(0,(prodFab[c]||0)+(compNuez[c]||0)-(consumoCoc[c]||0)-(vendNuez[c]||0))
+  }));
+
+  // Stock elaborados cocina
+  const stockElaborados=Object.entries(porReceta)
+    .map(([nombre,v])=>({nombre,kg:Math.max(0,v.producido-v.vendido)}))
+    .filter(e=>e.kg>0.001);
+
+  let htmlSV='<div style="font-size:.75rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Pecan pelado</div>';
+  htmlSV+=stockNuez.map(c=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);">
+      <span style="font-size:.83rem;">${c.lbl}</span>
+      <strong style="color:${c.color};font-size:.88rem;">${fmtKg(c.kg)}</strong>
+    </div>`).join('');
+
+  if(stockElaborados.length){
+    htmlSV+='<div style="font-size:.75rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin:10px 0 6px;">Elaborados cocina</div>';
+    htmlSV+=stockElaborados.map(e=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);">
+        <span style="font-size:.83rem;">🍫 ${e.nombre}</span>
+        <strong style="color:var(--green);font-size:.88rem;">${fmtKg(e.kg)}</strong>
+      </div>`).join('');
+  }
+  document.getElementById('res-stock-vendible').innerHTML=htmlSV;
+
+  // ── STOCK INSUMOS — calculado igual que la sección Insumos ─────────────
+  // Entradas: compras de insumos
+  const insEntradas={};
+  snapComp.forEach(d=>{
+    (d.data().items||[]).forEach(it=>{
+      if(it.tipo==='insumo'&&it.insumo_id)
+        insEntradas[it.insumo_id]=(insEntradas[it.insumo_id]||0)+it.cantidad;
+    });
+  });
+  // Salidas cocina
+  const insSalidaCoc={};
+  snapTandas.forEach(d=>{
+    (d.data().insumos_usados||[]).forEach(it=>{
+      insSalidaCoc[it.insumo_id]=(insSalidaCoc[it.insumo_id]||0)+it.cantidad;
+    });
+  });
+  // Salidas fábrica (envasado)
+  const insSalidaFab={};
+  snapSal.forEach(d=>{
+    (d.data().insumos_usados||[]).forEach(it=>{
+      insSalidaFab[it.id]=(insSalidaFab[it.id]||0)+it.cantidad;
+    });
+  });
+
+  const insumos=[];
+  snapInsumos.forEach(d=>{
+    const i={id:d.id,...d.data()};
+    if(i.nombre){
+      i._stockCalc=(insEntradas[i.id]||0)-(insSalidaCoc[i.id]||0)-(insSalidaFab[i.id]||0);
+      insumos.push(i);
+    }
+  });
+  insumos.sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||''));
+  document.getElementById('res-stock-insumos').innerHTML=insumos.length
+    ?insumos.map(i=>{
+        const stock=i._stockCalc;
+        const bajo=stock<=0;
+        return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);">
+          <span style="font-size:.82rem;">${bajo?'🔴 ':''}${i.nombre}</span>
+          <strong style="font-size:.88rem;color:${bajo?'var(--red)':'var(--text)'};">${stock.toFixed(2)} ${i.unidad||''}</strong>
+        </div>`;}).join('')
+    :'<span style="color:var(--text2);font-size:.85rem;">Sin insumos registrados</span>';
+
+  // ── VENTAS ───────────────────────────────────────────────────────────────
+  let vTotalKg=0, vEnt=0, vPG=0, vPC=0, vDan=0, vMonto=0;
+  const vElabPorReceta={}; // {nombre: kg}
+  const mesesKg=Array(12).fill(0);
+  const mesesMonto=Array(12).fill(0);
+
+  snapVent.forEach(d=>{
+    const v=d.data();
+    const mes=parseInt((v.fecha||'').slice(5,7))-1;
+    const anioV=parseInt((v.fecha||'').slice(0,4));
+    if(anioV===anio&&mes>=0&&mes<12) mesesMonto[mes]+=v.monto_total||0;
+    if(v.fecha<desdeStr) return;
+    vMonto+=v.monto_total||0;
+    (v.items||[]).forEach(it=>{
+      const kg=it.kg||0;
+      const key=it.prod_key||'';
+      vTotalKg+=kg;
+      if(anioV===anio&&mes>=0) mesesKg[mes]+=kg;
+      // Clasificar por categoría usando prod_key
+      if(key==='nuez_enteras') vEnt+=kg;
+      else if(key==='nuez_part_grandes') vPG+=kg;
+      else if(key==='nuez_part_chicas') vPC+=kg;
+      else if(key==='nuez_danadas') vDan+=kg;
+      else if(key.startsWith('receta_')||porReceta[it.nombre]){
+        const nombre=it.nombre||key;
+        vElabPorReceta[nombre]=(vElabPorReceta[nombre]||0)+kg;
+      } else {
+        // fallback por nombre
+        const n=(it.nombre||'').toLowerCase();
+        if(n.includes('entera')||n.includes('entero')) vEnt+=kg;
+        else if(n.includes('grande')) vPG+=kg;
+        else if(n.includes('chico')||n.includes('chica')) vPC+=kg;
+        else if(n.includes('da')) vDan+=kg;
+        else{
+          const nombre=it.nombre||'Otro';
+          vElabPorReceta[nombre]=(vElabPorReceta[nombre]||0)+kg;
+        }
+      }
+    });
+  });
+
+  const vElabTotal=Object.values(vElabPorReceta).reduce((s,v)=>s+v,0);
+  document.getElementById('rv-total-kg').textContent=fmtKg(vTotalKg);
+  document.getElementById('rv-entero-kg').textContent=fmtKg(vEnt);
+  document.getElementById('rv-pg-kg').textContent=fmtKg(vPG);
+  document.getElementById('rv-pc-kg').textContent=fmtKg(vPC);
+  document.getElementById('rv-dan-kg').textContent=fmtKg(vDan);
+  document.getElementById('rv-monto').textContent=fmt(vMonto);
+  // Elaborados desglosados
+  const elabEntries=Object.entries(vElabPorReceta).sort((a,b)=>b[1]-a[1]);
+  const elabDiv=document.getElementById('rv-elab-detalle');
+  const elabGrid=document.getElementById('rv-elab-grid');
+  if(elabEntries.length){
+    elabDiv.style.display='block';
+    elabGrid.innerHTML=elabEntries.map(([nombre,kg])=>
+      `<div class="metric-card"><div class="val" style="font-size:1rem;">${fmtKg(kg)}</div><div class="lbl">🍫 ${nombre}</div></div>`
+    ).join('');
+  } else {
+    elabDiv.style.display='none';
+  }
+
+  // Gráfico evolución ventas (barras kg + línea monto)
+  const mesesLbl=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  if(_chartVentasEvol) _chartVentasEvol.destroy();
+  const ctxEvol=document.getElementById('chart-ventas-evol').getContext('2d');
+  _chartVentasEvol=new Chart(ctxEvol,{
+    data:{
+      labels:mesesLbl,
+      datasets:[
+        {type:'bar',label:'Kg vendidos',data:mesesKg,backgroundColor:'rgba(200,129,26,.6)',borderColor:'rgba(200,129,26,1)',borderWidth:1,yAxisID:'y'},
+        {type:'line',label:'Monto ($)',data:mesesMonto,borderColor:'#3a6b35',backgroundColor:'rgba(58,107,53,.1)',tension:.4,pointRadius:3,yAxisID:'y2'},
+      ]
+    },
+    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10}}}},
+      scales:{
+        y:{position:'left',title:{display:true,text:'Kg',font:{size:10}},ticks:{font:{size:9}}},
+        y2:{position:'right',title:{display:true,text:'$ ARS',font:{size:10}},ticks:{font:{size:9},callback:v=>'$'+v.toLocaleString('es-AR')},grid:{drawOnChartArea:false}},
+      }
+    }
+  });
+
+  // Gráfico torta categorías
+  if(_chartVentasTorta) _chartVentasTorta.destroy();
+  const ctxTorta=document.getElementById('chart-ventas-torta').getContext('2d');
+  _chartVentasTorta=new Chart(ctxTorta,{
+    type:'doughnut',
+    data:{
+      labels:['Entero','Partido Gde','Partido Chico','Dañado','Elaborados'],
+      datasets:[{data:[vEnt,vPG,vPC,vDan,vElabTotal],backgroundColor:['#3a6b35','#c8811a','#e07b00','#8b2e2e','#6b4226'],borderWidth:2,borderColor:'#fff9f0'}]
+    },
+    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:8}}}}
+  });
+
+  // ── ECONÓMICO ────────────────────────────────────────────────────────────
+  let ventas=0,cobrado=0,porCobrar=0,gastos=0,deudaProvARS=0;
+  let comprasUSD=0,deudaProvUSD=0,pagadoUSD=0;
+  const mesesVentas=Array(12).fill(0);
+  const mesesCobrado=Array(12).fill(0);
+  const mesesGastos=Array(12).fill(0);
+
+  snapVent.forEach(d=>{
+    const v=d.data();
+    const mes=parseInt((v.fecha||'').slice(5,7))-1;
+    const anioV=parseInt((v.fecha||'').slice(0,4));
+    if(anioV===anio&&mes>=0) mesesVentas[mes]+=v.monto_total||0;
+    if(v.fecha<desdeStr) return;
+    ventas+=v.monto_total||0;
+    if(v.estado==='cuenta_corriente') porCobrar+=v.monto_total||0;
+  });
+
+  snapCob.forEach(d=>{
+    const c=d.data();
+    const mes=parseInt((c.fecha||'').slice(5,7))-1;
+    const anioC=parseInt((c.fecha||'').slice(0,4));
+    if(anioC===anio&&mes>=0&&c.tipo!=='nota_credito') mesesCobrado[mes]+=c.importe||0;
+    if(c.fecha<desdeStr) return;
+    if(c.tipo!=='nota_credito') cobrado+=c.importe||0;
+    else porCobrar-=c.importe||0;
+  });
+
+  // Calcular total pagado en USD por compra (para deuda real)
+  const pagadoPorCompra={};
+  snapPagosUSD.forEach(d=>{
+    const p=d.data();
+    pagadoPorCompra[p.compra_id]=(pagadoPorCompra[p.compra_id]||0)+(p.usd_cancelado||0);
+    if(p.fecha>=desdeStr) pagadoUSD+=p.usd_cancelado||0;
+  });
+
+  snapComp.forEach(d=>{
+    const c=d.data(); const id=d.id;
+    const mes=parseInt((c.fecha||'').slice(5,7))-1;
+    const anioC=parseInt((c.fecha||'').slice(0,4));
+    const moneda=c.moneda||'ARS';
+    if(moneda==='USD'){
+      if(c.fecha>=desdeStr) comprasUSD+=c.monto_total||0;
+      if(c.estado!=='pagado'){
+        // Deuda real = total - ya pagado en pagos_usd
+        const yaPagado=pagadoPorCompra[id]||0;
+        const saldo=Math.max(0,(c.monto_total||0)-yaPagado);
+        deudaProvUSD+=saldo;
+      }
+    } else {
+      if(anioC===anio&&mes>=0) mesesGastos[mes]+=c.monto_total||0;
+      if(c.fecha>=desdeStr) gastos+=c.monto_total||0;
+      if(c.estado==='pendiente'||(c.forma_pago==='credito'&&c.estado!=='pagado')) deudaProvARS+=c.monto_total||0;
+    }
+  });
+
+  const resultado=ventas-gastos;
+  document.getElementById('re-ventas').textContent=fmt(ventas);
+  document.getElementById('re-cobrado').textContent=fmt(cobrado);
+  document.getElementById('re-por-cobrar').textContent=fmt(Math.max(0,porCobrar));
+  document.getElementById('re-gastos').textContent=fmt(gastos);
+  document.getElementById('re-deuda-prov-ars').textContent=fmt(deudaProvARS);
+  const resEl=document.getElementById('re-resultado');
+  resEl.textContent=fmt(resultado);
+  resEl.style.color=resultado>=0?'var(--green)':'var(--red)';
+  document.getElementById('re-compras-usd').textContent=fmtUSD(comprasUSD);
+  document.getElementById('re-deuda-prov-usd').textContent=fmtUSD(deudaProvUSD);
+  document.getElementById('re-pagado-usd').textContent=fmtUSD(pagadoUSD);
+
+  // Gráfico económico
+  if(_chartEconomico) _chartEconomico.destroy();
+  const ctxEco=document.getElementById('chart-economico').getContext('2d');
+  _chartEconomico=new Chart(ctxEco,{
+    type:'bar',
+    data:{
+      labels:mesesLbl,
+      datasets:[
+        {label:'Ventas',data:mesesVentas,backgroundColor:'rgba(58,107,53,.7)',borderRadius:4},
+        {label:'Cobrado',data:mesesCobrado,backgroundColor:'rgba(200,129,26,.7)',borderRadius:4},
+        {label:'Gastos',data:mesesGastos,backgroundColor:'rgba(139,46,46,.7)',borderRadius:4},
+      ]
+    },
+    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10}}}},
+      scales:{
+        x:{ticks:{font:{size:9}}},
+        y:{ticks:{font:{size:9},callback:v=>'$'+v.toLocaleString('es-AR')}},
+      }
+    }
+  });
+}
 
 // ============================================================
 // COTIZADOR DE COMPRA DE NUEZ CON CÁSCARA
