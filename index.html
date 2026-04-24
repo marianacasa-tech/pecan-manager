@@ -2094,6 +2094,19 @@ function showAlert(msg,type='success'){
   setTimeout(()=>el.className='alert',3500);
 }
 function optsVar(sel=''){return variedades.map(v=>`<option${v===sel?' selected':''}>${v}</option>`).join('');}
+
+function poblarSelectsVariedad(){
+  // Pobla todos los selects de variedad en fábrica con la lista actualizada
+  const selectIds=['sal-variedad','f-sal-var','f-ent-var'];
+  selectIds.forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    const cur=el.value;
+    const prefix=id.startsWith('f-')?'<option value="">Todas</option>':'<option value="">— Seleccioná —</option>';
+    el.innerHTML=prefix+optsVar();
+    if(cur) el.value=cur;
+  });
+}
 function pad(n){return String(n).padStart(4,'0');}
 
 // ---- REMITO CORRELATIVO ----
@@ -2416,6 +2429,7 @@ window.limpiarFiltrosEntradas=function(){
   cargarEntradas();
 }
 window.cargarEntradas=async function(){
+  poblarSelectsVariedad();
   const tbody=document.querySelector('#tbl-entradas tbody');
   tbody.innerHTML='<tr><td colspan="8" class="loading">Cargando...</td></tr>';
   const propF=document.getElementById('f-ent-prop').value;
@@ -2654,6 +2668,7 @@ window.guardarSalida=async function(){
   }catch(e){showAlert('Error: '+e.message,'error');}
 }
 window.cargarSalidas=async function(){
+  poblarSelectsVariedad();
   const tbody=document.querySelector('#tbl-salidas tbody');
   tbody.innerHTML='<tr><td colspan="12" class="loading">Cargando...</td></tr>';
   const prop=document.getElementById('f-sal-prop').value;
