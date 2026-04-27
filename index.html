@@ -211,8 +211,6 @@
           <label style="font-size:.8rem;">Variedad</label>
           <select id="db-var" onchange="cargarDashboard()">
             <option value="">Todas</option>
-            <option>Wichita</option><option>Cheyenne</option><option>Western Schley</option>
-            <option>Shoshoni</option><option>Mahan</option><option>Sioux</option><option>Otra</option>
           </select>
         </div>
         <button class="btn btn-secondary btn-sm" onclick="document.getElementById('db-prop').value='';document.getElementById('db-var').value='';cargarDashboard()">✖ Limpiar</button>
@@ -359,8 +357,6 @@
         <div class="form-group"><label>Variedad</label>
           <select id="f-ent-var" onchange="cargarEntradas()">
             <option value="">Todas</option>
-            <option>Wichita</option><option>Cheyenne</option><option>Western Schley</option>
-            <option>Shoshoni</option><option>Mahan</option><option>Sioux</option><option>Otra</option>
           </select>
         </div>
         <div class="form-group"><label>Mes</label>
@@ -440,8 +436,6 @@
         <div class="form-group"><label>Variedad *</label>
           <select id="sal-variedad" onchange="consultarStockCascara()">
             <option value="">— Seleccioná —</option>
-            <option>Wichita</option><option>Cheyenne</option><option>Western Schley</option>
-            <option>Shoshoni</option><option>Mahan</option><option>Sioux</option><option>Otra</option>
           </select>
         </div>
         <div class="form-group"><label>Kg con cáscara procesados *</label>
@@ -483,8 +477,6 @@
         <div class="form-group"><label>Variedad</label>
           <select id="f-sal-var" onchange="cargarSalidas()">
             <option value="">Todas</option>
-            <option>Wichita</option><option>Cheyenne</option><option>Western Schley</option>
-            <option>Shoshoni</option><option>Mahan</option><option>Sioux</option><option>Otra</option>
           </select>
         </div>
       </div>
@@ -511,8 +503,6 @@
         <div class="form-group"><label>Variedad</label>
           <select id="sf-var-casc" onchange="calcStockFabrica()">
             <option value="">Todas</option>
-            <option>Wichita</option><option>Cheyenne</option><option>Western Schley</option>
-            <option>Shoshoni</option><option>Mahan</option><option>Sioux</option><option>Otra</option>
           </select>
         </div>
         <div style="align-self:flex-end;"><button class="btn btn-secondary btn-sm" onclick="calcStockFabrica()">🔄 Actualizar</button></div>
@@ -531,8 +521,6 @@
         <div class="form-group"><label>Variedad</label>
           <select id="sf-var-pelada" onchange="calcStockFabrica()">
             <option value="">Todas</option>
-            <option>Wichita</option><option>Cheyenne</option><option>Western Schley</option>
-            <option>Shoshoni</option><option>Mahan</option><option>Sioux</option><option>Otra</option>
           </select>
         </div>
         <div class="form-group"><label>Categoría</label>
@@ -1858,8 +1846,6 @@
       <div class="form-group"><label>Variedad *</label>
         <select id="edit-ent-variedad">
           <option value="">— Seleccioná —</option>
-          <option>Wichita</option><option>Cheyenne</option><option>Western Schley</option>
-          <option>Shoshoni</option><option>Mahan</option><option>Sioux</option><option>Otra</option>
         </select>
       </div>
       <div class="form-group"><label>Kg *</label><input type="number" id="edit-ent-kg" step="0.01" min="0"></div>
@@ -1889,8 +1875,6 @@
       <div class="form-group"><label>Variedad *</label>
         <select id="edit-sal-variedad">
           <option value="">— Seleccioná —</option>
-          <option>Wichita</option><option>Cheyenne</option><option>Western Schley</option>
-          <option>Shoshoni</option><option>Mahan</option><option>Sioux</option><option>Otra</option>
         </select>
       </div>
       <div class="form-group"><label>Kg c/cáscara *</label><input type="number" id="edit-sal-cascara" step="0.01" min="0"></div>
@@ -2050,6 +2034,8 @@ async function cargarInicialApp(){
   cargarCatGastos();
   cargarConfigEnvasado();
   cargarPrecios();
+  // Poblar todos los selects de variedad con la lista cargada desde Firestore
+  actualizarTodosSelectsVariedad();
 }
 
 // ── ACCIONES DE AUTH ─────────────────────────────────────────────────────────
@@ -2283,13 +2269,33 @@ window.confirmarNuevaVariedad=async function(){
 }
 
 function actualizarTodosSelectsVariedad(){
-  // Actualizar todos los selects de variedad en la app
-  document.querySelectorAll('.var-variedad').forEach(s=>{const v=s.value;s.innerHTML='<option value="">— Variedad —</option>'+optsVar();s.value=v;});
+  // Selects con "Todas" como primera opción (filtros)
+  ['db-var','f-ent-var','f-sal-var'].forEach(id=>{
+    const s=document.getElementById(id);if(!s)return;
+    const v=s.value;
+    s.innerHTML='<option value="">Todas</option>'+optsVar();
+    if(v)s.value=v;
+  });
+  // Selects de formulario (entrada/salida)
+  ['sal-variedad'].forEach(id=>{
+    const s=document.getElementById(id);if(!s)return;
+    const v=s.value;
+    s.innerHTML='<option value="">— Seleccioná —</option>'+optsVar();
+    if(v)s.value=v;
+  });
+  // Selects de modales de edición
   ['edit-ent-variedad','edit-sal-variedad'].forEach(id=>{
     const s=document.getElementById(id);if(!s)return;
-    const v=s.value;s.innerHTML='<option value="">— Seleccioná —</option>'+optsVar();s.value=v;
+    const v=s.value;
+    s.innerHTML='<option value="">— Seleccioná —</option>'+optsVar();
+    if(v)s.value=v;
   });
-  poblarSelectsVariedad();
+  // Filas dinámicas de entrada fábrica
+  document.querySelectorAll('.var-variedad').forEach(s=>{
+    const v=s.value;
+    s.innerHTML='<option value="">— Variedad —</option>'+optsVar();
+    if(v)s.value=v;
+  });
 }
 agregarLinea();
 
