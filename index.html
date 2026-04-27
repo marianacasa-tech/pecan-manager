@@ -2035,6 +2035,16 @@ onAuthStateChanged(auth, async user=>{
 });
 
 async function cargarInicialApp(){
+  // Cargar variedades persistidas en Firestore
+  try{
+    const varDoc=await getDoc(doc(db,'config','variedades'));
+    if(varDoc.exists()&&varDoc.data().lista?.length){
+      variedades=varDoc.data().lista;
+      // Asegurar que 'Otra' siempre esté al final
+      variedades=variedades.filter(v=>v!=='Otra');
+      variedades.push('Otra');
+    }
+  }catch(e){console.warn('No se pudieron cargar variedades:',e);}
   await cargarClientesSelects();
   initCocinaCache();
   cargarCatGastos();
@@ -2258,19 +2268,28 @@ window.abrirModalVariedad=function(){
   document.getElementById('modal-variedad').classList.add('open');
   setTimeout(()=>document.getElementById('nueva-variedad-input').focus(),100);
 }
-window.confirmarNuevaVariedad=function(){
+window.confirmarNuevaVariedad=async function(){
   const val=document.getElementById('nueva-variedad-input').value.trim();
   if(!val){showAlert('Escribí el nombre','error');return;}
   if(variedades.includes(val)){showAlert('Esa variedad ya existe','error');return;}
   variedades.splice(variedades.length-1,0,val);
+  // Guardar en Firestore para persistir entre sesiones
+  try{
+    await setDoc(doc(db,'config','variedades'),{lista:variedades});
+  }catch(e){console.warn('No se pudo guardar variedad en Firestore:',e);}
+  actualizarTodosSelectsVariedad();
+  cerrarModal('modal-variedad');
+  showAlert('✅ Variedad "'+val+'" agregada');
+}
+
+function actualizarTodosSelectsVariedad(){
+  // Actualizar todos los selects de variedad en la app
   document.querySelectorAll('.var-variedad').forEach(s=>{const v=s.value;s.innerHTML='<option value="">— Variedad —</option>'+optsVar();s.value=v;});
-  // También actualizar selects de modales de edición
   ['edit-ent-variedad','edit-sal-variedad'].forEach(id=>{
     const s=document.getElementById(id);if(!s)return;
     const v=s.value;s.innerHTML='<option value="">— Seleccioná —</option>'+optsVar();s.value=v;
   });
-  cerrarModal('modal-variedad');
-  showAlert('✅ Variedad "'+val+'" agregada');
+  poblarSelectsVariedad();
 }
 agregarLinea();
 
@@ -3857,6 +3876,9 @@ const _charts={};
 function _destroyChart(id){if(_charts[id]){_charts[id].destroy();delete _charts[id];}}
 
 window.cargarDashboard=async function(){
+  // Actualizar selector de variedades del dashboard
+  const dbVar=document.getElementById('db-var');
+  if(dbVar){const cur=dbVar.value;dbVar.innerHTML='<option value="">Todas</option>'+optsVar();if(cur)dbVar.value=cur;}
   const propF=document.getElementById('db-prop')?.value||'';
   const varF=document.getElementById('db-var')?.value||'';
 
