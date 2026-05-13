@@ -475,10 +475,21 @@
           <select id="f-sal-prop" onchange="cargarSalidas()"><option value="">Todos</option><option value="PROPIO">PROPIO</option></select>
         </div>
         <div class="form-group"><label>Variedad</label>
-          <select id="f-sal-var" onchange="cargarSalidas()">
-            <option value="">Todas</option>
+          <select id="f-sal-var" onchange="cargarSalidas()"><option value="">Todas</option></select>
+        </div>
+        <div class="form-group"><label>Mes</label>
+          <select id="f-sal-mes" onchange="cargarSalidas()">
+            <option value="">Todos</option>
+            <option value="01">Enero</option><option value="02">Febrero</option><option value="03">Marzo</option>
+            <option value="04">Abril</option><option value="05">Mayo</option><option value="06">Junio</option>
+            <option value="07">Julio</option><option value="08">Agosto</option><option value="09">Septiembre</option>
+            <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
           </select>
         </div>
+        <div class="form-group"><label>Año</label>
+          <select id="f-sal-anio" onchange="cargarSalidas()"><option value="">Todos</option></select>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="limpiarFiltrosSalidas()">✖ Limpiar</button>
       </div>
       <div class="table-wrap">
         <table id="tbl-salidas">
@@ -580,6 +591,24 @@
     <!-- Historial de liquidaciones -->
     <div class="card">
       <h2>📋 Historial de liquidaciones</h2>
+      <div class="filters">
+        <div class="form-group"><label>Cliente</label>
+          <select id="f-liq-cliente" onchange="cargarLiquidaciones()"><option value="">Todos</option></select>
+        </div>
+        <div class="form-group"><label>Mes</label>
+          <select id="f-liq-mes" onchange="cargarLiquidaciones()">
+            <option value="">Todos</option>
+            <option value="01">Enero</option><option value="02">Febrero</option><option value="03">Marzo</option>
+            <option value="04">Abril</option><option value="05">Mayo</option><option value="06">Junio</option>
+            <option value="07">Julio</option><option value="08">Agosto</option><option value="09">Septiembre</option>
+            <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Año</label>
+          <select id="f-liq-anio" onchange="cargarLiquidaciones()"><option value="">Todos</option></select>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="limpiarFiltrosLiq()">✖ Limpiar</button>
+      </div>
       <div class="table-wrap">
         <table id="tbl-liquidaciones">
           <thead><tr><th>N° Liq.</th><th>Fecha</th><th>Cliente</th><th>Kg c/cáscara</th><th>Precio/kg</th><th>Total servicio</th><th>Pago</th><th>Estado</th><th>Acciones</th></tr></thead>
@@ -1763,7 +1792,16 @@
     <div id="liq-resumen" style="background:var(--bg2);border-radius:8px;padding:16px;margin-bottom:18px;font-size:.88rem;"></div>
     <div class="form-grid">
       <div class="form-group"><label>Fecha liquidación *</label><input type="date" id="liq-fecha"></div>
-      <div class="form-group"><label>Precio por kg c/cáscara ($) *</label><input type="number" id="liq-precio" placeholder="0.00" step="0.01" min="0" oninput="calcTotalLiquidacion()"></div>
+      <div class="form-group"><label>Precio por kg (USD) *</label>
+        <input type="number" id="liq-precio-usd" placeholder="0.00" step="0.001" min="0" oninput="calcTotalLiquidacion()">
+      </div>
+      <div class="form-group"><label>Tipo de cambio BNA ($/USD) *</label>
+        <input type="number" id="liq-tc" placeholder="Ej: 1500" step="0.01" min="0" oninput="calcTotalLiquidacion()">
+      </div>
+      <div class="form-group"><label>Kg con IVA 21%</label>
+        <input type="number" id="liq-kg-iva" placeholder="0.00" step="0.01" min="0" oninput="calcTotalLiquidacion()">
+        <div style="font-size:.75rem;color:var(--text2);margin-top:4px;">El resto va sin IVA</div>
+      </div>
       <div class="form-group"><label>Forma de pago</label>
         <select id="liq-pago">
           <option value="Efectivo">Efectivo</option>
@@ -1778,11 +1816,28 @@
           <option value="cobrado">Cobrado ✅</option>
         </select>
       </div>
-      <div class="form-group"><label>Observaciones</label><input type="text" id="liq-obs" placeholder="Notas..."></div>
+      <div class="form-group full"><label>Observaciones</label><input type="text" id="liq-obs" placeholder="Notas..."></div>
     </div>
-    <div id="liq-total-display" style="margin-top:16px;background:var(--brown);color:#fff9f0;border-radius:10px;padding:16px;display:none;">
-      <div style="font-size:.85rem;opacity:.8;">Total servicio de maquila</div>
-      <div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;" id="liq-total-val">$0</div>
+    <!-- Desglose del total -->
+    <div id="liq-total-display" style="margin-top:16px;display:none;">
+      <div style="background:var(--bg2);border-radius:10px;padding:14px 16px;margin-bottom:8px;font-size:.85rem;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <span style="color:var(--text2);">Kg sin IVA × USD <span id="liq-d-precio">0</span> × TC <span id="liq-d-tc">0</span></span>
+          <strong id="liq-d-sub-sin-iva">$0</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;" id="liq-d-row-iva" style="display:none;">
+          <span style="color:var(--text2);">Kg con IVA × USD <span id="liq-d-precio2">0</span> × TC <span id="liq-d-tc2">0</span></span>
+          <strong id="liq-d-sub-con-iva">$0</strong>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;" id="liq-d-iva-row">
+          <span style="color:var(--text2);">IVA 21%</span>
+          <strong id="liq-d-iva">$0</strong>
+        </div>
+        <div style="border-top:1px solid var(--border);padding-top:8px;display:flex;justify-content:space-between;">
+          <span style="font-weight:700;">TOTAL ARS</span>
+          <strong style="color:var(--brown);font-size:1.1rem;" id="liq-d-total">$0</strong>
+        </div>
+      </div>
     </div>
     <div style="display:flex;gap:12px;margin-top:20px;">
       <button class="btn btn-primary" onclick="guardarLiquidacion()">📄 Generar liquidación</button>
@@ -2081,7 +2136,7 @@ let variedades=['Wichita','Cheyenne','Western Schley','Shoshoni','Mahan','Sioux'
 let filaCount=0;
 let _delCol='',_delId='',_delCb=null;
 
-function fmtKg(n){return n?parseFloat(n).toFixed(2)+' kg':'—';}
+function fmtKg(n){return n||n===0?parseFloat(n).toFixed(3)+' kg':'—';}
 function pct(a,b){return b>0?((a/b)*100).toFixed(1)+'%':'—';}
 function today(){return new Date().toISOString().split('T')[0];}
 function showAlert(msg,type='success'){
@@ -2391,11 +2446,11 @@ function generarPDF(datos, enviarWA=false){
   let y=ty+22;p.setTextColor(61,43,31);p.setFont('helvetica','normal');
   datos.lineas.forEach((l,i)=>{
     if(i%2===0){p.setFillColor(245,240,232);p.rect(20,y-6,170,10,'F');}
-    p.text(l.variedad,24,y);p.text(l.kg.toFixed(2)+' kg',100,y);p.text(l.humedad!=null?l.humedad+'%':'—',155,y);y+=12;
+    p.text(l.variedad,24,y);p.text(l.kg.toFixed(3)+' kg',100,y);p.text(l.humedad!=null?l.humedad+'%':'—',155,y);y+=12;
   });
   const kgTotal=datos.lineas.reduce((s,l)=>s+l.kg,0);
   p.setFont('helvetica','bold');p.setDrawColor(200,129,26);p.line(20,y,190,y);y+=8;
-  p.text('TOTAL:',24,y);p.text(kgTotal.toFixed(2)+' kg',100,y);
+  p.text('TOTAL:',24,y);p.text(kgTotal.toFixed(3)+' kg',100,y);
   if(datos.observaciones){y+=10;p.setFont('helvetica','normal');p.text('Obs: '+datos.observaciones,20,y);}
   p.setDrawColor(100,100,100);p.line(20,255,80,255);p.line(130,255,190,255);
   p.setFontSize(9);p.setTextColor(100,100,100);
@@ -2568,7 +2623,7 @@ window.calcPorcentajes=function(){
     document.getElementById('ind-partido').textContent=part.toFixed(1)+'%';
     document.getElementById('ind-podrido').textContent=incom.toFixed(1)+'%';
     document.getElementById('ind-rend-pot').textContent=rendPot.toFixed(1)+'%';
-    document.getElementById('ind-total').textContent=kernelCom.toFixed(2)+' kg';
+    document.getElementById('ind-total').textContent=kernelCom.toFixed(3)+' kg';
   }
 }
 
@@ -2599,18 +2654,18 @@ window.consultarStockCascara=async function(){
     panel.innerHTML=`<strong>⚠️ Sin existencias</strong> — No hay entradas registradas de <strong>${variedad}</strong> para <strong>${prop}</strong>.`;
   } else if(disponible<=0){
     panel.style.cssText='display:block;margin:4px 0 16px;border-radius:10px;padding:14px 18px;font-size:.88rem;border:1.5px solid #e74c3c;background:#fff0f0;color:#c0392b;';
-    panel.innerHTML=`<strong>⚠️ Stock agotado</strong> — Todo lo ingresado de <strong>${variedad}</strong> (${ingresado.toFixed(2)} kg) ya fue procesado.`;
+    panel.innerHTML=`<strong>⚠️ Stock agotado</strong> — Todo lo ingresado de <strong>${variedad}</strong> (${ingresado.toFixed(3)} kg) ya fue procesado.`;
   } else {
     const pct=ingresado>0?(procesado/ingresado*100).toFixed(1):0;
     panel.style.cssText='display:block;margin:4px 0 16px;border-radius:10px;padding:14px 18px;font-size:.88rem;border:1.5px solid var(--green);background:#f0fff4;color:var(--brown);';
     panel.innerHTML=`
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
         <span style="font-size:1.1rem;">📦</span>
-        <strong style="font-size:1rem;color:var(--green);">Disponible: ${disponible.toFixed(2)} kg</strong>
+        <strong style="font-size:1rem;color:var(--green);">Disponible: ${disponible.toFixed(3)} kg</strong>
       </div>
       <div style="color:var(--text2);font-size:.83rem;">
-        Ingresado: <strong>${ingresado.toFixed(2)} kg</strong> &nbsp;|&nbsp;
-        Ya procesado: <strong>${procesado.toFixed(2)} kg</strong> &nbsp;|&nbsp;
+        Ingresado: <strong>${ingresado.toFixed(3)} kg</strong> &nbsp;|&nbsp;
+        Ya procesado: <strong>${procesado.toFixed(3)} kg</strong> &nbsp;|&nbsp;
         Procesado: <strong>${pct}%</strong>
       </div>`;
   }
@@ -2629,7 +2684,7 @@ window.validarKgCascara=function(){
     const w=document.createElement('div');
     w.id='sal-kg-warn';
     w.style.cssText='color:#c0392b;font-size:.82rem;margin-top:4px;';
-    w.innerHTML=`⚠️ Superás el disponible (${_stockCascaraDisp.toFixed(2)} kg)`;
+    w.innerHTML=`⚠️ Superás el disponible (${_stockCascaraDisp.toFixed(3)} kg)`;
     input.parentNode.appendChild(w);
   } else {
     input.style.borderColor='var(--green)';
@@ -2642,7 +2697,7 @@ window.guardarSalida=async function(){
   const kgC=parseFloat(document.getElementById('sal-kg-cascara').value);
   if(!fecha||!prop||!variedad||!kgC){showAlert('Completá los campos obligatorios','error');return;}
   if(_stockCascaraDisp>0&&kgC>_stockCascaraDisp){
-    showAlert(`⚠️ Los kg ingresados (${kgC.toFixed(2)}) superan el stock disponible (${_stockCascaraDisp.toFixed(2)} kg) para ${prop} — ${variedad}.`,'error');return;
+    showAlert(`⚠️ Los kg ingresados (${kgC.toFixed(3)}) superan el stock disponible (${_stockCascaraDisp.toFixed(3)} kg) para ${prop} — ${variedad}.`,'error');return;
   }
   const ent=parseFloat(document.getElementById('sal-enteras').value)||0;
   const pg=parseFloat(document.getElementById('sal-part-grandes').value)||0;
@@ -2692,18 +2747,43 @@ window.guardarSalida=async function(){
     abrirEtiquetaFab(salidaRef.id,fecha,prop,variedad,ent,pg,pc,dan,loteId);
   }catch(e){showAlert('Error: '+e.message,'error');}
 }
+window.limpiarFiltrosSalidas=function(){
+  ['f-sal-prop','f-sal-var','f-sal-mes','f-sal-anio'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  cargarSalidas();
+}
+
 window.cargarSalidas=async function(){
   poblarSelectsVariedad();
   const tbody=document.querySelector('#tbl-salidas tbody');
   tbody.innerHTML='<tr><td colspan="12" class="loading">Cargando...</td></tr>';
   const prop=document.getElementById('f-sal-prop').value;
   const varF=document.getElementById('f-sal-var').value;
+  const mesF=document.getElementById('f-sal-mes')?.value||'';
+  const anioF=document.getElementById('f-sal-anio')?.value||'';
   const snap=await getDocs(query(collection(db,'salidas_fabrica'),orderBy('fecha','desc')));
+
+  // Poblar años únicos
+  const anios=new Set();
+  snap.forEach(d=>{const a=(d.data().fecha||'').slice(0,4);if(a)anios.add(a);});
+  const selAnio=document.getElementById('f-sal-anio');
+  if(selAnio){
+    const cur=selAnio.value;
+    selAnio.innerHTML='<option value="">Todos</option>';
+    [...anios].sort().reverse().forEach(a=>{
+      const o=document.createElement('option');o.value=a;o.textContent=a;selAnio.appendChild(o);
+    });
+    if(cur)selAnio.value=cur;
+  }
+
   tbody.innerHTML='';let count=0;
   snap.forEach(d=>{
     const s=d.data();
     if(prop&&s.propietario!==prop)return;
     if(varF&&s.variedad!==varF)return;
+    if(mesF&&(s.fecha||'').slice(5,7)!==mesF)return;
+    if(anioF&&(s.fecha||'').slice(0,4)!==anioF)return;
     count++;
     tbody.innerHTML+=`<tr>
       <td>${s.fecha}</td>
@@ -2811,25 +2891,28 @@ window.calcStockFabrica=async function(){
     catsCasc.forEach(r=>{if(!porPropC[r.propietario])porPropC[r.propietario]=[];porPropC[r.propietario].push(r);});
     let html='';
     Object.entries(porPropC).forEach(([pN,items])=>{
+      // Filtrar solo variedades con stock positivo
+      const itemsConStock=items.filter(r=>(r.ingresado-r.procesado)>0.0005);
+      if(!itemsConStock.length) return; // omitir clientes sin stock
       html+=`<div class="stock-separator">${pN==='PROPIO'?'🏭 PROPIO':'👤 '+pN}</div>`;
       html+=`<div class="table-wrap"><table><thead><tr>
         <th>Variedad</th><th>Ingresado (kg)</th><th>Procesado (kg)</th><th>Disponible sin procesar</th>
       </tr></thead><tbody>`;
       let totIng=0,totProc=0;
-      items.forEach(r=>{
+      itemsConStock.forEach(r=>{
         const disp=r.ingresado-r.procesado;
         totIng+=r.ingresado;totProc+=r.procesado;
         html+=`<tr>
           <td><strong>${r.variedad}</strong></td>
-          <td>${r.ingresado.toFixed(2)} kg</td>
-          <td>${r.procesado.toFixed(2)} kg</td>
-          <td><strong style="color:${disp>=0?'var(--green)':'var(--red)'};">${disp.toFixed(2)} kg</strong></td>
+          <td>${r.ingresado.toFixed(3)} kg</td>
+          <td>${r.procesado.toFixed(3)} kg</td>
+          <td><strong style="color:var(--green);">${disp.toFixed(3)} kg</strong></td>
         </tr>`;
       });
       const totDisp=totIng-totProc;
       html+=`<tr class="stock-total-row">
-        <td>TOTAL</td><td>${totIng.toFixed(2)} kg</td><td>${totProc.toFixed(2)} kg</td>
-        <td><strong style="color:${totDisp>=0?'var(--green)':'var(--red)'};">${totDisp.toFixed(2)} kg</strong></td>
+        <td>TOTAL</td><td>${totIng.toFixed(3)} kg</td><td>${totProc.toFixed(3)} kg</td>
+        <td><strong style="color:var(--green);">${totDisp.toFixed(3)} kg</strong></td>
       </tr></tbody></table></div>`;
     });
     cCont.innerHTML=html;
@@ -2876,6 +2959,9 @@ window.calcStockFabrica=async function(){
     pelItems.forEach(r=>{if(!porPropP[r.propietario])porPropP[r.propietario]=[];porPropP[r.propietario].push(r);});
     let html='';
     Object.entries(porPropP).forEach(([pN,items])=>{
+      // Solo mostrar variedades con stock positivo
+      const itemsConStock=items.filter(r=>catsShow.some(c=>(r[c]||0)>0.0005));
+      if(!itemsConStock.length) return; // omitir clientes sin stock pelado
       html+=`<div class="stock-separator">${pN==='PROPIO'?'🏭 PROPIO':'👤 '+pN}</div>`;
       html+=`<div class="table-wrap"><table><thead><tr><th>Variedad</th>`;
       catsShow.forEach(c=>{html+=`<th>${catLabel[c]}</th>`;});
@@ -2883,22 +2969,22 @@ window.calcStockFabrica=async function(){
       if(!catPel) html+=`<th>⚫ Incomestibles (info)</th>`;
       html+=`</tr></thead><tbody>`;
       const totales={};catsShow.forEach(c=>totales[c]=0);let totPod=0,totTotal=0;
-      items.forEach(r=>{
+      itemsConStock.forEach(r=>{
         const subtotal=catsShow.reduce((s,c)=>s+(r[c]||0),0);
         totTotal+=subtotal;totPod+=r.podridas||0;
         html+=`<tr><td><strong>${r.variedad}</strong></td>`;
         catsShow.forEach(c=>{
           totales[c]+=r[c]||0;
-          html+=`<td>${r[c]>0?r[c].toFixed(2)+' kg':'<span class="stock-zero">—</span>'}</td>`;
+          html+=`<td>${r[c]>0.0005?r[c].toFixed(3)+' kg':'<span class="stock-zero">—</span>'}</td>`;
         });
-        html+=`<td><strong>${subtotal.toFixed(2)} kg</strong></td>`;
-        if(!catPel) html+=`<td style="color:var(--text2);">${r.podridas>0?r.podridas.toFixed(2)+' kg':'—'}</td>`;
+        html+=`<td><strong>${subtotal.toFixed(3)} kg</strong></td>`;
+        if(!catPel) html+=`<td style="color:var(--text2);">${r.podridas>0?r.podridas.toFixed(3)+' kg':'—'}</td>`;
         html+=`</tr>`;
       });
       html+=`<tr class="stock-total-row"><td>TOTAL</td>`;
-      catsShow.forEach(c=>{html+=`<td>${totales[c].toFixed(2)} kg</td>`;});
-      html+=`<td>${totTotal.toFixed(2)} kg</td>`;
-      if(!catPel) html+=`<td>${totPod.toFixed(2)} kg</td>`;
+      catsShow.forEach(c=>{html+=`<td>${totales[c].toFixed(3)} kg</td>`;});
+      html+=`<td>${totTotal.toFixed(3)} kg</td>`;
+      if(!catPel) html+=`<td>${totPod.toFixed(3)} kg</td>`;
       html+=`</tr></tbody></table></div>`;
     });
     pCont.innerHTML=html;
@@ -2987,15 +3073,15 @@ window.calcStockVendible=async function(){
     totalNuez+=Math.max(0,disp);
     html+=`<tr>
       <td><strong>${catLabel[c]}</strong></td>
-      <td>${producido[c].toFixed(2)} kg</td>
-      <td>${comprada[c]>0?`<span style="color:var(--green);">+${comprada[c].toFixed(2)} kg</span>`:'—'}</td>
-      <td>${consumoCocina[c]>0?`<span style="color:var(--amber);">−${consumoCocina[c].toFixed(2)} kg</span>`:'—'}</td>
-      <td>${vendidoNuez[c]>0?`<span style="color:var(--red);">−${vendidoNuez[c].toFixed(2)} kg</span>`:'—'}</td>
-      <td><strong style="color:${disp>0?'var(--green)':'var(--red)'};">${Math.max(0,disp).toFixed(2)} kg</strong></td>
+      <td>${producido[c].toFixed(3)} kg</td>
+      <td>${comprada[c]>0?`<span style="color:var(--green);">+${comprada[c].toFixed(3)} kg</span>`:'—'}</td>
+      <td>${consumoCocina[c]>0?`<span style="color:var(--amber);">−${consumoCocina[c].toFixed(3)} kg</span>`:'—'}</td>
+      <td>${vendidoNuez[c]>0?`<span style="color:var(--red);">−${vendidoNuez[c].toFixed(3)} kg</span>`:'—'}</td>
+      <td><strong style="color:${disp>0?'var(--green)':'var(--red)'};">${Math.max(0,disp).toFixed(3)} kg</strong></td>
     </tr>`;
   });
   html+=`<tr class="stock-total-row"><td>TOTAL PECÁN</td><td></td><td></td><td></td><td></td>
-    <td><strong style="font-size:1.05rem;color:var(--green);">${totalNuez.toFixed(2)} kg</strong></td>
+    <td><strong style="font-size:1.05rem;color:var(--green);">${totalNuez.toFixed(3)} kg</strong></td>
   </tr></tbody></table></div>`;
 
   // ---- BLOQUE 2: Productos elaborados cocina ----
@@ -3010,13 +3096,13 @@ window.calcStockVendible=async function(){
       totalElab+=disp;
       html+=`<tr>
         <td><strong>${nombre}</strong></td>
-        <td>${v.producido.toFixed(2)} kg</td>
-        <td>${v.vendido>0?`<span style="color:var(--red);">−${v.vendido.toFixed(2)} kg</span>`:'—'}</td>
-        <td><strong style="color:${disp>0?'var(--green)':'var(--red)'};">${disp.toFixed(2)} kg</strong></td>
+        <td>${v.producido.toFixed(3)} kg</td>
+        <td>${v.vendido>0?`<span style="color:var(--red);">−${v.vendido.toFixed(3)} kg</span>`:'—'}</td>
+        <td><strong style="color:${disp>0?'var(--green)':'var(--red)'};">${disp.toFixed(3)} kg</strong></td>
       </tr>`;
     });
     html+=`<tr class="stock-total-row"><td>TOTAL ELABORADOS</td><td></td><td></td>
-      <td><strong style="font-size:1.05rem;color:var(--green);">${totalElab.toFixed(2)} kg</strong></td>
+      <td><strong style="font-size:1.05rem;color:var(--green);">${totalElab.toFixed(3)} kg</strong></td>
     </tr></tbody></table></div>`;
   }
 
@@ -3112,7 +3198,7 @@ window.cargarPanelMaquila=async function(){
   liqs.sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||''));
 
   const catL={enteras:'🟢 Pecan Entero',part_grandes:'🟡 Pecan Partido Grande',part_chicas:'🟠 Pecan Partido Chico',danadas:'🔴 Pecan Dañado'};
-  const fmtM=n=>n>0?`<strong style="color:var(--green);">${n.toFixed(2)} kg</strong>`:`<span style="color:#ccc;">—</span>`;
+  const fmtM=n=>n>0?`<strong style="color:var(--green);">${n.toFixed(3)} kg</strong>`:`<span style="color:#ccc;">—</span>`;
 
   // Producción agrupada por variedad
   const salPorVar={};
@@ -3149,20 +3235,20 @@ window.cargarPanelMaquila=async function(){
       tKC+=s.kg_cascara;tEnt+=s.enteras;tPG+=s.part_grandes;tPC+=s.part_chicas;tDan+=s.danadas;tPod+=s.podridas;
       html+=`<tr>
         <td><strong>${v}</strong></td>
-        <td>${s.kg_cascara.toFixed(2)} kg</td>
+        <td>${s.kg_cascara.toFixed(3)} kg</td>
         <td>${fmtM(s.enteras)}</td><td>${fmtM(s.part_grandes)}</td>
         <td>${fmtM(s.part_chicas)}</td><td>${fmtM(s.danadas)}</td>
-        <td style="color:var(--text2);">${s.podridas>0?s.podridas.toFixed(2)+' kg':'—'}</td>
+        <td style="color:var(--text2);">${s.podridas>0?s.podridas.toFixed(3)+' kg':'—'}</td>
         <td><span class="badge badge-green">${kernel}</span></td>
       </tr>`;
     });
     const tKernel=tEnt+tPG+tPC+tDan;
     const tKernelPct=tKC>0?(tKernel/tKC*100).toFixed(1)+'%':'—';
     html+=`<tr class="stock-total-row">
-      <td>TOTAL</td><td>${tKC.toFixed(2)} kg</td>
-      <td>${tEnt.toFixed(2)} kg</td><td>${tPG.toFixed(2)} kg</td>
-      <td>${tPC.toFixed(2)} kg</td><td>${tDan.toFixed(2)} kg</td>
-      <td>${tPod.toFixed(2)} kg</td><td><span class="badge badge-green">${tKernelPct}</span></td>
+      <td>TOTAL</td><td>${tKC.toFixed(3)} kg</td>
+      <td>${tEnt.toFixed(3)} kg</td><td>${tPG.toFixed(3)} kg</td>
+      <td>${tPC.toFixed(3)} kg</td><td>${tDan.toFixed(3)} kg</td>
+      <td>${tPod.toFixed(3)} kg</td><td><span class="badge badge-green">${tKernelPct}</span></td>
     </tr></tbody></table></div>`;
   }
 
@@ -3173,7 +3259,7 @@ window.cargarPanelMaquila=async function(){
   Object.entries(catL).forEach(([k,lbl])=>{
     html+=`<tr><td>${lbl}</td><td>${fmtM(prod[k])}</td><td>${fmtM(retirado[k])}</td><td>${fmtM(saldo[k])}</td></tr>`;
   });
-  html+=`<tr><td style="font-weight:700;">⚫ Incomestibles (merma)</td><td>${prod.podridas>0?prod.podridas.toFixed(2)+' kg':'—'}</td><td colspan="2" style="color:var(--text2);font-size:.82rem;">No se entregan</td></tr>`;
+  html+=`<tr><td style="font-weight:700;">⚫ Incomestibles (merma)</td><td>${prod.podridas>0?prod.podridas.toFixed(3)+' kg':'—'}</td><td colspan="2" style="color:var(--text2);font-size:.82rem;">No se entregan</td></tr>`;
   html+=`</tbody></table></div>`;
 
   // Historial de retiros
@@ -3185,11 +3271,11 @@ window.cargarPanelMaquila=async function(){
       const tot=(r.enteras||0)+(r.part_grandes||0)+(r.part_chicas||0)+(r.danadas||0);
       html+=`<tr>
         <td>${r.fecha}</td><td><span class="remito-num">${r.num_remito||'—'}</span></td>
-        <td>${r.enteras?r.enteras.toFixed(2)+' kg':'—'}</td>
-        <td>${r.part_grandes?r.part_grandes.toFixed(2)+' kg':'—'}</td>
-        <td>${r.part_chicas?r.part_chicas.toFixed(2)+' kg':'—'}</td>
-        <td>${r.danadas?r.danadas.toFixed(2)+' kg':'—'}</td>
-        <td><strong>${tot.toFixed(2)} kg</strong></td>
+        <td>${r.enteras?r.enteras.toFixed(3)+' kg':'—'}</td>
+        <td>${r.part_grandes?r.part_grandes.toFixed(3)+' kg':'—'}</td>
+        <td>${r.part_chicas?r.part_chicas.toFixed(3)+' kg':'—'}</td>
+        <td>${r.danadas?r.danadas.toFixed(3)+' kg':'—'}</td>
+        <td><strong>${tot.toFixed(3)} kg</strong></td>
         <td><span class="badge ${r.estado==='activo'?'badge-green':'badge-amber'}">${r.estado==='activo'?'Activo':'Liquidado'}</span></td>
         <td style="display:flex;gap:5px;">
           <button class="btn btn-pdf btn-sm" onclick="reimprimirRetiro('${r.id}')" title="Descargar PDF">🖨️</button>
@@ -3208,7 +3294,7 @@ window.cargarPanelMaquila=async function(){
     if(totalSaldo>0)
       html+=`<button class="btn btn-primary" onclick="abrirRetiro('${cliente}')">📦 Registrar retiro parcial</button>`;
     if(kgProcesado>0)
-      html+=`<button class="btn" style="background:var(--green);color:#fff;" onclick="abrirLiquidacion('${cliente}',${kgProcesado.toFixed(2)},${kgLiquidados.toFixed(2)})">📄 Generar liquidación</button>`;
+      html+=`<button class="btn" style="background:var(--green);color:#fff;" onclick="abrirLiquidacion('${cliente}',${kgProcesado.toFixed(3)},${kgLiquidados.toFixed(3)})">📄 Generar liquidación</button>`;
   }
   if(!kgIngresado){
     html=`<p style="color:var(--text2);text-align:center;padding:20px;">Este cliente no tiene entradas registradas.</p>`;
@@ -3222,7 +3308,7 @@ window.cargarPanelMaquila=async function(){
       html+=`<tr>
         <td><span class="remito-num">${l.num_liquidacion||'—'}</span></td>
         <td>${l.fecha}</td>
-        <td>${parseFloat(l.kg_cascara||0).toFixed(2)} kg</td>
+        <td>${parseFloat(l.kg_cascara||0).toFixed(3)} kg</td>
         <td>$${parseFloat(l.precio_kg||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</td>
         <td><strong>$${parseFloat(l.total_servicio||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</strong></td>
         <td>${l.forma_pago||'—'}</td>
@@ -3250,7 +3336,7 @@ window.abrirRetiro=function(cliente){
   document.getElementById('ret-info-cliente').textContent=cliente;
   const catL={enteras:'Pecan Entero',part_grandes:'Pecan Partido Grande',part_chicas:'Pecan Partido Chico',danadas:'Pecan Dañado'};
   document.getElementById('ret-stock-info').innerHTML=
-    Object.entries(catL).map(([k,l])=>`${l}: <strong>${(saldo[k]||0).toFixed(2)} kg</strong>`).join(' | ');
+    Object.entries(catL).map(([k,l])=>`${l}: <strong>${(saldo[k]||0).toFixed(3)} kg</strong>`).join(' | ');
   document.getElementById('ret-fecha').value=today();
   ['ret-enteras','ret-pg','ret-pc','ret-dan','ret-obs'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('modal-retiro').classList.add('open');
@@ -3278,10 +3364,10 @@ window.guardarRetiro=async function(){
   const sPC=parseFloat(document.getElementById('ret-saldo-pc').value)||0;
   const sDan=parseFloat(document.getElementById('ret-saldo-dan').value)||0;
   const errores=[];
-  if(ent>sEnt) errores.push(`• Pecan Entero: ingresaste <strong>${ent.toFixed(2)} kg</strong> pero hay <strong>${sEnt.toFixed(2)} kg</strong> disponibles`);
-  if(pg>sPG)   errores.push(`• Pecan Partido Grande: ingresaste <strong>${pg.toFixed(2)} kg</strong> pero hay <strong>${sPG.toFixed(2)} kg</strong> disponibles`);
-  if(pc>sPC)   errores.push(`• Pecan Partido Chico: ingresaste <strong>${pc.toFixed(2)} kg</strong> pero hay <strong>${sPC.toFixed(2)} kg</strong> disponibles`);
-  if(dan>sDan) errores.push(`• Pecan Dañado: ingresaste <strong>${dan.toFixed(2)} kg</strong> pero hay <strong>${sDan.toFixed(2)} kg</strong> disponibles`);
+  if(ent>sEnt) errores.push(`• Pecan Entero: ingresaste <strong>${ent.toFixed(3)} kg</strong> pero hay <strong>${sEnt.toFixed(3)} kg</strong> disponibles`);
+  if(pg>sPG)   errores.push(`• Pecan Partido Grande: ingresaste <strong>${pg.toFixed(3)} kg</strong> pero hay <strong>${sPG.toFixed(3)} kg</strong> disponibles`);
+  if(pc>sPC)   errores.push(`• Pecan Partido Chico: ingresaste <strong>${pc.toFixed(3)} kg</strong> pero hay <strong>${sPC.toFixed(3)} kg</strong> disponibles`);
+  if(dan>sDan) errores.push(`• Pecan Dañado: ingresaste <strong>${dan.toFixed(3)} kg</strong> pero hay <strong>${sDan.toFixed(3)} kg</strong> disponibles`);
   if(errores.length){
     const div=document.createElement('div');
     div.id='ret-error';
@@ -3344,12 +3430,12 @@ function generarPDFRetiro(d, enviarWA=false){
   cats.forEach(([lbl,,kg])=>{
     if(kg>0){
       if(i%2===0){p.setFillColor(245,240,232);p.rect(20,y-6,170,10,'F');}
-      p.setTextColor(61,43,31);p.text(lbl,24,y);p.text(kg.toFixed(2)+' kg',130,y);
+      p.setTextColor(61,43,31);p.text(lbl,24,y);p.text(kg.toFixed(3)+' kg',130,y);
       total+=kg;y+=12;i++;
     }
   });
   p.setFont('helvetica','bold');p.setDrawColor(200,129,26);p.line(20,y,190,y);y+=8;
-  p.text('TOTAL ENTREGADO:',24,y);p.text(total.toFixed(2)+' kg',130,y);
+  p.text('TOTAL ENTREGADO:',24,y);p.text(total.toFixed(3)+' kg',130,y);
   if(d.obs){y+=10;p.setFont('helvetica','normal');p.text('Obs: '+d.obs,20,y);}
   p.setDrawColor(100,100,100);p.line(20,255,80,255);p.line(130,255,190,255);
   p.setFontSize(9);p.setTextColor(100,100,100);
@@ -3375,7 +3461,7 @@ window.abrirLiquidacion=function(cliente, kgProcesado, kgLiquidados){
   document.getElementById('liq-kg-procesados').value=kgProcesado;
   document.getElementById('liq-kg-liquidados-prev').value=kgLiquidados;
   document.getElementById('liq-fecha').value=today();
-  document.getElementById('liq-precio').value='';
+  document.getElementById('liq-precio-usd').value='';document.getElementById('liq-tc').value='';document.getElementById('liq-kg-iva').value='';
   document.getElementById('liq-obs').value='';
   document.getElementById('liq-estado-cobro').value='cuenta_corriente';
   document.getElementById('liq-total-display').style.display='none';
@@ -3385,29 +3471,59 @@ window.abrirLiquidacion=function(cliente, kgProcesado, kgLiquidados){
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;">
       <div style="background:var(--bg);border-radius:6px;padding:8px 10px;text-align:center;">
         <div style="font-size:.72rem;color:var(--text2);text-transform:uppercase;margin-bottom:2px;">Kg procesados</div>
-        <div style="font-weight:700;font-size:1rem;">${kgProcesado.toFixed(2)} kg</div>
+        <div style="font-weight:700;font-size:1rem;">${kgProcesado.toFixed(3)} kg</div>
       </div>
       <div style="background:var(--bg);border-radius:6px;padding:8px 10px;text-align:center;">
         <div style="font-size:.72rem;color:var(--text2);text-transform:uppercase;margin-bottom:2px;">Ya liquidados</div>
-        <div style="font-weight:700;font-size:1rem;color:var(--green);">${kgLiquidados.toFixed(2)} kg</div>
+        <div style="font-weight:700;font-size:1rem;color:var(--green);">${kgLiquidados.toFixed(3)} kg</div>
       </div>
       <div style="background:var(--bg);border-radius:6px;padding:8px 10px;text-align:center;">
         <div style="font-size:.72rem;color:var(--text2);text-transform:uppercase;margin-bottom:2px;">Pendiente de liquidar</div>
-        <div style="font-weight:700;font-size:1rem;color:${kgPendiente>0.01?'#e07b00':'var(--green)'};">${kgPendiente.toFixed(2)} kg</div>
+        <div style="font-weight:700;font-size:1rem;color:${kgPendiente>0.01?'#e07b00':'var(--green)'};">${kgPendiente.toFixed(3)} kg</div>
       </div>
     </div>
-    <div style="margin-top:10px;font-size:.82rem;color:var(--text2);">El precio por kg se aplicará sobre los <strong>${kgPendiente.toFixed(2)} kg pendientes</strong>.</div>`;
+    <div style="margin-top:10px;font-size:.82rem;color:var(--text2);">El precio por kg se aplicará sobre los <strong>${kgPendiente.toFixed(3)} kg pendientes</strong>.</div>`;
   document.getElementById('modal-liquidacion').classList.add('open');
 }
 
 window.calcTotalLiquidacion=function(){
-  const precio=parseFloat(document.getElementById('liq-precio').value)||0;
-  const total=precio*(_liqDatos.kgTotal||0);
+  const precioUSD=parseFloat(document.getElementById('liq-precio-usd').value)||0;
+  const tc=parseFloat(document.getElementById('liq-tc').value)||0;
+  const kgTotal=_liqDatos.kgTotal||0;
+  const kgConIva=Math.min(parseFloat(document.getElementById('liq-kg-iva').value)||0, kgTotal);
+  const kgSinIva=Math.max(0,kgTotal-kgConIva);
   const disp=document.getElementById('liq-total-display');
-  if(precio>0){
+
+  if(precioUSD>0&&tc>0){
     disp.style.display='block';
-    document.getElementById('liq-total-val').textContent='$'+total.toLocaleString('es-AR',{minimumFractionDigits:2});
-  } else {disp.style.display='none';}
+    const subSinIva=kgSinIva*precioUSD*tc;
+    const subConIva=kgConIva*precioUSD*tc;
+    const iva=subConIva*0.21;
+    const total=subSinIva+subConIva+iva;
+    const fmt=v=>'$'+v.toLocaleString('es-AR',{minimumFractionDigits:2});
+    const fmtN=v=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:2});
+
+    document.getElementById('liq-d-precio').textContent=fmtN(precioUSD);
+    document.getElementById('liq-d-tc').textContent=fmtN(tc);
+    document.getElementById('liq-d-precio2').textContent=fmtN(precioUSD);
+    document.getElementById('liq-d-tc2').textContent=fmtN(tc);
+    document.getElementById('liq-d-sub-sin-iva').textContent=fmt(subSinIva);
+
+    const rowIva=document.getElementById('liq-d-row-iva');
+    const rowIvaAmt=document.getElementById('liq-d-iva-row');
+    if(kgConIva>0){
+      rowIva.style.display='flex';
+      rowIvaAmt.style.display='flex';
+      document.getElementById('liq-d-sub-con-iva').textContent=fmt(subConIva);
+      document.getElementById('liq-d-iva').textContent=fmt(iva);
+    } else {
+      rowIva.style.display='none';
+      rowIvaAmt.style.display='none';
+    }
+    document.getElementById('liq-d-total').textContent=fmt(total);
+  } else {
+    disp.style.display='none';
+  }
 }
 
 window.toggleLiqEstadoCobro=function(){
@@ -3465,13 +3581,22 @@ function _abrirComprobanteMaquila({nro,fecha,cliente,importe,medio,ref,obs}){
 window.guardarLiquidacion=async function(){
   const cliente=document.getElementById('liq-cliente').value;
   const fecha=document.getElementById('liq-fecha').value;
-  const precio=parseFloat(document.getElementById('liq-precio').value);
+  const precioUSD=parseFloat(document.getElementById('liq-precio-usd').value)||0;
+  const tc=parseFloat(document.getElementById('liq-tc').value)||0;
+  const kgTotal=_liqDatos.kgTotal||0;
+  const kgConIva=Math.min(parseFloat(document.getElementById('liq-kg-iva').value)||0,kgTotal);
+  const kgSinIva=Math.max(0,kgTotal-kgConIva);
   const pago=document.getElementById('liq-pago').value;
   const obs=document.getElementById('liq-obs').value.trim();
   const estadoCobro=document.getElementById('liq-estado-cobro').value;
-  if(!fecha||!precio){showAlert('Completá fecha y precio','error');return;}
-  const kgTotal=_liqDatos.kgTotal||0;
-  const totalServicio=precio*kgTotal;
+  if(!fecha||!precioUSD||!tc){showAlert('Completá fecha, precio USD y tipo de cambio','error');return;}
+
+  const subSinIva=kgSinIva*precioUSD*tc;
+  const subConIva=kgConIva*precioUSD*tc;
+  const iva=subConIva*0.21;
+  const totalServicio=subSinIva+subConIva+iva;
+  // precio_kg en ARS para compatibilidad con historial
+  const precio=kgTotal>0?totalServicio/kgTotal:0;
 
   try{
     // Traer salidas SIN liquidar del cliente + entradas + retiros
@@ -3537,6 +3662,9 @@ window.guardarLiquidacion=async function(){
     await setDoc(liqDocRef,{
       cliente,fecha,num_liquidacion:num,
       kg_cascara:kgTotal,precio_kg:precio,total_servicio:totalServicio,
+      precio_usd:precioUSD,tc_bna:tc,
+      kg_con_iva:kgConIva,kg_sin_iva:kgSinIva,
+      subtotal_sin_iva:subSinIva,subtotal_con_iva:subConIva,iva_21:iva,
       forma_pago:pago,observaciones:obs,
       creado:serverTimestamp()
     });
@@ -3565,7 +3693,7 @@ window.guardarLiquidacion=async function(){
 
     // Generar PDF liquidación
     const _cliTel=(clientesCache.find(c=>c.nombre===cliente)||{}).telefono||'';
-    generarPDFLiquidacion({num,fecha,cliente,clienteTel:_cliTel,lotes,retiros,precio,kgTotal,totalServicio,pago,obs});
+    generarPDFLiquidacion({num,fecha,cliente,clienteTel:_cliTel,lotes,retiros,precio,kgTotal,totalServicio,pago,obs,precioUSD,tc,kgConIva,kgSinIva,subSinIva,subConIva,iva});
 
     const msgEstado=estadoCobro==='cobrado'?'— cobrado y registrado':'— registrado en cuenta corriente';
     showAlert(`✅ Liquidación ${num} generada ${msgEstado}`);
@@ -3579,7 +3707,7 @@ function generarPDFLiquidacion(d, enviarWA=false){
   const {jsPDF}=window.jspdf;
   const p=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
   const fF=f=>f&&f!=='0000-01-01'?f.split('-').reverse().join('/'):'—';
-  const fN=v=>v>0?v.toFixed(2)+' kg':'—';
+  const fN=v=>v>0?v.toFixed(3)+' kg':'—';
 
   // Header
   p.setFillColor(61,43,31);p.rect(0,0,210,35,'F');
@@ -3597,87 +3725,123 @@ function generarPDFLiquidacion(d, enviarWA=false){
   let cy=66;p.setFont('helvetica','normal');p.setFontSize(9);
   if(cli){if(cli.cuit){p.text('CUIT: '+cli.cuit,20,cy);cy+=6;}if(cli.localidad||cli.provincia){p.text((cli.localidad||'')+' '+(cli.provincia||''),20,cy);cy+=6;}}
 
-  // Período
+  // ── CALCULAR TOTALES ─────────────────────────────────────────────────────
   let y=Math.max(cy+6,82);
-  p.setFontSize(8);p.setTextColor(120,100,80);
-  p.text('Incluye los lotes procesados pendientes de liquidar al '+fF(d.fecha),20,y);
-  p.setTextColor(61,43,31);p.setFontSize(9);
-  y+=10;
+  const lotes=d.lotes||[];
+  // Totales generales
+  const tot=lotes.reduce((acc,l)=>{
+    acc.kg_cascara+=l.kg_cascara||0;acc.enteras+=l.enteras||0;acc.part_grandes+=l.part_grandes||0;
+    acc.part_chicas+=l.part_chicas||0;acc.danadas+=l.danadas||0;acc.podridas+=l.podridas||0;return acc;
+  },{kg_cascara:0,enteras:0,part_grandes:0,part_chicas:0,danadas:0,podridas:0});
+  const totKernel=tot.enteras+tot.part_grandes+tot.part_chicas+tot.danadas;
+  const pctKernel=tot.kg_cascara>0?(totKernel/tot.kg_cascara*100).toFixed(1)+'%':'—';
+  const pctPartido=totKernel>0?((tot.part_grandes+tot.part_chicas)/totKernel*100).toFixed(1)+'%':'—';
 
-  // ── SECCIÓN: DETALLE POR LOTE ──────────────────────────────────────────
-  p.setFont('helvetica','bold');p.text('1. DETALLE POR LOTE — PECAN CON CÁSCARA PROCESADO',20,y);
-  p.setDrawColor(200,129,26);p.line(20,y+2,190,y+2);
-  y+=10;
+  // Totales por variedad
+  const porVariedad={};
+  lotes.forEach(l=>{
+    const v=l.variedad||'Sin variedad';
+    if(!porVariedad[v]) porVariedad[v]={kg_cascara:0,enteras:0,part_grandes:0,part_chicas:0,danadas:0};
+    porVariedad[v].kg_cascara+=l.kg_cascara||0;
+    porVariedad[v].enteras+=l.enteras||0;
+    porVariedad[v].part_grandes+=l.part_grandes||0;
+    porVariedad[v].part_chicas+=l.part_chicas||0;
+    porVariedad[v].danadas+=l.danadas||0;
+  });
 
-  if(!d.lotes||d.lotes.length===0){
-    p.setFont('helvetica','normal');p.text('Sin lotes procesados en este período.',24,y);y+=10;
-  } else {
-    d.lotes.forEach((lote,idx)=>{
-      if(y>240){p.addPage();y=20;}
-      // Encabezado lote
-      p.setFillColor(61,43,31);p.rect(20,y,170,8,'F');
-      p.setTextColor(255,249,240);p.setFont('helvetica','bold');p.setFontSize(8.5);
-      p.text('LOTE: '+lote.lote_id,24,y+5.5);
-      p.text('Variedad: '+lote.variedad,90,y+5.5);
-      p.text('Fecha proc.: '+fF(lote.fecha),155,y+5.5);
-      y+=12;p.setTextColor(61,43,31);p.setFont('helvetica','normal');p.setFontSize(8.5);
-
-      // Datos de la entrada
-      p.setFillColor(245,240,232);p.rect(20,y-4,170,8,'F');
-      p.setFont('helvetica','bold');p.text('Pecan c/cáscara recibido:',24,y);
-      p.setFont('helvetica','normal');
-      p.text('Remito entrada: '+lote.entrada_remito,80,y);
-      p.text('Kg recibidos: '+(lote.entrada_kg>0?lote.entrada_kg.toFixed(2)+' kg':'—'),130,y);
-      if(lote.entrada_humedad!=null) p.text('Humedad: '+lote.entrada_humedad+'%',170,y);
-      y+=10;
-
-      // Datos del procesamiento
-      p.setFont('helvetica','bold');p.text('Resultado del procesamiento:',24,y);y+=7;
-      // Cabecera tabla proceso
-      p.setFillColor(230,220,205);p.rect(24,y-4,162,7,'F');
-      p.setFontSize(7.5);
-      p.text('Kg c/c proc.',28,y);p.text('Pecan Entero',58,y);p.text('P.Gde',86,y);
-      p.text('P.Chico',104,y);p.text('Dañado',124,y);p.text('Incomest.',144,y);p.text('% Kernel',166,y);
-      y+=8;p.setFont('helvetica','normal');p.setFontSize(8.5);
-      const kernel=lote.kg_cascara>0?((lote.enteras+lote.part_grandes+lote.part_chicas+lote.danadas)/lote.kg_cascara*100).toFixed(1)+'%':'—';
-      p.text(fN(lote.kg_cascara),28,y);
-      p.text(fN(lote.enteras),58,y);
-      p.text(fN(lote.part_grandes),86,y);
-      p.text(fN(lote.part_chicas),104,y);
-      p.text(fN(lote.danadas),124,y);
-      p.text(lote.podridas>0?lote.podridas.toFixed(2)+' kg*':'—',144,y);
-      p.text(kernel,166,y);
-      y+=12;p.setDrawColor(200,190,175);p.line(24,y-4,186,y-4);
+  // ── 1. RECEPCIÓN DE MATERIA PRIMA ───────────────────────────────────────
+  if(lotes.length){
+    if(y>220){p.addPage();y=20;}
+    p.setFont('helvetica','bold');p.setFontSize(10);p.setTextColor(61,43,31);
+    p.text('1. RECEPCIÓN DE MATERIA PRIMA',20,y);
+    p.setDrawColor(200,129,26);p.line(20,y+2,190,y+2);y+=10;
+    p.setFillColor(61,43,31);p.rect(20,y,170,9,'F');
+    p.setTextColor(255,249,240);p.setFontSize(8.5);p.setFont('helvetica','bold');
+    p.text('FECHA',24,y+5.5);
+    p.text('VARIEDAD',70,y+5.5);
+    p.text('REMITO',118,y+5.5);
+    p.text('Kg c/c',158,y+5.5,{align:'right'});
+    p.text('Humedad',188,y+5.5,{align:'right'});
+    y+=11;
+    // Una fila por variedad/remito — igual que el detalle del remito de entrada
+    const filasRecepcion=lotes.map(l=>({
+      fecha:l.fecha,
+      remito:l.entrada_remito||'—',
+      variedad:l.variedad||'—',
+      kg:l.entrada_kg||0,
+      humedad:l.entrada_humedad
+    }));
+    // Ordenar por remito y luego variedad
+    filasRecepcion.sort((a,b)=>(a.remito+a.variedad).localeCompare(b.remito+b.variedad));
+    filasRecepcion.forEach((r,i)=>{
+      if(y>270){p.addPage();y=20;}
+      if(i%2===0){p.setFillColor(245,240,232);p.rect(20,y-5,170,9,'F');}
+      p.setTextColor(61,43,31);p.setFont('helvetica','normal');p.setFontSize(8.5);
+      p.text(fF(r.fecha),24,y);
+      p.text(r.variedad,70,y);
+      p.text(r.remito,120,y);
+      p.text(r.kg>0?r.kg.toFixed(3)+' kg':'—',155,y,{align:'right'});
+      p.text(r.humedad!=null?r.humedad+'%':'—',188,y,{align:'right'});
+      y+=9;
     });
-
-    // Totales generales
-    if(y>240){p.addPage();y=20;}
-    const tot=d.lotes.reduce((acc,l)=>{
-      acc.kg_cascara+=l.kg_cascara;acc.enteras+=l.enteras;acc.part_grandes+=l.part_grandes;
-      acc.part_chicas+=l.part_chicas;acc.danadas+=l.danadas;acc.podridas+=l.podridas;return acc;
-    },{kg_cascara:0,enteras:0,part_grandes:0,part_chicas:0,danadas:0,podridas:0});
-    const totKernel=tot.enteras+tot.part_grandes+tot.part_chicas+tot.danadas;
-    const pctTot=tot.kg_cascara>0?(totKernel/tot.kg_cascara*100).toFixed(1)+'%':'—';
-    p.setFillColor(61,43,31);p.rect(20,y-4,170,9,'F');
-    p.setTextColor(255,249,240);p.setFont('helvetica','bold');p.setFontSize(8.5);
-    p.text('TOTALES DEL PERÍODO',24,y+1);
-    p.text(tot.kg_cascara.toFixed(2)+' kg',58,y+1);
-    p.text(tot.enteras.toFixed(2),86,y+1);
-    p.text(tot.part_grandes.toFixed(2),104,y+1);
-    p.text(tot.part_chicas.toFixed(2),124,y+1);
-    p.text(tot.danadas.toFixed(2),144,y+1);
-    p.text(pctTot,166,y+1);
-    y+=14;p.setTextColor(61,43,31);
-    p.setFont('helvetica','normal');p.setFontSize(7);p.setTextColor(120,100,80);
-    p.text('* Incomestibles = merma, no se entregan al cliente',24,y);
-    p.setTextColor(61,43,31);p.setFontSize(9);y+=10;
+    y+=8;
   }
 
-  // Retiros parciales
+  // ── 2. RESULTADO DEL PROCESAMIENTO ──────────────────────────────────────
+  if(y>220){p.addPage();y=20;}
+  p.setFont('helvetica','bold');p.setFontSize(10);p.setTextColor(61,43,31);
+  p.text('2. RESULTADO DEL PROCESAMIENTO',20,y);
+  p.setDrawColor(200,129,26);p.line(20,y+2,190,y+2);y+=10;
+
+  // Tabla por variedad con % Kernel y % Partido
+  p.setFillColor(61,43,31);p.rect(20,y,170,10,'F');
+  p.setTextColor(255,249,240);p.setFontSize(7.5);p.setFont('helvetica','bold');
+  p.text('VARIEDAD',24,y+5.5);
+  p.text('Kg c/c',65,y+5.5,{align:'right'});
+  p.text('Entero',88,y+5.5,{align:'right'});
+  p.text('P.Grande',109,y+5.5,{align:'right'});
+  p.text('P.Chico',128,y+5.5,{align:'right'});
+  p.text('Dañado',147,y+5.5,{align:'right'});
+  p.text('% Kernel',165,y+5.5,{align:'right'});
+  p.text('% Partido',186,y+5.5,{align:'right'});
+  y+=12;
+  Object.entries(porVariedad).forEach(([v,t],i)=>{
+    if(y>260){p.addPage();y=20;}
+    const k=t.enteras+t.part_grandes+t.part_chicas+t.danadas;
+    const pctK=t.kg_cascara>0?(k/t.kg_cascara*100).toFixed(1)+'%':'—';
+    const pctPart=k>0?((t.part_grandes+t.part_chicas)/k*100).toFixed(1)+'%':'—';
+    if(i%2===0){p.setFillColor(245,240,232);p.rect(20,y-5,170,9,'F');}
+    p.setTextColor(61,43,31);p.setFont('helvetica','normal');p.setFontSize(8);
+    p.text(v,24,y);
+    p.text(t.kg_cascara.toFixed(3),65,y,{align:'right'});
+    p.text(t.enteras>0?t.enteras.toFixed(3):'—',88,y,{align:'right'});
+    p.text(t.part_grandes>0?t.part_grandes.toFixed(3):'—',109,y,{align:'right'});
+    p.text(t.part_chicas>0?t.part_chicas.toFixed(3):'—',128,y,{align:'right'});
+    p.text(t.danadas>0?t.danadas.toFixed(3):'—',147,y,{align:'right'});
+    p.text(pctK,165,y,{align:'right'});
+    p.text(pctPart,186,y,{align:'right'});
+    y+=9;
+  });
+  // Fila totales
+  if(y>260){p.addPage();y=20;}
+  p.setFillColor(61,43,31);p.rect(20,y-5,170,10,'F');
+  p.setTextColor(255,249,240);p.setFont('helvetica','bold');p.setFontSize(8);
+  p.text('TOTAL',24,y+1);
+  p.text(tot.kg_cascara.toFixed(3),65,y+1,{align:'right'});
+  p.text(tot.enteras>0?tot.enteras.toFixed(3):'—',88,y+1,{align:'right'});
+  p.text(tot.part_grandes>0?tot.part_grandes.toFixed(3):'—',109,y+1,{align:'right'});
+  p.text(tot.part_chicas>0?tot.part_chicas.toFixed(3):'—',128,y+1,{align:'right'});
+  p.text(tot.danadas>0?tot.danadas.toFixed(3):'—',147,y+1,{align:'right'});
+  p.text(pctKernel,165,y+1,{align:'right'});
+  p.text(pctPartido,186,y+1,{align:'right'});
+  y+=14;
+
+  // ── RETIROS PARCIALES ────────────────────────────────────────────────────
   const retirosActivos=(d.retiros||[]).filter(r=>r.enteras||r.part_grandes||r.part_chicas||r.danadas);
   if(retirosActivos.length){
     if(y>210){p.addPage();y=20;}
-    p.setFont('helvetica','bold');p.text('2. RETIROS PARCIALES REALIZADOS',20,y);
+    p.setFont('helvetica','bold');p.setFontSize(10);p.setTextColor(61,43,31);
+    p.text('3. RETIROS PARCIALES REALIZADOS',20,y);
     p.setDrawColor(200,129,26);p.line(20,y+2,190,y+2);
     p.setFillColor(61,43,31);p.rect(20,y+4,170,7,'F');
     p.setTextColor(255,249,240);p.setFontSize(8);
@@ -3686,7 +3850,7 @@ function generarPDFLiquidacion(d, enviarWA=false){
     let totRetEnt=0,totRetPG=0,totRetPC=0,totRetDan=0;
     retirosActivos.forEach((r,i)=>{
       if(y>270){p.addPage();y=20;}
-      const tot=(r.enteras||0)+(r.part_grandes||0)+(r.part_chicas||0)+(r.danadas||0);
+      const totR=(r.enteras||0)+(r.part_grandes||0)+(r.part_chicas||0)+(r.danadas||0);
       totRetEnt+=r.enteras||0;totRetPG+=r.part_grandes||0;totRetPC+=r.part_chicas||0;totRetDan+=r.danadas||0;
       if(i%2===0){p.setFillColor(245,240,232);p.rect(20,y-5,170,9,'F');}
       p.text(fF(r.fecha),24,y);p.text(r.num_remito||'—',55,y);
@@ -3694,28 +3858,54 @@ function generarPDFLiquidacion(d, enviarWA=false){
       p.text(r.part_grandes?(r.part_grandes.toFixed(1)+' kg'):'—',102,y);
       p.text(r.part_chicas?(r.part_chicas.toFixed(1)+' kg'):'—',122,y);
       p.text(r.danadas?(r.danadas.toFixed(1)+' kg'):'—',144,y);
-      p.text(tot.toFixed(1)+' kg',168,y);y+=10;
+      p.text(totR.toFixed(1)+' kg',168,y);y+=10;
     });
     p.setFont('helvetica','bold');p.line(20,y,190,y);y+=7;
     const totRet=totRetEnt+totRetPG+totRetPC+totRetDan;
-    p.text('TOTAL RETIRADO: '+totRet.toFixed(2)+' kg',24,y);y+=12;
+    p.text('TOTAL RETIRADO: '+totRet.toFixed(3)+' kg',24,y);y+=14;
   }
 
   // Liquidación del servicio
   if(y>220){p.addPage();y=20;}
-  p.setFont('helvetica','bold');p.setFontSize(10);
-  p.text('3. LIQUIDACIÓN DEL SERVICIO DE MAQUILA',20,y);
+  p.setFont('helvetica','bold');p.setFontSize(10);p.setTextColor(61,43,31);
+  p.text('LIQUIDACIÓN DEL SERVICIO DE MAQUILA',20,y);
   p.setDrawColor(200,129,26);p.line(20,y+2,190,y+2);y+=12;
+  const fmtARS=v=>'$ '+parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:2});
   p.setFontSize(9);p.setFont('helvetica','normal');
-  p.text('Kg con cáscara liquidados en este período:',24,y);p.text(d.kgTotal.toFixed(2)+' kg',160,y);y+=8;
-  p.text('Precio por kg (c/cáscara):',24,y);p.text('$ '+d.precio.toLocaleString('es-AR',{minimumFractionDigits:2}),160,y);y+=8;
+  // Datos base
+  if(d.precioUSD&&d.tc){
+    p.text('Precio del servicio:',24,y);p.text('USD '+parseFloat(d.precioUSD).toLocaleString('es-AR',{minimumFractionDigits:3})+'/kg c/c',160,y);y+=7;
+    p.text('Tipo de cambio BNA (billete venta):',24,y);p.text('$ '+parseFloat(d.tc).toLocaleString('es-AR',{minimumFractionDigits:2})+'/USD',160,y);y+=7;
+    p.text('Total Kg liquidados:',24,y);p.text(parseFloat(d.kgTotal||0).toFixed(3)+' kg',160,y);y+=10;
+    // Desglose IVA
+    if(d.kgSinIva>0){
+      p.text('Kg sin IVA: '+parseFloat(d.kgSinIva).toFixed(3)+' kg',24,y);
+      p.text(fmtARS(d.subSinIva),160,y);y+=7;
+    }
+    if(d.kgConIva>0){
+      p.text('Kg con IVA (21%): '+parseFloat(d.kgConIva).toFixed(3)+' kg',24,y);
+      p.text(fmtARS(d.subConIva),160,y);y+=7;
+      p.text('IVA 21%:',24,y);p.text(fmtARS(d.iva),160,y);y+=7;
+    }
+  } else {
+    p.text('Kg con cáscara liquidados:',24,y);p.text(parseFloat(d.kgTotal||0).toFixed(3)+' kg',160,y);y+=7;
+    p.text('Precio por kg (c/cáscara):',24,y);p.text(fmtARS(d.precio),160,y);y+=7;
+  }
   p.setDrawColor(61,43,31);p.line(20,y,190,y);y+=6;
   p.setFont('helvetica','bold');p.setFontSize(12);
-  p.text('TOTAL SERVICIO:',24,y);p.text('$ '+d.totalServicio.toLocaleString('es-AR',{minimumFractionDigits:2}),160,y);y+=8;
+  p.text('TOTAL SERVICIO:',24,y);p.text(fmtARS(d.totalServicio),160,y);y+=10;
   p.setFont('helvetica','normal');p.setFontSize(9);
-  p.text('Forma de pago: '+d.pago,24,y);y+=8;
-  if(d.obs){p.text('Obs: '+d.obs,24,y);y+=8;}
-  y+=10;
+  p.text('Forma de pago: '+d.pago,24,y);y+=7;
+  if(d.obs){p.text('Obs: '+d.obs,24,y);y+=7;}
+  y+=6;
+  // Leyenda: si no cabe en la página actual, nueva página
+  const leyenda='Los precios indicados en esta liquidacion estan sujetos a modificaciones conforme al tipo de cambio vigente en el momento del pago o cancelacion.';
+  const leyendaLines=p.splitTextToSize(leyenda,165);
+  const espacioNecesario=leyendaLines.length*5+30; // leyenda + firmas
+  if(y+espacioNecesario>268){p.addPage();y=20;}
+  p.setFontSize(8);p.setTextColor(100,80,60);
+  p.text(leyendaLines,24,y);y+=leyendaLines.length*5+10;
+  p.setTextColor(61,43,31);p.setFontSize(9);
   p.setDrawColor(100,100,100);p.line(20,y,80,y);p.line(130,y,190,y);y+=7;
   p.text('Firma del cliente',50,y,{align:'center'});p.text('Firma y sello empresa',160,y,{align:'center'});
   p.setFillColor(61,43,31);p.rect(0,280,210,17,'F');
@@ -3730,13 +3920,46 @@ function generarPDFLiquidacion(d, enviarWA=false){
   }
 }
 
+window.limpiarFiltrosLiq=function(){
+  ['f-liq-cliente','f-liq-mes','f-liq-anio'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  cargarLiquidaciones();
+}
+
 window.cargarLiquidaciones=async function(){
   const tbody=document.querySelector('#tbl-liquidaciones tbody');
-  tbody.innerHTML='<tr><td colspan="8" class="loading">Cargando...</td></tr>';
+  tbody.innerHTML='<tr><td colspan="9" class="loading">Cargando...</td></tr>';
+  const clienteF=document.getElementById('f-liq-cliente')?.value||'';
+  const mesF=document.getElementById('f-liq-mes')?.value||'';
+  const anioF=document.getElementById('f-liq-anio')?.value||'';
+
   const [snapLiqs, snapCob]=await Promise.all([
     getDocsFromServer(query(collection(db,'liquidaciones_maquila'),orderBy('fecha','desc'))),
     getDocsFromServer(collection(db,'cobros'))
   ]);
+
+  // Poblar selector de clientes con los que existen
+  const clientesLiq=new Set();
+  const aniosLiq=new Set();
+  snapLiqs.forEach(d=>{
+    const l=d.data();
+    if(l.cliente) clientesLiq.add(l.cliente);
+    const a=(l.fecha||'').slice(0,4);if(a) aniosLiq.add(a);
+  });
+  const selCli=document.getElementById('f-liq-cliente');
+  if(selCli){
+    const cur=selCli.value;
+    selCli.innerHTML='<option value="">Todos</option>';
+    [...clientesLiq].sort().forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;selCli.appendChild(o);});
+    if(cur)selCli.value=cur;
+  }
+  const selAnio=document.getElementById('f-liq-anio');
+  if(selAnio){
+    const cur=selAnio.value;
+    selAnio.innerHTML='<option value="">Todos</option>';
+    [...aniosLiq].sort().reverse().forEach(a=>{const o=document.createElement('option');o.value=a;o.textContent=a;selAnio.appendChild(o);});
+    if(cur)selAnio.value=cur;
+  }
+
   // Cobros automáticos por liq_id
   const cobradosPorLiq=new Set();
   snapCob.forEach(d=>{
@@ -3744,9 +3967,14 @@ window.cargarLiquidaciones=async function(){
     if(c.tipo==='cobro_automatico'&&c.liq_id) cobradosPorLiq.add(c.liq_id);
   });
   tbody.innerHTML='';
-  if(snapLiqs.empty){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text2);padding:20px;">No hay liquidaciones aún</td></tr>';return;}
+  if(snapLiqs.empty){tbody.innerHTML='<tr><td colspan="9" style="text-align:center;color:var(--text2);padding:20px;">No hay liquidaciones aún</td></tr>';return;}
+  let count=0;
   snapLiqs.forEach(d=>{
     const l=d.data();
+    if(clienteF&&l.cliente!==clienteF) return;
+    if(mesF&&(l.fecha||'').slice(5,7)!==mesF) return;
+    if(anioF&&(l.fecha||'').slice(0,4)!==anioF) return;
+    count++;
     const cobrado=cobradosPorLiq.has(d.id);
     const estadoBadge=cobrado
       ?'<span class="badge badge-green">💵 Cobrado</span>'
@@ -3755,7 +3983,7 @@ window.cargarLiquidaciones=async function(){
       <td><span class="remito-num">${l.num_liquidacion||'—'}</span></td>
       <td>${l.fecha}</td>
       <td><strong>${l.cliente}</strong></td>
-      <td>${l.kg_cascara?l.kg_cascara.toFixed(2)+' kg':'—'}</td>
+      <td>${l.kg_cascara?l.kg_cascara.toFixed(3)+' kg':'—'}</td>
       <td>$${parseFloat(l.precio_kg).toLocaleString('es-AR',{minimumFractionDigits:2})}</td>
       <td><strong>$${parseFloat(l.total_servicio).toLocaleString('es-AR',{minimumFractionDigits:2})}</strong></td>
       <td>${l.forma_pago||'—'}</td>
@@ -3768,6 +3996,7 @@ window.cargarLiquidaciones=async function(){
       </td>
     </tr>`;
   });
+  if(!count) tbody.innerHTML='<tr><td colspan="9" style="text-align:center;color:var(--text2);padding:20px;">No hay liquidaciones para los filtros seleccionados</td></tr>';
 }
 
 // ---- EDITAR RETIRO ----
@@ -3873,7 +4102,7 @@ window.reimprimirLiquidacion=async function(id, enviarWA=false){
   // Buscar teléfono del cliente
   const cliSnap=clientesCache.find(c=>c.nombre===l.cliente);
   const clienteTel=cliSnap?.telefono||'';
-  generarPDFLiquidacion({num:l.num_liquidacion,fecha:l.fecha,cliente:l.cliente,clienteTel,lotes,retiros,precio:l.precio_kg,kgTotal:l.kg_cascara,totalServicio:l.total_servicio,pago:l.forma_pago,obs:l.observaciones||''},enviarWA);
+  generarPDFLiquidacion({num:l.num_liquidacion,fecha:l.fecha,cliente:l.cliente,clienteTel,lotes,retiros,precio:l.precio_kg,kgTotal:l.kg_cascara,totalServicio:l.total_servicio,pago:l.forma_pago,obs:l.observaciones||'',precioUSD:l.precio_usd||0,tc:l.tc_bna||0,kgConIva:l.kg_con_iva||0,kgSinIva:l.kg_sin_iva||0,subSinIva:l.subtotal_sin_iva||0,subConIva:l.subtotal_con_iva||0,iva:l.iva_21||0},enviarWA);
   showAlert('🖨️ Liquidación '+l.num_liquidacion+' descargada');
 }
 
@@ -4253,9 +4482,9 @@ window.verificarStockNuez=async function(){
   } else {
     const ok=kg<=disp||kg===0;
     panel.style.cssText=`display:block;margin:4px 0 12px;border-radius:10px;padding:12px 16px;font-size:.88rem;border:1.5px solid ${ok?'var(--green)':'#e74c3c'};background:${ok?'#f0fff4':'#fff0f0'};`;
-    panel.innerHTML=`<div style="font-size:1rem;font-weight:700;color:${ok?'var(--green)':'#c0392b'};">📦 Disponible: ${disp.toFixed(2)} kg</div>
-      <div style="font-size:.82rem;color:var(--text2);margin-top:3px;">Producido fábrica: ${prod.toFixed(2)} kg — Usado en cocina: ${usado.toFixed(2)} kg</div>
-      ${kg>disp?`<div style="color:#c0392b;font-size:.83rem;margin-top:4px;">⚠️ Ingresaste ${kg.toFixed(2)} kg pero solo hay ${disp.toFixed(2)} kg disponibles</div>`:''}`;
+    panel.innerHTML=`<div style="font-size:1rem;font-weight:700;color:${ok?'var(--green)':'#c0392b'};">📦 Disponible: ${disp.toFixed(3)} kg</div>
+      <div style="font-size:.82rem;color:var(--text2);margin-top:3px;">Producido fábrica: ${prod.toFixed(3)} kg — Usado en cocina: ${usado.toFixed(3)} kg</div>
+      ${kg>disp?`<div style="color:#c0392b;font-size:.83rem;margin-top:4px;">⚠️ Ingresaste ${kg.toFixed(3)} kg pero solo hay ${disp.toFixed(3)} kg disponibles</div>`:''}`;
   }
 }
 
@@ -4291,8 +4520,8 @@ window.recalcTotalesCocina=function(){
     if(n>0||p>0) cnt++;
     totNuez+=n; totProd+=p;
   });
-  document.getElementById('coc-tot-nuez').textContent=totNuez.toFixed(2)+' kg';
-  document.getElementById('coc-tot-prod').textContent=totProd.toFixed(2)+' kg';
+  document.getElementById('coc-tot-nuez').textContent=totNuez.toFixed(3)+' kg';
+  document.getElementById('coc-tot-prod').textContent=totProd.toFixed(3)+' kg';
   document.getElementById('coc-tot-tandas').textContent=cnt;
 }
 
@@ -4367,7 +4596,7 @@ window.guardarLoteCocina=async function(){
     }
     await batch.commit();
 
-    showAlert(`✅ Lote ${loteId} registrado — ${tandas.length} tanda(s) | ${totalNuez.toFixed(2)} kg Pecan → ${totalProd.toFixed(2)} kg producidos`);
+    showAlert(`✅ Lote ${loteId} registrado — ${tandas.length} tanda(s) | ${totalNuez.toFixed(3)} kg Pecan → ${totalProd.toFixed(3)} kg producidos`);
 
     // Limpiar formulario
     document.getElementById('coc-fecha').value='';
@@ -4413,15 +4642,15 @@ window.cargarTandas=async function(){
     tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text2);padding:20px;">No hay lotes registrados</td></tr>';return;
   }
   lotesArr.forEach(l=>{
-    const detalle=l.tandas.map((t,i)=>`T${i+1}: ${t.kg_nuez?.toFixed(2)}kg→${t.kg_producido?.toFixed(2)}kg${t.observaciones?' ('+t.observaciones+')':''}`).join(' | ');
+    const detalle=l.tandas.map((t,i)=>`T${i+1}: ${t.kg_nuez?.toFixed(3)}kg→${t.kg_producido?.toFixed(3)}kg${t.observaciones?' ('+t.observaciones+')':''}`).join(' | ');
     tbody.innerHTML+=`<tr>
       <td><span class="remito-num">${l.lote_id}</span></td>
       <td>${l.fecha}</td>
       <td><strong>${l.receta_nombre}</strong></td>
       <td>${catLabel[l.categoria_nuez]||l.categoria_nuez}</td>
       <td><span class="badge badge-amber">${l.tandas.length}</span></td>
-      <td>${l.kg_nuez.toFixed(2)} kg</td>
-      <td><strong style="color:var(--green);">${l.kg_producido.toFixed(2)} kg</strong></td>
+      <td>${l.kg_nuez.toFixed(3)} kg</td>
+      <td><strong style="color:var(--green);">${l.kg_producido.toFixed(3)} kg</strong></td>
       <td style="display:flex;gap:5px;">
         <button class="btn btn-secondary btn-sm" title="Ver detalle" onclick="toggleDetalleLote('${l.lote_id}')">🔍</button>
         <button class="btn btn-secondary btn-sm" title="Etiqueta" onclick="abrirEtiquetaCoc(null,'${l.fecha}','${l.receta_nombre}','${l.categoria_nuez}','${l.lote_id}')">🏷️</button>
@@ -4431,7 +4660,7 @@ window.cargarTandas=async function(){
     <tr id="detalle-lote-${l.lote_id}" style="display:none;">
       <td colspan="8" style="padding:0;">
         <div style="padding:10px 16px;background:var(--bg2);font-size:.83rem;color:var(--text2);border-bottom:1px solid var(--border);">
-          ${l.tandas.map((t,i)=>`<span style="margin-right:16px;"><strong>T${i+1}:</strong> ${t.kg_nuez?.toFixed(2)} kg Pecan → ${t.kg_producido?.toFixed(2)} kg prod${t.observaciones?' — '+t.observaciones:''}</span>`).join('')}
+          ${l.tandas.map((t,i)=>`<span style="margin-right:16px;"><strong>T${i+1}:</strong> ${t.kg_nuez?.toFixed(3)} kg Pecan → ${t.kg_producido?.toFixed(3)} kg prod${t.observaciones?' — '+t.observaciones:''}</span>`).join('')}
         </div>
       </td>
     </tr>`;
@@ -4668,11 +4897,11 @@ window.calcStockCocina=async function(){
     html+=`<tr>
       <td><strong>${nombre}</strong></td>
       <td>${d.tandas}</td>
-      <td><strong style="color:var(--green);">${d.producido.toFixed(2)} kg</strong></td>
+      <td><strong style="color:var(--green);">${d.producido.toFixed(3)} kg</strong></td>
       <td><span class="badge badge-green">En stock</span></td>
     </tr>`;
   });
-  html+=`<tr class="stock-total-row"><td>TOTAL</td><td></td><td><strong>${total.toFixed(2)} kg</strong></td><td></td></tr>`;
+  html+=`<tr class="stock-total-row"><td>TOTAL</td><td></td><td><strong>${total.toFixed(3)} kg</strong></td><td></td></tr>`;
   html+='</tbody></table></div>';
   html+=`<div style="margin-top:12px;padding:12px 16px;background:var(--bg2);border-radius:8px;font-size:.83rem;color:var(--text2);">
     ➕ <strong>Ventas</strong> — se descuentan automáticamente del stock vendible.
@@ -6028,7 +6257,7 @@ window.abrirRemitoModal=function(v){
   const itemsHtml=(v.items||[]).map(it=>`
     <tr>
       <td style="padding:8px 10px;border-bottom:1px solid #eee;">${it.nombre}</td>
-      <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;">${parseFloat(it.kg).toFixed(2)} kg</td>
+      <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;">${parseFloat(it.kg).toFixed(3)} kg</td>
       <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;">${fmtMoneda(it.precio_kg)}</td>
       <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;font-weight:600;">${fmtMoneda(it.subtotal)}</td>
     </tr>`).join('');
@@ -6926,7 +7155,7 @@ async function initResumen(){
   });
   document.getElementById('res-label').textContent=label;
 
-  const fmtKg=v=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:0})+' kg';
+  const fmtKg=v=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:3,maximumFractionDigits:3})+' kg';
   const fmt=v=>{
     const n=parseFloat(v||0);
     if(Math.abs(n)>=1000000) return '$'+(n/1000000).toLocaleString('es-AR',{minimumFractionDigits:2})+' M';
