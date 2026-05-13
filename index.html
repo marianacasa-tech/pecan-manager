@@ -223,7 +223,9 @@
     <div class="metrics-grid" id="db-kpis-volumen">
       <div class="metric-card"><div class="val" id="m-entradas">—</div><div class="lbl">Kg ingresados</div></div>
       <div class="metric-card"><div class="val" id="m-salidas">—</div><div class="lbl">Kg kernel producido</div></div>
-      <div class="metric-card"><div class="val" id="m-clientes">—</div><div class="lbl">Clientes registrados</div></div>
+      <div class="metric-card"><div class="val" id="m-prom-dia">—</div><div class="lbl">Kg c/c promedio por día</div></div>
+      <div class="metric-card"><div class="val" id="m-sin-procesar" style="color:var(--amber);">—</div><div class="lbl">Kg c/c sin procesar</div></div>
+      <div class="metric-card"><div class="val" id="m-clientes">—</div><div class="lbl">Clientes de servicio</div></div>
     </div>
 
     <!-- KPIs rendimiento -->
@@ -301,6 +303,14 @@
             <option>Santiago del Estero</option><option>Tierra del Fuego</option><option>Tucumán</option>
           </select>
         </div>
+        <div class="form-group"><label>Categoría *</label>
+          <select id="cli-categoria">
+            <option value="">— Seleccioná —</option>
+            <option value="venta">🛒 Venta</option>
+            <option value="servicio">🔄 Servicio (maquila)</option>
+            <option value="venta_servicio">🛒🔄 Venta y servicio</option>
+          </select>
+        </div>
         <div class="form-group"><label>Email</label><input type="email" id="cli-email" placeholder="correo@ejemplo.com"></div>
         <div class="form-group"><label>Teléfono</label><input type="text" id="cli-tel" placeholder="351-1234567"></div>
       </div>
@@ -312,7 +322,7 @@
       <h2>👥 Clientes registrados</h2>
       <div class="table-wrap">
         <table id="tbl-clientes">
-          <thead><tr><th>Nombre</th><th>CUIT</th><th>Localidad</th><th>Provincia</th><th>Email</th><th>Tel</th><th>Acciones</th></tr></thead>
+          <thead><tr><th>Nombre</th><th>Categoría</th><th>CUIT</th><th>Localidad</th><th>Provincia</th><th>Email</th><th>Tel</th><th>Acciones</th></tr></thead>
           <tbody><tr><td colspan="7" class="loading">Cargando...</td></tr></tbody>
         </table>
       </div>
@@ -1052,6 +1062,7 @@
       <button class="btn btn-secondary" id="ctab-reg" onclick="cobrosTab('reg')">💵 Registro de cobros</button>
       <button class="btn btn-secondary" id="ctab-cta" onclick="cobrosTab('cta')">📒 Cuenta corriente</button>
       <button class="btn btn-secondary" onclick="abrirModalNC()" style="margin-left:auto;">📋 Nota de crédito</button>
+      <button class="btn btn-secondary" onclick="abrirModalND()">📋 Nota de débito</button>
     </div>
 
     <!-- ── TAB REGISTRO ── -->
@@ -1109,6 +1120,7 @@
             <option value="">Cobros y NC</option>
             <option value="cobro">Solo cobros</option>
             <option value="nota_credito">Solo notas de crédito</option>
+            <option value="nota_debito">Solo notas de débito</option>
           </select>
           <button class="btn btn-secondary btn-sm" onclick="limpiarFiltrosCobros()">✖ Limpiar</button>
         </div>
@@ -1141,6 +1153,7 @@
               <option value="venta">Ventas</option>
               <option value="cobro">Cobros</option>
               <option value="nota_credito">Notas crédito</option>
+          <option value="nota_debito">Notas débito</option>
               <option value="liquidacion_maquila">Servicio maquila</option>
             </select>
             <button class="btn btn-secondary btn-sm" onclick="limpiarFiltrosCta()">✖</button>
@@ -1238,7 +1251,8 @@
         <div class="metric-card"><div class="val" id="rf-entrada">—</div><div class="lbl">Kg c/c ingresados</div></div>
         <div class="metric-card"><div class="val" id="rf-procesado">—</div><div class="lbl">Kg c/c procesados</div></div>
         <div class="metric-card"><div class="val" id="rf-pendiente" style="color:var(--amber);">—</div><div class="lbl">Kg c/c pendientes</div></div>
-        <div class="metric-card"><div class="val" id="rf-kernel">—</div><div class="lbl">% Kernel promedio</div></div>
+        <div class="metric-card"><div class="val" id="rf-prom-dia">—</div><div class="lbl">Kg c/c promedio por día</div></div>
+        <div class="metric-card"><div class="val" id="rf-dias">—</div><div class="lbl">Días de proceso</div></div>
       </div>
     </div>
 
@@ -1299,12 +1313,14 @@
       <!-- Tarjetas ARS -->
       <div style="font-size:.75rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">🇦🇷 Pesos</div>
       <div class="metrics-grid" style="margin-bottom:20px;">
-        <div class="metric-card"><div class="val" id="re-ventas">—</div><div class="lbl">Ventas</div></div>
+        <div class="metric-card"><div class="val" id="re-ventas">—</div><div class="lbl">Total ingresos</div></div>
+        <div class="metric-card"><div class="val" id="re-ventas-nuez">—</div><div class="lbl">↳ Venta de nueces</div></div>
+        <div class="metric-card"><div class="val" id="re-ventas-servicio">—</div><div class="lbl">↳ Servicio de maquila</div></div>
         <div class="metric-card"><div class="val" id="re-cobrado">—</div><div class="lbl">Cobrado</div></div>
         <div class="metric-card"><div class="val" id="re-por-cobrar" style="color:var(--amber);">—</div><div class="lbl">Por cobrar (cta. cte.)</div></div>
         <div class="metric-card"><div class="val" id="re-gastos">—</div><div class="lbl">Gastos</div></div>
         <div class="metric-card"><div class="val" id="re-deuda-prov-ars" style="color:var(--amber);">—</div><div class="lbl">Deuda proveedores ARS</div></div>
-        <div class="metric-card"><div class="val" id="re-resultado">—</div><div class="lbl">Resultado (ventas − gastos)</div></div>
+        <div class="metric-card"><div class="val" id="re-resultado">—</div><div class="lbl">Resultado (ingresos − gastos)</div></div>
       </div>
 
       <!-- Tarjetas USD -->
@@ -1318,6 +1334,35 @@
       <!-- Gráfico económico -->
       <div style="font-size:.8rem;color:var(--text2);margin-bottom:8px;font-weight:600;">Ventas vs Cobrado vs Gastos por mes</div>
       <canvas id="chart-economico" height="160"></canvas>
+    </div>
+
+    <!-- Rankings -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+
+      <!-- Ranking ventas -->
+      <div class="card">
+        <div style="font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--brown2);margin-bottom:14px;">🏆 Top clientes — Venta de nueces</div>
+        <div id="rank-ventas">
+          <div class="loading">Cargando...</div>
+        </div>
+      </div>
+
+      <!-- Ranking servicio -->
+      <div class="card">
+        <div style="font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--brown2);margin-bottom:14px;">🏆 Top clientes — Servicio de maquila</div>
+        <div id="rank-servicio">
+          <div class="loading">Cargando...</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Cuentas corrientes pendientes -->
+    <div class="card">
+      <div style="font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--brown2);margin-bottom:14px;">📒 Cuentas corrientes pendientes</div>
+      <div id="res-cta-cte-pendientes">
+        <div class="loading">Cargando...</div>
+      </div>
     </div>
 
   </div>
@@ -1735,7 +1780,6 @@
           <option value="Efectivo">Efectivo</option>
           <option value="Transferencia">Transferencia</option>
           <option value="Mixto">Mixto (efectivo + transferencia)</option>
-          <option value="Pendiente">Pendiente de cobro</option>
         </select>
       </div>
       <div class="form-group"><label>Observaciones</label><input type="text" id="edit-liq-obs"></div>
@@ -1807,7 +1851,6 @@
           <option value="Efectivo">Efectivo</option>
           <option value="Transferencia">Transferencia</option>
           <option value="Mixto">Mixto (efectivo + transferencia)</option>
-          <option value="Pendiente">Pendiente de cobro</option>
         </select>
       </div>
       <div class="form-group"><label>Estado del cobro *</label>
@@ -1875,6 +1918,14 @@
           <option>Misiones</option><option>Neuquén</option><option>Río Negro</option><option>Salta</option>
           <option>San Juan</option><option>San Luis</option><option>Santa Cruz</option><option>Santa Fe</option>
           <option>Santiago del Estero</option><option>Tierra del Fuego</option><option>Tucumán</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Categoría *</label>
+        <select id="edit-cli-categoria">
+          <option value="">— Seleccioná —</option>
+          <option value="venta">🛒 Venta</option>
+          <option value="servicio">🔄 Servicio (maquila)</option>
+          <option value="venta_servicio">🛒🔄 Venta y servicio</option>
         </select>
       </div>
       <div class="form-group"><label>Email</label><input type="email" id="edit-cli-email"></div>
@@ -2358,12 +2409,54 @@ agregarLinea();
 async function cargarClientesSelects(){
   const snap=await getDocs(collection(db,'clientes'));
   clientesCache=[];snap.forEach(d=>clientesCache.push({id:d.id,...d.data()}));
-  ['ent-propietario','sal-propietario','edit-ent-prop','edit-sal-prop','f-ent-prop','f-sal-prop','sf-prop-casc','sf-prop-pelada'].forEach(sid=>{
+  clientesCache.sort((a,b)=>a.nombre.localeCompare(b.nombre));
+
+  // Helper: filtrar por categoría
+  // 'servicio' = servicio o venta_servicio
+  // 'venta'    = venta o venta_servicio
+  // 'todos'    = todos
+  function poblarSelect(sid, catFiltro){
     const sel=document.getElementById(sid);if(!sel)return;
-    const val=sel.value;const isF=sid.startsWith('f-');
+    const val=sel.value;
+    const isF=sid.startsWith('f-')||sid.startsWith('sf-');
     while(sel.options.length>(isF?2:1))sel.remove(sel.options.length-1);
-    clientesCache.forEach(c=>{const o=document.createElement('option');o.value=c.nombre;o.textContent=c.nombre;sel.appendChild(o);});
+    clientesCache
+      .filter(c=>{
+        if(catFiltro==='todos') return true;
+        const cat=c.categoria||'venta_servicio'; // sin categoría = todos
+        if(catFiltro==='venta') return cat==='venta'||cat==='venta_servicio';
+        if(catFiltro==='servicio') return cat==='servicio'||cat==='venta_servicio';
+        return true;
+      })
+      .forEach(c=>{const o=document.createElement('option');o.value=c.nombre;o.textContent=c.nombre;sel.appendChild(o);});
     if(val)sel.value=val;
+  }
+
+  // Selects de SERVICIO (maquila, fábrica, cotizador)
+  ['ent-propietario','sal-propietario','edit-ent-prop','edit-sal-prop',
+   'f-ent-prop','f-sal-prop','sf-prop-casc','sf-prop-pelada',
+   'f-cot-cliente','cot-cliente',
+   'maq-cliente-sel','f-liq-cliente'].forEach(sid=>poblarSelect(sid,'servicio'));
+
+  // Dashboard: PROPIO fijo + clientes de servicio
+  const dbPropSel=document.getElementById('db-prop');
+  if(dbPropSel){
+    const cur=dbPropSel.value;
+    dbPropSel.innerHTML='<option value="">Todos</option><option value="PROPIO">🏭 PROPIO</option>';
+    clientesCache
+      .filter(c=>{const cat=c.categoria||'venta_servicio';return cat==='servicio'||cat==='venta_servicio';})
+      .forEach(c=>{const o=document.createElement('option');o.value=c.nombre;o.textContent='👤 '+c.nombre;dbPropSel.appendChild(o);});
+    if(cur)dbPropSel.value=cur;
+  }
+
+  // Selects de VENTA
+  ['f-ven-cliente','ven-cliente'].forEach(sid=>poblarSelect(sid,'venta'));
+
+  // Datalists TODOS (cobros, nc, nd — input text con datalist)
+  ['cob-cli-list','nc-cli-list','nd-cli-list'].forEach(dlId=>{
+    const dl=document.getElementById(dlId);if(!dl)return;
+    dl.innerHTML='';
+    clientesCache.forEach(c=>{const o=document.createElement('option');o.value=c.nombre;dl.appendChild(o);});
   });
 }
 
@@ -2372,29 +2465,34 @@ window.guardarCliente=async function(){
   const nombre=document.getElementById('cli-nombre').value.trim();
   if(!nombre){showAlert('El nombre es obligatorio','error');return;}
   try{
-    await addDoc(collection(db,'clientes'),{nombre,cuit:document.getElementById('cli-cuit').value.trim(),localidad:document.getElementById('cli-localidad').value.trim(),provincia:document.getElementById('cli-provincia').value,email:document.getElementById('cli-email').value.trim(),telefono:document.getElementById('cli-tel').value.trim(),creado:serverTimestamp()});
+    await addDoc(collection(db,'clientes'),{nombre,categoria:document.getElementById('cli-categoria').value,cuit:document.getElementById('cli-cuit').value.trim(),localidad:document.getElementById('cli-localidad').value.trim(),provincia:document.getElementById('cli-provincia').value,email:document.getElementById('cli-email').value.trim(),telefono:document.getElementById('cli-tel').value.trim(),creado:serverTimestamp()});
     showAlert('✅ Cliente guardado');
     ['cli-nombre','cli-cuit','cli-localidad','cli-email','cli-tel'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('cli-categoria').value='';
     document.getElementById('cli-provincia').value='';cargarClientes();
   }catch(e){showAlert('Error: '+e.message,'error');}
 }
 window.cargarClientes=async function(){
   const tbody=document.querySelector('#tbl-clientes tbody');
-  tbody.innerHTML='<tr><td colspan="7" class="loading">Cargando...</td></tr>';
+  tbody.innerHTML='<tr><td colspan="8" class="loading">Cargando...</td></tr>';
   const snap=await getDocs(query(collection(db,'clientes'),orderBy('nombre')));
-  if(snap.empty){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text2);padding:20px;">No hay clientes registrados</td></tr>';return;}
+  if(snap.empty){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text2);padding:20px;">No hay clientes registrados</td></tr>';return;}
   tbody.innerHTML='';
+  const _catLabel={'venta':'🛒 Venta','servicio':'🔄 Servicio','venta_servicio':'🛒🔄 Venta y serv.'};
   snap.forEach(d=>{
     const c=d.data();const esc=s=>(s||'').replace(/'/g,"\\'");
+    const catBadge=_catLabel[c.categoria]?`<span class="badge" style="font-size:.72rem;padding:2px 8px;">${_catLabel[c.categoria]}</span>`:'<span style="color:var(--text2);font-size:.8rem;">—</span>';
     tbody.innerHTML+=`<tr>
-      <td><strong>${c.nombre}</strong></td><td>${c.cuit||'—'}</td><td>${c.localidad||'—'}</td><td>${c.provincia||'—'}</td><td>${c.email||'—'}</td><td>${c.telefono||'—'}</td>
+      <td><strong>${c.nombre}</strong></td>
+      <td>${catBadge}</td>
+      <td>${c.cuit||'—'}</td><td>${c.localidad||'—'}</td><td>${c.provincia||'—'}</td><td>${c.email||'—'}</td><td>${c.telefono||'—'}</td>
       <td style="display:flex;gap:6px;flex-wrap:wrap;">
-        <button class="btn btn-edit btn-sm" onclick="abrirEditarCliente('${d.id}','${esc(c.nombre)}','${esc(c.cuit||'')}','${esc(c.localidad||'')}','${esc(c.provincia||'')}','${esc(c.email||'')}','${esc(c.telefono||'')}')">✏️ Editar</button>
+        <button class="btn btn-edit btn-sm" onclick="abrirEditarCliente('${d.id}','${esc(c.nombre)}','${esc(c.cuit||'')}','${esc(c.localidad||'')}','${esc(c.provincia||'')}','${esc(c.email||'')}','${esc(c.telefono||'')}','${c.categoria||''}')">✏️ Editar</button>
         <button class="btn btn-danger btn-sm" onclick="eliminar('clientes','${d.id}',cargarClientes)">🗑️</button>
       </td></tr>`;
   });
 }
-window.abrirEditarCliente=function(id,nombre,cuit,localidad,provincia,email,tel){
+window.abrirEditarCliente=function(id,nombre,cuit,localidad,provincia,email,tel,categoria){
   document.getElementById('edit-cli-id').value=id;
   document.getElementById('edit-cli-nombre').value=nombre;
   document.getElementById('edit-cli-cuit').value=cuit;
@@ -2402,6 +2500,7 @@ window.abrirEditarCliente=function(id,nombre,cuit,localidad,provincia,email,tel)
   document.getElementById('edit-cli-provincia').value=provincia;
   document.getElementById('edit-cli-email').value=email;
   document.getElementById('edit-cli-tel').value=tel;
+  if(document.getElementById('edit-cli-categoria')) document.getElementById('edit-cli-categoria').value=categoria||'';
   document.getElementById('modal-edit-cli').classList.add('open');
 }
 window.guardarEdicionCliente=async function(){
@@ -2409,7 +2508,8 @@ window.guardarEdicionCliente=async function(){
   const nombre=document.getElementById('edit-cli-nombre').value.trim();
   if(!nombre){showAlert('El nombre es obligatorio','error');return;}
   try{
-    await updateDoc(doc(db,'clientes',id),{nombre,cuit:document.getElementById('edit-cli-cuit').value.trim(),localidad:document.getElementById('edit-cli-localidad').value.trim(),provincia:document.getElementById('edit-cli-provincia').value,email:document.getElementById('edit-cli-email').value.trim(),telefono:document.getElementById('edit-cli-tel').value.trim()});
+    const editCat=document.getElementById('edit-cli-categoria');
+    await updateDoc(doc(db,'clientes',id),{nombre,categoria:editCat?editCat.value:'',cuit:document.getElementById('edit-cli-cuit').value.trim(),localidad:document.getElementById('edit-cli-localidad').value.trim(),provincia:document.getElementById('edit-cli-provincia').value,email:document.getElementById('edit-cli-email').value.trim(),telefono:document.getElementById('edit-cli-tel').value.trim()});
     showAlert('✅ Cliente actualizado');cerrarModal('modal-edit-cli');cargarClientes();
   }catch(e){showAlert('Error: '+e.message,'error');}
 }
@@ -3529,7 +3629,7 @@ window.calcTotalLiquidacion=function(){
 window.toggleLiqEstadoCobro=function(){
   const estado=document.getElementById('liq-estado-cobro').value;
   const pagoRow=document.getElementById('liq-pago').closest('.form-group');
-  pagoRow.style.display=estado==='cobrado'?'':'block';
+  pagoRow.style.display=estado==='cobrado'?'block':'none';
 }
 
 function _abrirComprobanteMaquila({nro,fecha,cliente,importe,medio,ref,obs}){
@@ -4140,13 +4240,16 @@ window.cargarDashboard=async function(){
     tKgCC+=e.kg||0;
   });
 
-  let tEnt=0,tPG=0,tPC=0,tDan=0,tPod=0;
+  let tEnt=0,tPG=0,tPC=0,tDan=0,tPod=0,tKgCCProcesado=0;
+  const diasConProd=new Set();
   sS.forEach(d=>{
     const s=d.data();
     if(propF&&s.propietario!==propF) return;
     if(varF&&s.variedad!==varF) return;
     tEnt+=s.enteras||0; tPG+=s.part_grandes||0; tPC+=s.part_chicas||0;
     tDan+=s.danadas||0; tPod+=s.podridas||0;
+    tKgCCProcesado+=s.kg_cascara||0;
+    if(s.fecha) diasConProd.add(s.fecha);
   });
 
   const kernelCom=tEnt+tPG+tPC+tDan;
@@ -4159,9 +4262,15 @@ window.cargarDashboard=async function(){
   const rendPot  =tKgCC>0?kernelTotal/tKgCC*100:null;
   const fmt=v=>v!==null?v.toFixed(1)+'%':'—';
 
+  const promDia=diasConProd.size>0?tKgCCProcesado/diasConProd.size:0;
+  const sinProcesar=Math.max(0,tKgCC-tKgCCProcesado);
+  // Clientes de servicio
+  const clientesServicio=[];sC.forEach(d=>{const cat=d.data().categoria||'venta_servicio';if(cat==='servicio'||cat==='venta_servicio')clientesServicio.push(d.id);});
   document.getElementById('m-entradas').textContent=tKgCC>0?tKgCC.toFixed(0)+' kg':'—';
   document.getElementById('m-salidas').textContent=kernelCom>0?kernelCom.toFixed(0)+' kg':'—';
-  document.getElementById('m-clientes').textContent=sC.size;
+  document.getElementById('m-prom-dia').textContent=promDia>0?promDia.toFixed(3)+' kg':'—';
+  document.getElementById('m-sin-procesar').textContent=sinProcesar>0.001?sinProcesar.toFixed(3)+' kg':'—';
+  document.getElementById('m-clientes').textContent=clientesServicio.length;
   document.getElementById('m-skr').textContent=fmt(skr);
   document.getElementById('m-entero').textContent=fmt(enteroPct);
   document.getElementById('m-partido').textContent=fmt(partidoPct);
@@ -6469,16 +6578,17 @@ let _compCurrent=null; // comprobante actual para imprimir
 // ---- INIT ----
 async function initCobros(){
   // Poblar selects de clientes
-  ['cob-cli-list','nc-cli-list','f-cob-cliente','f-cta-cliente'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(!el) return;
-    if(el.tagName==='SELECT'){
-      while(el.options.length>1) el.remove(1);
-      clientesCache.forEach(c=>{const o=document.createElement('option');o.value=c.nombre;o.textContent=c.nombre;el.appendChild(o);});
-    } else {
-      el.innerHTML='';
-      clientesCache.forEach(c=>{const o=document.createElement('option');o.value=c.nombre;el.appendChild(o);});
-    }
+  // Datalists: todos los clientes
+  ['cob-cli-list','nc-cli-list','nd-cli-list'].forEach(dlId=>{
+    const dl=document.getElementById(dlId);if(!dl)return;
+    dl.innerHTML='';
+    clientesCache.forEach(c=>{const o=document.createElement('option');o.value=c.nombre;dl.appendChild(o);});
+  });
+  // Selects de filtro: todos los clientes
+  ['f-cob-cliente','f-cta-cliente'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    while(el.options.length>1) el.remove(1);
+    clientesCache.forEach(c=>{const o=document.createElement('option');o.value=c.nombre;o.textContent=c.nombre;el.appendChild(o);});
   });
   const mesEl=document.getElementById('f-cob-mes');
   if(mesEl&&!mesEl.value) mesEl.value=today().slice(0,7);
@@ -6516,6 +6626,7 @@ async function cargarCobroKPIs(){
       if((c.fecha||'').slice(0,7)===mes) cobradoMes+=c.importe||0;
     }
     if(c.tipo==='nota_credito') totalNC+=c.importe||0;
+    if(c.tipo==='nota_debito'){totalVentas+=c.importe||0;totalND+=c.importe||0;} // ND suma al DEBE
   });
   snapV.forEach(d=>{ totalVentas+=(d.data().monto_total||0); });
   const saldoGlobal=totalVentas-totalCobrado-totalNC;
@@ -6574,6 +6685,9 @@ window.limpiarFormCobro=function(){
 
 window.abrirModalNC=function(){
   document.getElementById('nc-fecha').value=today();
+  // Poblar datalist clientes
+  const dlNC=document.getElementById('nc-cli-list');
+  if(dlNC){dlNC.innerHTML='';clientesCache.forEach(c=>{const o=document.createElement('option');o.value=c.nombre;dlNC.appendChild(o);});}
   document.getElementById('modal-nota-credito').classList.add('open');
 }
 
@@ -6597,6 +6711,36 @@ window.guardarNotaCredito=async function(){
     document.getElementById('nc-referencia').value='';
     document.getElementById('nc-obs').value='';
     document.getElementById('nc-fecha').value=today();
+    cargarListaCobros();
+    cargarCobroKPIs();
+  }catch(e){showAlert('Error: '+e.message,'error');}
+}
+
+// ---- NOTA DE DÉBITO ----
+window.abrirModalND=function(){
+  document.getElementById('nd-fecha').value=today();
+  // Poblar datalist clientes
+  const dl=document.getElementById('nd-cli-list');
+  dl.innerHTML='';
+  clientesCache.forEach(c=>{const o=document.createElement('option');o.value=c.nombre;dl.appendChild(o);});
+  document.getElementById('modal-nota-debito').classList.add('open');
+}
+
+window.guardarNotaDebito=async function(){
+  const cliente=document.getElementById('nd-cliente').value.trim();
+  const fecha=document.getElementById('nd-fecha').value;
+  const importe=parseFloat(document.getElementById('nd-importe').value)||0;
+  const motivo=document.getElementById('nd-motivo').value;
+  const referencia=document.getElementById('nd-referencia').value.trim();
+  const obs=document.getElementById('nd-obs').value.trim();
+  if(!cliente||!fecha||importe<=0){showAlert('Completá cliente, fecha e importe','error');return;}
+  try{
+    const nro=await _nextNroCobro('ND');
+    await addDoc(collection(db,'cobros'),{tipo:'nota_debito',cliente,fecha,importe,motivo,referencia,obs,nro_cobro:nro,creado:serverTimestamp()});
+    showAlert(`✅ Nota de débito registrada — ${nro}`);
+    cerrarModal('modal-nota-debito');
+    ['nd-cliente','nd-importe','nd-referencia','nd-obs'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('nd-fecha').value=today();
     cargarListaCobros();
     cargarCobroKPIs();
   }catch(e){showAlert('Error: '+e.message,'error');}
@@ -6641,20 +6785,22 @@ window.cargarListaCobros=async function(){
   const mesF=document.getElementById('f-cob-mes')?.value||'';
   const tipoF=document.getElementById('f-cob-tipo')?.value||'';
   const snap=await getDocsFromServer(query(collection(db,'cobros'),orderBy('fecha','desc')));
-  const tipoLabel={cobro:'Cobro',cobro_automatico:'Cobro automático',nota_credito:'Nota de crédito'};
+  const tipoLabel={cobro:'Cobro',cobro_automatico:'Cobro automático',nota_credito:'Nota de crédito',nota_debito:'Nota de débito'};
   const motivoLabel={devolucion:'Devolución',descuento:'Descuento',correccion:'Corrección',ajuste:'Ajuste',otro:'Otro'};
   let rows='', total=0, cnt=0;
   snap.forEach(d=>{
     const c={id:d.id,...d.data()};
     if(clienteF&&c.cliente!==clienteF) return;
     if(mesF&&(c.fecha||'').slice(0,7)!==mesF) return;
-    if(tipoF==='cobro'&&c.tipo==='nota_credito') return;
+    if(tipoF==='cobro'&&(c.tipo==='nota_credito'||c.tipo==='nota_debito')) return;
     if(tipoF==='nota_credito'&&c.tipo!=='nota_credito') return;
+    if(tipoF==='nota_debito'&&c.tipo!=='nota_debito') return;
     cnt++; total+=c.importe||0;
     const esNC=c.tipo==='nota_credito';
-    const desc=esNC?`${motivoLabel[c.motivo]||c.motivo||'—'}`:c.obs||'—';
+    const esND=c.tipo==='nota_debito';
+    const desc=(esNC||esND)?`${motivoLabel[c.motivo]||c.motivo||'—'}`:c.obs||'—';
     rows+=`<tr>
-      <td><span class="remito-num" style="background:${esNC?'#fff3cd':'#e8f4e8'};color:${esNC?'#856404':'#2d6a2d'};">${c.nro_cobro||'—'}</span></td>
+      <td><span class="remito-num" style="background:${esNC?'#fff3cd':esND?'#f8d7da':'#e8f4e8'};color:${esNC?'#856404':esND?'#721c24':'#2d6a2d'};">${c.nro_cobro||'—'}</span></td>
       <td style="color:var(--text2);">${c.fecha||'—'}</td>
       <td><strong>${c.cliente||'—'}</strong></td>
       <td><span style="font-size:.78rem;padding:2px 8px;border-radius:12px;background:var(--bg2);">${tipoLabel[c.tipo]||c.tipo}</span></td>
@@ -6691,7 +6837,7 @@ window.abrirComprobante=function(c){
   const _cliAct=clientesCache.find(x=>x.nombre===c.cliente);
   if(_cliAct) c={...c, cliente_telefono:_cliAct.telefono||''};
   _compCurrent=c;
-  const tipoLabel={cobro:'Recibo de cobro',cobro_automatico:'Recibo de cobro',nota_credito:'Nota de crédito'};
+  const tipoLabel={cobro:'Recibo de cobro',cobro_automatico:'Recibo de cobro',nota_credito:'Nota de crédito',nota_debito:'Nota de débito'};
   const motivoLabel={devolucion:'Devolución de mercadería',descuento:'Descuento posterior',correccion:'Corrección de facturación',ajuste:'Ajuste comercial',otro:'Otro'};
   const medioLabel={efectivo:'Efectivo',transferencia:'Transferencia bancaria',cheque:'Cheque',otro:'Otro'};
   document.getElementById('mcc-titulo').textContent=(tipoLabel[c.tipo]||'Comprobante')+' — '+(c.nro_cobro||'');
@@ -7168,7 +7314,7 @@ async function initResumen(){
   };
 
   // Cargar todo en paralelo
-  const [snapEnt,snapSal,snapVent,snapCob,snapComp,snapPagosUSD,snapInsumos,snapTandas,snapComprasNuez]=await Promise.all([
+  const [snapEnt,snapSal,snapVent,snapCob,snapComp,snapPagosUSD,snapInsumos,snapTandas,snapComprasNuez,snapLiqsMaq]=await Promise.all([
     getDocsFromServer(collection(db,'entradas_fabrica')),
     getDocsFromServer(collection(db,'salidas_fabrica')),
     getDocsFromServer(collection(db,'ventas')),
@@ -7178,31 +7324,35 @@ async function initResumen(){
     getDocsFromServer(collection(db,'insumos')),
     getDocsFromServer(collection(db,'tandas_cocina')),
     getDocsFromServer(collection(db,'compras_nuez')),
+    getDocsFromServer(collection(db,'liquidaciones_maquila')),
   ]);
 
-  // ── FÁBRICA ──────────────────────────────────────────────────────────────
+  // ── FÁBRICA — todo lo procesado (propio + maquila) ─────────────────────
   let kgEnt=0, kgSal=0, kernelSum=0, kernelCnt=0;
-  let totEntProp=0, totSalProp=0;
+  let totEntAll=0, totSalAll=0;
+  const diasConProdFab=new Set();
   snapEnt.forEach(d=>{
     const e=d.data();
-    if(e.propietario==='PROPIO') totEntProp+=e.kg||0;
-    if(e.propietario==='PROPIO'&&e.fecha>=desdeStr) kgEnt+=e.kg||0;
+    totEntAll+=e.kg||0;
+    if(e.fecha>=desdeStr) kgEnt+=e.kg||0;
   });
   snapSal.forEach(d=>{
     const s=d.data();
-    if(s.propietario==='PROPIO') totSalProp+=s.kg_cascara||0;
-    if(s.propietario==='PROPIO'&&s.fecha>=desdeStr){
+    totSalAll+=s.kg_cascara||0;
+    if(s.fecha>=desdeStr){
       kgSal+=s.kg_cascara||0;
       if(s.pct_kernel){kernelSum+=parseFloat(s.pct_kernel);kernelCnt++;}
+      if(s.fecha) diasConProdFab.add(s.fecha);
     }
   });
-  const kgPend=Math.max(0,totEntProp-totSalProp);
-  const kernelProm=kernelCnt>0?(kernelSum/kernelCnt).toFixed(1)+'%':'—';
+  const kgPend=Math.max(0,totEntAll-totSalAll);
+  const promDiaFab=diasConProdFab.size>0?kgSal/diasConProdFab.size:0;
 
   document.getElementById('rf-entrada').textContent=fmtKg(kgEnt);
   document.getElementById('rf-procesado').textContent=fmtKg(kgSal);
   document.getElementById('rf-pendiente').textContent=fmtKg(kgPend);
-  document.getElementById('rf-kernel').textContent=kernelProm;
+  document.getElementById('rf-prom-dia').textContent=promDiaFab>0?fmtKg(promDiaFab):'—';
+  document.getElementById('rf-dias').textContent=diasConProdFab.size>0?diasConProdFab.size+' días':'—';
 
   // ── STOCK VENDIBLE — igual lógica que calcStockVendible() ───────────────
   const _cats=['enteras','part_grandes','part_chicas','danadas'];
@@ -7413,21 +7563,33 @@ async function initResumen(){
   });
 
   // ── ECONÓMICO ────────────────────────────────────────────────────────────
-  let ventas=0,cobrado=0,porCobrar=0,gastos=0,deudaProvARS=0;
+  let ventas=0,ventasNuez=0,ventasServicio=0,cobrado=0,porCobrar=0,gastos=0,deudaProvARS=0;
   let comprasUSD=0,deudaProvUSD=0,pagadoUSD=0;
   const mesesVentas=Array(12).fill(0);
   const mesesCobrado=Array(12).fill(0);
   const mesesGastos=Array(12).fill(0);
 
+  // Ventas de nueces
   snapVent.forEach(d=>{
     const v=d.data();
     const mes=parseInt((v.fecha||'').slice(5,7))-1;
     const anioV=parseInt((v.fecha||'').slice(0,4));
     if(anioV===anio&&mes>=0) mesesVentas[mes]+=v.monto_total||0;
     if(v.fecha<desdeStr) return;
-    ventas+=v.monto_total||0;
-    if(v.estado==='cuenta_corriente') porCobrar+=v.monto_total||0;
+    ventasNuez+=v.monto_total||0;
   });
+
+  // Ingresos por servicio de maquila (liquidaciones)
+  snapLiqsMaq.forEach(d=>{
+    const l=d.data();
+    const mes=parseInt((l.fecha||'').slice(5,7))-1;
+    const anioL=parseInt((l.fecha||'').slice(0,4));
+    if(anioL===anio&&mes>=0) mesesVentas[mes]+=l.total_servicio||0;
+    if(l.fecha<desdeStr) return;
+    ventasServicio+=l.total_servicio||0;
+  });
+
+  ventas=ventasNuez+ventasServicio;
 
   snapCob.forEach(d=>{
     const c=d.data();
@@ -7435,8 +7597,7 @@ async function initResumen(){
     const anioC=parseInt((c.fecha||'').slice(0,4));
     if(anioC===anio&&mes>=0&&c.tipo!=='nota_credito') mesesCobrado[mes]+=c.importe||0;
     if(c.fecha<desdeStr) return;
-    if(c.tipo!=='nota_credito') cobrado+=c.importe||0;
-    else porCobrar-=c.importe||0;
+    if(c.tipo!=='nota_credito'&&c.tipo!=='nota_debito') cobrado+=c.importe||0;
   });
 
   // Calcular total pagado en USD por compra (para deuda real)
@@ -7469,8 +7630,10 @@ async function initResumen(){
 
   const resultado=ventas-gastos;
   document.getElementById('re-ventas').textContent=fmt(ventas);
+  document.getElementById('re-ventas-nuez').textContent=fmt(ventasNuez);
+  document.getElementById('re-ventas-servicio').textContent=fmt(ventasServicio);
   document.getElementById('re-cobrado').textContent=fmt(cobrado);
-  document.getElementById('re-por-cobrar').textContent=fmt(Math.max(0,porCobrar));
+
   document.getElementById('re-gastos').textContent=fmt(gastos);
   document.getElementById('re-deuda-prov-ars').textContent=fmt(deudaProvARS);
   const resEl=document.getElementById('re-resultado');
@@ -7479,6 +7642,153 @@ async function initResumen(){
   document.getElementById('re-compras-usd').textContent=fmtUSD(comprasUSD);
   document.getElementById('re-deuda-prov-usd').textContent=fmtUSD(deudaProvUSD);
   document.getElementById('re-pagado-usd').textContent=fmtUSD(pagadoUSD);
+
+  // ── RANKINGS ────────────────────────────────────────────────────────────
+  // Ranking ventas de nueces por cliente
+  const rankVentas={};
+  snapVent.forEach(d=>{
+    const v=d.data();
+    if(v.fecha<desdeStr) return;
+    const cli=v.cliente||'Sin nombre';
+    rankVentas[cli]=(rankVentas[cli]||0)+(v.monto_total||0);
+  });
+  const topVentas=Object.entries(rankVentas).sort((a,b)=>b[1]-a[1]).slice(0,10);
+
+  const rankVentasEl=document.getElementById('rank-ventas');
+  if(topVentas.length){
+    const maxV=topVentas[0][1]||1;
+    rankVentasEl.innerHTML=topVentas.map(([cli,monto],i)=>{
+      const pct=Math.round(monto/maxV*100);
+      const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':`<span style="color:var(--text2);font-size:.8rem;">${i+1}</span>`;
+      return `<div style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
+          <span style="font-size:.85rem;">${medal} ${cli}</span>
+          <strong style="font-size:.85rem;color:var(--brown);">${fmt(monto)}</strong>
+        </div>
+        <div style="background:var(--bg2);border-radius:4px;height:6px;">
+          <div style="background:var(--brown);width:${pct}%;height:6px;border-radius:4px;transition:width .3s;"></div>
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    rankVentasEl.innerHTML='<span style="color:var(--text2);font-size:.85rem;">Sin ventas en el período</span>';
+  }
+
+  // Ranking servicio de maquila por cliente (kg procesados)
+  const rankServicio={};
+  snapLiqsMaq.forEach(d=>{
+    const l=d.data();
+    if(l.fecha<desdeStr) return;
+    const cli=l.cliente||'Sin nombre';
+    if(!rankServicio[cli]) rankServicio[cli]={monto:0,kg:0};
+    rankServicio[cli].monto+=l.total_servicio||0;
+    rankServicio[cli].kg+=l.kg_cascara||0;
+  });
+  const topServicio=Object.entries(rankServicio).sort((a,b)=>b[1].kg-a[1].kg).slice(0,10);
+
+  const rankServicioEl=document.getElementById('rank-servicio');
+  if(topServicio.length){
+    const maxS=topServicio[0][1].kg||1;
+    rankServicioEl.innerHTML=topServicio.map(([cli,d],i)=>{
+      const pct=Math.round(d.kg/maxS*100);
+      const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':`<span style="color:var(--text2);font-size:.8rem;">${i+1}</span>`;
+      return `<div style="margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
+          <span style="font-size:.85rem;">${medal} ${cli}</span>
+          <span style="font-size:.82rem;color:var(--text2);">${d.kg.toFixed(3)} kg · <strong style="color:var(--brown);">${fmt(d.monto)}</strong></span>
+        </div>
+        <div style="background:var(--bg2);border-radius:4px;height:6px;">
+          <div style="background:#3a6b35;width:${pct}%;height:6px;border-radius:4px;transition:width .3s;"></div>
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    rankServicioEl.innerHTML='<span style="color:var(--text2);font-size:.85rem;">Sin liquidaciones en el período</span>';
+  }
+
+  // ── CUENTAS CORRIENTES PENDIENTES (sin filtro de período — saldo acumulado) ──
+  const saldoPorCliente={};
+
+  // Sumar DEBE: ventas en cta cte
+  const snapVentAll=await getDocsFromServer(collection(db,'ventas'));
+  snapVentAll.forEach(d=>{
+    const v=d.data();
+    if(v.estado==='cuenta_corriente'){
+      const cli=v.cliente||'Sin nombre';
+      saldoPorCliente[cli]=(saldoPorCliente[cli]||0)+(v.monto_total||0);
+    }
+  });
+
+  // Sumar DEBE: liquidaciones en cta cte
+  // estado_cobro='cuenta_corriente' es el campo correcto (nuevas liquidaciones)
+  // forma_pago='Pendiente' era el campo viejo — migramos automáticamente
+  const snapLiqAll=await getDocsFromServer(collection(db,'liquidaciones_maquila'));
+  const migBatch=writeBatch(db);
+  let migCount=0;
+  snapLiqAll.forEach(d=>{
+    const l=d.data();
+    // Migrar registros viejos: forma_pago='Pendiente' → estado_cobro='cuenta_corriente'
+    if(l.forma_pago==='Pendiente'&&!l.estado_cobro){
+      migBatch.update(doc(db,'liquidaciones_maquila',d.id),{
+        estado_cobro:'cuenta_corriente',
+        forma_pago:'Transferencia' // valor por defecto razonable
+      });
+      migCount++;
+    }
+    const enCtaCte=l.estado_cobro==='cuenta_corriente'||l.forma_pago==='Pendiente';
+    if(enCtaCte){
+      const cli=l.cliente||'Sin nombre';
+      saldoPorCliente[cli]=(saldoPorCliente[cli]||0)+(l.total_servicio||0);
+    }
+  });
+  if(migCount>0){
+    await migBatch.commit();
+    console.log('Migradas '+migCount+' liquidaciones al nuevo formato');
+  }
+
+  // Restar HABER: cobros, notas de crédito, débito
+  const snapCobAll=await getDocsFromServer(collection(db,'cobros'));
+  snapCobAll.forEach(d=>{
+    const c=d.data();
+    const cli=c.cliente||'Sin nombre';
+    if(!saldoPorCliente[cli]) return;
+    if(c.tipo==='nota_credito') saldoPorCliente[cli]-=c.importe||0;
+    else if(c.tipo==='nota_debito') saldoPorCliente[cli]+=(c.importe||0);
+    else saldoPorCliente[cli]-=c.importe||0;
+  });
+
+  // Filtrar saldos positivos y ordenar de mayor a menor
+  const ctaCtes=Object.entries(saldoPorCliente)
+    .filter(([,s])=>s>0.01)
+    .sort((a,b)=>b[1]-a[1]);
+  // Ahora sí tenemos saldoPorCliente completo — actualizar KPI
+  const porCobrarTotal=ctaCtes.reduce((s,[,v])=>s+v,0);
+  document.getElementById('re-por-cobrar').textContent=fmt(porCobrarTotal);
+
+  const ctaEl=document.getElementById('res-cta-cte-pendientes');
+  if(ctaCtes.length){
+    const totalDeuda=ctaCtes.reduce((s,[,v])=>s+v,0);
+    ctaEl.innerHTML=`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--brown);border-radius:8px;margin-bottom:12px;">
+        <span style="color:#fff9f0;font-size:.85rem;font-weight:600;">Total deuda pendiente</span>
+        <strong style="color:#fff9f0;font-size:1.1rem;">${fmt(totalDeuda)}</strong>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr><th>#</th><th>Cliente</th><th style="text-align:right;">Saldo pendiente</th><th style="text-align:right;">% del total</th></tr></thead>
+          <tbody>${ctaCtes.map(([cli,saldo],i)=>`
+            <tr>
+              <td style="color:var(--text2);font-size:.8rem;">${i+1}</td>
+              <td><strong>${cli}</strong></td>
+              <td style="text-align:right;color:var(--red);font-weight:700;">${fmt(saldo)}</td>
+              <td style="text-align:right;color:var(--text2);font-size:.82rem;">${(saldo/totalDeuda*100).toFixed(1)}%</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`;
+  } else {
+    ctaEl.innerHTML='<div style="text-align:center;padding:20px;color:var(--green);font-weight:600;">✅ No hay cuentas corrientes pendientes</div>';
+  }
 
   // Gráfico económico
   if(_chartEconomico) _chartEconomico.destroy();
@@ -8132,6 +8442,49 @@ window.confirmarRestore=async function(){
     <div style="display:flex;gap:10px;margin-top:16px;">
       <button class="btn btn-primary" onclick="guardarNotaCredito()">💾 Registrar</button>
       <button class="btn btn-secondary" onclick="cerrarModal('modal-nota-credito')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-nota-debito">
+  <div class="modal" style="max-width:480px;">
+    <h2>📋 Registrar nota de débito</h2>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Cliente *</label>
+        <input type="text" id="nd-cliente" list="nd-cli-list" placeholder="Nombre del cliente">
+        <datalist id="nd-cli-list"></datalist>
+      </div>
+      <div class="form-group">
+        <label>Fecha *</label>
+        <input type="date" id="nd-fecha">
+      </div>
+      <div class="form-group">
+        <label>Importe $ *</label>
+        <input type="number" id="nd-importe" step="0.01" min="0" placeholder="0.00">
+      </div>
+      <div class="form-group">
+        <label>Motivo *</label>
+        <select id="nd-motivo">
+          <option value="interes">Interés por mora</option>
+          <option value="gasto_administrativo">Gasto administrativo</option>
+          <option value="diferencia_precio">Diferencia de precio</option>
+          <option value="ajuste_tc">Ajuste por tipo de cambio</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Referencia</label>
+        <input type="text" id="nd-referencia" placeholder="Opcional">
+      </div>
+      <div class="form-group">
+        <label>Observaciones</label>
+        <input type="text" id="nd-obs" placeholder="Opcional">
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:16px;">
+      <button class="btn btn-primary" onclick="guardarNotaDebito()">💾 Registrar</button>
+      <button class="btn btn-secondary" onclick="cerrarModal('modal-nota-debito')">Cancelar</button>
     </div>
   </div>
 </div>
