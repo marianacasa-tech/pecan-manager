@@ -2376,14 +2376,28 @@ window.confirmarNuevaVariedad=async function(){
   const val=document.getElementById('nueva-variedad-input').value.trim();
   if(!val){showAlert('Escribí el nombre','error');return;}
   if(variedades.includes(val)){showAlert('Esa variedad ya existe','error');return;}
-  variedades.splice(variedades.length-1,0,val);
-  // Guardar en Firestore para persistir entre sesiones
+  // Siempre mantener 'Otra' al final
+  variedades=variedades.filter(v=>v!=='Otra');
+  variedades.push(val);
+  variedades.push('Otra');
+  // Guardar en Firestore con verificacion
   try{
     await setDoc(doc(db,'config','variedades'),{lista:variedades});
-  }catch(e){console.warn('No se pudo guardar variedad en Firestore:',e);}
+    const check=await getDoc(doc(db,'config','variedades'));
+    if(!check.exists()||!check.data().lista?.includes(val)){
+      showAlert('Error al guardar la variedad, intentá de nuevo','error');
+      variedades=variedades.filter(v=>v!==val);
+      return;
+    }
+  }catch(e){
+    showAlert('Error al guardar: '+e.message,'error');
+    variedades=variedades.filter(v=>v!==val);
+    return;
+  }
   actualizarTodosSelectsVariedad();
+  document.getElementById('nueva-variedad-input').value='';
   cerrarModal('modal-variedad');
-  showAlert('✅ Variedad "'+val+'" agregada');
+  showAlert('Variedad "'+val+'" agregada y guardada');
 }
 
 function actualizarTodosSelectsVariedad(){
@@ -2412,6 +2426,13 @@ function actualizarTodosSelectsVariedad(){
   document.querySelectorAll('.var-variedad').forEach(s=>{
     const v=s.value;
     s.innerHTML='<option value="">— Variedad —</option>'+optsVar();
+    if(v)s.value=v;
+  });
+  // También actualizar selector de producción fábrica
+  ['sal-variedad','edit-sal-variedad','edit-ent-variedad'].forEach(id=>{
+    const s=document.getElementById(id);if(!s)return;
+    const v=s.value;
+    s.innerHTML='<option value="">— Seleccioná —</option>'+optsVar();
     if(v)s.value=v;
   });
 }
@@ -2581,11 +2602,11 @@ function generarPDF(datos, enviarWA=false){
   let y=ty+22;p.setTextColor(61,43,31);p.setFont('helvetica','normal');
   datos.lineas.forEach((l,i)=>{
     if(i%2===0){p.setFillColor(245,240,232);p.rect(20,y-6,170,10,'F');}
-    p.text(l.variedad,24,y);p.text(l.kg.toFixed(3)+' kg',100,y);p.text(l.humedad!=null?l.humedad+'%':'—',155,y);y+=12;
+    p.text(l.variedad,24,y);p.text(l.kg.toFixed(1)+' kg',100,y);p.text(l.humedad!=null?l.humedad+'%':'—',155,y);y+=12;
   });
   const kgTotal=datos.lineas.reduce((s,l)=>s+l.kg,0);
   p.setFont('helvetica','bold');p.setDrawColor(200,129,26);p.line(20,y,190,y);y+=8;
-  p.text('TOTAL:',24,y);p.text(kgTotal.toFixed(3)+' kg',100,y);
+  p.text('TOTAL:',24,y);p.text(kgTotal.toFixed(1)+' kg',100,y);
   if(datos.observaciones){y+=10;p.setFont('helvetica','normal');p.text('Obs: '+datos.observaciones,20,y);}
   p.setDrawColor(100,100,100);p.line(20,255,80,255);p.line(130,255,190,255);
   p.setFontSize(9);p.setTextColor(100,100,100);
@@ -3565,12 +3586,12 @@ function generarPDFRetiro(d, enviarWA=false){
   cats.forEach(([lbl,,kg])=>{
     if(kg>0){
       if(i%2===0){p.setFillColor(245,240,232);p.rect(20,y-6,170,10,'F');}
-      p.setTextColor(61,43,31);p.text(lbl,24,y);p.text(kg.toFixed(3)+' kg',130,y);
+      p.setTextColor(61,43,31);p.text(lbl,24,y);p.text(kg.toFixed(1)+' kg',130,y);
       total+=kg;y+=12;i++;
     }
   });
   p.setFont('helvetica','bold');p.setDrawColor(200,129,26);p.line(20,y,190,y);y+=8;
-  p.text('TOTAL ENTREGADO:',24,y);p.text(total.toFixed(3)+' kg',130,y);
+  p.text('TOTAL ENTREGADO:',24,y);p.text(total.toFixed(1)+' kg',130,y);
   if(d.obs){y+=10;p.setFont('helvetica','normal');p.text('Obs: '+d.obs,20,y);}
   p.setDrawColor(100,100,100);p.line(20,255,80,255);p.line(130,255,190,255);
   p.setFontSize(9);p.setTextColor(100,100,100);
@@ -3606,18 +3627,18 @@ window.abrirLiquidacion=function(cliente, kgProcesado, kgLiquidados){
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;">
       <div style="background:var(--bg);border-radius:6px;padding:8px 10px;text-align:center;">
         <div style="font-size:.72rem;color:var(--text2);text-transform:uppercase;margin-bottom:2px;">Kg procesados</div>
-        <div style="font-weight:700;font-size:1rem;">${kgProcesado.toFixed(3)} kg</div>
+        <div style="font-weight:700;font-size:1rem;">${kgProcesado.toFixed(1)} kg</div>
       </div>
       <div style="background:var(--bg);border-radius:6px;padding:8px 10px;text-align:center;">
         <div style="font-size:.72rem;color:var(--text2);text-transform:uppercase;margin-bottom:2px;">Ya liquidados</div>
-        <div style="font-weight:700;font-size:1rem;color:var(--green);">${kgLiquidados.toFixed(3)} kg</div>
+        <div style="font-weight:700;font-size:1rem;color:var(--green);">${kgLiquidados.toFixed(1)} kg</div>
       </div>
       <div style="background:var(--bg);border-radius:6px;padding:8px 10px;text-align:center;">
         <div style="font-size:.72rem;color:var(--text2);text-transform:uppercase;margin-bottom:2px;">Pendiente de liquidar</div>
-        <div style="font-weight:700;font-size:1rem;color:${kgPendiente>0.01?'#e07b00':'var(--green)'};">${kgPendiente.toFixed(3)} kg</div>
+        <div style="font-weight:700;font-size:1rem;color:${kgPendiente>0.01?'#e07b00':'var(--green)'};">${kgPendiente.toFixed(1)} kg</div>
       </div>
     </div>
-    <div style="margin-top:10px;font-size:.82rem;color:var(--text2);">El precio por kg se aplicará sobre los <strong>${kgPendiente.toFixed(3)} kg pendientes</strong>.</div>`;
+    <div style="margin-top:10px;font-size:.82rem;color:var(--text2);">El precio por kg se aplicará sobre los <strong>${kgPendiente.toFixed(1)} kg pendientes</strong>.</div>`;
   document.getElementById('modal-liquidacion').classList.add('open');
 }
 
@@ -3635,8 +3656,8 @@ window.calcTotalLiquidacion=function(){
     const subConIva=kgConIva*precioUSD*tc;
     const iva=subConIva*0.21;
     const total=subSinIva+subConIva+iva;
-    const fmt=v=>'$'+v.toLocaleString('es-AR',{minimumFractionDigits:2});
-    const fmtN=v=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:2});
+    const fmt=v=>'$'+v.toLocaleString('es-AR',{minimumFractionDigits:1});
+    const fmtN=v=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:1});
 
     document.getElementById('liq-d-precio').textContent=fmtN(precioUSD);
     document.getElementById('liq-d-tc').textContent=fmtN(tc);
@@ -3670,7 +3691,7 @@ window.toggleLiqEstadoCobro=function(){
 function _abrirComprobanteMaquila({nro,fecha,cliente,importe,medio,ref,obs}){
   const cli=clientesCache.find(c=>c.nombre===cliente)||{};
   const fF=f=>f?f.split('-').reverse().join('/'):'—';
-  const fmt=v=>'$ '+parseFloat(v).toLocaleString('es-AR',{minimumFractionDigits:2});
+  const fmt=v=>'$ '+parseFloat(v).toLocaleString('es-AR',{minimumFractionDigits:1});
   const w=window.open('','_blank','width=600,height=500');
   w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Recibo ${nro}</title>
   <style>body{font-family:Arial,sans-serif;margin:0;padding:24px;color:#3d2b1f;}
@@ -3842,7 +3863,7 @@ function generarPDFLiquidacion(d, enviarWA=false){
   const {jsPDF}=window.jspdf;
   const p=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
   const fF=f=>f&&f!=='0000-01-01'?f.split('-').reverse().join('/'):'—';
-  const fN=v=>v>0?v.toFixed(3)+' kg':'—';
+  const fN=v=>v>0?v.toFixed(1)+' kg':'—';
 
   // Header
   p.setFillColor(61,43,31);p.rect(0,0,210,35,'F');
@@ -3915,7 +3936,7 @@ function generarPDFLiquidacion(d, enviarWA=false){
       p.text(fF(r.fecha),24,y);
       p.text(r.variedad,70,y);
       p.text(r.remito,120,y);
-      p.text(r.kg>0?r.kg.toFixed(3)+' kg':'—',155,y,{align:'right'});
+      p.text(r.kg>0?r.kg.toFixed(1)+' kg':'—',155,y,{align:'right'});
       p.text(r.humedad!=null?r.humedad+'%':'—',188,y,{align:'right'});
       y+=9;
     });
@@ -3948,11 +3969,11 @@ function generarPDFLiquidacion(d, enviarWA=false){
     if(i%2===0){p.setFillColor(245,240,232);p.rect(20,y-5,170,9,'F');}
     p.setTextColor(61,43,31);p.setFont('helvetica','normal');p.setFontSize(8);
     p.text(v,24,y);
-    p.text(t.kg_cascara.toFixed(3),65,y,{align:'right'});
-    p.text(t.enteras>0?t.enteras.toFixed(3):'—',88,y,{align:'right'});
-    p.text(t.part_grandes>0?t.part_grandes.toFixed(3):'—',109,y,{align:'right'});
-    p.text(t.part_chicas>0?t.part_chicas.toFixed(3):'—',128,y,{align:'right'});
-    p.text(t.danadas>0?t.danadas.toFixed(3):'—',147,y,{align:'right'});
+    p.text(t.kg_cascara.toFixed(1),65,y,{align:'right'});
+    p.text(t.enteras>0?t.enteras.toFixed(1):'—',88,y,{align:'right'});
+    p.text(t.part_grandes>0?t.part_grandes.toFixed(1):'—',109,y,{align:'right'});
+    p.text(t.part_chicas>0?t.part_chicas.toFixed(1):'—',128,y,{align:'right'});
+    p.text(t.danadas>0?t.danadas.toFixed(1):'—',147,y,{align:'right'});
     p.text(pctK,165,y,{align:'right'});
     p.text(pctPart,186,y,{align:'right'});
     y+=9;
@@ -3962,11 +3983,11 @@ function generarPDFLiquidacion(d, enviarWA=false){
   p.setFillColor(61,43,31);p.rect(20,y-5,170,10,'F');
   p.setTextColor(255,249,240);p.setFont('helvetica','bold');p.setFontSize(8);
   p.text('TOTAL',24,y+1);
-  p.text(tot.kg_cascara.toFixed(3),65,y+1,{align:'right'});
-  p.text(tot.enteras>0?tot.enteras.toFixed(3):'—',88,y+1,{align:'right'});
-  p.text(tot.part_grandes>0?tot.part_grandes.toFixed(3):'—',109,y+1,{align:'right'});
-  p.text(tot.part_chicas>0?tot.part_chicas.toFixed(3):'—',128,y+1,{align:'right'});
-  p.text(tot.danadas>0?tot.danadas.toFixed(3):'—',147,y+1,{align:'right'});
+  p.text(tot.kg_cascara.toFixed(1),65,y+1,{align:'right'});
+  p.text(tot.enteras>0?tot.enteras.toFixed(1):'—',88,y+1,{align:'right'});
+  p.text(tot.part_grandes>0?tot.part_grandes.toFixed(1):'—',109,y+1,{align:'right'});
+  p.text(tot.part_chicas>0?tot.part_chicas.toFixed(1):'—',128,y+1,{align:'right'});
+  p.text(tot.danadas>0?tot.danadas.toFixed(1):'—',147,y+1,{align:'right'});
   p.text(pctKernel,165,y+1,{align:'right'});
   p.text(pctPartido,186,y+1,{align:'right'});
   y+=14;
@@ -3997,7 +4018,7 @@ function generarPDFLiquidacion(d, enviarWA=false){
     });
     p.setFont('helvetica','bold');p.line(20,y,190,y);y+=7;
     const totRet=totRetEnt+totRetPG+totRetPC+totRetDan;
-    p.text('TOTAL RETIRADO: '+totRet.toFixed(3)+' kg',24,y);y+=14;
+    p.text('TOTAL RETIRADO: '+totRet.toFixed(1)+' kg',24,y);y+=14;
   }
 
   // Liquidación del servicio
@@ -4005,25 +4026,25 @@ function generarPDFLiquidacion(d, enviarWA=false){
   p.setFont('helvetica','bold');p.setFontSize(10);p.setTextColor(61,43,31);
   p.text('LIQUIDACIÓN DEL SERVICIO DE MAQUILA',20,y);
   p.setDrawColor(200,129,26);p.line(20,y+2,190,y+2);y+=12;
-  const fmtARS=v=>'$ '+parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:2});
+  const fmtARS=v=>'$ '+parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:1});
   p.setFontSize(9);p.setFont('helvetica','normal');
   // Datos base
   if(d.precioUSD&&d.tc){
     p.text('Precio del servicio:',24,y);p.text('USD '+parseFloat(d.precioUSD).toLocaleString('es-AR',{minimumFractionDigits:3})+'/kg c/c',160,y);y+=7;
-    p.text('Tipo de cambio BNA (billete venta):',24,y);p.text('$ '+parseFloat(d.tc).toLocaleString('es-AR',{minimumFractionDigits:2})+'/USD',160,y);y+=7;
-    p.text('Total Kg liquidados:',24,y);p.text(parseFloat(d.kgTotal||0).toFixed(3)+' kg',160,y);y+=10;
+    p.text('Tipo de cambio BNA (billete venta):',24,y);p.text('$ '+parseFloat(d.tc).toLocaleString('es-AR',{minimumFractionDigits:1})+'/USD',160,y);y+=7;
+    p.text('Total Kg liquidados:',24,y);p.text(parseFloat(d.kgTotal||0).toFixed(1)+' kg',160,y);y+=10;
     // Desglose IVA
     if(d.kgSinIva>0){
-      p.text('Kg sin IVA: '+parseFloat(d.kgSinIva).toFixed(3)+' kg',24,y);
+      p.text('Kg sin IVA: '+parseFloat(d.kgSinIva).toFixed(1)+' kg',24,y);
       p.text(fmtARS(d.subSinIva),160,y);y+=7;
     }
     if(d.kgConIva>0){
-      p.text('Kg con IVA (21%): '+parseFloat(d.kgConIva).toFixed(3)+' kg',24,y);
+      p.text('Kg con IVA (21%): '+parseFloat(d.kgConIva).toFixed(1)+' kg',24,y);
       p.text(fmtARS(d.subConIva),160,y);y+=7;
       p.text('IVA 21%:',24,y);p.text(fmtARS(d.iva),160,y);y+=7;
     }
   } else {
-    p.text('Kg con cáscara liquidados:',24,y);p.text(parseFloat(d.kgTotal||0).toFixed(3)+' kg',160,y);y+=7;
+    p.text('Kg con cáscara liquidados:',24,y);p.text(parseFloat(d.kgTotal||0).toFixed(1)+' kg',160,y);y+=7;
     p.text('Precio por kg (c/cáscara):',24,y);p.text(fmtARS(d.precio),160,y);y+=7;
   }
   p.setDrawColor(61,43,31);p.line(20,y,190,y);y+=6;
@@ -4118,9 +4139,9 @@ window.cargarLiquidaciones=async function(){
       <td><span class="remito-num">${l.num_liquidacion||'—'}</span></td>
       <td>${l.fecha}</td>
       <td><strong>${l.cliente}</strong></td>
-      <td>${l.kg_cascara?l.kg_cascara.toFixed(3)+' kg':'—'}</td>
-      <td>$${parseFloat(l.precio_kg).toLocaleString('es-AR',{minimumFractionDigits:2})}</td>
-      <td><strong>$${parseFloat(l.total_servicio).toLocaleString('es-AR',{minimumFractionDigits:2})}</strong></td>
+      <td>${l.kg_cascara?l.kg_cascara.toFixed(1)+' kg':'—'}</td>
+      <td>$${parseFloat(l.precio_kg).toLocaleString('es-AR',{minimumFractionDigits:1})}</td>
+      <td><strong>$${parseFloat(l.total_servicio).toLocaleString('es-AR',{minimumFractionDigits:1})}</strong></td>
       <td>${l.forma_pago||'—'}</td>
       <td>${estadoBadge}</td>
       <td style="display:flex;gap:5px;flex-wrap:wrap;">
@@ -6387,7 +6408,7 @@ window.guardarVenta=async function(){
 }
 
 // ---- REMITO PDF / WHATSAPP ----
-function fmtMoneda(v){return'$ '+parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:2});}
+function fmtMoneda(v){return'$ '+parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1});}
 function fmtFecha(f){return f?f.split('-').reverse().join('/'):''}
 
 window.abrirRemitoModal=function(v){
@@ -6401,7 +6422,7 @@ window.abrirRemitoModal=function(v){
   const itemsHtml=(v.items||[]).map(it=>`
     <tr>
       <td style="padding:8px 10px;border-bottom:1px solid #eee;">${it.nombre}</td>
-      <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;">${parseFloat(it.kg).toFixed(3)} kg</td>
+      <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;">${parseFloat(it.kg).toFixed(1)} kg</td>
       <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;">${fmtMoneda(it.precio_kg)}</td>
       <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;font-weight:600;">${fmtMoneda(it.subtotal)}</td>
     </tr>`).join('');
@@ -6469,8 +6490,27 @@ window.abrirRemitoModal=function(v){
       ${v.estado==='cuenta_corriente'&&v.vencimiento?` &nbsp;|&nbsp; Vencimiento: <strong style="color:#c0392b;">${v.vencimiento.split('-').reverse().join('/')}</strong>`:''}
     </div>
     <div>${v.observaciones?'Obs: '+v.observaciones:''}</div>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px solid #ddd;font-size:10px;color:#888;font-style:italic;">
+      Solicitamos verificar la mercadería al momento de la recepción. La recepción de la misma implica conformidad con la cantidad y el estado visible de los productos entregados.
+    </div>
   </div>
 
+  <div style="margin:24px 20px 0;display:flex;gap:12px;flex-wrap:wrap;" class="no-print">
+    <button onclick="window.print()" style="padding:10px 20px;background:#7a4a1e;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-family:sans-serif;">🖨️ Imprimir / Guardar PDF</button>
+    <button id="btn-wa-remito" style="padding:10px 20px;background:#25D366;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-family:sans-serif;">💬 Enviar por WhatsApp</button>
+  </div>
+  <scr`+'ipt>'+`
+    const _vd=${JSON.stringify({...v,empresa:EMPRESA})};
+    document.getElementById('btn-wa-remito').addEventListener('click',function(){
+      const emp=_vd.empresa;
+      const items=(_vd.items||[]).map(it=>'• '+it.nombre+': '+parseFloat(it.kg||0).toFixed(1)+'kg @ $'+parseFloat(it.precio_kg||0).toFixed(1)+'/kg = $'+parseFloat(it.subtotal||0).toFixed(1)).join('%0A');
+      const totales=(_vd.descuento_pct>0?'Descuento '+_vd.descuento_pct+'%: -$'+parseFloat(_vd.monto_desc||0).toFixed(1)+'%0A':'')+(_vd.iva_pct>0?'IVA '+_vd.iva_pct+'%: $'+parseFloat(_vd.monto_iva||0).toFixed(1)+'%0A':'')+(_vd.flete>0?'Flete: $'+parseFloat(_vd.flete||0).toFixed(1)+'%0A':'')+'*TOTAL: $'+parseFloat(_vd.monto_total||0).toFixed(1)+'*';
+      const msg='*Remito '+_vd.nro_remito+'* — '+(_vd.fecha||'').split('-').reverse().join('/')+'%0A'+emp.nombre+'%0ACUIT: '+emp.cuit+'%0A%0ACliente: *'+_vd.cliente+'*%0A%0A'+items+'%0A%0A'+totales+'%0A%0AForma de pago: '+_vd.forma_pago;
+      const tel=(_vd.cliente_telefono||'').replace(/[^0-9]/g,'');
+      const base=tel?'https://wa.me/54'+tel:'https://wa.me/';
+      window.open(base+'?text='+msg,'_blank');
+    });
+  <`+'/scr'+'ipt>'+`
   </body></html>`;
 
   const win=window.open('','_blank','width=800,height=700');
@@ -8134,7 +8174,7 @@ window.imprimirCotizacion=async function(cotId){
   const {jsPDF}=window.jspdf;
   const p=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
   const fF=f=>f?f.split('-').reverse().join('/'):'—';
-  const fN=v=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:2});
+  const fN=v=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:1});
   const simbolo=c.moneda==='USD'?'USD ':'$';
   // Header
   p.setFillColor(61,43,31);p.rect(0,0,210,35,'F');
