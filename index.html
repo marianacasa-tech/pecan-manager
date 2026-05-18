@@ -8,6 +8,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 <style>
   :root{--bg:#f5f0e8;--bg2:#ede7d9;--card:#fff9f0;--brown:#3d2b1f;--brown2:#6b4226;--amber:#c8811a;--amber2:#e8a030;--green:#3a6b35;--red:#8b2e2e;--text:#2a1f14;--text2:#7a6555;--border:#d4c4a8;--shadow:0 2px 16px rgba(61,43,31,.10);--radius:12px;}
   *{box-sizing:border-box;margin:0;padding:0;}
@@ -95,6 +97,14 @@
   /* Header conn-status y textos opcionales */
   .hdr-conn{font-size:.82rem;color:var(--amber2);font-weight:500;}
 
+  /* Tom Select overrides */
+  .ts-wrapper{width:100%;}
+  .ts-control{border:1.5px solid var(--border)!important;border-radius:8px!important;background:var(--bg)!important;color:var(--text)!important;font-family:'DM Sans',sans-serif!important;font-size:.88rem!important;padding:6px 10px!important;min-height:38px!important;}
+  .ts-control input{color:var(--text)!important;font-family:'DM Sans',sans-serif!important;font-size:.88rem!important;}
+  .ts-dropdown{background:var(--bg)!important;border:1.5px solid var(--border)!important;border-radius:8px!important;font-family:'DM Sans',sans-serif!important;font-size:.88rem!important;z-index:9999!important;}
+  .ts-dropdown .option{padding:8px 12px!important;color:var(--text)!important;}
+  .ts-dropdown .option:hover,.ts-dropdown .option.active{background:var(--brown)!important;color:#fff9f0!important;}
+  .ts-dropdown .option.selected{background:var(--bg2)!important;}
   @media(max-width:600px){
     .hdr-conn{font-size:.75rem!important;}
     .hdr-txt{display:none!important;}
@@ -1318,9 +1328,11 @@
         <div class="metric-card"><div class="val" id="re-ventas-servicio">—</div><div class="lbl">↳ Servicio de maquila</div></div>
         <div class="metric-card"><div class="val" id="re-cobrado">—</div><div class="lbl">Cobrado</div></div>
         <div class="metric-card"><div class="val" id="re-por-cobrar" style="color:var(--amber);">—</div><div class="lbl">Por cobrar (cta. cte.)</div></div>
-        <div class="metric-card"><div class="val" id="re-gastos">—</div><div class="lbl">Gastos</div></div>
+        <div class="metric-card"><div class="val" id="re-gastos-directos">—</div><div class="lbl">Gastos directos</div></div>
+        <div class="metric-card"><div class="val" id="re-gastos-indirectos">—</div><div class="lbl">Gastos indirectos</div></div>
+        <div class="metric-card"><div class="val" id="re-inversiones">—</div><div class="lbl">Inversiones</div></div>
         <div class="metric-card"><div class="val" id="re-deuda-prov-ars" style="color:var(--amber);">—</div><div class="lbl">Deuda proveedores ARS</div></div>
-        <div class="metric-card"><div class="val" id="re-resultado">—</div><div class="lbl">Resultado (ingresos − gastos)</div></div>
+        <div class="metric-card"><div class="val" id="re-resultado">—</div><div class="lbl">Resultado (ingresos − gastos dir. e indir.)</div></div>
       </div>
 
       <!-- Tarjetas USD -->
@@ -2406,16 +2418,33 @@ function actualizarTodosSelectsVariedad(){
 agregarLinea();
 
 // ---- CLIENTES SELECTS ----
+// Tom Select instances registry
+const _tsInstances={};
+function _tsInit(sid){
+  if(!window.TomSelect) return;
+  const el=document.getElementById(sid);
+  if(!el||el.tagName!=='SELECT') return;
+  if(_tsInstances[sid]){
+    try{_tsInstances[sid].destroy();}catch(e){}
+    delete _tsInstances[sid];
+  }
+  try{
+    _tsInstances[sid]=new TomSelect(el,{
+      create:false, sortField:{field:'text',direction:'asc'},
+      plugins:['no_backspace_delete'],
+      render:{option:(d,esc)=>`<div>${esc(d.text)}</div>`}
+    });
+  }catch(e){}
+}
+
 async function cargarClientesSelects(){
   const snap=await getDocs(collection(db,'clientes'));
   clientesCache=[];snap.forEach(d=>clientesCache.push({id:d.id,...d.data()}));
   clientesCache.sort((a,b)=>a.nombre.localeCompare(b.nombre));
 
-  // Helper: filtrar por categoría
-  // 'servicio' = servicio o venta_servicio
-  // 'venta'    = venta o venta_servicio
-  // 'todos'    = todos
   function poblarSelect(sid, catFiltro){
+    // Destruir Tom Select si existe
+    if(_tsInstances[sid]){try{_tsInstances[sid].destroy();}catch(e){}delete _tsInstances[sid];}
     const sel=document.getElementById(sid);if(!sel)return;
     const val=sel.value;
     const isF=sid.startsWith('f-')||sid.startsWith('sf-');
@@ -2423,13 +2452,15 @@ async function cargarClientesSelects(){
     clientesCache
       .filter(c=>{
         if(catFiltro==='todos') return true;
-        const cat=c.categoria||'venta_servicio'; // sin categoría = todos
+        const cat=c.categoria||'venta_servicio';
         if(catFiltro==='venta') return cat==='venta'||cat==='venta_servicio';
         if(catFiltro==='servicio') return cat==='servicio'||cat==='venta_servicio';
         return true;
       })
       .forEach(c=>{const o=document.createElement('option');o.value=c.nombre;o.textContent=c.nombre;sel.appendChild(o);});
     if(val)sel.value=val;
+    // Inicializar Tom Select
+    _tsInit(sid);
   }
 
   // Selects de SERVICIO (maquila, fábrica, cotizador)
@@ -2441,12 +2472,14 @@ async function cargarClientesSelects(){
   // Dashboard: PROPIO fijo + clientes de servicio
   const dbPropSel=document.getElementById('db-prop');
   if(dbPropSel){
+    if(_tsInstances['db-prop']){try{_tsInstances['db-prop'].destroy();}catch(e){}delete _tsInstances['db-prop'];}
     const cur=dbPropSel.value;
     dbPropSel.innerHTML='<option value="">Todos</option><option value="PROPIO">🏭 PROPIO</option>';
     clientesCache
       .filter(c=>{const cat=c.categoria||'venta_servicio';return cat==='servicio'||cat==='venta_servicio';})
       .forEach(c=>{const o=document.createElement('option');o.value=c.nombre;o.textContent='👤 '+c.nombre;dbPropSel.appendChild(o);});
     if(cur)dbPropSel.value=cur;
+    _tsInit('db-prop');
   }
 
   // Selects de VENTA
@@ -2469,7 +2502,9 @@ window.guardarCliente=async function(){
     showAlert('✅ Cliente guardado');
     ['cli-nombre','cli-cuit','cli-localidad','cli-email','cli-tel'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('cli-categoria').value='';
-    document.getElementById('cli-provincia').value='';cargarClientes();
+    document.getElementById('cli-provincia').value='';
+    cargarClientes();
+    await cargarClientesSelects(); // actualizar todos los selectores de la app
   }catch(e){showAlert('Error: '+e.message,'error');}
 }
 window.cargarClientes=async function(){
@@ -2510,7 +2545,7 @@ window.guardarEdicionCliente=async function(){
   try{
     const editCat=document.getElementById('edit-cli-categoria');
     await updateDoc(doc(db,'clientes',id),{nombre,categoria:editCat?editCat.value:'',cuit:document.getElementById('edit-cli-cuit').value.trim(),localidad:document.getElementById('edit-cli-localidad').value.trim(),provincia:document.getElementById('edit-cli-provincia').value,email:document.getElementById('edit-cli-email').value.trim(),telefono:document.getElementById('edit-cli-tel').value.trim()});
-    showAlert('✅ Cliente actualizado');cerrarModal('modal-edit-cli');cargarClientes();
+    showAlert('✅ Cliente actualizado');cerrarModal('modal-edit-cli');cargarClientes();cargarClientesSelects();
   }catch(e){showAlert('Error: '+e.message,'error');}
 }
 
@@ -6428,29 +6463,14 @@ window.abrirRemitoModal=function(v){
     <tfoot>${totalesHtml}</tfoot>
   </table>
   <div class="footer">
-    <div>Forma de pago: <strong>${formaPagoLabel[v.forma_pago]||v.forma_pago}</strong> &nbsp;|&nbsp; Estado: <strong>${estadoLabel[v.estado]||v.estado}</strong></div>
+    <div>
+      Forma de pago: <strong>${formaPagoLabel[v.forma_pago]||v.forma_pago}</strong>
+      &nbsp;|&nbsp; Estado: <strong>${estadoLabel[v.estado]||v.estado}</strong>
+      ${v.estado==='cuenta_corriente'&&v.vencimiento?` &nbsp;|&nbsp; Vencimiento: <strong style="color:#c0392b;">${v.vencimiento.split('-').reverse().join('/')}</strong>`:''}
+    </div>
     <div>${v.observaciones?'Obs: '+v.observaciones:''}</div>
   </div>
-  <div style="margin-top:30px;display:flex;gap:12px;flex-wrap:wrap;" class="no-print">
-    <button onclick="window.print()" style="padding:10px 20px;background:#7a4a1e;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;">🖨️ Imprimir / Guardar PDF</button>
-    <button id="btn-wa" style="padding:10px 20px;background:#25D366;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-family:sans-serif;">💬 Enviar por WhatsApp</button>
-  </div>
-  <scr`+'ipt>'+`
-    const _vd=${JSON.stringify({...v,empresa:EMPRESA})};
-    document.getElementById('btn-wa').addEventListener('click',function(){
-      const emp=_vd.empresa;
-      const items=(_vd.items||[]).map(it=>'• '+it.nombre+': '+parseFloat(it.kg).toFixed(2)+'kg @ $'+parseFloat(it.precio_kg).toFixed(2)+'/kg = $'+parseFloat(it.subtotal).toFixed(2)).join('%0A');
-      const totales=(_vd.descuento_pct>0?'Descuento '+_vd.descuento_pct+'%: -$'+parseFloat(_vd.monto_desc).toFixed(2)+'%0A':'')+(_vd.iva_pct>0?'IVA '+_vd.iva_pct+'%: $'+parseFloat(_vd.monto_iva).toFixed(2)+'%0A':'')+(_vd.flete>0?'Flete: $'+parseFloat(_vd.flete).toFixed(2)+'%0A':'')+'*TOTAL: $'+parseFloat(_vd.monto_total).toFixed(2)+'*';
-      const msg='*Remito '+_vd.nro_remito+'* — '+(_vd.fecha||'').split('-').reverse().join('/')+'%0A'+emp.nombre+'%0ACUIT: '+emp.cuit+'%0A%0ACliente: *'+_vd.cliente+'*%0A%0A'+items+'%0A%0A'+totales+'%0A%0AForma de pago: '+_vd.forma_pago;
-      const tel=(_vd.cliente_telefono||'').replace(/\D/g,'');
-      const base=tel?'https://wa.me/54'+tel:'https://wa.me/';
-      // 1. Descargar PDF
-      const nombre='Remito-'+_vd.nro_remito+'.pdf';
-      html2pdf().set({filename:nombre,margin:10,image:{type:'jpeg',quality:.95},html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4'}}).from(document.querySelector('.doc-print')||document.body).save();
-      // 2. Abrir WhatsApp luego de un momento para que arranque la descarga
-      setTimeout(function(){ window.open(base+'?text='+msg,'_blank'); }, 800);
-    });
-  <`+'/scr'+'ipt>'+`
+
   </body></html>`;
 
   const win=window.open('','_blank','width=800,height=700');
@@ -7563,7 +7583,8 @@ async function initResumen(){
   });
 
   // ── ECONÓMICO ────────────────────────────────────────────────────────────
-  let ventas=0,ventasNuez=0,ventasServicio=0,cobrado=0,porCobrar=0,gastos=0,deudaProvARS=0;
+  let ventas=0,ventasNuez=0,ventasServicio=0,cobrado=0,porCobrar=0;
+  let gastosDir=0,gastosInd=0,inversiones=0,deudaProvARS=0;
   let comprasUSD=0,deudaProvUSD=0,pagadoUSD=0;
   const mesesVentas=Array(12).fill(0);
   const mesesCobrado=Array(12).fill(0);
@@ -7616,29 +7637,47 @@ async function initResumen(){
     if(moneda==='USD'){
       if(c.fecha>=desdeStr) comprasUSD+=c.monto_total||0;
       if(c.estado!=='pagado'){
-        // Deuda real = total - ya pagado en pagos_usd
         const yaPagado=pagadoPorCompra[id]||0;
         const saldo=Math.max(0,(c.monto_total||0)-yaPagado);
         deudaProvUSD+=saldo;
       }
     } else {
+      // Segregar por tipo de items
+      let montoDir=0,montoInd=0,montoInv=0,montoOtro=0;
+      (c.items||[]).forEach(it=>{
+        const sub=it.subtotal||0;
+        if(it.tipo==='gasto_directo') montoDir+=sub;
+        else if(it.tipo==='gasto_indirecto') montoInd+=sub;
+        else if(it.tipo==='inversion') montoInv+=sub;
+        else montoDir+=sub; // insumos, nuez pelada y otros = gasto directo
+      });
+      // Si no hay items, usar monto_total como gasto directo
+      if(!c.items?.length) montoDir+=c.monto_total||0;
       if(anioC===anio&&mes>=0) mesesGastos[mes]+=c.monto_total||0;
-      if(c.fecha>=desdeStr) gastos+=c.monto_total||0;
+      if(c.fecha>=desdeStr){
+        gastosDir+=montoDir;
+        gastosInd+=montoInd;
+        inversiones+=montoInv;
+      }
       if(c.estado==='pendiente'||(c.forma_pago==='credito'&&c.estado!=='pagado')) deudaProvARS+=c.monto_total||0;
     }
   });
 
-  const resultado=ventas-gastos;
+  const gastos=gastosDir+gastosInd+inversiones; // compatibilidad gráfico
+  const gastosOperativos=gastosDir+gastosInd; // sin inversiones
+  const resultadoARS=ventas-gastosOperativos;
   document.getElementById('re-ventas').textContent=fmt(ventas);
   document.getElementById('re-ventas-nuez').textContent=fmt(ventasNuez);
   document.getElementById('re-ventas-servicio').textContent=fmt(ventasServicio);
   document.getElementById('re-cobrado').textContent=fmt(cobrado);
 
-  document.getElementById('re-gastos').textContent=fmt(gastos);
+  document.getElementById('re-gastos-directos').textContent=fmt(gastosDir);
+  document.getElementById('re-gastos-indirectos').textContent=fmt(gastosInd);
+  document.getElementById('re-inversiones').textContent=fmt(inversiones);
   document.getElementById('re-deuda-prov-ars').textContent=fmt(deudaProvARS);
   const resEl=document.getElementById('re-resultado');
-  resEl.textContent=fmt(resultado);
-  resEl.style.color=resultado>=0?'var(--green)':'var(--red)';
+  resEl.textContent=fmt(resultadoARS);
+  resEl.style.color=resultadoARS>=0?'var(--green)':'var(--red)';
   document.getElementById('re-compras-usd').textContent=fmtUSD(comprasUSD);
   document.getElementById('re-deuda-prov-usd').textContent=fmtUSD(deudaProvUSD);
   document.getElementById('re-pagado-usd').textContent=fmtUSD(pagadoUSD);
