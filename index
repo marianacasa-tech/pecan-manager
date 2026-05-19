@@ -6508,10 +6508,9 @@ window.abrirRemitoModal=function(v){
       const msg='*Remito '+_vd.nro_remito+'* — '+(_vd.fecha||'').split('-').reverse().join('/')+'%0A'+emp.nombre+'%0ACUIT: '+emp.cuit+'%0A%0ACliente: *'+_vd.cliente+'*%0A%0A'+items+'%0A%0A'+totales+'%0A%0AForma de pago: '+_vd.forma_pago;
       const tel=(_vd.cliente_telefono||'').replace(/[^0-9]/g,'');
       const base=tel?'https://wa.me/54'+tel:'https://wa.me/';
-      // 1. Descargar PDF
-      const nombre='Remito-'+_vd.nro_remito+'.pdf';
-      html2pdf().set({filename:nombre,margin:10,image:{type:'jpeg',quality:.95},html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4'}}).from(document.querySelector('.doc-print')||document.body).save();
-      // 2. Abrir WhatsApp 800ms después para que arranque la descarga
+      // 1. Descargar PDF usando print de la ventana actual
+      window.print();
+      // 2. Abrir WhatsApp 800ms después
       setTimeout(function(){ window.open(base+'?text='+msg,'_blank'); }, 800);
     });
   <`+'/scr'+'ipt>'+`
