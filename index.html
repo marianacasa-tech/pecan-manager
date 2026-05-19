@@ -6457,6 +6457,7 @@ window.abrirRemitoModal=function(v){
     .footer{margin-top:24px;padding-top:14px;border-top:1px solid #ddd;font-size:11px;color:#666;display:flex;justify-content:space-between;}
     @media print{body{padding:15px;}button{display:none!important;}}
   </style><\/head><body>
+  <div id="remito-content">
   <div class="header">
     <div class="empresa">
       <strong>${EMPRESA.nombre}</strong>
@@ -6495,6 +6496,7 @@ window.abrirRemitoModal=function(v){
     </div>
   </div>
 
+  </div><!-- remito-content -->
   <div style="margin:24px 20px 0;display:flex;gap:12px;flex-wrap:wrap;" class="no-print">
     <button onclick="window.print()" style="padding:10px 20px;background:#7a4a1e;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-family:sans-serif;">🖨️ Imprimir / Guardar PDF</button>
     <button id="btn-wa-remito" style="padding:10px 20px;background:#25D366;color:#fff;border:none;border-radius:6px;font-size:14px;cursor:pointer;font-family:sans-serif;">💬 Enviar por WhatsApp</button>
@@ -6506,9 +6508,18 @@ window.abrirRemitoModal=function(v){
       const items=(_vd.items||[]).map(it=>'• '+it.nombre+': '+parseFloat(it.kg||0).toFixed(1)+'kg @ $'+parseFloat(it.precio_kg||0).toFixed(1)+'/kg = $'+parseFloat(it.subtotal||0).toFixed(1)).join('%0A');
       const totales=(_vd.descuento_pct>0?'Descuento '+_vd.descuento_pct+'%: -$'+parseFloat(_vd.monto_desc||0).toFixed(1)+'%0A':'')+(_vd.iva_pct>0?'IVA '+_vd.iva_pct+'%: $'+parseFloat(_vd.monto_iva||0).toFixed(1)+'%0A':'')+(_vd.flete>0?'Flete: $'+parseFloat(_vd.flete||0).toFixed(1)+'%0A':'')+'*TOTAL: $'+parseFloat(_vd.monto_total||0).toFixed(1)+'*';
       const msg='*Remito '+_vd.nro_remito+'* — '+(_vd.fecha||'').split('-').reverse().join('/')+'%0A'+emp.nombre+'%0ACUIT: '+emp.cuit+'%0A%0ACliente: *'+_vd.cliente+'*%0A%0A'+items+'%0A%0A'+totales+'%0A%0AForma de pago: '+_vd.forma_pago;
-      const tel=(_vd.cliente_telefono||'').replace(/[^0-9]/g,'');
+      const tel=(_vd.cliente_telefono||'').replace(/\D/g,'');
       const base=tel?'https://wa.me/54'+tel:'https://wa.me/';
-      window.open(base+'?text='+msg,'_blank');
+      // Descargar PDF y abrir WhatsApp
+      const nombre='Remito-'+_vd.nro_remito+'.pdf';
+      const el=document.getElementById('remito-content')||document.body;
+      html2pdf().set({
+        filename:nombre,margin:[10,10,10,10],
+        image:{type:'jpeg',quality:.98},
+        html2canvas:{scale:2,useCORS:true,logging:false},
+        jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
+      }).from(el).save();
+      setTimeout(function(){ window.open(base+'?text='+msg,'_blank'); }, 1500);
     });
   <`+'/scr'+'ipt>'+`
   </body></html>`;
