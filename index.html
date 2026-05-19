@@ -7375,8 +7375,8 @@ async function initResumen(){
   const fmtKg=v=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1})+' kg';
   const fmt=v=>{
     const n=parseFloat(v||0);
-    if(Math.abs(n)>=1000000) return '$'+(n/1000000).toLocaleString('es-AR',{minimumFractionDigits:1})+' M';
-    return '$'+n.toLocaleString('es-AR',{minimumFractionDigits:0});
+    if(Math.abs(n)>=1000000) return '$'+(n/1000000).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1})+' M';
+    return '$'+n.toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1});
   };
   const fmtUSD=v=>{
     const n=parseFloat(v||0);
