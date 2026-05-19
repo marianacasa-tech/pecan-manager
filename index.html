@@ -2199,7 +2199,7 @@ let variedades=['Wichita','Cheyenne','Western Schley','Shoshoni','Mahan','Sioux'
 let filaCount=0;
 let _delCol='',_delId='',_delCb=null;
 
-function fmtKg(n){return n||n===0?parseFloat(n).toFixed(3)+' kg':'—';}
+function fmtKg(n){return n||n===0?parseFloat(n).toFixed(1)+' kg':'—';}
 function pct(a,b){return b>0?((a/b)*100).toFixed(1)+'%':'—';}
 function today(){return new Date().toISOString().split('T')[0];}
 function showAlert(msg,type='success'){
@@ -2779,7 +2779,7 @@ window.calcPorcentajes=function(){
     document.getElementById('ind-partido').textContent=part.toFixed(1)+'%';
     document.getElementById('ind-podrido').textContent=incom.toFixed(1)+'%';
     document.getElementById('ind-rend-pot').textContent=rendPot.toFixed(1)+'%';
-    document.getElementById('ind-total').textContent=kernelCom.toFixed(3)+' kg';
+    document.getElementById('ind-total').textContent=kernelCom.toFixed(1)+' kg';
   }
 }
 
@@ -2810,18 +2810,18 @@ window.consultarStockCascara=async function(){
     panel.innerHTML=`<strong>⚠️ Sin existencias</strong> — No hay entradas registradas de <strong>${variedad}</strong> para <strong>${prop}</strong>.`;
   } else if(disponible<=0){
     panel.style.cssText='display:block;margin:4px 0 16px;border-radius:10px;padding:14px 18px;font-size:.88rem;border:1.5px solid #e74c3c;background:#fff0f0;color:#c0392b;';
-    panel.innerHTML=`<strong>⚠️ Stock agotado</strong> — Todo lo ingresado de <strong>${variedad}</strong> (${ingresado.toFixed(3)} kg) ya fue procesado.`;
+    panel.innerHTML=`<strong>⚠️ Stock agotado</strong> — Todo lo ingresado de <strong>${variedad}</strong> (${ingresado.toFixed(1)} kg) ya fue procesado.`;
   } else {
     const pct=ingresado>0?(procesado/ingresado*100).toFixed(1):0;
     panel.style.cssText='display:block;margin:4px 0 16px;border-radius:10px;padding:14px 18px;font-size:.88rem;border:1.5px solid var(--green);background:#f0fff4;color:var(--brown);';
     panel.innerHTML=`
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
         <span style="font-size:1.1rem;">📦</span>
-        <strong style="font-size:1rem;color:var(--green);">Disponible: ${disponible.toFixed(3)} kg</strong>
+        <strong style="font-size:1rem;color:var(--green);">Disponible: ${disponible.toFixed(1)} kg</strong>
       </div>
       <div style="color:var(--text2);font-size:.83rem;">
-        Ingresado: <strong>${ingresado.toFixed(3)} kg</strong> &nbsp;|&nbsp;
-        Ya procesado: <strong>${procesado.toFixed(3)} kg</strong> &nbsp;|&nbsp;
+        Ingresado: <strong>${ingresado.toFixed(1)} kg</strong> &nbsp;|&nbsp;
+        Ya procesado: <strong>${procesado.toFixed(1)} kg</strong> &nbsp;|&nbsp;
         Procesado: <strong>${pct}%</strong>
       </div>`;
   }
@@ -2840,7 +2840,7 @@ window.validarKgCascara=function(){
     const w=document.createElement('div');
     w.id='sal-kg-warn';
     w.style.cssText='color:#c0392b;font-size:.82rem;margin-top:4px;';
-    w.innerHTML=`⚠️ Superás el disponible (${_stockCascaraDisp.toFixed(3)} kg)`;
+    w.innerHTML=`⚠️ Superás el disponible (${_stockCascaraDisp.toFixed(1)} kg)`;
     input.parentNode.appendChild(w);
   } else {
     input.style.borderColor='var(--green)';
@@ -2853,7 +2853,7 @@ window.guardarSalida=async function(){
   const kgC=parseFloat(document.getElementById('sal-kg-cascara').value);
   if(!fecha||!prop||!variedad||!kgC){showAlert('Completá los campos obligatorios','error');return;}
   if(_stockCascaraDisp>0&&kgC>_stockCascaraDisp){
-    showAlert(`⚠️ Los kg ingresados (${kgC.toFixed(3)}) superan el stock disponible (${_stockCascaraDisp.toFixed(3)} kg) para ${prop} — ${variedad}.`,'error');return;
+    showAlert(`⚠️ Los kg ingresados (${kgC.toFixed(1)}) superan el stock disponible (${_stockCascaraDisp.toFixed(1)} kg) para ${prop} — ${variedad}.`,'error');return;
   }
   const ent=parseFloat(document.getElementById('sal-enteras').value)||0;
   const pg=parseFloat(document.getElementById('sal-part-grandes').value)||0;
@@ -3060,15 +3060,15 @@ window.calcStockFabrica=async function(){
         totIng+=r.ingresado;totProc+=r.procesado;
         html+=`<tr>
           <td><strong>${r.variedad}</strong></td>
-          <td>${r.ingresado.toFixed(3)} kg</td>
-          <td>${r.procesado.toFixed(3)} kg</td>
-          <td><strong style="color:var(--green);">${disp.toFixed(3)} kg</strong></td>
+          <td>${r.ingresado.toFixed(1)} kg</td>
+          <td>${r.procesado.toFixed(1)} kg</td>
+          <td><strong style="color:var(--green);">${disp.toFixed(1)} kg</strong></td>
         </tr>`;
       });
       const totDisp=totIng-totProc;
       html+=`<tr class="stock-total-row">
-        <td>TOTAL</td><td>${totIng.toFixed(3)} kg</td><td>${totProc.toFixed(3)} kg</td>
-        <td><strong style="color:var(--green);">${totDisp.toFixed(3)} kg</strong></td>
+        <td>TOTAL</td><td>${totIng.toFixed(1)} kg</td><td>${totProc.toFixed(1)} kg</td>
+        <td><strong style="color:var(--green);">${totDisp.toFixed(1)} kg</strong></td>
       </tr></tbody></table></div>`;
     });
     cCont.innerHTML=html;
@@ -3131,16 +3131,16 @@ window.calcStockFabrica=async function(){
         html+=`<tr><td><strong>${r.variedad}</strong></td>`;
         catsShow.forEach(c=>{
           totales[c]+=r[c]||0;
-          html+=`<td>${r[c]>0.0005?r[c].toFixed(3)+' kg':'<span class="stock-zero">—</span>'}</td>`;
+          html+=`<td>${r[c]>0.0005?r[c].toFixed(1)+' kg':'<span class="stock-zero">—</span>'}</td>`;
         });
-        html+=`<td><strong>${subtotal.toFixed(3)} kg</strong></td>`;
-        if(!catPel) html+=`<td style="color:var(--text2);">${r.podridas>0?r.podridas.toFixed(3)+' kg':'—'}</td>`;
+        html+=`<td><strong>${subtotal.toFixed(1)} kg</strong></td>`;
+        if(!catPel) html+=`<td style="color:var(--text2);">${r.podridas>0?r.podridas.toFixed(1)+' kg':'—'}</td>`;
         html+=`</tr>`;
       });
       html+=`<tr class="stock-total-row"><td>TOTAL</td>`;
-      catsShow.forEach(c=>{html+=`<td>${totales[c].toFixed(3)} kg</td>`;});
-      html+=`<td>${totTotal.toFixed(3)} kg</td>`;
-      if(!catPel) html+=`<td>${totPod.toFixed(3)} kg</td>`;
+      catsShow.forEach(c=>{html+=`<td>${totales[c].toFixed(1)} kg</td>`;});
+      html+=`<td>${totTotal.toFixed(1)} kg</td>`;
+      if(!catPel) html+=`<td>${totPod.toFixed(1)} kg</td>`;
       html+=`</tr></tbody></table></div>`;
     });
     pCont.innerHTML=html;
@@ -3229,15 +3229,15 @@ window.calcStockVendible=async function(){
     totalNuez+=Math.max(0,disp);
     html+=`<tr>
       <td><strong>${catLabel[c]}</strong></td>
-      <td>${producido[c].toFixed(3)} kg</td>
-      <td>${comprada[c]>0?`<span style="color:var(--green);">+${comprada[c].toFixed(3)} kg</span>`:'—'}</td>
-      <td>${consumoCocina[c]>0?`<span style="color:var(--amber);">−${consumoCocina[c].toFixed(3)} kg</span>`:'—'}</td>
-      <td>${vendidoNuez[c]>0?`<span style="color:var(--red);">−${vendidoNuez[c].toFixed(3)} kg</span>`:'—'}</td>
-      <td><strong style="color:${disp>0?'var(--green)':'var(--red)'};">${Math.max(0,disp).toFixed(3)} kg</strong></td>
+      <td>${producido[c].toFixed(1)} kg</td>
+      <td>${comprada[c]>0?`<span style="color:var(--green);">+${comprada[c].toFixed(1)} kg</span>`:'—'}</td>
+      <td>${consumoCocina[c]>0?`<span style="color:var(--amber);">−${consumoCocina[c].toFixed(1)} kg</span>`:'—'}</td>
+      <td>${vendidoNuez[c]>0?`<span style="color:var(--red);">−${vendidoNuez[c].toFixed(1)} kg</span>`:'—'}</td>
+      <td><strong style="color:${disp>0?'var(--green)':'var(--red)'};">${Math.max(0,disp).toFixed(1)} kg</strong></td>
     </tr>`;
   });
   html+=`<tr class="stock-total-row"><td>TOTAL PECÁN</td><td></td><td></td><td></td><td></td>
-    <td><strong style="font-size:1.05rem;color:var(--green);">${totalNuez.toFixed(3)} kg</strong></td>
+    <td><strong style="font-size:1.05rem;color:var(--green);">${totalNuez.toFixed(1)} kg</strong></td>
   </tr></tbody></table></div>`;
 
   // ---- BLOQUE 2: Productos elaborados cocina ----
@@ -3252,13 +3252,13 @@ window.calcStockVendible=async function(){
       totalElab+=disp;
       html+=`<tr>
         <td><strong>${nombre}</strong></td>
-        <td>${v.producido.toFixed(3)} kg</td>
-        <td>${v.vendido>0?`<span style="color:var(--red);">−${v.vendido.toFixed(3)} kg</span>`:'—'}</td>
-        <td><strong style="color:${disp>0?'var(--green)':'var(--red)'};">${disp.toFixed(3)} kg</strong></td>
+        <td>${v.producido.toFixed(1)} kg</td>
+        <td>${v.vendido>0?`<span style="color:var(--red);">−${v.vendido.toFixed(1)} kg</span>`:'—'}</td>
+        <td><strong style="color:${disp>0?'var(--green)':'var(--red)'};">${disp.toFixed(1)} kg</strong></td>
       </tr>`;
     });
     html+=`<tr class="stock-total-row"><td>TOTAL ELABORADOS</td><td></td><td></td>
-      <td><strong style="font-size:1.05rem;color:var(--green);">${totalElab.toFixed(3)} kg</strong></td>
+      <td><strong style="font-size:1.05rem;color:var(--green);">${totalElab.toFixed(1)} kg</strong></td>
     </tr></tbody></table></div>`;
   }
 
@@ -3354,7 +3354,7 @@ window.cargarPanelMaquila=async function(){
   liqs.sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||''));
 
   const catL={enteras:'🟢 Pecan Entero',part_grandes:'🟡 Pecan Partido Grande',part_chicas:'🟠 Pecan Partido Chico',danadas:'🔴 Pecan Dañado'};
-  const fmtM=n=>n>0?`<strong style="color:var(--green);">${n.toFixed(3)} kg</strong>`:`<span style="color:#ccc;">—</span>`;
+  const fmtM=n=>n>0?`<strong style="color:var(--green);">${n.toFixed(1)} kg</strong>`:`<span style="color:#ccc;">—</span>`;
 
   // Producción agrupada por variedad
   const salPorVar={};
@@ -3391,20 +3391,20 @@ window.cargarPanelMaquila=async function(){
       tKC+=s.kg_cascara;tEnt+=s.enteras;tPG+=s.part_grandes;tPC+=s.part_chicas;tDan+=s.danadas;tPod+=s.podridas;
       html+=`<tr>
         <td><strong>${v}</strong></td>
-        <td>${s.kg_cascara.toFixed(3)} kg</td>
+        <td>${s.kg_cascara.toFixed(1)} kg</td>
         <td>${fmtM(s.enteras)}</td><td>${fmtM(s.part_grandes)}</td>
         <td>${fmtM(s.part_chicas)}</td><td>${fmtM(s.danadas)}</td>
-        <td style="color:var(--text2);">${s.podridas>0?s.podridas.toFixed(3)+' kg':'—'}</td>
+        <td style="color:var(--text2);">${s.podridas>0?s.podridas.toFixed(1)+' kg':'—'}</td>
         <td><span class="badge badge-green">${kernel}</span></td>
       </tr>`;
     });
     const tKernel=tEnt+tPG+tPC+tDan;
     const tKernelPct=tKC>0?(tKernel/tKC*100).toFixed(1)+'%':'—';
     html+=`<tr class="stock-total-row">
-      <td>TOTAL</td><td>${tKC.toFixed(3)} kg</td>
-      <td>${tEnt.toFixed(3)} kg</td><td>${tPG.toFixed(3)} kg</td>
-      <td>${tPC.toFixed(3)} kg</td><td>${tDan.toFixed(3)} kg</td>
-      <td>${tPod.toFixed(3)} kg</td><td><span class="badge badge-green">${tKernelPct}</span></td>
+      <td>TOTAL</td><td>${tKC.toFixed(1)} kg</td>
+      <td>${tEnt.toFixed(1)} kg</td><td>${tPG.toFixed(1)} kg</td>
+      <td>${tPC.toFixed(1)} kg</td><td>${tDan.toFixed(1)} kg</td>
+      <td>${tPod.toFixed(1)} kg</td><td><span class="badge badge-green">${tKernelPct}</span></td>
     </tr></tbody></table></div>`;
   }
 
@@ -3415,7 +3415,7 @@ window.cargarPanelMaquila=async function(){
   Object.entries(catL).forEach(([k,lbl])=>{
     html+=`<tr><td>${lbl}</td><td>${fmtM(prod[k])}</td><td>${fmtM(retirado[k])}</td><td>${fmtM(saldo[k])}</td></tr>`;
   });
-  html+=`<tr><td style="font-weight:700;">⚫ Incomestibles (merma)</td><td>${prod.podridas>0?prod.podridas.toFixed(3)+' kg':'—'}</td><td colspan="2" style="color:var(--text2);font-size:.82rem;">No se entregan</td></tr>`;
+  html+=`<tr><td style="font-weight:700;">⚫ Incomestibles (merma)</td><td>${prod.podridas>0?prod.podridas.toFixed(1)+' kg':'—'}</td><td colspan="2" style="color:var(--text2);font-size:.82rem;">No se entregan</td></tr>`;
   html+=`</tbody></table></div>`;
 
   // Historial de retiros
@@ -3427,11 +3427,11 @@ window.cargarPanelMaquila=async function(){
       const tot=(r.enteras||0)+(r.part_grandes||0)+(r.part_chicas||0)+(r.danadas||0);
       html+=`<tr>
         <td>${r.fecha}</td><td><span class="remito-num">${r.num_remito||'—'}</span></td>
-        <td>${r.enteras?r.enteras.toFixed(3)+' kg':'—'}</td>
-        <td>${r.part_grandes?r.part_grandes.toFixed(3)+' kg':'—'}</td>
-        <td>${r.part_chicas?r.part_chicas.toFixed(3)+' kg':'—'}</td>
-        <td>${r.danadas?r.danadas.toFixed(3)+' kg':'—'}</td>
-        <td><strong>${tot.toFixed(3)} kg</strong></td>
+        <td>${r.enteras?r.enteras.toFixed(1)+' kg':'—'}</td>
+        <td>${r.part_grandes?r.part_grandes.toFixed(1)+' kg':'—'}</td>
+        <td>${r.part_chicas?r.part_chicas.toFixed(1)+' kg':'—'}</td>
+        <td>${r.danadas?r.danadas.toFixed(1)+' kg':'—'}</td>
+        <td><strong>${tot.toFixed(1)} kg</strong></td>
         <td><span class="badge ${r.estado==='activo'?'badge-green':'badge-amber'}">${r.estado==='activo'?'Activo':'Liquidado'}</span></td>
         <td style="display:flex;gap:5px;">
           <button class="btn btn-pdf btn-sm" onclick="reimprimirRetiro('${r.id}')" title="Descargar PDF">🖨️</button>
@@ -3450,7 +3450,7 @@ window.cargarPanelMaquila=async function(){
     if(totalSaldo>0)
       html+=`<button class="btn btn-primary" onclick="abrirRetiro('${cliente}')">📦 Registrar retiro parcial</button>`;
     if(kgProcesado>0)
-      html+=`<button class="btn" style="background:var(--green);color:#fff;" onclick="abrirLiquidacion('${cliente}',${kgProcesado.toFixed(3)},${kgLiquidados.toFixed(3)})">📄 Generar liquidación</button>`;
+      html+=`<button class="btn" style="background:var(--green);color:#fff;" onclick="abrirLiquidacion('${cliente}',${kgProcesado.toFixed(1)},${kgLiquidados.toFixed(1)})">📄 Generar liquidación</button>`;
   }
   if(!kgIngresado){
     html=`<p style="color:var(--text2);text-align:center;padding:20px;">Este cliente no tiene entradas registradas.</p>`;
@@ -3464,9 +3464,9 @@ window.cargarPanelMaquila=async function(){
       html+=`<tr>
         <td><span class="remito-num">${l.num_liquidacion||'—'}</span></td>
         <td>${l.fecha}</td>
-        <td>${parseFloat(l.kg_cascara||0).toFixed(3)} kg</td>
-        <td>$${parseFloat(l.precio_kg||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</td>
-        <td><strong>$${parseFloat(l.total_servicio||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</strong></td>
+        <td>${parseFloat(l.kg_cascara||0).toFixed(1)} kg</td>
+        <td>$${parseFloat(l.precio_kg||0).toLocaleString('es-AR',{minimumFractionDigits:1})}</td>
+        <td><strong>$${parseFloat(l.total_servicio||0).toLocaleString('es-AR',{minimumFractionDigits:1})}</strong></td>
         <td>${l.forma_pago||'—'}</td>
         <td style="display:flex;gap:4px;">
           <button class="btn btn-pdf btn-sm" onclick="reimprimirLiquidacion('${l.id}')" title="Descargar PDF">🖨️</button>
@@ -3492,7 +3492,7 @@ window.abrirRetiro=function(cliente){
   document.getElementById('ret-info-cliente').textContent=cliente;
   const catL={enteras:'Pecan Entero',part_grandes:'Pecan Partido Grande',part_chicas:'Pecan Partido Chico',danadas:'Pecan Dañado'};
   document.getElementById('ret-stock-info').innerHTML=
-    Object.entries(catL).map(([k,l])=>`${l}: <strong>${(saldo[k]||0).toFixed(3)} kg</strong>`).join(' | ');
+    Object.entries(catL).map(([k,l])=>`${l}: <strong>${(saldo[k]||0).toFixed(1)} kg</strong>`).join(' | ');
   document.getElementById('ret-fecha').value=today();
   ['ret-enteras','ret-pg','ret-pc','ret-dan','ret-obs'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('modal-retiro').classList.add('open');
@@ -3520,10 +3520,10 @@ window.guardarRetiro=async function(){
   const sPC=parseFloat(document.getElementById('ret-saldo-pc').value)||0;
   const sDan=parseFloat(document.getElementById('ret-saldo-dan').value)||0;
   const errores=[];
-  if(ent>sEnt) errores.push(`• Pecan Entero: ingresaste <strong>${ent.toFixed(3)} kg</strong> pero hay <strong>${sEnt.toFixed(3)} kg</strong> disponibles`);
-  if(pg>sPG)   errores.push(`• Pecan Partido Grande: ingresaste <strong>${pg.toFixed(3)} kg</strong> pero hay <strong>${sPG.toFixed(3)} kg</strong> disponibles`);
-  if(pc>sPC)   errores.push(`• Pecan Partido Chico: ingresaste <strong>${pc.toFixed(3)} kg</strong> pero hay <strong>${sPC.toFixed(3)} kg</strong> disponibles`);
-  if(dan>sDan) errores.push(`• Pecan Dañado: ingresaste <strong>${dan.toFixed(3)} kg</strong> pero hay <strong>${sDan.toFixed(3)} kg</strong> disponibles`);
+  if(ent>sEnt) errores.push(`• Pecan Entero: ingresaste <strong>${ent.toFixed(1)} kg</strong> pero hay <strong>${sEnt.toFixed(1)} kg</strong> disponibles`);
+  if(pg>sPG)   errores.push(`• Pecan Partido Grande: ingresaste <strong>${pg.toFixed(1)} kg</strong> pero hay <strong>${sPG.toFixed(1)} kg</strong> disponibles`);
+  if(pc>sPC)   errores.push(`• Pecan Partido Chico: ingresaste <strong>${pc.toFixed(1)} kg</strong> pero hay <strong>${sPC.toFixed(1)} kg</strong> disponibles`);
+  if(dan>sDan) errores.push(`• Pecan Dañado: ingresaste <strong>${dan.toFixed(1)} kg</strong> pero hay <strong>${sDan.toFixed(1)} kg</strong> disponibles`);
   if(errores.length){
     const div=document.createElement('div');
     div.id='ret-error';
@@ -4030,7 +4030,7 @@ function generarPDFLiquidacion(d, enviarWA=false){
   p.setFontSize(9);p.setFont('helvetica','normal');
   // Datos base
   if(d.precioUSD&&d.tc){
-    p.text('Precio del servicio:',24,y);p.text('USD '+parseFloat(d.precioUSD).toLocaleString('es-AR',{minimumFractionDigits:3})+'/kg c/c',160,y);y+=7;
+    p.text('Precio del servicio:',24,y);p.text('USD '+parseFloat(d.precioUSD).toLocaleString('es-AR',{minimumFractionDigits:1})+'/kg c/c',160,y);y+=7;
     p.text('Tipo de cambio BNA (billete venta):',24,y);p.text('$ '+parseFloat(d.tc).toLocaleString('es-AR',{minimumFractionDigits:1})+'/USD',160,y);y+=7;
     p.text('Total Kg liquidados:',24,y);p.text(parseFloat(d.kgTotal||0).toFixed(1)+' kg',160,y);y+=10;
     // Desglose IVA
@@ -4202,7 +4202,7 @@ window.calcTotalEdicionLiq=function(){
   const disp=document.getElementById('edit-liq-total');
   if(precio>0&&kg>0){
     disp.style.display='block';
-    document.getElementById('edit-liq-total-val').textContent='$'+(precio*kg).toLocaleString('es-AR',{minimumFractionDigits:2});
+    document.getElementById('edit-liq-total-val').textContent='$'+(precio*kg).toLocaleString('es-AR',{minimumFractionDigits:1});
   } else disp.style.display='none';
 }
 window.guardarEdicionLiquidacion=async function(){
@@ -4322,10 +4322,10 @@ window.cargarDashboard=async function(){
   const sinProcesar=Math.max(0,tKgCC-tKgCCProcesado);
   // Clientes de servicio
   const clientesServicio=[];sC.forEach(d=>{const cat=d.data().categoria||'venta_servicio';if(cat==='servicio'||cat==='venta_servicio')clientesServicio.push(d.id);});
-  document.getElementById('m-entradas').textContent=tKgCC>0?tKgCC.toFixed(0)+' kg':'—';
-  document.getElementById('m-salidas').textContent=kernelCom>0?kernelCom.toFixed(0)+' kg':'—';
-  document.getElementById('m-prom-dia').textContent=promDia>0?promDia.toFixed(3)+' kg':'—';
-  document.getElementById('m-sin-procesar').textContent=sinProcesar>0.001?sinProcesar.toFixed(3)+' kg':'—';
+  document.getElementById('m-entradas').textContent=tKgCC>0?tKgCC.toFixed(1)+' kg':'—';
+  document.getElementById('m-salidas').textContent=kernelCom>0?kernelCom.toFixed(1)+' kg':'—';
+  document.getElementById('m-prom-dia').textContent=promDia>0?promDia.toFixed(1)+' kg':'—';
+  document.getElementById('m-sin-procesar').textContent=sinProcesar>0.001?sinProcesar.toFixed(1)+' kg':'—';
   document.getElementById('m-clientes').textContent=clientesServicio.length;
   document.getElementById('m-skr').textContent=fmt(skr);
   document.getElementById('m-entero').textContent=fmt(enteroPct);
@@ -4617,7 +4617,7 @@ window.seleccionarReceta=async function(){
     const ok=stockReal>=i.cantidad;
     return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-radius:6px;margin-bottom:4px;background:${ok?'#f0fff4':'#fff0f0'};">
       <span><strong>${i.nombre}</strong> — ${i.cantidad} ${i.unidad}</span>
-      <span style="font-size:.82rem;color:${ok?'var(--green)':'#c0392b'};">Stock: ${stockReal.toFixed(2)} ${i.unidad} ${ok?'✔':'⚠️ insuficiente'}</span>
+      <span style="font-size:.82rem;color:${ok?'var(--green)':'#c0392b'};">Stock: ${stockReal.toFixed(1)} ${i.unidad} ${ok?'✔':'⚠️ insuficiente'}</span>
     </div>`;
   }).join('');
   verificarStockNuez();
@@ -4647,9 +4647,9 @@ window.verificarStockNuez=async function(){
   } else {
     const ok=kg<=disp||kg===0;
     panel.style.cssText=`display:block;margin:4px 0 12px;border-radius:10px;padding:12px 16px;font-size:.88rem;border:1.5px solid ${ok?'var(--green)':'#e74c3c'};background:${ok?'#f0fff4':'#fff0f0'};`;
-    panel.innerHTML=`<div style="font-size:1rem;font-weight:700;color:${ok?'var(--green)':'#c0392b'};">📦 Disponible: ${disp.toFixed(3)} kg</div>
-      <div style="font-size:.82rem;color:var(--text2);margin-top:3px;">Producido fábrica: ${prod.toFixed(3)} kg — Usado en cocina: ${usado.toFixed(3)} kg</div>
-      ${kg>disp?`<div style="color:#c0392b;font-size:.83rem;margin-top:4px;">⚠️ Ingresaste ${kg.toFixed(3)} kg pero solo hay ${disp.toFixed(3)} kg disponibles</div>`:''}`;
+    panel.innerHTML=`<div style="font-size:1rem;font-weight:700;color:${ok?'var(--green)':'#c0392b'};">📦 Disponible: ${disp.toFixed(1)} kg</div>
+      <div style="font-size:.82rem;color:var(--text2);margin-top:3px;">Producido fábrica: ${prod.toFixed(1)} kg — Usado en cocina: ${usado.toFixed(1)} kg</div>
+      ${kg>disp?`<div style="color:#c0392b;font-size:.83rem;margin-top:4px;">⚠️ Ingresaste ${kg.toFixed(1)} kg pero solo hay ${disp.toFixed(1)} kg disponibles</div>`:''}`;
   }
 }
 
@@ -4685,8 +4685,8 @@ window.recalcTotalesCocina=function(){
     if(n>0||p>0) cnt++;
     totNuez+=n; totProd+=p;
   });
-  document.getElementById('coc-tot-nuez').textContent=totNuez.toFixed(3)+' kg';
-  document.getElementById('coc-tot-prod').textContent=totProd.toFixed(3)+' kg';
+  document.getElementById('coc-tot-nuez').textContent=totNuez.toFixed(1)+' kg';
+  document.getElementById('coc-tot-prod').textContent=totProd.toFixed(1)+' kg';
   document.getElementById('coc-tot-tandas').textContent=cnt;
 }
 
@@ -4732,7 +4732,7 @@ window.guardarLoteCocina=async function(){
     const stockReal=(_iEnt[i.insumo_id]||0)-(_iCoc[i.insumo_id]||0)-(_iFab[i.insumo_id]||0);
     const necesita=i.cantidad*tandas.length;
     if(stockReal<necesita)
-      insuficientes.push(`${i.nombre} (necesita ${necesita} ${i.unidad}, hay ${stockReal.toFixed(2)})`);
+      insuficientes.push(`${i.nombre} (necesita ${necesita} ${i.unidad}, hay ${stockReal.toFixed(1)})`);
   }
   if(insuficientes.length){showAlert('⚠️ Insumos insuficientes:\n'+insuficientes.join('\n'),'error');return;}
 
@@ -4761,7 +4761,7 @@ window.guardarLoteCocina=async function(){
     }
     await batch.commit();
 
-    showAlert(`✅ Lote ${loteId} registrado — ${tandas.length} tanda(s) | ${totalNuez.toFixed(3)} kg Pecan → ${totalProd.toFixed(3)} kg producidos`);
+    showAlert(`✅ Lote ${loteId} registrado — ${tandas.length} tanda(s) | ${totalNuez.toFixed(1)} kg Pecan → ${totalProd.toFixed(1)} kg producidos`);
 
     // Limpiar formulario
     document.getElementById('coc-fecha').value='';
@@ -4807,15 +4807,15 @@ window.cargarTandas=async function(){
     tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text2);padding:20px;">No hay lotes registrados</td></tr>';return;
   }
   lotesArr.forEach(l=>{
-    const detalle=l.tandas.map((t,i)=>`T${i+1}: ${t.kg_nuez?.toFixed(3)}kg→${t.kg_producido?.toFixed(3)}kg${t.observaciones?' ('+t.observaciones+')':''}`).join(' | ');
+    const detalle=l.tandas.map((t,i)=>`T${i+1}: ${t.kg_nuez?.toFixed(1)}kg→${t.kg_producido?.toFixed(1)}kg${t.observaciones?' ('+t.observaciones+')':''}`).join(' | ');
     tbody.innerHTML+=`<tr>
       <td><span class="remito-num">${l.lote_id}</span></td>
       <td>${l.fecha}</td>
       <td><strong>${l.receta_nombre}</strong></td>
       <td>${catLabel[l.categoria_nuez]||l.categoria_nuez}</td>
       <td><span class="badge badge-amber">${l.tandas.length}</span></td>
-      <td>${l.kg_nuez.toFixed(3)} kg</td>
-      <td><strong style="color:var(--green);">${l.kg_producido.toFixed(3)} kg</strong></td>
+      <td>${l.kg_nuez.toFixed(1)} kg</td>
+      <td><strong style="color:var(--green);">${l.kg_producido.toFixed(1)} kg</strong></td>
       <td style="display:flex;gap:5px;">
         <button class="btn btn-secondary btn-sm" title="Ver detalle" onclick="toggleDetalleLote('${l.lote_id}')">🔍</button>
         <button class="btn btn-secondary btn-sm" title="Etiqueta" onclick="abrirEtiquetaCoc(null,'${l.fecha}','${l.receta_nombre}','${l.categoria_nuez}','${l.lote_id}')">🏷️</button>
@@ -4825,7 +4825,7 @@ window.cargarTandas=async function(){
     <tr id="detalle-lote-${l.lote_id}" style="display:none;">
       <td colspan="8" style="padding:0;">
         <div style="padding:10px 16px;background:var(--bg2);font-size:.83rem;color:var(--text2);border-bottom:1px solid var(--border);">
-          ${l.tandas.map((t,i)=>`<span style="margin-right:16px;"><strong>T${i+1}:</strong> ${t.kg_nuez?.toFixed(3)} kg Pecan → ${t.kg_producido?.toFixed(3)} kg prod${t.observaciones?' — '+t.observaciones:''}</span>`).join('')}
+          ${l.tandas.map((t,i)=>`<span style="margin-right:16px;"><strong>T${i+1}:</strong> ${t.kg_nuez?.toFixed(1)} kg Pecan → ${t.kg_producido?.toFixed(1)} kg prod${t.observaciones?' — '+t.observaciones:''}</span>`).join('')}
         </div>
       </td>
     </tr>`;
@@ -5062,11 +5062,11 @@ window.calcStockCocina=async function(){
     html+=`<tr>
       <td><strong>${nombre}</strong></td>
       <td>${d.tandas}</td>
-      <td><strong style="color:var(--green);">${d.producido.toFixed(3)} kg</strong></td>
+      <td><strong style="color:var(--green);">${d.producido.toFixed(1)} kg</strong></td>
       <td><span class="badge badge-green">En stock</span></td>
     </tr>`;
   });
-  html+=`<tr class="stock-total-row"><td>TOTAL</td><td></td><td><strong>${total.toFixed(3)} kg</strong></td><td></td></tr>`;
+  html+=`<tr class="stock-total-row"><td>TOTAL</td><td></td><td><strong>${total.toFixed(1)} kg</strong></td><td></td></tr>`;
   html+='</tbody></table></div>';
   html+=`<div style="margin-top:12px;padding:12px 16px;background:var(--bg2);border-radius:8px;font-size:.83rem;color:var(--text2);">
     ➕ <strong>Ventas</strong> — se descuentan automáticamente del stock vendible.
@@ -5512,7 +5512,7 @@ window.recalcItem=function(idx){
   const cant=parseFloat(document.getElementById('gi-cant-'+idx)?.value)||0;
   const precio=parseFloat(document.getElementById('gi-precio-'+idx)?.value)||0;
   if(cant>0&&precio>0){
-    document.getElementById('gi-sub-'+idx).value=(cant*precio).toFixed(2);
+    document.getElementById('gi-sub-'+idx).value=(cant*precio).toFixed(1);
   }
   recalcTotales();
 }
@@ -5535,7 +5535,7 @@ window.recalcTotales=function(){
   const ivaPct=parseFloat(document.getElementById('gas-iva')?.value)||0;
   const iva=neto*ivaPct/100;
   const total=neto+iva;
-  const fmt=v=>'$ '+v.toLocaleString('es-AR',{minimumFractionDigits:2});
+  const fmt=v=>'$ '+v.toLocaleString('es-AR',{minimumFractionDigits:1});
   document.getElementById('gas-tot-neto').textContent=fmt(neto);
   document.getElementById('gas-tot-iva').textContent=fmt(iva);
   document.getElementById('gas-tot-total').textContent=fmt(total);
@@ -5700,9 +5700,9 @@ window.cargarCompras=async function(){
       <td>${c.proveedor||'—'}</td>
       <td><span class="remito-num">${c.nro_factura||'—'}</span></td>
       <td style="font-size:.8rem;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${itemsResumen}">${tiposBadges}</td>
-      <td>${simbolo}${(c.monto_neto||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</td>
-      <td>${simbolo}${(c.monto_iva||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</td>
-      <td><strong>${simbolo}${(c.monto_total||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</strong>
+      <td>${simbolo}${(c.monto_neto||0).toLocaleString('es-AR',{minimumFractionDigits:1})}</td>
+      <td>${simbolo}${(c.monto_iva||0).toLocaleString('es-AR',{minimumFractionDigits:1})}</td>
+      <td><strong>${simbolo}${(c.monto_total||0).toLocaleString('es-AR',{minimumFractionDigits:1})}</strong>
         ${moneda==='USD'?'<span class="badge" style="background:#1a5276;color:#fff;margin-left:4px;font-size:.7rem;">USD</span>':''}
       </td>
       <td style="font-size:.82rem;">${c.forma_pago||'—'}</td>
@@ -5724,7 +5724,7 @@ window.cargarCompras=async function(){
   const res=document.getElementById('gas-resumen');
   if(cnt>0){
     res.style.display='block';
-    res.innerHTML=`<strong>${cnt} registro(s)</strong> — Neto total: <strong>$${totNeto.toLocaleString('es-AR',{minimumFractionDigits:2})}</strong> &nbsp;|&nbsp; Total con IVA: <strong style="color:var(--brown);">$${totTotal.toLocaleString('es-AR',{minimumFractionDigits:2})}</strong>`;
+    res.innerHTML=`<strong>${cnt} registro(s)</strong> — Neto total: <strong>$${totNeto.toLocaleString('es-AR',{minimumFractionDigits:1})}</strong> &nbsp;|&nbsp; Total con IVA: <strong style="color:var(--brown);">$${totTotal.toLocaleString('es-AR',{minimumFractionDigits:1})}</strong>`;
   } else {
     res.style.display='none';
   }
@@ -5752,7 +5752,7 @@ let _pagosUSDProveedor='';
 window.abrirPagosUSD=async function(compraId, proveedor, totalUSD){
   _pagosUSDCompraId=compraId;
   document.getElementById('pu-proveedor').textContent=proveedor||'—';
-  document.getElementById('pu-total-usd').textContent='USD '+parseFloat(totalUSD).toLocaleString('es-AR',{minimumFractionDigits:2});
+  document.getElementById('pu-total-usd').textContent='USD '+parseFloat(totalUSD).toLocaleString('es-AR',{minimumFractionDigits:1});
   document.getElementById('pu-fecha').value=today();
   document.getElementById('pu-ars').value='';
   document.getElementById('pu-tc').value='';
@@ -5779,9 +5779,9 @@ async function cargarPagosUSD(compraId, totalUSD){
       totalPagadoUSD+=p.usd_cancelado||0;
       html+=`<tr style="border-bottom:1px solid var(--border);">
         <td style="padding:6px 10px;">${p.fecha||'—'}</td>
-        <td style="padding:6px 10px;text-align:right;">$${(p.monto_ars||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</td>
-        <td style="padding:6px 10px;text-align:right;">$${(p.tc||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</td>
-        <td style="padding:6px 10px;text-align:right;font-weight:700;color:#1a5276;">USD ${(p.usd_cancelado||0).toLocaleString('es-AR',{minimumFractionDigits:2})}</td>
+        <td style="padding:6px 10px;text-align:right;">$${(p.monto_ars||0).toLocaleString('es-AR',{minimumFractionDigits:1})}</td>
+        <td style="padding:6px 10px;text-align:right;">$${(p.tc||0).toLocaleString('es-AR',{minimumFractionDigits:1})}</td>
+        <td style="padding:6px 10px;text-align:right;font-weight:700;color:#1a5276;">USD ${(p.usd_cancelado||0).toLocaleString('es-AR',{minimumFractionDigits:1})}</td>
         <td style="padding:6px 10px;color:var(--text2);font-size:.8rem;">${p.obs||'—'}</td>
         <td style="padding:4px;"><button class="btn btn-danger btn-sm" onclick="eliminarPagoUSD('${p.id}','${compraId}',${totalUSD})">🗑️</button></td>
       </tr>`;
@@ -5793,8 +5793,8 @@ async function cargarPagosUSD(compraId, totalUSD){
   document.getElementById('pu-historial').innerHTML=html||'<p style="color:var(--text2);font-size:.85rem;padding:8px 0;">Sin pagos registrados aún.</p>';
   document.getElementById('pu-saldo').innerHTML=`
     <div style="display:flex;gap:20px;flex-wrap:wrap;padding:12px 16px;background:var(--bg2);border-radius:8px;font-size:.88rem;margin-top:8px;">
-      <div>Pagado: <strong style="color:var(--green);">USD ${totalPagadoUSD.toLocaleString('es-AR',{minimumFractionDigits:2})}</strong></div>
-      <div>Saldo pendiente: <strong style="color:${saldoColor};">USD ${Math.max(0,saldo).toLocaleString('es-AR',{minimumFractionDigits:2})}</strong></div>
+      <div>Pagado: <strong style="color:var(--green);">USD ${totalPagadoUSD.toLocaleString('es-AR',{minimumFractionDigits:1})}</strong></div>
+      <div>Saldo pendiente: <strong style="color:${saldoColor};">USD ${Math.max(0,saldo).toLocaleString('es-AR',{minimumFractionDigits:1})}</strong></div>
     </div>`;
   if(saldo<=0.005) await updateDoc(doc(db,'compras',compraId),{estado:'pagado'});
 }
@@ -5802,7 +5802,7 @@ async function cargarPagosUSD(compraId, totalUSD){
 window.calcEquivUSD=function(){
   const ars=parseFloat(document.getElementById('pu-ars').value)||0;
   const tc=parseFloat(document.getElementById('pu-tc').value)||0;
-  document.getElementById('pu-usd-equiv').textContent=tc>0?'= USD '+(ars/tc).toLocaleString('es-AR',{minimumFractionDigits:2}):'—';
+  document.getElementById('pu-usd-equiv').textContent=tc>0?'= USD '+(ars/tc).toLocaleString('es-AR',{minimumFractionDigits:1}):'—';
 }
 
 window.registrarPagoUSD=async function(){
@@ -5847,7 +5847,7 @@ window.generarExtractoPagosUSD=function(){
   const {jsPDF}=window.jspdf;
   const p=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
   const fF=f=>f?f.split('-').reverse().join('/'):'—';
-  const fN=v=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:2});
+  const fN=v=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:1});
   // Header
   p.setFillColor(61,43,31);p.rect(0,0,210,35,'F');
   p.setTextColor(255,249,240);p.setFontSize(18);p.setFont('helvetica','bold');
@@ -6112,10 +6112,10 @@ window.calcStockInsumos=async function(){
     html+=`<tr>
       <td><strong>${ins.nombre}</strong></td>
       <td>${ins.unidad}</td>
-      <td style="color:var(--green);">${ent>0?'+'+ent.toFixed(2):'—'}</td>
-      <td style="color:var(--amber);">${sc>0?'−'+sc.toFixed(2):'—'}</td>
-      <td style="color:var(--amber);">${sf>0?'−'+sf.toFixed(2):'—'}</td>
-      <td><strong style="color:${color};font-size:1.05rem;">${stock.toFixed(2)} ${ins.unidad}</strong>
+      <td style="color:var(--green);">${ent>0?'+'+ent.toFixed(1):'—'}</td>
+      <td style="color:var(--amber);">${sc>0?'−'+sc.toFixed(1):'—'}</td>
+      <td style="color:var(--amber);">${sf>0?'−'+sf.toFixed(1):'—'}</td>
+      <td><strong style="color:${color};font-size:1.05rem;">${stock.toFixed(1)} ${ins.unidad}</strong>
         ${stock<0?'<span style="font-size:.75rem;color:#c0392b;margin-left:4px;">⚠️ negativo</span>':''}</td>
     </tr>`;
   });
@@ -6265,7 +6265,7 @@ window.recalcItemVenta=function(idx){
   const kg=parseFloat(document.getElementById('vi-kg-'+idx)?.value)||0;
   const precio=parseFloat(document.getElementById('vi-precio-'+idx)?.value)||0;
   const sub=kg*precio;
-  document.getElementById('vi-sub-'+idx).value=sub>0?sub.toFixed(2):'';
+  document.getElementById('vi-sub-'+idx).value=sub>0?sub.toFixed(1):'';
   // Autocalcular cajas
   if(kg>0){
     const cajas=Math.ceil(kg/KG_POR_CAJA);
@@ -6288,7 +6288,7 @@ window.recalcVenta=function(){
   const ivaMonto=baseIva*ivaPct/100;
   const total=baseIva+ivaMonto+flete;
 
-  const fmt=v=>'$ '+v.toLocaleString('es-AR',{minimumFractionDigits:2});
+  const fmt=v=>'$ '+v.toLocaleString('es-AR',{minimumFractionDigits:1});
   document.getElementById('vent-tot-sub').textContent=fmt(sub);
   document.getElementById('vent-tot-desc').textContent='-'+fmt(descMonto);
   document.getElementById('vent-tot-iva').textContent=fmt(ivaMonto);
@@ -6701,7 +6701,7 @@ async function cargarCobroKPIs(){
   });
   snapV.forEach(d=>{ totalVentas+=(d.data().monto_total||0); });
   const saldoGlobal=totalVentas-totalCobrado-totalNC;
-  const fmt=v=>'$ '+parseFloat(v).toLocaleString('es-AR',{minimumFractionDigits:2});
+  const fmt=v=>'$ '+parseFloat(v).toLocaleString('es-AR',{minimumFractionDigits:1});
   el.innerHTML=`
     <div class="metric-card"><div class="val" style="color:var(--green);">${fmt(cobradoMes)}</div><div class="lbl">Cobrado este mes</div></div>
     <div class="metric-card"><div class="val" style="color:${saldoGlobal>0?'var(--amber)':'var(--green)'};">${fmt(Math.abs(saldoGlobal))}</div><div class="lbl">${saldoGlobal>0?'Saldo pendiente total':'Saldo a favor clientes'}</div></div>
@@ -6964,7 +6964,7 @@ window.imprimirComprobante=function(){
   <div class="row"><span style="color:#666;">${c.tipo==='nota_credito'?'Motivo':'Medio de pago'}<\/span><span style="font-weight:600;">${c.tipo==='nota_credito'?(motivoLabel[c.motivo]||c.motivo||'—'):(medioLabel[c.medio]||c.medio||'—')}<\/span><\/div>
   ${c.referencia?`<div class="row"><span style="color:#666;">Referencia<\/span><span>${c.referencia}<\/span><\/div>`:''}
   ${c.obs?`<div class="row"><span style="color:#666;">Observaciones<\/span><span>${c.obs}<\/span><\/div>`:''}
-  <div class="monto"><div class="lbl">${c.tipo==='nota_credito'?'Importe nota de crédito':'Total cobrado'}<\/div><div class="val">$ ${parseFloat(c.importe||0).toLocaleString('es-AR',{minimumFractionDigits:2})}<\/div><\/div>
+  <div class="monto"><div class="lbl">${c.tipo==='nota_credito'?'Importe nota de crédito':'Total cobrado'}<\/div><div class="val">$ ${parseFloat(c.importe||0).toLocaleString('es-AR',{minimumFractionDigits:1})}<\/div><\/div>
   <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap;" class="no-print">
     <button onclick="window.print()" style="padding:10px 24px;background:#7a4a1e;color:#fff;border:none;border-radius:6px;cursor:pointer;">🖨️ Imprimir<\/button>
     <button id="btn-wa-cobro" style="padding:10px 20px;background:#25D366;color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:sans-serif;font-size:13px;">💬 Enviar por WhatsApp<\/button>
@@ -6985,7 +6985,7 @@ window.imprimirComprobante=function(){
       else msg+='Medio de pago: '+medio+'%0A';
       if(_cd.referencia) msg+='Referencia: '+_cd.referencia+'%0A';
       if(_cd.obs) msg+='Obs: '+_cd.obs+'%0A';
-      msg+='%0A*'+(_cd.tipo==='nota_credito'?'Importe NC':'Total cobrado')+': $ '+parseFloat(_cd.importe||0).toLocaleString('es-AR',{minimumFractionDigits:2})+'*';
+      msg+='%0A*'+(_cd.tipo==='nota_credito'?'Importe NC':'Total cobrado')+': $ '+parseFloat(_cd.importe||0).toLocaleString('es-AR',{minimumFractionDigits:1})+'*';
       // 1. Descargar PDF
       const nombre=tipo.replace(/ /g,'-')+'-'+(_cd.nro_cobro||'cobro')+'.pdf';
       html2pdf().set({filename:nombre,margin:10,image:{type:'jpeg',quality:.95},html2canvas:{scale:2},jsPDF:{unit:'mm',format:'a4'}}).from(document.body).save();
@@ -7198,7 +7198,7 @@ window.imprimirCtaCte=async function(){
   movs=movs.map(m=>{sal+=m.debe-m.haber;tD+=m.debe;tH+=m.haber;return{...m,sal};});
   const salFin=sal;
   const cObj=clientesCache.find(c=>c.nombre===cliente)||{};
-  const fM=v=>v?'$ '+parseFloat(v).toLocaleString('es-AR',{minimumFractionDigits:2}):'—';
+  const fM=v=>v?'$ '+parseFloat(v).toLocaleString('es-AR',{minimumFractionDigits:1}):'—';
   const fF=f=>f?f.split('-').reverse().join('/'):'';
   const hoyFmt=fF(today());
 
@@ -7372,16 +7372,16 @@ async function initResumen(){
   });
   document.getElementById('res-label').textContent=label;
 
-  const fmtKg=v=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:3,maximumFractionDigits:3})+' kg';
+  const fmtKg=v=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1})+' kg';
   const fmt=v=>{
     const n=parseFloat(v||0);
-    if(Math.abs(n)>=1000000) return '$'+(n/1000000).toLocaleString('es-AR',{minimumFractionDigits:2})+' M';
+    if(Math.abs(n)>=1000000) return '$'+(n/1000000).toLocaleString('es-AR',{minimumFractionDigits:1})+' M';
     return '$'+n.toLocaleString('es-AR',{minimumFractionDigits:0});
   };
   const fmtUSD=v=>{
     const n=parseFloat(v||0);
-    if(Math.abs(n)>=1000000) return 'USD '+(n/1000000).toLocaleString('es-AR',{minimumFractionDigits:2})+' M';
-    return 'USD '+n.toLocaleString('es-AR',{minimumFractionDigits:2});
+    if(Math.abs(n)>=1000000) return 'USD '+(n/1000000).toLocaleString('es-AR',{minimumFractionDigits:1})+' M';
+    return 'USD '+n.toLocaleString('es-AR',{minimumFractionDigits:1});
   };
 
   // Cargar todo en paralelo
@@ -7536,7 +7536,7 @@ async function initResumen(){
         const bajo=stock<=0;
         return `<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);">
           <span style="font-size:.82rem;">${bajo?'🔴 ':''}${i.nombre}</span>
-          <strong style="font-size:.88rem;color:${bajo?'var(--red)':'var(--text)'};">${stock.toFixed(2)} ${i.unidad||''}</strong>
+          <strong style="font-size:.88rem;color:${bajo?'var(--red)':'var(--text)'};">${stock.toFixed(1)} ${i.unidad||''}</strong>
         </div>`;}).join('')
     :'<span style="color:var(--text2);font-size:.85rem;">Sin insumos registrados</span>';
 
@@ -7785,7 +7785,7 @@ async function initResumen(){
       return `<div style="margin-bottom:10px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
           <span style="font-size:.85rem;">${medal} ${cli}</span>
-          <span style="font-size:.82rem;color:var(--text2);">${d.kg.toFixed(3)} kg · <strong style="color:var(--brown);">${fmt(d.monto)}</strong></span>
+          <span style="font-size:.82rem;color:var(--text2);">${d.kg.toFixed(1)} kg · <strong style="color:var(--brown);">${fmt(d.monto)}</strong></span>
         </div>
         <div style="background:var(--bg2);border-radius:4px;height:6px;">
           <div style="background:#3a6b35;width:${pct}%;height:6px;border-radius:4px;transition:width .3s;"></div>
@@ -7949,7 +7949,7 @@ window.calcPrecioMax=function(){
   const inversionTotal=precioMaxCompra+costoPelado;
   const ganancia=ingresoBruto-inversionTotal;
 
-  const fmt=v=>'$'+v.toLocaleString('es-AR',{minimumFractionDigits:2});
+  const fmt=v=>'$'+v.toLocaleString('es-AR',{minimumFractionDigits:1});
 
   sinDatos.style.display='none';resultado.style.display='block';
 
@@ -7963,7 +7963,7 @@ window.calcPrecioMax=function(){
   document.getElementById('calc-r-ganancia').textContent=fmt(ganancia);
 
   const inversionVerif=Math.max(0,precioMaxCompra)+costoPelado;
-  const margenVerif=inversionVerif>0?(ganancia/inversionVerif*100).toFixed(2):0;
+  const margenVerif=inversionVerif>0?(ganancia/inversionVerif*100).toFixed(1):0;
   document.getElementById('calc-desglose').innerHTML=
     `<strong>Ingresos por kg c/c:</strong><br>`+
     `&nbsp;&nbsp;Kernel entero: ${(kgEntero*1000).toFixed(1)} g × ${fmt(precioEntero)}/kg = <strong>${fmt(kgEntero*precioEntero)}</strong><br>`+
@@ -8010,7 +8010,7 @@ window.recalcFilasCot=function(){
     const ars=parseFloat(document.getElementById('cot-precio-'+idx)?.value)||0;
     if(esUSD){
       el.style.display='';
-      el.textContent=tc>0?'USD '+(ars/tc).toLocaleString('es-AR',{minimumFractionDigits:2}):'—';
+      el.textContent=tc>0?'USD '+(ars/tc).toLocaleString('es-AR',{minimumFractionDigits:1}):'—';
     } else {
       el.style.display='none';
     }
@@ -8162,7 +8162,7 @@ window.cargarCotizaciones=async function(){
         <td>${c.fecha||'—'}</td>
         <td>${c.cliente||'—'}</td>
         <td>${c.variedad||'—'}</td>
-        <td><strong>${simbolo}${parseFloat(c.precio_kg||0).toLocaleString('es-AR',{minimumFractionDigits:2})}/kg</strong>
+        <td><strong>${simbolo}${parseFloat(c.precio_kg||0).toLocaleString('es-AR',{minimumFractionDigits:1})}/kg</strong>
           ${c.moneda==='USD'?'<span class="badge" style="background:#1a5276;color:#fff;font-size:.7rem;margin-left:4px;">USD</span>':''}
         </td>
         <td>${c.pct_kernel!=null?c.pct_kernel+'%':'—'}</td>
