@@ -514,7 +514,7 @@
       <div class="table-wrap">
         <table id="tbl-salidas">
           <thead><tr><th>Fecha</th><th>Propietario</th><th>Variedad</th><th>Kg c/cáscara</th><th>Pecan Entero</th><th>Pecan Partido Grande</th><th>Pecan Partido Chico</th><th>Pecan Dañado</th><th>Incomestibles</th><th>%Kernel</th><th>%Partido</th><th>Acciones</th></tr></thead>
-          <tbody><tr><td colspan="12" class="loading">Cargando...</td></tr></tbody>
+          <tbody><tr><td colspan="11" class="loading">Cargando...</td></tr></tbody>
         </table>
       </div>
     </div>
@@ -895,7 +895,7 @@
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Fecha</th><th>Proveedor</th><th>Comprobante</th><th>Ítems</th><th>Neto</th><th>IVA</th><th>Total</th><th>Pago</th><th>Estado</th><th>Vence</th><th>Acciones</th></tr></thead>
+            <thead><tr><th>Fecha</th><th>Proveedor</th><th>Comprobante</th><th>Tipo</th><th>Categoría / Ítem</th><th>Neto</th><th>IVA</th><th>Total</th><th>Estado</th><th>Vence</th><th>Acciones</th></tr></thead>
             <tbody id="tbl-compras-body"></tbody>
           </table>
         </div>
@@ -2913,7 +2913,7 @@ window.limpiarFiltrosSalidas=function(){
 window.cargarSalidas=async function(){
   poblarSelectsVariedad();
   const tbody=document.querySelector('#tbl-salidas tbody');
-  tbody.innerHTML='<tr><td colspan="12" class="loading">Cargando...</td></tr>';
+  tbody.innerHTML='<tr><td colspan="11" class="loading">Cargando...</td></tr>';
   const prop=document.getElementById('f-sal-prop').value;
   const varF=document.getElementById('f-sal-var').value;
   const mesF=document.getElementById('f-sal-mes')?.value||'';
@@ -3485,10 +3485,11 @@ window.cargarPanelMaquila=async function(){
 window.abrirRetiro=function(cliente){
   const saldo=window._saldoRetiro||{enteras:0,part_grandes:0,part_chicas:0,danadas:0};
   document.getElementById('ret-cliente').value=cliente;
-  document.getElementById('ret-saldo-enteras').value=saldo.enteras||0;
-  document.getElementById('ret-saldo-pg').value=saldo.part_grandes||0;
-  document.getElementById('ret-saldo-pc').value=saldo.part_chicas||0;
-  document.getElementById('ret-saldo-dan').value=saldo.danadas||0;
+  // Redondear a 1 decimal para consistencia con lo que ve el usuario
+  document.getElementById('ret-saldo-enteras').value=Math.round((saldo.enteras||0)*10)/10;
+  document.getElementById('ret-saldo-pg').value=Math.round((saldo.part_grandes||0)*10)/10;
+  document.getElementById('ret-saldo-pc').value=Math.round((saldo.part_chicas||0)*10)/10;
+  document.getElementById('ret-saldo-dan').value=Math.round((saldo.danadas||0)*10)/10;
   document.getElementById('ret-info-cliente').textContent=cliente;
   const catL={enteras:'Pecan Entero',part_grandes:'Pecan Partido Grande',part_chicas:'Pecan Partido Chico',danadas:'Pecan Dañado'};
   document.getElementById('ret-stock-info').innerHTML=
@@ -3520,10 +3521,11 @@ window.guardarRetiro=async function(){
   const sPC=parseFloat(document.getElementById('ret-saldo-pc').value)||0;
   const sDan=parseFloat(document.getElementById('ret-saldo-dan').value)||0;
   const errores=[];
-  if(ent>sEnt) errores.push(`• Pecan Entero: ingresaste <strong>${ent.toFixed(1)} kg</strong> pero hay <strong>${sEnt.toFixed(1)} kg</strong> disponibles`);
-  if(pg>sPG)   errores.push(`• Pecan Partido Grande: ingresaste <strong>${pg.toFixed(1)} kg</strong> pero hay <strong>${sPG.toFixed(1)} kg</strong> disponibles`);
-  if(pc>sPC)   errores.push(`• Pecan Partido Chico: ingresaste <strong>${pc.toFixed(1)} kg</strong> pero hay <strong>${sPC.toFixed(1)} kg</strong> disponibles`);
-  if(dan>sDan) errores.push(`• Pecan Dañado: ingresaste <strong>${dan.toFixed(1)} kg</strong> pero hay <strong>${sDan.toFixed(1)} kg</strong> disponibles`);
+  const tol=0.05; // tolerancia para redondeo
+  if(ent>sEnt+tol) errores.push(`• Pecan Entero: ingresaste <strong>${ent.toFixed(1)} kg</strong> pero hay <strong>${sEnt.toFixed(1)} kg</strong> disponibles`);
+  if(pg>sPG+tol)   errores.push(`• Pecan Partido Grande: ingresaste <strong>${pg.toFixed(1)} kg</strong> pero hay <strong>${sPG.toFixed(1)} kg</strong> disponibles`);
+  if(pc>sPC+tol)   errores.push(`• Pecan Partido Chico: ingresaste <strong>${pc.toFixed(1)} kg</strong> pero hay <strong>${sPC.toFixed(1)} kg</strong> disponibles`);
+  if(dan>sDan+tol) errores.push(`• Pecan Dañado: ingresaste <strong>${dan.toFixed(1)} kg</strong> pero hay <strong>${sDan.toFixed(1)} kg</strong> disponibles`);
   if(errores.length){
     const div=document.createElement('div');
     div.id='ret-error';
@@ -5664,7 +5666,7 @@ window.guardarCompra=async function(){
 // ---- HISTORIAL COMPRAS ----
 window.cargarCompras=async function(){
   const tbody=document.getElementById('tbl-compras-body');
-  tbody.innerHTML='<tr><td colspan="11" class="loading">Cargando...</td></tr>';
+  tbody.innerHTML='<tr><td colspan="12" class="loading">Cargando...</td></tr>';
   const tipoF=document.getElementById('f-gas-tipo').value;
   const estadoF=document.getElementById('f-gas-estado').value;
   const mesF=document.getElementById('f-gas-mes').value;
@@ -5691,6 +5693,12 @@ window.cargarCompras=async function(){
 
     const tiposBadges=(c.items||[]).map(it=>`<span style="font-size:.75rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:2px 7px;">${_tipoLabel[it.tipo]||it.tipo}</span>`).join(' ');
     const itemsResumen=(c.items||[]).map(it=>it.descripcion).join(', ');
+    // Categoría e ítem: mostrar categoría + nombre/descripción de cada ítem
+    const catItems=(c.items||[]).map(it=>{
+      const cat=it.categoria||it.descripcion||'—';
+      const nombre=it.nombre||it.descripcion||'';
+      return nombre&&nombre!==cat?`${cat} — ${nombre}`:cat;
+    }).join('<br>');
 
     const moneda=c.moneda||'ARS';
     const simbolo=moneda==='USD'?'USD ':'$';
@@ -5699,13 +5707,13 @@ window.cargarCompras=async function(){
       <td>${c.fecha}</td>
       <td>${c.proveedor||'—'}</td>
       <td><span class="remito-num">${c.nro_factura||'—'}</span></td>
-      <td style="font-size:.8rem;max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${itemsResumen}">${tiposBadges}</td>
+      <td style="font-size:.8rem;">${tiposBadges}</td>
+      <td style="font-size:.8rem;max-width:200px;" title="${itemsResumen}">${catItems||'—'}</td>
       <td>${simbolo}${(c.monto_neto||0).toLocaleString('es-AR',{minimumFractionDigits:1})}</td>
       <td>${simbolo}${(c.monto_iva||0).toLocaleString('es-AR',{minimumFractionDigits:1})}</td>
       <td><strong>${simbolo}${(c.monto_total||0).toLocaleString('es-AR',{minimumFractionDigits:1})}</strong>
         ${moneda==='USD'?'<span class="badge" style="background:#1a5276;color:#fff;margin-left:4px;font-size:.7rem;">USD</span>':''}
       </td>
-      <td style="font-size:.82rem;">${c.forma_pago||'—'}</td>
       <td>${estadoBadge}</td>
       <td style="font-size:.82rem;${vencida?'color:#c0392b;font-weight:700;':''}">${c.vencimiento||'—'}</td>
       <td style="display:flex;gap:4px;flex-wrap:wrap;">
@@ -5718,7 +5726,7 @@ window.cargarCompras=async function(){
     </tr>`;
   });
 
-  if(!cnt) tbody.innerHTML='<tr><td colspan="11" style="text-align:center;color:var(--text2);padding:20px;">No hay registros</td></tr>';
+  if(!cnt) tbody.innerHTML='<tr><td colspan="12" style="text-align:center;color:var(--text2);padding:20px;">No hay registros</td></tr>';
 
   // Resumen totales
   const res=document.getElementById('gas-resumen');
