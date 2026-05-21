@@ -2803,7 +2803,7 @@ window.consultarStockCascara=async function(){
   snapEnt.forEach(d=>ingresado+=d.data().kg||0);
   snapSal.forEach(d=>procesado+=d.data().kg_cascara||0);
   const disponible=ingresado-procesado;
-  _stockCascaraDisp=disponible;
+  _stockCascaraDisp=Math.round(disponible*10)/10; // redondear a 1 decimal para comparación consistente
 
   if(ingresado===0){
     panel.style.cssText='display:block;margin:4px 0 16px;border-radius:10px;padding:14px 18px;font-size:.88rem;border:1.5px solid #e74c3c;background:#fff0f0;color:#c0392b;';
@@ -2835,7 +2835,7 @@ window.validarKgCascara=function(){
   const warn=document.getElementById('sal-kg-warn');
   if(warn) warn.remove();
   if(kg<=0||_stockCascaraDisp<=0) {input.style.borderColor='';return;}
-  if(kg>_stockCascaraDisp){
+  if(kg>Math.round(_stockCascaraDisp*10)/10+0.05){
     input.style.borderColor='#e74c3c';
     const w=document.createElement('div');
     w.id='sal-kg-warn';
