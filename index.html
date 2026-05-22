@@ -2951,7 +2951,7 @@ window.cargarSalidas=async function(){
       <td><span class="badge badge-amber">${s.pct_partido}%</span></td>
       <td style="display:flex;gap:5px;">
         <button class="btn btn-secondary btn-sm" title="Etiqueta" onclick="abrirEtiquetaFab('${d.id}','${s.fecha}','${s.propietario}','${s.variedad}',${s.enteras||0},${s.part_grandes||0},${s.part_chicas||0},${s.danadas||0})">🏷️</button>
-        <button class="btn btn-edit btn-sm" onclick="abrirEditarSalida('${d.id}','${s.fecha}','${s.propietario}','${s.variedad}',${s.kg_cascara},${s.enteras||0},${s.part_grandes||0},${s.part_chicas||0},${s.danadas||0},${s.podridas||0})">✏️</button>
+        <button class="btn btn-edit btn-sm" onclick="abrirEditarSalidaById('${d.id}')">✏️</button>
         <button class="btn btn-danger btn-sm" onclick="eliminar('salidas_fabrica','${d.id}',cargarSalidas)">🗑️</button>
       </td></tr>`;
   });
@@ -2959,6 +2959,13 @@ window.cargarSalidas=async function(){
 }
 
 // ---- EDITAR SALIDA ----
+window.abrirEditarSalidaById=async function(id){
+  const snap=await getDoc(doc(db,'salidas_fabrica',id));
+  if(!snap.exists()) return;
+  const s=snap.data();
+  abrirEditarSalida(id,s.fecha,s.propietario,s.variedad,s.kg_cascara||0,s.enteras||0,s.part_grandes||0,s.part_chicas||0,s.danadas||0,s.podridas||0);
+}
+
 window.abrirEditarSalida=function(id,fecha,prop,variedad,kgC,ent,pg,pc,dan,pod){
   document.getElementById('edit-sal-id').value=id;
   document.getElementById('edit-sal-fecha').value=fecha;
@@ -2970,9 +2977,12 @@ window.abrirEditarSalida=function(id,fecha,prop,variedad,kgC,ent,pg,pc,dan,pod){
   document.getElementById('edit-sal-dan').value=dan;
   document.getElementById('edit-sal-pod').value=pod;
   const sel=document.getElementById('edit-sal-prop');
+  // Destruir Tom Select si existe para poder manipular el select directamente
+  if(_tsInstances['edit-sal-prop']){try{_tsInstances['edit-sal-prop'].destroy();}catch(e){}delete _tsInstances['edit-sal-prop'];}
   while(sel.options.length>1)sel.remove(1);
-  clientesCache.forEach(c=>{const o=document.createElement('option');o.value=c.nombre;o.textContent=c.nombre;sel.appendChild(o);});
+  clientesCache.filter(c=>{const cat=c.categoria||'venta_servicio';return cat==='servicio'||cat==='venta_servicio';}).forEach(c=>{const o=document.createElement('option');o.value=c.nombre;o.textContent=c.nombre;sel.appendChild(o);});
   sel.value=prop;
+  _tsInit('edit-sal-prop');
   document.getElementById('modal-edit-sal').classList.add('open');
 }
 window.guardarEdicionSalida=async function(){
