@@ -2700,7 +2700,7 @@ window.cargarEntradas=async function(){
       <td>${e.humedad!=null?e.humedad+'%':'—'}</td>
       <td>${e.observaciones||'—'}</td>
       <td style="display:flex;gap:5px;flex-wrap:wrap;">
-        <button class="btn btn-edit btn-sm" onclick="abrirEditarEntrada('${d.id}','${e.fecha}','${esc(e.propietario)}','${esc(e.variedad)}',${e.kg},${e.humedad!=null?e.humedad:'null'},'${esc(e.observaciones||'')}','${e.num_remito}')">✏️</button>
+        <button class="btn btn-edit btn-sm" onclick="abrirEditarEntradaById('${d.id}')">✏️</button>
         <button class="btn btn-danger btn-sm" onclick="eliminar('entradas_fabrica','${d.id}',cargarEntradas)">🗑️</button>
       </td></tr>`;
   });
@@ -2708,6 +2708,13 @@ window.cargarEntradas=async function(){
 }
 
 // ---- EDITAR ENTRADA ----
+window.abrirEditarEntradaById=async function(id){
+  const snap=await getDoc(doc(db,'entradas_fabrica',id));
+  if(!snap.exists()) return;
+  const e=snap.data();
+  abrirEditarEntrada(id,e.fecha,e.propietario,e.variedad,e.kg,e.humedad!=null?e.humedad:null,e.observaciones||'',e.num_remito||'');
+}
+
 window.abrirEditarEntrada=function(id,fecha,prop,variedad,kg,humedad,obs,remito){
   document.getElementById('edit-ent-id').value=id;
   document.getElementById('edit-ent-remito').value=remito;
