@@ -2719,17 +2719,25 @@ window.abrirEditarEntrada=function(id,fecha,prop,variedad,kg,humedad,obs,remito)
   document.getElementById('edit-ent-id').value=id;
   document.getElementById('edit-ent-remito').value=remito;
   document.getElementById('edit-ent-fecha').value=fecha;
-  document.getElementById('edit-ent-variedad').innerHTML='<option value="">— Seleccioná —</option>'+optsVar(variedad);
-  document.getElementById('edit-ent-variedad').value=variedad;
   document.getElementById('edit-ent-kg').value=kg;
-  document.getElementById('edit-ent-humedad').value=humedad!=='null'?humedad:'';
+  document.getElementById('edit-ent-humedad').value=(humedad!==null&&humedad!==undefined&&humedad!=='null')?humedad:'';
   document.getElementById('edit-ent-obs').value=obs;
   document.getElementById('edit-ent-remito-display').textContent=remito;
-  // poblar propietario
+  // Destruir Tom Select en variedad y repoblar
+  ['edit-ent-variedad','edit-ent-prop'].forEach(sid=>{
+    if(_tsInstances[sid]){try{_tsInstances[sid].destroy();}catch(e){}delete _tsInstances[sid];}
+  });
+  // Variedad
+  const selVar=document.getElementById('edit-ent-variedad');
+  selVar.innerHTML='<option value="">— Seleccioná —</option>'+optsVar(variedad);
+  selVar.value=variedad;
+  _tsInit('edit-ent-variedad');
+  // Propietario
   const sel=document.getElementById('edit-ent-prop');
   while(sel.options.length>1)sel.remove(1);
-  clientesCache.forEach(c=>{const o=document.createElement('option');o.value=c.nombre;o.textContent=c.nombre;sel.appendChild(o);});
+  clientesCache.filter(c=>{const cat=c.categoria||'venta_servicio';return cat==='servicio'||cat==='venta_servicio';}).forEach(c=>{const o=document.createElement('option');o.value=c.nombre;o.textContent=c.nombre;sel.appendChild(o);});
   sel.value=prop;
+  _tsInit('edit-ent-prop');
   document.getElementById('modal-edit-ent').classList.add('open');
 }
 window.guardarEdicionEntrada=async function(){
@@ -2976,7 +2984,11 @@ window.abrirEditarSalidaById=async function(id){
 window.abrirEditarSalida=function(id,fecha,prop,variedad,kgC,ent,pg,pc,dan,pod){
   document.getElementById('edit-sal-id').value=id;
   document.getElementById('edit-sal-fecha').value=fecha;
+  // Destruir Tom Select en variedad antes de repoblar
+  if(_tsInstances['edit-sal-variedad']){try{_tsInstances['edit-sal-variedad'].destroy();}catch(e){}delete _tsInstances['edit-sal-variedad'];}
   document.getElementById('edit-sal-variedad').innerHTML='<option value="">— Seleccioná —</option>'+optsVar(variedad);
+  document.getElementById('edit-sal-variedad').value=variedad;
+  _tsInit('edit-sal-variedad');
   document.getElementById('edit-sal-cascara').value=kgC;
   document.getElementById('edit-sal-enteras').value=ent;
   document.getElementById('edit-sal-pg').value=pg;
