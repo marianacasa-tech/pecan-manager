@@ -7855,7 +7855,8 @@ async function initResumen(){
 
   // ── CUENTAS CORRIENTES PENDIENTES (sin filtro de período — saldo acumulado) ──
   const saldoPorCliente={};
-  const fechaUltCobroPorCliente={}; // para calcular mora desde último cobro
+  const fechaPrimerDebeCtaCte={}; // fecha desde cuando la cta cte está negativa
+  const fechaUltCobroCtaCte={};   // fecha del último cobro realizado
 
   // Sumar DEBE: ventas en cta cte
   const snapVentAll=await getDocsFromServer(collection(db,'ventas'));
@@ -7864,6 +7865,9 @@ async function initResumen(){
     if(v.estado==='cuenta_corriente'){
       const cli=v.cliente||'Sin nombre';
       saldoPorCliente[cli]=(saldoPorCliente[cli]||0)+(v.monto_total||0);
+      // Fecha más antigua de cuando quedó en cta cte
+      if(!fechaPrimerDebeCtaCte[cli]||v.fecha<fechaPrimerDebeCtaCte[cli])
+        fechaPrimerDebeCtaCte[cli]=v.fecha;
     }
   });
 
@@ -7887,7 +7891,7 @@ async function initResumen(){
     if(enCtaCte){
       const cli=l.cliente||'Sin nombre';
       saldoPorCliente[cli]=(saldoPorCliente[cli]||0)+(l.total_servicio||0);
-
+      if(!fechaPrimerDebeCtaCte[cli]||l.fecha<fechaPrimerDebeCtaCte[cli]) fechaPrimerDebeCtaCte[cli]=l.fecha;
     }
   });
   if(migCount>0){
@@ -7905,9 +7909,7 @@ async function initResumen(){
     else if(c.tipo==='nota_debito') saldoPorCliente[cli]+=(c.importe||0);
     else{
       saldoPorCliente[cli]-=c.importe||0;
-      // Registrar fecha del último cobro real
-      if(!fechaUltCobroPorCliente[cli]||c.fecha>fechaUltCobroPorCliente[cli])
-        fechaUltCobroPorCliente[cli]=c.fecha;
+      if(!fechaUltCobroCtaCte[cli]||c.fecha>fechaUltCobroCtaCte[cli]) fechaUltCobroCtaCte[cli]=c.fecha;
     }
   });
 
@@ -7929,15 +7931,22 @@ async function initResumen(){
       </div>
       <div class="table-wrap">
         <table class="table">
-          <thead><tr><th>#</th><th>Cliente</th><th style="text-align:right;">Saldo pendiente</th><th style="text-align:right;">% del total</th><th style="text-align:center;" title="Días desde último cobro">Sin cobro</th></tr></thead>
+          <thead><tr><th>#</th><th>Cliente</th><th style="text-align:right;">Saldo</th><th style="text-align:right;">% del total</th><th style="text-align:center;">Cta. neg. desde</th><th style="text-align:center;">Último pago</th></tr></thead>
           <tbody>${ctaCtes.map(([cli,saldo],i)=>{
-            const fechaRef=fechaUltCobroPorCliente[cli]||null;
-            let moraHtml='<span style="color:var(--red);font-weight:700;">⚠️ Sin cobros</span>';
-            if(fechaRef){
-              const dias=Math.floor((new Date()-new Date(fechaRef))/(1000*60*60*24));
+            const fechaDeude=fechaPrimerDebeCtaCte[cli]||null;
+            let desdeHtml='—';
+            if(fechaDeude){
+              const dias=Math.floor((new Date()-new Date(fechaDeude))/(1000*60*60*24));
               const color=dias>30?'var(--red)':dias>15?'var(--amber)':'var(--green)';
-              const icono=dias>30?'🔴':dias>15?'🟡':'🟢';
-              moraHtml='<span style="color:'+color+';font-weight:700;white-space:nowrap;">'+icono+' '+dias+' días</span>';
+              desdeHtml='<span style="color:'+color+';font-weight:600;font-size:.82rem;">'+dias+' días</span>';
+            }
+            const fechaPago=fechaUltCobroCtaCte[cli]||null;
+            let pagoHtml='<span style="color:var(--red);font-weight:700;">⚠️ Sin pagos</span>';
+            if(fechaPago){
+              const diasP=Math.floor((new Date()-new Date(fechaPago))/(1000*60*60*24));
+              const colorP=diasP>30?'var(--red)':diasP>15?'var(--amber)':'var(--green)';
+              const iconoP=diasP>30?'🔴':diasP>15?'🟡':'🟢';
+              pagoHtml='<span style="color:'+colorP+';font-weight:600;font-size:.82rem;white-space:nowrap;">'+iconoP+' '+diasP+' días</span>';
             }
             return `
             <tr>
@@ -7945,7 +7954,8 @@ async function initResumen(){
               <td><strong>${cli}</strong></td>
               <td style="text-align:right;color:var(--red);font-weight:700;">${fmt(saldo)}</td>
               <td style="text-align:right;color:var(--text2);font-size:.82rem;">${(saldo/totalDeuda*100).toFixed(1)}%</td>
-              <td style="text-align:center;">${moraHtml}</td>
+              <td style="text-align:center;">${desdeHtml}</td>
+              <td style="text-align:center;">${pagoHtml}</td>
             </tr>`;
           }).join('')}
           </tbody>
