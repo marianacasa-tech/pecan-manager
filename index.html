@@ -3950,14 +3950,21 @@ function generarPDFLiquidacion(d, enviarWA=false){
     p.text('Kg c/c',158,y+5.5,{align:'right'});
     p.text('Humedad',188,y+5.5,{align:'right'});
     y+=11;
-    // Una fila por variedad/remito — igual que el detalle del remito de entrada
-    const filasRecepcion=lotes.map(l=>({
-      fecha:l.fecha,
-      remito:l.entrada_remito||'—',
-      variedad:l.variedad||'—',
-      kg:l.entrada_kg||0,
-      humedad:l.entrada_humedad
-    }));
+    // Deduplicar por remito+variedad — un renglón por combinación única
+    const recepcionMap={};
+    lotes.forEach(l=>{
+      const key=(l.entrada_remito||'SR')+'__'+(l.variedad||'');
+      if(!recepcionMap[key]){
+        recepcionMap[key]={
+          fecha:l.fecha,
+          remito:l.entrada_remito||'—',
+          variedad:l.variedad||'—',
+          kg:l.entrada_kg||0,
+          humedad:l.entrada_humedad
+        };
+      }
+    });
+    const filasRecepcion=Object.values(recepcionMap);
     // Ordenar por remito y luego variedad
     filasRecepcion.sort((a,b)=>(a.remito+a.variedad).localeCompare(b.remito+b.variedad));
     filasRecepcion.forEach((r,i)=>{
@@ -7221,13 +7228,26 @@ window.imprimirCtaCte=async function(){
   });
   if(!fmt) return;
 
-  const [snapV,snapC]=await Promise.all([
+  const [snapV,snapC,snapLiq]=await Promise.all([
     getDocsFromServer(query(collection(db,'ventas'),orderBy('fecha','asc'))),
-    getDocsFromServer(query(collection(db,'cobros'),orderBy('fecha','asc')))
+    getDocsFromServer(query(collection(db,'cobros'),orderBy('fecha','asc'))),
+    getDocsFromServer(query(collection(db,'liquidaciones_maquila'),orderBy('fecha','asc')))
   ]);
   let movs=[];
-  snapV.forEach(d=>{const v=d.data();if(v.cliente!==cliente)return;movs.push({fecha:v.fecha,tipo:'Venta',ref:v.nro_remito||'',desc:'Venta',debe:v.monto_total||0,haber:0});});
-  snapC.forEach(d=>{const c=d.data();if(c.cliente!==cliente)return;const esNC=c.tipo==='nota_credito';movs.push({fecha:c.fecha,tipo:esNC?'Nota de crédito':'Cobro',ref:c.nro_cobro||'',desc:c.concepto||(esNC?c.motivo:c.medio)||'',debe:0,haber:c.importe||0});});
+  // Ventas de nueces
+  snapV.forEach(d=>{const v=d.data();if(v.cliente!==cliente)return;movs.push({fecha:v.fecha,tipo:'Venta',ref:v.nro_remito||'',desc:'Venta nueces',debe:v.monto_total||0,haber:0});});
+  // Liquidaciones de maquila — todas aparecen en el extracto como DEBE
+  // Los cobros ya están en la colección 'cobros' como cobro_automatico
+  snapLiq.forEach(d=>{const l=d.data();if(l.cliente!==cliente)return;
+    movs.push({fecha:l.fecha,tipo:'Maquila',ref:l.num_liquidacion||'',desc:'Servicio de maquila',debe:l.total_servicio||0,haber:0});
+  });
+  // Cobros y notas
+  snapC.forEach(d=>{const c=d.data();if(c.cliente!==cliente)return;
+    const esNC=c.tipo==='nota_credito';
+    const esND=c.tipo==='nota_debito';
+    if(esND) movs.push({fecha:c.fecha,tipo:'Nota de débito',ref:c.nro_cobro||'',desc:c.motivo||'',debe:c.importe||0,haber:0});
+    else movs.push({fecha:c.fecha,tipo:esNC?'Nota de crédito':'Cobro',ref:c.nro_cobro||'',desc:c.concepto||(esNC?c.motivo:c.medio)||'',debe:0,haber:c.importe||0});
+  });
   movs.sort((a,b)=>a.fecha.localeCompare(b.fecha));
   if(desde) movs=movs.filter(m=>m.fecha>=desde);
   if(hasta) movs=movs.filter(m=>m.fecha<=hasta);
@@ -7835,6 +7855,7 @@ async function initResumen(){
 
   // ── CUENTAS CORRIENTES PENDIENTES (sin filtro de período — saldo acumulado) ──
   const saldoPorCliente={};
+  const fechaUltCobroPorCliente={}; // para calcular mora desde último cobro
 
   // Sumar DEBE: ventas en cta cte
   const snapVentAll=await getDocsFromServer(collection(db,'ventas'));
@@ -7866,6 +7887,7 @@ async function initResumen(){
     if(enCtaCte){
       const cli=l.cliente||'Sin nombre';
       saldoPorCliente[cli]=(saldoPorCliente[cli]||0)+(l.total_servicio||0);
+
     }
   });
   if(migCount>0){
@@ -7881,7 +7903,12 @@ async function initResumen(){
     if(!saldoPorCliente[cli]) return;
     if(c.tipo==='nota_credito') saldoPorCliente[cli]-=c.importe||0;
     else if(c.tipo==='nota_debito') saldoPorCliente[cli]+=(c.importe||0);
-    else saldoPorCliente[cli]-=c.importe||0;
+    else{
+      saldoPorCliente[cli]-=c.importe||0;
+      // Registrar fecha del último cobro real
+      if(!fechaUltCobroPorCliente[cli]||c.fecha>fechaUltCobroPorCliente[cli])
+        fechaUltCobroPorCliente[cli]=c.fecha;
+    }
   });
 
   // Filtrar saldos positivos y ordenar de mayor a menor
@@ -7902,14 +7929,25 @@ async function initResumen(){
       </div>
       <div class="table-wrap">
         <table class="table">
-          <thead><tr><th>#</th><th>Cliente</th><th style="text-align:right;">Saldo pendiente</th><th style="text-align:right;">% del total</th></tr></thead>
-          <tbody>${ctaCtes.map(([cli,saldo],i)=>`
+          <thead><tr><th>#</th><th>Cliente</th><th style="text-align:right;">Saldo pendiente</th><th style="text-align:right;">% del total</th><th style="text-align:center;" title="Días desde último cobro">Sin cobro</th></tr></thead>
+          <tbody>${ctaCtes.map(([cli,saldo],i)=>{
+            const fechaRef=fechaUltCobroPorCliente[cli]||null;
+            let moraHtml='<span style="color:var(--red);font-weight:700;">⚠️ Sin cobros</span>';
+            if(fechaRef){
+              const dias=Math.floor((new Date()-new Date(fechaRef))/(1000*60*60*24));
+              const color=dias>30?'var(--red)':dias>15?'var(--amber)':'var(--green)';
+              const icono=dias>30?'🔴':dias>15?'🟡':'🟢';
+              moraHtml='<span style="color:'+color+';font-weight:700;white-space:nowrap;">'+icono+' '+dias+' días</span>';
+            }
+            return `
             <tr>
               <td style="color:var(--text2);font-size:.8rem;">${i+1}</td>
               <td><strong>${cli}</strong></td>
               <td style="text-align:right;color:var(--red);font-weight:700;">${fmt(saldo)}</td>
               <td style="text-align:right;color:var(--text2);font-size:.82rem;">${(saldo/totalDeuda*100).toFixed(1)}%</td>
-            </tr>`).join('')}
+              <td style="text-align:center;">${moraHtml}</td>
+            </tr>`;
+          }).join('')}
           </tbody>
         </table>
       </div>`;
