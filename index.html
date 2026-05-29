@@ -8774,7 +8774,6 @@ window.filtrarProveedoresCta=async function(){
     const aFavorUSD=saldoUSD<-0.01;
     const alDia=!debeARS&&!debeUSD&&!aFavorARS&&!aFavorUSD;
 
-    console.log(nombre,'netARS:',netARS,'netUSD:',netUSD,'esPend:',esPendiente,'esAFavor:',esAFavor,'esAlDia:',esAlDia,'filtro:',filtro);
     // Clasificación mutuamente excluyente basada en saldo neto
     const netARS=saldoARS;
     const netUSD=saldoUSD;
