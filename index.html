@@ -914,9 +914,8 @@
           <div class="form-group" style="margin:0;">
             <label style="font-size:.8rem;">Mostrar</label>
             <select id="ctaprov-filtro" onchange="filtrarProveedoresCta()">
-              <option value="pendientes">Pendientes (les debo)</option>
-              <option value="favor">A favor (me deben)</option>
-              <option value="todos">Al día (saldo cero)</option>
+              <option value="pendientes">Pendientes</option>
+              <option value="todos">Al día</option>
             </select>
           </div>
           <button class="btn btn-secondary btn-sm" onclick="imprimirCtaCteProveedor()">🖨️ Imprimir extracto</button>
@@ -1446,11 +1445,23 @@
 
     </div>
 
-    <!-- Cuentas corrientes pendientes -->
+    <!-- Cuentas corrientes pendientes (clientes) -->
     <div class="card">
-      <div style="font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--brown2);margin-bottom:14px;">📒 Cuentas corrientes pendientes</div>
+      <div style="font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--brown2);margin-bottom:14px;">📒 Cuentas corrientes pendientes — Clientes</div>
       <div id="res-cta-cte-pendientes">
         <div class="loading">Cargando...</div>
+      </div>
+    </div>
+
+    <!-- Cuentas corrientes proveedores -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="card">
+        <div style="font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--brown2);margin-bottom:14px;">🏢 Deudas con proveedores</div>
+        <div id="res-prov-pendientes"><div class="loading">Cargando...</div></div>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--brown2);margin-bottom:14px;">📅 Cheques a vencer</div>
+        <div id="res-cheques-vencer"><div class="loading">Cargando...</div></div>
       </div>
     </div>
 
@@ -7451,6 +7462,7 @@ window.imprimirCtaCte=async function(){
 // COTIZADOR DE NUEZ CON CÁSCARA
 // ============================================================
 window.calcCotizador=function(){
+  if(!document.getElementById('cot-kernel')) return; // elemento no disponible aún
   const kernel   = parseFloat(document.getElementById('cot-kernel').value)||0;
   const pctPart  = parseFloat(document.getElementById('cot-pct-partido').value)||0;
   const pEntero  = parseFloat(document.getElementById('cot-precio-entero').value)||0;
@@ -7580,17 +7592,17 @@ async function initResumen(){
   };
 
   // Cargar todo en paralelo
-  const [snapEnt,snapSal,snapVent,snapCob,snapComp,snapPagosUSD,snapInsumos,snapTandas,snapComprasNuez,snapLiqsMaq]=await Promise.all([
+  const [snapEnt,snapSal,snapVent,snapCob,snapComp,snapInsumos,snapTandas,snapComprasNuez,snapLiqsMaq,snapPagosProvRes]=await Promise.all([
     getDocsFromServer(collection(db,'entradas_fabrica')),
     getDocsFromServer(collection(db,'salidas_fabrica')),
     getDocsFromServer(collection(db,'ventas')),
     getDocsFromServer(collection(db,'cobros')),
     getDocsFromServer(collection(db,'compras')),
-    getDocsFromServer(collection(db,'pagos_usd')),
     getDocsFromServer(collection(db,'insumos')),
     getDocsFromServer(collection(db,'tandas_cocina')),
     getDocsFromServer(collection(db,'compras_nuez')),
     getDocsFromServer(collection(db,'liquidaciones_maquila')),
+    getDocsFromServer(collection(db,'pagos_proveedores')),
   ]);
 
   // ── FÁBRICA — todo lo procesado (propio + maquila) ─────────────────────
@@ -7867,13 +7879,28 @@ async function initResumen(){
     if(c.tipo!=='nota_credito'&&c.tipo!=='nota_debito') cobrado+=c.importe||0;
   });
 
-  // Calcular total pagado en USD por compra (para deuda real)
-  const pagadoPorCompra={};
-  snapPagosUSD.forEach(d=>{
-    const p=d.data();
-    pagadoPorCompra[p.compra_id]=(pagadoPorCompra[p.compra_id]||0)+(p.usd_cancelado||0);
-    if(p.fecha>=desdeStr) pagadoUSD+=p.usd_cancelado||0;
+  // Calcular pagos USD desde pagos_proveedores
+  const saldoUSDPorProv={};
+  snapComp.forEach(d=>{
+    const c=d.data();
+    if((c.moneda||'ARS')==='USD'){
+      const esCtaCte=c.forma_pago==='credito'||c.forma_pago==='cuenta_corriente';
+      if(esCtaCte){const prov=c.proveedor||'';if(!saldoUSDPorProv[prov])saldoUSDPorProv[prov]=0;saldoUSDPorProv[prov]+=c.monto_total||0;}
+      if(c.fecha>=desdeStr) comprasUSD+=c.monto_total||0;
+    }
   });
+  snapPagosProvRes.forEach(d=>{
+    const p=d.data();
+    const prov=p.proveedor||'';
+    const fechaEf=p.medio==='Cheque'&&p.cheque_vencimiento?p.cheque_vencimiento:p.fecha;
+    if(fechaEf>hoyStr) return;
+    let usdPagado=0;
+    if(p.moneda==='USD') usdPagado=p.importe||0;
+    else if(p.moneda==='USD_en_ARS') usdPagado=p.importe_usd||(p.tc>0?(p.importe||0)/p.tc:0);
+    if(saldoUSDPorProv[prov]!==undefined) saldoUSDPorProv[prov]-=usdPagado;
+    if(p.fecha>=desdeStr) pagadoUSD+=usdPagado;
+  });
+  deudaProvUSD=Object.values(saldoUSDPorProv).filter(v=>v>0.01).reduce((s,v)=>s+v,0);
 
   snapComp.forEach(d=>{
     const c=d.data(); const id=d.id;
@@ -7881,12 +7908,7 @@ async function initResumen(){
     const anioC=parseInt((c.fecha||'').slice(0,4));
     const moneda=c.moneda||'ARS';
     if(moneda==='USD'){
-      if(c.fecha>=desdeStr) comprasUSD+=c.monto_total||0;
-      if(c.estado!=='pagado'){
-        const yaPagado=pagadoPorCompra[id]||0;
-        const saldo=Math.max(0,(c.monto_total||0)-yaPagado);
-        deudaProvUSD+=saldo;
-      }
+      // ya procesado arriba
     } else {
       // Segregar por tipo de items
       let montoDir=0,montoInd=0,montoInv=0,montoOtro=0;
@@ -8101,6 +8123,92 @@ async function initResumen(){
       </div>`;
   } else {
     ctaEl.innerHTML='<div style="text-align:center;padding:20px;color:var(--green);font-weight:600;">✅ No hay cuentas corrientes pendientes</div>';
+  }
+
+  // ── DEUDAS CON PROVEEDORES ─────────────────────────────────────────────────
+  const provEl=document.getElementById('res-prov-pendientes');
+  const cheqEl=document.getElementById('res-cheques-vencer');
+  if(provEl&&cheqEl){
+    const [snapCompProv,snapPagosProv2]=await Promise.all([
+      getDocsFromServer(collection(db,'compras')),
+      getDocsFromServer(collection(db,'pagos_proveedores'))
+    ]);
+    const saldosProv={};
+    snapCompProv.forEach(d=>{
+      const c=d.data();
+      const prov=c.proveedor||'';
+      if(!prov) return;
+      const esCtaCte=c.forma_pago==='credito'||c.forma_pago==='cuenta_corriente';
+      if(!esCtaCte) return;
+      const moneda=c.moneda||'ARS';
+      if(!saldosProv[prov]) saldosProv[prov]={ars:0,usd:0};
+      if(moneda==='ARS') saldosProv[prov].ars+=c.monto_total||0;
+      else saldosProv[prov].usd+=c.monto_total||0;
+    });
+    const chequesPendientes=[];
+    snapPagosProv2.forEach(d=>{
+      const p=d.data();
+      const prov=p.proveedor||'';
+      if(!prov) return;
+      const fechaEf=p.medio==='Cheque'&&p.cheque_vencimiento?p.cheque_vencimiento:p.fecha;
+      const esChequeNoCobrado=p.medio==='Cheque'&&p.cheque_vencimiento&&p.cheque_vencimiento>hoyStr;
+      if(!esChequeNoCobrado){
+        if(!saldosProv[prov]) return;
+        if(p.moneda==='ARS') saldosProv[prov].ars-=p.importe||0;
+        else if(p.moneda==='USD') saldosProv[prov].usd-=p.importe||0;
+        else if(p.moneda==='USD_en_ARS'){saldosProv[prov].ars-=p.importe_ars||0;saldosProv[prov].usd-=(p.importe_usd||(p.tc>0?(p.importe||0)/p.tc:0));}
+      } else {
+        const diasVenc=Math.ceil((new Date(p.cheque_vencimiento)-new Date(hoyStr))/(1000*60*60*24));
+        chequesPendientes.push({proveedor:prov,fecha:p.fecha,vencimiento:p.cheque_vencimiento,diasVenc,importe:p.importe||0,importe_usd:p.importe_usd||0,moneda:p.moneda,ref:p.ref||''});
+      }
+    });
+    // Render deudas
+    const deudores=Object.entries(saldosProv).filter(([,s])=>s.ars>0.01||s.usd>0.01).sort((a,b)=>(b[1].ars+b[1].usd*1000)-(a[1].ars+a[1].usd*1000));
+    if(deudores.length){
+      const totalARS=deudores.reduce((s,[,v])=>s+(v.ars>0.01?v.ars:0),0);
+      const totalUSD=deudores.reduce((s,[,v])=>s+(v.usd>0.01?v.usd:0),0);
+      const fmtN=v=>'$'+parseFloat(v).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1});
+      const fmtU=v=>'USD '+parseFloat(v).toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+      provEl.innerHTML=`<div style="background:var(--brown);border-radius:8px;padding:12px 14px;margin-bottom:12px;">
+        <div style="color:#fff9f0;font-size:.82rem;font-weight:600;margin-bottom:8px;">Total deuda proveedores</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;">`
+        +(totalARS>0.01?'<div style="background:rgba(255,255,255,.12);border-radius:6px;padding:6px 12px;"><div style="color:rgba(255,249,240,.7);font-size:.72rem;">🇦🇷 Pesos</div><div style="color:#fff9f0;font-size:1rem;font-weight:700;">'+fmtN(totalARS)+'</div></div>':'')
+        +(totalUSD>0.01?'<div style="background:rgba(255,255,255,.12);border-radius:6px;padding:6px 12px;"><div style="color:rgba(255,249,240,.7);font-size:.72rem;">🇺🇸 Dólares</div><div style="color:#fff9f0;font-size:1rem;font-weight:700;">'+fmtU(totalUSD)+'</div></div>':'')
+        +`</div></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>#</th><th>Proveedor</th><th style="text-align:right;">Saldo ARS</th><th style="text-align:right;">Saldo USD</th></tr></thead>
+          <tbody>${deudores.map(([prov,s],i)=>`<tr>
+            <td style="color:var(--text2);font-size:.8rem;">${i+1}</td>
+            <td><strong>${prov}</strong></td>
+            <td style="text-align:right;color:var(--amber);font-weight:700;">${s.ars>0.01?fmtN(s.ars):'—'}</td>
+            <td style="text-align:right;color:var(--amber);font-weight:700;">${s.usd>0.01?fmtU(s.usd):'—'}</td>
+          </tr>`).join('')}</tbody>
+        </table></div>`;
+    } else {
+      provEl.innerHTML='<div style="text-align:center;padding:20px;color:var(--green);font-weight:600;">✅ Sin deudas pendientes</div>';
+    }
+    // Render cheques
+    chequesPendientes.sort((a,b)=>a.vencimiento.localeCompare(b.vencimiento));
+    if(chequesPendientes.length){
+      const fmtN=v=>'$'+parseFloat(v).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1});
+      const fmtU=v=>'USD '+parseFloat(v).toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+      cheqEl.innerHTML=`<div class="table-wrap"><table>
+        <thead><tr><th>Vencimiento</th><th>Proveedor</th><th style="text-align:right;">Importe</th><th style="text-align:center;">Días</th></tr></thead>
+        <tbody>${chequesPendientes.map(c=>{
+          const color=c.diasVenc<=7?'var(--red)':c.diasVenc<=15?'var(--amber)':'var(--green)';
+          const icono=c.diasVenc<=7?'🔴':c.diasVenc<=15?'🟡':'🟢';
+          const impFmt=c.moneda==='USD'?fmtU(c.importe):c.moneda==='USD_en_ARS'?fmtN(c.importe)+' ('+fmtU(c.importe_usd)+')':fmtN(c.importe);
+          return `<tr>
+            <td style="font-weight:600;">${c.vencimiento.split('-').reverse().join('/')}</td>
+            <td>${c.proveedor}</td>
+            <td style="text-align:right;font-weight:700;">${impFmt}</td>
+            <td style="text-align:center;color:${color};font-weight:700;">${icono} ${c.diasVenc}d</td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table></div>`;
+    } else {
+      cheqEl.innerHTML='<div style="text-align:center;padding:20px;color:var(--green);font-weight:600;">✅ Sin cheques pendientes</div>';
+    }
   }
 
   // Gráfico económico
@@ -8512,7 +8620,7 @@ const COLECCIONES_BACKUP = [
   'recetas','insumos','tandas_cocina',
   'compras','compras_nuez',
   'ventas','cobros',
-  'config','pagos_usd','cotizaciones'
+  'config','cotizaciones'
 ];
 
 let _restoreData = null;
@@ -8774,15 +8882,12 @@ window.filtrarProveedoresCta=async function(){
     const aFavorUSD=saldoUSD<-0.01;
     const alDia=!debeARS&&!debeUSD&&!aFavorARS&&!aFavorUSD;
 
-    // Clasificación mutuamente excluyente basada en saldo neto
-    const netARS=saldoARS;
-    const netUSD=saldoUSD;
-    const esPendiente=(netARS>0.01||netUSD>0.01)&&netARS>=-0.01&&netUSD>=-0.01;
-    const esAFavor=netARS<-0.01||netUSD<-0.01;
-    const esAlDia=Math.abs(netARS)<=0.01&&Math.abs(netUSD)<=0.01;
+    // pendientes = cualquier saldo distinto de cero (deuda O a favor)
+    // todos = saldo exactamente cero
+    const tieneMovimiento=saldoARS>0.01||saldoUSD>0.01||saldoARS<-0.01||saldoUSD<-0.01;
+    const esAlDia=Math.abs(saldoARS)<=0.01&&Math.abs(saldoUSD)<=0.01;
 
-    if(filtro==='pendientes'&&!esPendiente) return;
-    if(filtro==='favor'&&!esAFavor) return;
+    if(filtro==='pendientes'&&!tieneMovimiento) return;
     if(filtro==='todos'&&!esAlDia) return;
 
     const o=document.createElement('option');
@@ -8824,10 +8929,9 @@ window.cargarCtaCteProveedor=async function(){
   kpisEl.style.display='grid';tablaEl.style.display='block';
   emptyEl.style.display='none';if(btnPagar)btnPagar.style.display='';
 
-  const [snapComp, snapPagos, snapPagosUSD]=await Promise.all([
+  const [snapComp, snapPagos]=await Promise.all([
     getDocsFromServer(query(collection(db,'compras'),orderBy('fecha','asc'))),
-    getDocsFromServer(query(collection(db,'pagos_proveedores'),orderBy('fecha','asc'))),
-    getDocsFromServer(query(collection(db,'pagos_usd'),orderBy('fecha','asc')))
+    getDocsFromServer(query(collection(db,'pagos_proveedores'),orderBy('fecha','asc')))
   ]);
 
   const movs=[];
@@ -8887,13 +8991,6 @@ window.cargarCtaCteProveedor=async function(){
     movs.push({fecha:fechaEfectiva,fechaEmision:p.fecha,tipo:'Pago',ref:p.ref||'—',
       desc:descPago,
       debeARS:0,debeUSD:0,haberARS,haberUSD,id:d.id});
-  });
-  // HABER: pagos_usd legacy
-  snapPagosUSD.forEach(d=>{
-    const p=d.data();
-    if(p.proveedor!==prov) return;
-    movs.push({fecha:p.fecha,tipo:'Pago USD',ref:p.referencia||'—',desc:'Pago USD'+( p.obs?' — '+p.obs:''),
-      debeARS:0,debeUSD:0,haberARS:0,haberUSD:p.monto||0,id:d.id});
   });
 
   // Ordenar por fecha
