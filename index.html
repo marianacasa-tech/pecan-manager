@@ -1407,16 +1407,12 @@
         <div class="metric-card"><div class="val" id="re-gastos-directos">—</div><div class="lbl">Gastos directos</div></div>
         <div class="metric-card"><div class="val" id="re-gastos-indirectos">—</div><div class="lbl">Gastos indirectos</div></div>
         <div class="metric-card"><div class="val" id="re-inversiones">—</div><div class="lbl">Inversiones</div></div>
-        <div class="metric-card"><div class="val" id="re-deuda-prov-ars" style="color:var(--amber);">—</div><div class="lbl">Deuda proveedores ARS</div></div>
         <div class="metric-card"><div class="val" id="re-resultado">—</div><div class="lbl">Resultado (ingresos − gastos dir. e indir.)</div></div>
       </div>
 
       <!-- Tarjetas USD -->
       <div style="font-size:.75rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">🇺🇸 Dólares</div>
       <div class="metrics-grid" style="margin-bottom:20px;">
-        <div class="metric-card"><div class="val" id="re-compras-usd">—</div><div class="lbl">Compras en USD</div></div>
-        <div class="metric-card"><div class="val" id="re-deuda-prov-usd" style="color:var(--amber);">—</div><div class="lbl">Deuda proveedores USD</div></div>
-        <div class="metric-card"><div class="val" id="re-pagado-usd">—</div><div class="lbl">Pagado en USD</div></div>
       </div>
 
       <!-- Gráfico económico -->
@@ -7842,7 +7838,7 @@ async function initResumen(){
 
   // ── ECONÓMICO ────────────────────────────────────────────────────────────
   let ventas=0,ventasNuez=0,ventasServicio=0,cobrado=0,porCobrar=0;
-  let gastosDir=0,gastosInd=0,inversiones=0,deudaProvARS=0;
+  let gastosDir=0,gastosInd=0,inversiones=0;
   let comprasUSD=0,deudaProvUSD=0,pagadoUSD=0;
   const mesesVentas=Array(12).fill(0);
   const mesesCobrado=Array(12).fill(0);
@@ -7927,7 +7923,7 @@ async function initResumen(){
         gastosInd+=montoInd;
         inversiones+=montoInv;
       }
-      if(c.estado==='pendiente'||(c.forma_pago==='credito'&&c.estado!=='pagado')) deudaProvARS+=c.monto_total||0;
+      // Deuda ARS: solo compras con estado='cuenta_corriente'
     }
   });
 
@@ -7942,13 +7938,10 @@ async function initResumen(){
   document.getElementById('re-gastos-directos').textContent=fmt(gastosDir);
   document.getElementById('re-gastos-indirectos').textContent=fmt(gastosInd);
   document.getElementById('re-inversiones').textContent=fmt(inversiones);
-  document.getElementById('re-deuda-prov-ars').textContent=fmt(deudaProvARS);
+
   const resEl=document.getElementById('re-resultado');
   resEl.textContent=fmt(resultadoARS);
   resEl.style.color=resultadoARS>=0?'var(--green)':'var(--red)';
-  document.getElementById('re-compras-usd').textContent=fmtUSD(comprasUSD);
-  document.getElementById('re-deuda-prov-usd').textContent=fmtUSD(deudaProvUSD);
-  document.getElementById('re-pagado-usd').textContent=fmtUSD(pagadoUSD);
 
   // ── RANKINGS ────────────────────────────────────────────────────────────
   // Ranking ventas de nueces por cliente
@@ -8857,11 +8850,15 @@ window.filtrarProveedoresCta=async function(){
     if(moneda==='ARS') saldos[prov].ars+=c.monto_total||0;
     else saldos[prov].usd+=c.monto_total||0;
   });
+  const hoyStrFilt=new Date().toISOString().slice(0,10);
   snapPagos.forEach(d=>{
     const p=d.data();
     const prov=p.proveedor||'';
     if(!prov) return;
-    if(!saldos[prov]) saldos[prov]={ars:0,usd:0}; // inicializar aunque no tenga compras en ctacte
+    // Cheque diferido no vencido → sigue siendo deuda, no resta
+    const esChequeNoCobrado=p.medio==='Cheque'&&p.cheque_vencimiento&&p.cheque_vencimiento>hoyStrFilt;
+    if(esChequeNoCobrado) return;
+    if(!saldos[prov]) saldos[prov]={ars:0,usd:0};
     if(p.moneda==='ARS') saldos[prov].ars-=p.importe||0;
     else if(p.moneda==='USD') saldos[prov].usd-=p.importe||0;
     else if(p.moneda==='USD_en_ARS'){saldos[prov].ars-=p.importe_ars||0;saldos[prov].usd-=p.importe_usd||0;}
