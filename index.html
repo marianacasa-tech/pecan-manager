@@ -789,6 +789,8 @@
     <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
       <button class="btn btn-secondary" id="gtab-compras" onclick="gasTab('compras')" style="background:var(--brown);color:#fff9f0;">🧾 Compras y Gastos</button>
       <button class="btn btn-secondary" id="gtab-proveedores" onclick="gasTab('proveedores')">🏢 Proveedores</button>
+      <button class="btn btn-secondary" id="gtab-ctacte" onclick="gasTab('ctacte')">📒 Cuentas corrientes</button>
+      <button class="btn btn-secondary" id="gtab-pagos" onclick="gasTab('pagos')">💳 Registro de pagos</button>
     </div>
 
     <!-- TAB COMPRAS -->
@@ -901,6 +903,84 @@
         </div>
         <!-- Resumen totales filtrados -->
         <div id="gas-resumen" style="margin-top:12px;padding:12px 16px;background:var(--bg2);border-radius:8px;font-size:.88rem;display:none;"></div>
+      </div>
+    </div>
+
+    <!-- TAB CUENTAS CORRIENTES PROVEEDORES -->
+    <div id="gas-ctacte" style="display:none;">
+      <div class="card">
+        <h2>📒 Cuenta corriente con proveedores</h2>
+        <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-bottom:16px;">
+          <div class="form-group" style="margin:0;min-width:220px;">
+            <label style="font-size:.8rem;">Proveedor</label>
+            <select id="ctaprov-selector" onchange="cargarCtaCteProveedor()">
+              <option value="">— Seleccioná proveedor —</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label style="font-size:.8rem;">Mostrar</label>
+            <select id="ctaprov-filtro" onchange="cargarCtaCteProveedor()">
+              <option value="pendientes">Solo pendientes</option>
+              <option value="todos">Todos</option>
+            </select>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="imprimirCtaCteProveedor()">🖨️ Imprimir extracto</button>
+        </div>
+
+        <!-- KPIs saldo -->
+        <div id="ctaprov-kpis" style="display:none;margin-bottom:16px;">
+          <div class="metrics-grid">
+            <div class="metric-card"><div class="val" id="ctaprov-debe-ars" style="color:var(--red);">—</div><div class="lbl">Deuda ARS</div></div>
+            <div class="metric-card"><div class="val" id="ctaprov-haber-ars">—</div><div class="lbl">Pagado ARS</div></div>
+            <div class="metric-card"><div class="val" id="ctaprov-saldo-ars" style="color:var(--amber);">—</div><div class="lbl">Saldo ARS</div></div>
+            <div class="metric-card"><div class="val" id="ctaprov-debe-usd" style="color:var(--red);">—</div><div class="lbl">Deuda USD</div></div>
+            <div class="metric-card"><div class="val" id="ctaprov-haber-usd">—</div><div class="lbl">Pagado USD</div></div>
+            <div class="metric-card"><div class="val" id="ctaprov-saldo-usd" style="color:var(--amber);">—</div><div class="lbl">Saldo USD</div></div>
+          </div>
+        </div>
+
+        <!-- Tabla movimientos -->
+        <div id="ctaprov-tabla" class="table-wrap" style="display:none;">
+          <table id="tbl-ctaprov">
+            <thead><tr><th>Fecha</th><th>Tipo</th><th>N°/Ref.</th><th>Descripción</th><th style="text-align:right;">Debe ARS</th><th style="text-align:right;">Debe USD</th><th style="text-align:right;">Haber ARS</th><th style="text-align:right;">Saldo ARS</th></tr></thead>
+            <tbody id="tbl-ctaprov-body"></tbody>
+          </table>
+        </div>
+        <div id="ctaprov-empty" style="text-align:center;padding:30px;color:var(--text2);">Seleccioná un proveedor para ver su cuenta corriente.</div>
+      </div>
+    </div>
+
+    <!-- TAB REGISTRO DE PAGOS -->
+    <div id="gas-pagos" style="display:none;">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+          <h2 style="margin:0;">💳 Registro de pagos a proveedores</h2>
+          <button class="btn btn-primary btn-sm" onclick="abrirModalPagoProv()">+ Registrar pago</button>
+        </div>
+        <div class="filters">
+          <div class="form-group"><label>Proveedor</label>
+            <select id="f-pagprov-prov" onchange="cargarRegistroPagos()"><option value="">Todos</option></select>
+          </div>
+          <div class="form-group"><label>Mes</label>
+            <select id="f-pagprov-mes" onchange="cargarRegistroPagos()">
+              <option value="">Todos</option>
+              <option value="01">Enero</option><option value="02">Febrero</option><option value="03">Marzo</option>
+              <option value="04">Abril</option><option value="05">Mayo</option><option value="06">Junio</option>
+              <option value="07">Julio</option><option value="08">Agosto</option><option value="09">Septiembre</option>
+              <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Año</label>
+            <select id="f-pagprov-anio" onchange="cargarRegistroPagos()"><option value="">Todos</option></select>
+          </div>
+          <button class="btn btn-secondary btn-sm" onclick="limpiarFiltrosPagProv()">✖ Limpiar</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Fecha</th><th>Proveedor</th><th>Moneda</th><th style="text-align:right;">Importe</th><th>TC</th><th style="text-align:right;">En ARS</th><th>Medio</th><th>Referencia</th><th>Vto. Cheque</th><th>Observaciones</th><th>Acciones</th></tr></thead>
+            <tbody id="tbl-pagprov-body"></tbody>
+          </table>
+        </div>
       </div>
     </div>
 
@@ -4348,12 +4428,12 @@ window.cargarDashboard=async function(){
 
   const kernelCom=tEnt+tPG+tPC+tDan;
   const kernelTotal=kernelCom+tPod;
-  const skr      =tKgCC>0?kernelCom/tKgCC*100:null;
+  const skr=tKgCCProcesado>0?kernelCom/tKgCCProcesado*100:null;
   const enteroPct=kernelCom>0?tEnt/kernelCom*100:null;
   const partidoPct=kernelCom>0?(tPG+tPC)/kernelCom*100:null;
-  const danadoPct=tKgCC>0?tDan/tKgCC*100:null;
-  const incomPct =tKgCC>0?tPod/tKgCC*100:null;
-  const rendPot  =tKgCC>0?kernelTotal/tKgCC*100:null;
+  const danadoPct=kernelCom>0?tDan/kernelCom*100:null;
+  const incomPct=tKgCCProcesado>0?tPod/tKgCCProcesado*100:null;
+  const rendPot=tKgCCProcesado>0?kernelTotal/tKgCCProcesado*100:null;
   const fmt=v=>v!==null?v.toFixed(1)+'%':'—';
 
   const promDia=diasConProd.size>0?tKgCCProcesado/diasConProd.size:0;
@@ -5347,12 +5427,15 @@ const _tipoColor={
 
 // ---- TABS ----
 window.gasTab=function(tab){
-  ['compras','proveedores'].forEach(t=>{
-    document.getElementById('gas-'+t).style.display=t===tab?'block':'none';
+  ['compras','ctacte','proveedores','pagos'].forEach(t=>{
+    const el=document.getElementById('gas-'+t);if(el)el.style.display=t===tab?'block':'none';
     const btn=document.getElementById('gtab-'+t);
     if(btn){btn.style.background=t===tab?'var(--brown)':'';btn.style.color=t===tab?'#fff9f0':'';}
   });
   if(tab==='proveedores') cargarProveedoresTabla();
+  if(tab==='compras') cargarCompras();
+  if(tab==='ctacte') iniciarCtaCteProveedores();
+  if(tab==='pagos') cargarRegistroPagos();
 }
 
 // ---- PROVEEDORES ----
@@ -5753,10 +5836,7 @@ window.cargarCompras=async function(){
       <td>${estadoBadge}</td>
       <td style="font-size:.82rem;${vencida?'color:#c0392b;font-weight:700;':''}">${c.vencimiento||'—'}</td>
       <td style="display:flex;gap:4px;flex-wrap:wrap;">
-        ${esCuentaCorrienteUSD
-          ?`<button class="btn btn-edit btn-sm" title="Ver/registrar pagos" style="background:#1a5276;color:#fff;" onclick="abrirPagosUSD('${d.id}','${(c.proveedor||'').replace(/'/g,"\\'")}',${c.monto_total||0})">💵 Pagos</button>`
-          :`<button class="btn btn-edit btn-sm" title="Actualizar pago" onclick="abrirEditarPago('${d.id}','${c.estado}','${c.vencimiento||''}','${c.forma_pago||'efectivo'}')">💳</button>`
-        }
+        <button class="btn btn-edit btn-sm" onclick="abrirEditarCompraById('${d.id}')">✏️</button>
         <button class="btn btn-danger btn-sm" onclick="eliminar('compras','${d.id}',cargarCompras)">🗑️</button>
       </td>
     </tr>`;
@@ -8576,6 +8656,308 @@ window.confirmarRestore=async function(){
   document.getElementById('bk-file-input').value='';
   await cargarEstadoDB();
 }
+
+// ============================================================
+// CUENTAS CORRIENTES PROVEEDORES
+// ============================================================
+
+window.iniciarCtaCteProveedores=async function(){
+  // Poblar selector de proveedores
+  const sel=document.getElementById('ctaprov-selector');
+  const cur=sel.value;
+  sel.innerHTML='<option value="">— Seleccioná proveedor —</option>';
+  const snap=await getDocs(collection(db,'proveedores'));
+  snap.forEach(d=>{const o=document.createElement('option');o.value=d.data().nombre;o.textContent=d.data().nombre;sel.appendChild(o);});
+  if(cur)sel.value=cur;
+  if(sel.value) cargarCtaCteProveedor();
+}
+
+window.cargarCtaCteProveedor=async function(){
+  const prov=document.getElementById('ctaprov-selector').value;
+  const filtro=document.getElementById('ctaprov-filtro').value;
+  const tbody=document.getElementById('tbl-ctaprov-body');
+  const kpisEl=document.getElementById('ctaprov-kpis');
+  const tablaEl=document.getElementById('ctaprov-tabla');
+  const emptyEl=document.getElementById('ctaprov-empty');
+  const btnPagar=document.getElementById('btn-pagar-prov');
+
+  if(!prov){
+    kpisEl.style.display='none';tablaEl.style.display='none';
+    emptyEl.style.display='block';btnPagar.style.display='none';return;
+  }
+
+  tbody.innerHTML='<tr><td colspan="8" class="loading">Cargando...</td></tr>';
+  kpisEl.style.display='grid';tablaEl.style.display='block';
+  emptyEl.style.display='none';btnPagar.style.display='';
+
+  const [snapComp, snapPagos, snapPagosUSD]=await Promise.all([
+    getDocsFromServer(query(collection(db,'compras'),orderBy('fecha','asc'))),
+    getDocsFromServer(query(collection(db,'pagos_proveedores'),orderBy('fecha','asc'))),
+    getDocsFromServer(query(collection(db,'pagos_usd'),orderBy('fecha','asc')))
+  ]);
+
+  const movs=[];
+  // DEBE: compras con forma_pago='cuenta_corriente' de este proveedor
+  snapComp.forEach(d=>{
+    const c=d.data();
+    if((c.proveedor||c.nombre_proveedor)!==prov) return;
+    if(c.forma_pago!=='cuenta_corriente'&&c.forma_pago!=='credito') return; // guardado como 'credito' o 'cuenta_corriente'
+    if(filtro==='pendientes'&&c.estado==='pagado') return;
+    const moneda=c.moneda||'ARS';
+    movs.push({
+      fecha:c.fecha,tipo:'Compra',ref:c.nro_factura||'—',
+      desc:(c.items||[]).map(i=>i.descripcion||i.categoria||'').filter(Boolean).join(', ')||'—',
+      debeARS:moneda==='ARS'?c.monto_total||0:0,
+      debeUSD:moneda==='USD'?c.monto_total||0:0,
+      haberARS:0,haberUSD:0,id:d.id,estado:c.estado
+    });
+  });
+  
+  // HABER: pagos_proveedores
+  snapPagos.forEach(d=>{
+    const p=d.data();
+    if(p.proveedor!==prov) return;
+    let haberARS=0,haberUSD=0;
+    if(p.moneda==='ARS') haberARS=p.importe||0;
+    else if(p.moneda==='USD') haberUSD=p.importe||0;
+    else if(p.moneda==='USD_en_ARS') haberARS=p.importe_ars||0; // USD pagado en ARS
+    movs.push({fecha:p.fecha,tipo:'Pago',ref:p.ref||'—',desc:p.medio+(p.obs?' — '+p.obs:''),
+      debeARS:0,debeUSD:0,haberARS,haberUSD:haberUSD,id:d.id});
+  });
+  // HABER: pagos_usd legacy
+  snapPagosUSD.forEach(d=>{
+    const p=d.data();
+    if(p.proveedor!==prov) return;
+    movs.push({fecha:p.fecha,tipo:'Pago USD',ref:p.referencia||'—',desc:'Pago USD'+( p.obs?' — '+p.obs:''),
+      debeARS:0,debeUSD:0,haberARS:0,haberUSD:p.monto||0,id:d.id});
+  });
+
+  // Ordenar por fecha
+  movs.sort((a,b)=>(a.fecha||'').localeCompare(b.fecha||''));
+
+  // Calcular saldos acumulados
+  const fmt=v=>'$'+parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1});
+  const fmtU=v=>'USD '+parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  let saldoARS=0,saldoUSD=0,totalDebeARS=0,totalDebeUSD=0,totalHaberARS=0,totalHaberUSD=0;
+  tbody.innerHTML='';
+
+  movs.forEach(m=>{
+    saldoARS+=m.debeARS-m.haberARS;
+    saldoUSD+=m.debeUSD-m.haberUSD;
+    totalDebeARS+=m.debeARS;totalDebeUSD+=m.debeUSD;
+    totalHaberARS+=m.haberARS;totalHaberUSD+=m.haberUSD;
+    const sColor=saldoARS>0?'color:var(--amber)':'color:var(--green)';
+    const tipoBadge=m.tipo==='Compra'
+      ?`<span style="background:#fde8e8;color:#c0392b;border-radius:12px;padding:2px 8px;font-size:.75rem;">📦 Compra</span>`
+      :`<span style="background:#e8f4e8;color:#2d6a2d;border-radius:12px;padding:2px 8px;font-size:.75rem;">💳 Pago</span>`;
+    tbody.innerHTML+=`<tr>
+      <td>${(m.fecha||'').split('-').reverse().join('/')}</td>
+      <td>${tipoBadge}</td>
+      <td><span class="remito-num">${m.ref}</span></td>
+      <td style="font-size:.82rem;max-width:200px;">${m.desc}</td>
+      <td style="text-align:right;color:var(--red);">${m.debeARS>0?fmt(m.debeARS):'—'}</td>
+      <td style="text-align:right;color:var(--red);">${m.debeUSD>0?fmtU(m.debeUSD):'—'}</td>
+      <td style="text-align:right;color:var(--green);">${m.haberARS>0?fmt(m.haberARS):m.haberUSD>0?fmtU(m.haberUSD):'—'}</td>
+      <td style="text-align:right;font-weight:700;${sColor};">${saldoARS!==0?fmt(saldoARS):(saldoUSD!==0?fmtU(saldoUSD):'✅ Al día')}</td>
+    </tr>`;
+  });
+
+  if(!movs.length) tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text2);padding:20px;">No hay movimientos en cuenta corriente para este proveedor.</td></tr>';
+
+  // Totales
+  tbody.innerHTML+=`<tr style="background:var(--bg2);font-weight:700;">
+    <td colspan="4">TOTALES</td>
+    <td style="text-align:right;color:var(--red);">${fmt(totalDebeARS)}</td>
+    <td style="text-align:right;color:var(--red);">${totalDebeUSD>0?fmtU(totalDebeUSD):'—'}</td>
+    <td style="text-align:right;color:var(--green);">${fmt(totalHaberARS)}</td>
+    <td style="text-align:right;color:${saldoARS>0?'var(--amber)':'var(--green)'};">${fmt(saldoARS)}</td>
+  </tr>`;
+
+  // KPIs
+  document.getElementById('ctaprov-debe-ars').textContent=fmt(totalDebeARS);
+  document.getElementById('ctaprov-haber-ars').textContent=fmt(totalHaberARS);
+  document.getElementById('ctaprov-saldo-ars').textContent=fmt(saldoARS);
+  document.getElementById('ctaprov-debe-usd').textContent=fmtU(totalDebeUSD);
+  document.getElementById('ctaprov-haber-usd').textContent=fmtU(totalHaberUSD);
+  document.getElementById('ctaprov-saldo-usd').textContent=fmtU(saldoUSD);
+  document.getElementById('ctaprov-saldo-ars').style.color=saldoARS>0?'var(--amber)':'var(--green)';
+  document.getElementById('ctaprov-saldo-usd').style.color=saldoUSD>0?'var(--amber)':'var(--green)';
+}
+
+window.abrirModalPagoProv=async function(){
+  // Puede ser llamado desde ctacte (con proveedor seleccionado) o desde pagos (sin prov)
+  const ctaSel=document.getElementById('ctaprov-selector');
+  const prov=ctaSel?ctaSel.value:'';
+  document.getElementById('pagprov-nombre').value=prov;
+  document.getElementById('pagprov-fecha').value=today();
+  document.getElementById('pagprov-importe').value='';
+  document.getElementById('pagprov-tc').value='';
+  document.getElementById('pagprov-total-ars').value='';
+  document.getElementById('pagprov-ref').value='';
+  document.getElementById('pagprov-obs').value='';
+  document.getElementById('pagprov-moneda').value='ARS';
+  document.getElementById('pagprov-medio').value='Efectivo';
+  document.getElementById('pagprov-cheque-venc').value='';
+  document.getElementById('pagprov-cheque-venc-group').style.display='none';
+  togglePagProvTC();
+  document.getElementById('modal-pago-prov').classList.add('open');
+}
+
+window.toggleChequeVenc=function(){
+  const medio=document.getElementById('pagprov-medio').value;
+  document.getElementById('pagprov-cheque-venc-group').style.display=medio==='Cheque'?'':'none';
+  if(medio!=='Cheque') document.getElementById('pagprov-cheque-venc').value='';
+}
+
+window.togglePagProvTC=function(){
+  const moneda=document.getElementById('pagprov-moneda').value;
+  const showTC=moneda==='USD_en_ARS';
+  document.getElementById('pagprov-tc-group').style.display=showTC?'':'none';
+  document.getElementById('pagprov-total-group').style.display=showTC?'':'none';
+}
+
+window.calcPagProvTotal=function(){
+  const imp=parseFloat(document.getElementById('pagprov-importe').value)||0;
+  const tc=parseFloat(document.getElementById('pagprov-tc').value)||0;
+  const total=imp*tc;
+  document.getElementById('pagprov-total-ars').value=total>0?'$ '+total.toLocaleString('es-AR',{minimumFractionDigits:1}):'';
+}
+
+window.guardarPagoProv=async function(){
+  const prov=document.getElementById('pagprov-nombre').value;
+  const fecha=document.getElementById('pagprov-fecha').value;
+  const moneda=document.getElementById('pagprov-moneda').value;
+  const importe=parseFloat(document.getElementById('pagprov-importe').value)||0;
+  const tc=parseFloat(document.getElementById('pagprov-tc').value)||0;
+  const medio=document.getElementById('pagprov-medio').value;
+  const ref=document.getElementById('pagprov-ref').value.trim();
+  const obs=document.getElementById('pagprov-obs').value.trim();
+  if(!fecha||importe<=0){showAlert('Completá fecha e importe','error');return;}
+  if(moneda==='USD_en_ARS'&&!tc){showAlert('Ingresá el tipo de cambio','error');return;}
+  const importe_ars=moneda==='USD_en_ARS'?importe*tc:moneda==='ARS'?importe:0;
+  const chequeVenc=document.getElementById('pagprov-cheque-venc').value||null;
+  await addDoc(collection(db,'pagos_proveedores'),{
+    proveedor:prov,fecha,moneda,importe,tc:tc||null,importe_ars,medio,ref,obs,cheque_vencimiento:chequeVenc,creado:serverTimestamp()
+  });
+  showAlert('✅ Pago registrado');
+  cerrarModal('modal-pago-prov');
+  cargarCtaCteProveedor();
+  if(document.getElementById('gas-pagos')?.style.display==='block') cargarRegistroPagos();
+}
+
+window.imprimirCtaCteProveedor=async function(){
+  const prov=document.getElementById('ctaprov-selector').value;
+  if(!prov){showAlert('Seleccioná un proveedor primero','error');return;}
+  const rows=document.getElementById('tbl-ctaprov-body').innerHTML;
+  const thead=document.querySelector('#tbl-ctaprov thead').outerHTML;
+  const win=window.open('','_blank','width=900,height=700');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Cta. Cte. ${prov}</title>
+  <style>body{font-family:sans-serif;padding:24px;font-size:13px;}table{width:100%;border-collapse:collapse;}
+  th{background:#3d2b1f;color:#fff9f0;padding:8px 10px;text-align:left;font-size:12px;}
+  td{padding:7px 10px;border-bottom:1px solid #eee;}tr:nth-child(even){background:#faf8f5;}
+  .header{display:flex;justify-content:space-between;margin-bottom:20px;}
+  h2{color:#3d2b1f;margin:0;}@media print{button{display:none!important}}</style></head><body>
+  <div class="header">
+    <div><strong style="font-size:1.1rem;">${EMPRESA.nombre}</strong><br><small>${EMPRESA.direccion}</small><br><small>CUIT: ${EMPRESA.cuit}</small></div>
+    <div style="text-align:right;"><strong style="color:#3d2b1f;text-transform:uppercase;letter-spacing:.05em;">Cuenta Corriente Proveedor</strong><br><strong style="font-size:1.2rem;">${prov}</strong><br><small>Emitido: ${new Date().toLocaleDateString('es-AR')}</small></div>
+  </div>
+  <table>${thead}<tbody>${rows}</tbody></table>
+  <div style="margin-top:20px;" class="no-print"><button onclick="window.print()" style="padding:10px 20px;background:#7a4a1e;color:#fff;border:none;border-radius:6px;cursor:pointer;">🖨️ Imprimir</button></div>
+  </body></html>`);
+  win.document.close();
+}
+
+window.abrirEditarCompraById=async function(id){
+  const snap=await getDoc(doc(db,'compras',id));
+  if(!snap.exists()){showAlert('No se encontró el registro','error');return;}
+  const c=snap.data();
+  document.getElementById('edit-compra-id').value=id;
+  document.getElementById('edit-compra-fecha').value=c.fecha||'';
+  document.getElementById('edit-compra-nro').value=c.nro_factura||'';
+  document.getElementById('edit-compra-forma-pago').value=c.forma_pago||'efectivo';
+  document.getElementById('edit-compra-estado').value=c.estado||'pagado';
+  document.getElementById('edit-compra-vencimiento').value=c.vencimiento||'';
+  document.getElementById('edit-compra-obs').value=c.observaciones||'';
+  // Poblar proveedor
+  const selProv=document.getElementById('edit-compra-proveedor');
+  while(selProv.options.length>1) selProv.remove(1);
+  const snapProv=await getDocs(collection(db,'proveedores'));
+  snapProv.forEach(d=>{const o=document.createElement('option');o.value=d.data().nombre;o.textContent=d.data().nombre;selProv.appendChild(o);});
+  selProv.value=c.proveedor||'';
+  document.getElementById('modal-edit-compra').classList.add('open');
+}
+
+window.guardarEdicionCompra=async function(){
+  const id=document.getElementById('edit-compra-id').value;
+  const fecha=document.getElementById('edit-compra-fecha').value;
+  if(!fecha){showAlert('La fecha es obligatoria','error');return;}
+  await updateDoc(doc(db,'compras',id),{
+    fecha,
+    proveedor:document.getElementById('edit-compra-proveedor').value,
+    nro_factura:document.getElementById('edit-compra-nro').value.trim(),
+    forma_pago:document.getElementById('edit-compra-forma-pago').value,
+    estado:document.getElementById('edit-compra-estado').value,
+    vencimiento:document.getElementById('edit-compra-vencimiento').value||null,
+    observaciones:document.getElementById('edit-compra-obs').value.trim()
+  });
+  showAlert('✅ Compra actualizada');
+  cerrarModal('modal-edit-compra');
+  cargarCompras();
+}
+
+window.limpiarFiltrosPagProv=function(){
+  ['f-pagprov-prov','f-pagprov-mes','f-pagprov-anio'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  cargarRegistroPagos();
+}
+
+window.cargarRegistroPagos=async function(){
+  const tbody=document.getElementById('tbl-pagprov-body');
+  if(!tbody) return;
+  tbody.innerHTML='<tr><td colspan="11" class="loading">Cargando...</td></tr>';
+  const provF=document.getElementById('f-pagprov-prov')?.value||'';
+  const mesF=document.getElementById('f-pagprov-mes')?.value||'';
+  const anioF=document.getElementById('f-pagprov-anio')?.value||'';
+
+  const snap=await getDocsFromServer(query(collection(db,'pagos_proveedores'),orderBy('fecha','desc')));
+
+  // Poblar filtros
+  const provs=new Set(),anios=new Set();
+  snap.forEach(d=>{const p=d.data();if(p.proveedor)provs.add(p.proveedor);const a=(p.fecha||'').slice(0,4);if(a)anios.add(a);});
+  const selProv=document.getElementById('f-pagprov-prov');
+  if(selProv){const cur=selProv.value;selProv.innerHTML='<option value="">Todos</option>';[...provs].sort().forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p;selProv.appendChild(o);});if(cur)selProv.value=cur;}
+  const selAnio=document.getElementById('f-pagprov-anio');
+  if(selAnio){const cur=selAnio.value;selAnio.innerHTML='<option value="">Todos</option>';[...anios].sort().reverse().forEach(a=>{const o=document.createElement('option');o.value=a;o.textContent=a;selAnio.appendChild(o);});if(cur)selAnio.value=cur;}
+
+  const fmt=v=>'$'+parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1});
+  const fmtU=v=>'USD '+parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  tbody.innerHTML='';let cnt=0;
+
+  snap.forEach(d=>{
+    const p=d.data();
+    if(provF&&p.proveedor!==provF) return;
+    if(mesF&&(p.fecha||'').slice(5,7)!==mesF) return;
+    if(anioF&&(p.fecha||'').slice(0,4)!==anioF) return;
+    cnt++;
+    const monedaLabel={'ARS':'🇦🇷 ARS','USD':'🇺🇸 USD','USD_en_ARS':'🇺🇸 USD→ARS'}[p.moneda]||p.moneda;
+    const importeFmt=p.moneda==='ARS'?fmt(p.importe):fmtU(p.importe);
+    const arsCol=p.moneda==='ARS'?'—':fmt(p.importe_ars||0);
+    const tcCol=p.tc?parseFloat(p.tc).toLocaleString('es-AR',{minimumFractionDigits:1}):'—';
+    tbody.innerHTML+=`<tr>
+      <td>${(p.fecha||'').split('-').reverse().join('/')}</td>
+      <td><strong>${p.proveedor||'—'}</strong></td>
+      <td><span style="font-size:.78rem;background:var(--bg2);border-radius:10px;padding:2px 7px;">${monedaLabel}</span></td>
+      <td style="text-align:right;font-weight:700;">${importeFmt}</td>
+      <td style="text-align:right;font-size:.82rem;color:var(--text2);">${tcCol}</td>
+      <td style="text-align:right;font-size:.82rem;">${arsCol}</td>
+      <td>${p.medio||'—'}</td>
+      <td style="font-size:.82rem;">${p.ref||'—'}</td>
+      <td style="font-size:.82rem;${p.cheque_vencimiento?'color:var(--amber);':''}">${p.cheque_vencimiento?p.cheque_vencimiento.split('-').reverse().join('/'):'—'}</td>
+      <td style="font-size:.82rem;">${p.obs||'—'}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="eliminar('pagos_proveedores','${d.id}',cargarRegistroPagos)">🗑️</button></td>
+    </tr>`;
+  });
+  if(!cnt) tbody.innerHTML='<tr><td colspan="11" style="text-align:center;color:var(--text2);padding:20px;">No hay pagos registrados</td></tr>';
+}
 </script>
 <!-- MODAL NOTA DE CRÉDITO -->
 <div class="modal-overlay" id="modal-nota-credito">
@@ -8671,6 +9053,81 @@ window.confirmarRestore=async function(){
     <div style="display:flex;gap:10px;margin-top:16px;">
       <button class="btn btn-primary" onclick="imprimirComprobante()">🖨️ Imprimir</button>
       <button class="btn btn-secondary" onclick="cerrarModal('modal-comp-cobro')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PAGO PROVEEDOR -->
+<div class="modal-overlay" id="modal-pago-prov">
+  <div class="modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <h3 style="margin:0;color:var(--brown);">💳 Registrar pago a proveedor</h3>
+      <button class="modal-close" onclick="cerrarModal('modal-pago-prov')">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group"><label>Proveedor *</label><select id="pagprov-nombre"><option value="">— Seleccioná —</option></select></div>
+      <div class="form-group"><label>Fecha *</label><input type="date" id="pagprov-fecha"></div>
+      <div class="form-group"><label>Moneda del pago *</label>
+        <select id="pagprov-moneda" onchange="togglePagProvTC()">
+          <option value="ARS">🇦🇷 Pesos (ARS)</option>
+          <option value="USD">🇺🇸 Dólares (USD)</option>
+          <option value="USD_en_ARS">🇺🇸 USD pagado en ARS (con TC)</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Importe *</label><input type="number" id="pagprov-importe" placeholder="0.00" step="0.01" min="0" oninput="calcPagProvTotal()"></div>
+      <div class="form-group" id="pagprov-tc-group" style="display:none;"><label>Tipo de cambio ($/USD) *</label><input type="number" id="pagprov-tc" placeholder="Ej: 1500" step="0.01" min="0" oninput="calcPagProvTotal()"></div>
+      <div class="form-group" id="pagprov-total-group" style="display:none;"><label>Total en ARS</label><input type="text" id="pagprov-total-ars" readonly style="background:var(--bg2);font-weight:700;"></div>
+      <div class="form-group"><label>Medio de pago</label>
+        <select id="pagprov-medio" onchange="toggleChequeVenc()">
+          <option value="Efectivo">Efectivo</option>
+          <option value="Transferencia">Transferencia</option>
+          <option value="Cheque">Cheque</option>
+        </select>
+      </div>
+      <div class="form-group" id="pagprov-cheque-venc-group" style="display:none;"><label>Vencimiento del cheque</label><input type="date" id="pagprov-cheque-venc"></div>
+      <div class="form-group"><label>N° Referencia</label><input type="text" id="pagprov-ref" placeholder="N° transferencia, cheque..."></div>
+      <div class="form-group full"><label>Observaciones</label><input type="text" id="pagprov-obs" placeholder="Notas..."></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
+      <button class="btn btn-secondary" onclick="cerrarModal('modal-pago-prov')">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarPagoProv()">💾 Guardar pago</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EDITAR COMPRA -->
+<div class="modal-overlay" id="modal-edit-compra">
+  <div class="modal" style="max-width:600px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+      <h3 style="margin:0;color:var(--brown);">✏️ Editar compra/gasto</h3>
+      <button class="modal-close" onclick="cerrarModal('modal-edit-compra')">✕</button>
+    </div>
+    <input type="hidden" id="edit-compra-id">
+    <div class="form-grid">
+      <div class="form-group"><label>Fecha *</label><input type="date" id="edit-compra-fecha"></div>
+      <div class="form-group"><label>Proveedor</label><select id="edit-compra-proveedor"><option value="">— Sin proveedor —</option></select></div>
+      <div class="form-group"><label>N° Factura / Comprobante</label><input type="text" id="edit-compra-nro"></div>
+      <div class="form-group"><label>Forma de pago</label>
+        <select id="edit-compra-forma-pago">
+          <option value="efectivo">Efectivo</option>
+          <option value="transferencia">Transferencia</option>
+          <option value="cheque">Cheque</option>
+          <option value="credito">Crédito / Cuenta corriente</option>
+          <option value="cuenta_corriente">Cuenta corriente</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Estado</label>
+        <select id="edit-compra-estado">
+          <option value="pagado">Pagado</option>
+          <option value="pendiente">Pendiente</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Vencimiento</label><input type="date" id="edit-compra-vencimiento"></div>
+      <div class="form-group full"><label>Observaciones</label><input type="text" id="edit-compra-obs"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px;justify-content:flex-end;">
+      <button class="btn btn-secondary" onclick="cerrarModal('modal-edit-compra')">Cancelar</button>
+      <button class="btn btn-primary" onclick="guardarEdicionCompra()">💾 Guardar cambios</button>
     </div>
   </div>
 </div>
