@@ -914,8 +914,9 @@
           <div class="form-group" style="margin:0;">
             <label style="font-size:.8rem;">Mostrar</label>
             <select id="ctaprov-filtro" onchange="filtrarProveedoresCta()">
-              <option value="pendientes">Pendientes</option>
-              <option value="todos">Al día</option>
+              <option value="pendientes">Pendientes (les debo)</option>
+              <option value="favor">A favor (me deben)</option>
+              <option value="todos">Al día (saldo cero)</option>
             </select>
           </div>
           <button class="btn btn-secondary btn-sm" onclick="imprimirCtaCteProveedor()">🖨️ Imprimir extracto</button>
@@ -923,10 +924,12 @@
 
         <!-- KPIs saldo -->
         <div id="ctaprov-kpis" style="display:none;margin-bottom:16px;">
-          <div class="metrics-grid">
+          <div class="metrics-grid" id="ctaprov-kpis-ars">
             <div class="metric-card"><div class="val" id="ctaprov-debe-ars" style="color:var(--red);">—</div><div class="lbl">Deuda ARS</div></div>
             <div class="metric-card"><div class="val" id="ctaprov-haber-ars">—</div><div class="lbl">Pagado ARS</div></div>
             <div class="metric-card"><div class="val" id="ctaprov-saldo-ars" style="color:var(--amber);">—</div><div class="lbl">Saldo ARS</div></div>
+          </div>
+          <div class="metrics-grid" id="ctaprov-kpis-usd" style="display:none;">
             <div class="metric-card"><div class="val" id="ctaprov-debe-usd" style="color:var(--red);">—</div><div class="lbl">Deuda USD</div></div>
             <div class="metric-card"><div class="val" id="ctaprov-haber-usd">—</div><div class="lbl">Pagado USD</div></div>
             <div class="metric-card"><div class="val" id="ctaprov-saldo-usd" style="color:var(--amber);">—</div><div class="lbl">Saldo USD</div></div>
@@ -936,7 +939,7 @@
         <!-- Tabla movimientos -->
         <div id="ctaprov-tabla" class="table-wrap" style="display:none;">
           <table id="tbl-ctaprov">
-            <thead><tr><th>Fecha</th><th>Tipo</th><th>N°/Ref.</th><th>Descripción</th><th style="text-align:right;">Debe ARS</th><th style="text-align:right;">Debe USD</th><th style="text-align:right;">Haber ARS</th><th style="text-align:right;">Saldo ARS</th></tr></thead>
+            <thead><tr><th>Fecha</th><th>Tipo</th><th>N°/Ref.</th><th>Descripción</th><th style="text-align:right;">Debe</th><th style="text-align:right;">Haber</th><th style="text-align:right;">Saldo</th></tr></thead>
             <tbody id="tbl-ctaprov-body"></tbody>
           </table>
         </div>
@@ -5504,6 +5507,10 @@ window.guardarEdicionProveedor=async function(){
   const nombre=document.getElementById('edit-prov-nombre').value.trim();
   if(!nombre){showAlert('Ingresá el nombre','error');return;}
   try{
+    // Obtener nombre viejo para migrar referencias
+    const provSnap=await getDoc(doc(db,'proveedores',id));
+    const nombreViejo=provSnap.exists()?provSnap.data().nombre:'';
+
     await updateDoc(doc(db,'proveedores',id),{
       nombre,cuit:document.getElementById('edit-prov-cuit').value.trim(),
       rubro:document.getElementById('edit-prov-rubro').value.trim(),
@@ -5511,7 +5518,32 @@ window.guardarEdicionProveedor=async function(){
       email:document.getElementById('edit-prov-email').value.trim(),
       observaciones:document.getElementById('edit-prov-obs').value.trim()
     });
-    showAlert('✅ Proveedor actualizado');cerrarModal('modal-edit-prov');
+
+    // Si cambió el nombre, actualizar todas las referencias
+    if(nombreViejo&&nombreViejo!==nombre){
+      showAlert('Actualizando referencias...','info');
+      const batch=writeBatch(db);
+      let count=0;
+
+      // Actualizar compras
+      const snapComp=await getDocsFromServer(query(collection(db,'compras'),where('proveedor','==',nombreViejo)));
+      snapComp.forEach(d=>{batch.update(doc(db,'compras',d.id),{proveedor:nombre});count++;});
+
+      // Actualizar pagos_proveedores
+      const snapPagos=await getDocsFromServer(query(collection(db,'pagos_proveedores'),where('proveedor','==',nombreViejo)));
+      snapPagos.forEach(d=>{batch.update(doc(db,'pagos_proveedores',d.id),{proveedor:nombre});count++;});
+
+      // Actualizar compras_nuez si aplica
+      const snapNuez=await getDocsFromServer(query(collection(db,'compras_nuez'),where('proveedor','==',nombreViejo)));
+      snapNuez.forEach(d=>{batch.update(doc(db,'compras_nuez',d.id),{proveedor:nombre});count++;});
+
+      if(count>0) await batch.commit();
+      showAlert('✅ Proveedor actualizado y '+count+' registros migrados');
+    } else {
+      showAlert('✅ Proveedor actualizado');
+    }
+
+    cerrarModal('modal-edit-prov');
     cargarProveedoresTabla();cargarProveedoresSelect();
   }catch(e){showAlert('Error: '+e.message,'error');}
 }
@@ -8703,6 +8735,7 @@ window.filtrarProveedoresCta=async function(){
   ]);
 
   // Calcular saldo por proveedor
+  // Incluir TODAS las compras en ctacte (incluso pagadas) para balance correcto
   const saldos={};
   snapComp.forEach(d=>{
     const c=d.data();
@@ -8710,7 +8743,7 @@ window.filtrarProveedoresCta=async function(){
     if(!prov) return;
     const esCtaCte=c.forma_pago==='credito'||c.forma_pago==='cuenta_corriente';
     if(!esCtaCte) return;
-    if(c.estado==='pagado') return;
+    // NO excluir estado='pagado' — incluir todo para balance real
     const moneda=c.moneda||'ARS';
     if(!saldos[prov]) saldos[prov]={ars:0,usd:0};
     if(moneda==='ARS') saldos[prov].ars+=c.monto_total||0;
@@ -8719,7 +8752,8 @@ window.filtrarProveedoresCta=async function(){
   snapPagos.forEach(d=>{
     const p=d.data();
     const prov=p.proveedor||'';
-    if(!prov||!saldos[prov]) return;
+    if(!prov) return;
+    if(!saldos[prov]) saldos[prov]={ars:0,usd:0}; // inicializar aunque no tenga compras en ctacte
     if(p.moneda==='ARS') saldos[prov].ars-=p.importe||0;
     else if(p.moneda==='USD') saldos[prov].usd-=p.importe||0;
     else if(p.moneda==='USD_en_ARS'){saldos[prov].ars-=p.importe_ars||0;saldos[prov].usd-=p.importe_usd||0;}
@@ -8730,20 +8764,41 @@ window.filtrarProveedoresCta=async function(){
   sel.innerHTML='<option value="">— Seleccioná proveedor —</option>';
   snapProv.forEach(d=>{
     const nombre=d.data().nombre;
-    const saldo=saldos[nombre]||{ars:0,usd:0};
-    const tieneSaldo=saldo.ars>0.01||saldo.usd>0.01;
-    // filtro 'pendientes' → solo proveedores con saldo
-    // filtro 'todos' → solo proveedores con saldo=0 (al día)
-    if(filtro==='pendientes'&&!tieneSaldo) return;
-    if(filtro==='todos'&&tieneSaldo) return;
+    // Buscar saldo con coincidencia exacta o case-insensitive
+    const saldo=saldos[nombre]||Object.entries(saldos).find(([k])=>k.toLowerCase()===nombre.toLowerCase())?.[1]||{ars:0,usd:0};
+    const saldoARS=saldo.ars;
+    const saldoUSD=saldo.usd;
+    const debeARS=saldoARS>0.01;
+    const debeUSD=saldoUSD>0.01;
+    const aFavorARS=saldoARS<-0.01;
+    const aFavorUSD=saldoUSD<-0.01;
+    const alDia=!debeARS&&!debeUSD&&!aFavorARS&&!aFavorUSD;
+
+    console.log(nombre,'netARS:',netARS,'netUSD:',netUSD,'esPend:',esPendiente,'esAFavor:',esAFavor,'esAlDia:',esAlDia,'filtro:',filtro);
+    // Clasificación mutuamente excluyente basada en saldo neto
+    const netARS=saldoARS;
+    const netUSD=saldoUSD;
+    const esPendiente=(netARS>0.01||netUSD>0.01)&&netARS>=-0.01&&netUSD>=-0.01;
+    const esAFavor=netARS<-0.01||netUSD<-0.01;
+    const esAlDia=Math.abs(netARS)<=0.01&&Math.abs(netUSD)<=0.01;
+
+    if(filtro==='pendientes'&&!esPendiente) return;
+    if(filtro==='favor'&&!esAFavor) return;
+    if(filtro==='todos'&&!esAlDia) return;
+
     const o=document.createElement('option');
     o.value=nombre;
     let deudaLabel='';
-    if(tieneSaldo){
+    if(debeARS||debeUSD){
       const partes=[];
-      if(saldo.ars>0.01) partes.push('$'+Math.round(saldo.ars).toLocaleString('es-AR'));
-      if(saldo.usd>0.01) partes.push('USD '+saldo.usd.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2}));
+      if(debeARS) partes.push('$'+Math.round(saldoARS).toLocaleString('es-AR'));
+      if(debeUSD) partes.push('USD '+saldoUSD.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2}));
       deudaLabel=' (debe '+partes.join(' + ')+')';
+    } else if(aFavorARS||aFavorUSD){
+      const partes=[];
+      if(aFavorARS) partes.push('$'+Math.round(Math.abs(saldoARS)).toLocaleString('es-AR'));
+      if(aFavorUSD) partes.push('USD '+Math.abs(saldoUSD).toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2}));
+      deudaLabel=' ✅ a favor '+partes.join(' + ');
     }
     o.textContent=nombre+deudaLabel;
     sel.appendChild(o);
@@ -8845,7 +8900,10 @@ window.cargarCtaCteProveedor=async function(){
   // Ordenar por fecha
   movs.sort((a,b)=>(a.fecha||'').localeCompare(b.fecha||''));
 
-  // Calcular saldos acumulados
+  // Detectar si la CC es en ARS o USD
+  const esUSD=movs.some(m=>m.debeUSD>0);
+  const esARS=movs.some(m=>m.debeARS>0);
+
   const fmt=v=>'$'+parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1});
   const fmtU=v=>'USD '+parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2});
   let saldoARS=0,saldoUSD=0,totalDebeARS=0,totalDebeUSD=0,totalHaberARS=0,totalHaberUSD=0;
@@ -8856,42 +8914,57 @@ window.cargarCtaCteProveedor=async function(){
     saldoUSD+=m.debeUSD-m.haberUSD;
     totalDebeARS+=m.debeARS;totalDebeUSD+=m.debeUSD;
     totalHaberARS+=m.haberARS;totalHaberUSD+=m.haberUSD;
-    const sColor=saldoARS>0?'color:var(--amber)':'color:var(--green)';
+    const saldo=esUSD?saldoUSD:saldoARS;
+    const sColor=saldo>0.01?'color:var(--amber)':saldo<-0.01?'color:var(--green)':'color:var(--text2)';
+    const saldoFmt=saldo>0.01?(esUSD?fmtU(saldoUSD):fmt(saldoARS))
+      :saldo<-0.01?'✅ A favor '+(esUSD?fmtU(Math.abs(saldoUSD)):fmt(Math.abs(saldoARS)))
+      :'✅ Al día';
     const tipoBadge=m.tipo==='Compra'
       ?`<span style="background:#fde8e8;color:#c0392b;border-radius:12px;padding:2px 8px;font-size:.75rem;">📦 Compra</span>`
       :`<span style="background:#e8f4e8;color:#2d6a2d;border-radius:12px;padding:2px 8px;font-size:.75rem;">💳 Pago</span>`;
+    // Debe y Haber según moneda de la CC
+    const debeCol=esUSD?(m.debeUSD>0?fmtU(m.debeUSD):'—'):(m.debeARS>0?fmt(m.debeARS):'—');
+    // Haber: si pago USD_en_ARS en CC USD → mostrar haberUSD; si CC ARS → mostrar haberARS
+    const haberCol=esUSD?(m.haberUSD>0?fmtU(m.haberUSD):m.haberARS>0?fmt(m.haberARS)+' (ARS)':'—')
+                        :(m.haberARS>0?fmt(m.haberARS):'—');
     tbody.innerHTML+=`<tr>
       <td>${(m.fecha||'').split('-').reverse().join('/')}</td>
       <td>${tipoBadge}</td>
       <td><span class="remito-num">${m.ref}</span></td>
       <td style="font-size:.82rem;max-width:200px;">${m.desc}</td>
-      <td style="text-align:right;color:var(--red);">${m.debeARS>0?fmt(m.debeARS):'—'}</td>
-      <td style="text-align:right;color:var(--red);">${m.debeUSD>0?fmtU(m.debeUSD):'—'}</td>
-      <td style="text-align:right;color:var(--green);">${m.haberARS>0?fmt(m.haberARS):m.haberUSD>0?fmtU(m.haberUSD):'—'}</td>
-      <td style="text-align:right;font-weight:700;${sColor};">${saldoARS!==0?fmt(saldoARS):(saldoUSD!==0?fmtU(saldoUSD):'✅ Al día')}</td>
+      <td style="text-align:right;color:var(--red);">${debeCol}</td>
+      <td style="text-align:right;color:var(--green);">${haberCol}</td>
+      <td style="text-align:right;font-weight:700;${sColor};">${saldoFmt}</td>
     </tr>`;
   });
 
-  if(!movs.length) tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text2);padding:20px;">No hay movimientos en cuenta corriente para este proveedor.</td></tr>';
+  if(!movs.length) tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text2);padding:20px;">No hay movimientos en cuenta corriente para este proveedor.</td></tr>';
 
   // Totales
+  const totDebe=esUSD?fmtU(totalDebeUSD):fmt(totalDebeARS);
+  const totHaber=esUSD?fmtU(totalHaberUSD):fmt(totalHaberARS);
+  const totSaldo=esUSD?saldoUSD:saldoARS;
   tbody.innerHTML+=`<tr style="background:var(--bg2);font-weight:700;">
     <td colspan="4">TOTALES</td>
-    <td style="text-align:right;color:var(--red);">${fmt(totalDebeARS)}</td>
-    <td style="text-align:right;color:var(--red);">${totalDebeUSD>0?fmtU(totalDebeUSD):'—'}</td>
-    <td style="text-align:right;color:var(--green);">${fmt(totalHaberARS)}</td>
-    <td style="text-align:right;color:${saldoARS>0?'var(--amber)':'var(--green)'};">${fmt(saldoARS)}</td>
+    <td style="text-align:right;color:var(--red);">${totDebe}</td>
+    <td style="text-align:right;color:var(--green);">${totHaber}</td>
+    <td style="text-align:right;color:${totSaldo>0.01?'var(--amber)':totSaldo<-0.01?'var(--green)':'var(--text2)'};">${totSaldo>0.01?(esUSD?fmtU(totSaldo):fmt(totSaldo)):totSaldo<-0.01?'✅ A favor '+(esUSD?fmtU(Math.abs(totSaldo)):fmt(Math.abs(totSaldo))):'✅ Al día'}</td>
   </tr>`;
 
   // KPIs
+  // Mostrar solo los KPIs de la moneda correspondiente
+  const kpisARS=document.getElementById('ctaprov-kpis-ars');
+  const kpisUSD=document.getElementById('ctaprov-kpis-usd');
+  if(kpisARS) kpisARS.style.display=esUSD?'none':'';
+  if(kpisUSD) kpisUSD.style.display=esUSD?'':'none';
   document.getElementById('ctaprov-debe-ars').textContent=fmt(totalDebeARS);
   document.getElementById('ctaprov-haber-ars').textContent=fmt(totalHaberARS);
   document.getElementById('ctaprov-saldo-ars').textContent=fmt(saldoARS);
   document.getElementById('ctaprov-debe-usd').textContent=fmtU(totalDebeUSD);
   document.getElementById('ctaprov-haber-usd').textContent=fmtU(totalHaberUSD);
   document.getElementById('ctaprov-saldo-usd').textContent=fmtU(saldoUSD);
-  document.getElementById('ctaprov-saldo-ars').style.color=saldoARS>0?'var(--amber)':'var(--green)';
-  document.getElementById('ctaprov-saldo-usd').style.color=saldoUSD>0?'var(--amber)':'var(--green)';
+  document.getElementById('ctaprov-saldo-ars').style.color=saldoARS>0.01?'var(--amber)':saldoARS<-0.01?'var(--green)':'var(--text2)';
+  document.getElementById('ctaprov-saldo-usd').style.color=saldoUSD>0.01?'var(--amber)':saldoUSD<-0.01?'var(--green)':'var(--text2)';
 }
 
 window.abrirModalPagoProv=async function(){
@@ -9072,8 +9145,13 @@ window.cargarRegistroPagos=async function(){
       :fmt(p.importe_ars||0);
     const tcCol=p.tc?parseFloat(p.tc).toLocaleString('es-AR',{minimumFractionDigits:1}):'—';
     // Monto ARS y USD según moneda
-    const montoARS=p.moneda==='ARS'?fmt(p.importe):p.moneda==='USD_en_ARS'?fmt(p.importe_ars||p.importe||0):'—';
-    const montoUSD=p.moneda==='USD'?fmtU(p.importe):p.moneda==='USD_en_ARS'?fmtU(p.importe_usd||0):'—';
+    // USD_en_ARS: importe=ARS pagado, importe_usd=equivalente USD (ARS/TC)
+    const montoARS=p.moneda==='ARS'?fmt(p.importe)
+      :p.moneda==='USD_en_ARS'?fmt(p.importe||0)
+      :'—';
+    const montoUSD=p.moneda==='USD'?fmtU(p.importe)
+      :p.moneda==='USD_en_ARS'?fmtU(p.importe_usd||0)
+      :'—';
     const tcDisplay=p.tc?parseFloat(p.tc).toLocaleString('es-AR',{minimumFractionDigits:1}):'—';
     tbody.innerHTML+=`<tr>
       <td>${(p.fecha||'').split('-').reverse().join('/')}</td>
