@@ -824,20 +824,14 @@
             </select>
           </div>
           <div class="form-group"><label>Forma de pago *</label>
-            <select id="gas-forma-pago">
+            <select id="gas-forma-pago" onchange="toggleGasFormaPago()">
               <option value="efectivo">Efectivo</option>
               <option value="transferencia">Transferencia</option>
               <option value="cheque">Cheque</option>
               <option value="credito">Crédito / Cuenta corriente</option>
             </select>
           </div>
-          <div class="form-group"><label>Estado</label>
-            <select id="gas-estado">
-              <option value="pagado">✅ Pagado</option>
-              <option value="pendiente">⏳ Pendiente</option>
-            </select>
-          </div>
-          <div class="form-group"><label>Vencimiento</label>
+          <div class="form-group" id="gas-vencimiento-group" style="display:none;"><label>Vencimiento cheque</label>
             <input type="date" id="gas-vencimiento">
           </div>
           <div class="form-group full"><label>Observaciones</label>
@@ -919,9 +913,9 @@
           </div>
           <div class="form-group" style="margin:0;">
             <label style="font-size:.8rem;">Mostrar</label>
-            <select id="ctaprov-filtro" onchange="cargarCtaCteProveedor()">
-              <option value="pendientes">Solo pendientes</option>
-              <option value="todos">Todos</option>
+            <select id="ctaprov-filtro" onchange="filtrarProveedoresCta()">
+              <option value="pendientes">Pendientes</option>
+              <option value="todos">Al día</option>
             </select>
           </div>
           <button class="btn btn-secondary btn-sm" onclick="imprimirCtaCteProveedor()">🖨️ Imprimir extracto</button>
@@ -977,7 +971,7 @@
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>Fecha</th><th>Proveedor</th><th>Moneda</th><th style="text-align:right;">Importe</th><th>TC</th><th style="text-align:right;">En ARS</th><th>Medio</th><th>Referencia</th><th>Vto. Cheque</th><th>Observaciones</th><th>Acciones</th></tr></thead>
+            <thead><tr><th>Fecha</th><th>Proveedor</th><th style="text-align:right;">Monto ARS</th><th style="text-align:right;">TC</th><th style="text-align:right;">USD</th><th>Medio</th><th>Vto. Cheque</th><th>Acciones</th></tr></thead>
             <tbody id="tbl-pagprov-body"></tbody>
           </table>
         </div>
@@ -3008,7 +3002,7 @@ window.limpiarFiltrosSalidas=function(){
 window.cargarSalidas=async function(){
   poblarSelectsVariedad();
   const tbody=document.querySelector('#tbl-salidas tbody');
-  tbody.innerHTML='<tr><td colspan="11" class="loading">Cargando...</td></tr>';
+  tbody.innerHTML='<tr><td colspan="8" class="loading">Cargando...</td></tr>';
   const prop=document.getElementById('f-sal-prop').value;
   const varF=document.getElementById('f-sal-var').value;
   const mesF=document.getElementById('f-sal-mes')?.value||'';
@@ -5663,6 +5657,14 @@ window.recalcTotales=function(){
 }
 
 // ---- GUARDAR COMPRA ----
+window.toggleGasFormaPago=function(){
+  const forma=document.getElementById('gas-forma-pago').value;
+  const esCheque=forma==='cheque';
+  const esCtaCte=forma==='credito'||forma==='cuenta_corriente';
+  document.getElementById('gas-vencimiento-group').style.display=esCheque?'':'none';
+  if(!esCheque) document.getElementById('gas-vencimiento').value='';
+}
+
 window.guardarCompra=async function(){
   const fecha=document.getElementById('gas-fecha').value;
   if(!fecha){showAlert('Ingresá la fecha','error');return;}
@@ -5724,18 +5726,39 @@ window.guardarCompra=async function(){
     const moneda=document.getElementById('gas-moneda').value||'ARS';
     const tcRef=moneda==='USD'?(parseFloat(document.getElementById('gas-tc').value)||0):0;
     const compraRef=doc(collection(db,'compras'));
+    const formaPago=document.getElementById('gas-forma-pago').value;
+    const esCuentaCorriente=formaPago==='credito'||formaPago==='cuenta_corriente';
+    const estadoAuto=esCuentaCorriente?'cuenta_corriente':'pagado';
+    const proveedor=document.getElementById('gas-proveedor').value||'';
     batch.set(compraRef,{
       fecha,
-      proveedor:document.getElementById('gas-proveedor').value||'',
+      proveedor,
       nro_factura:document.getElementById('gas-nro-factura').value.trim(),
       moneda, tc_referencial:tcRef,
       iva_pct:ivaPct,monto_neto:neto,monto_iva,monto_total,
-      forma_pago:document.getElementById('gas-forma-pago').value,
-      estado:document.getElementById('gas-estado').value,
+      forma_pago:formaPago,
+      estado:estadoAuto,
       vencimiento:document.getElementById('gas-vencimiento').value||'',
       observaciones:document.getElementById('gas-obs').value.trim(),
       items,creado:serverTimestamp()
     });
+    // Si es pago inmediato (no cta cte), registrar HABER en pagos_proveedores
+    if(!esCuentaCorriente&&proveedor){
+      const pagoRef=doc(collection(db,'pagos_proveedores'));
+      const medioLabel={efectivo:'Efectivo',transferencia:'Transferencia',cheque:'Cheque'};
+      batch.set(pagoRef,{
+        proveedor,fecha,
+        moneda:moneda==='USD'?'USD':'ARS',
+        importe:monto_total,
+        importe_ars:moneda==='ARS'?monto_total:monto_total*(tcRef||1),
+        tc:tcRef||null,
+        medio:medioLabel[formaPago]||formaPago,
+        ref:document.getElementById('gas-nro-factura').value.trim()||'',
+        obs:'Pago automático — compra registrada',
+        cheque_vencimiento:formaPago==='cheque'?document.getElementById('gas-vencimiento').value||null:null,
+        creado:serverTimestamp()
+      });
+    }
 
     // Actualizar stock de insumos
     for(const it of items){
@@ -5770,7 +5793,8 @@ window.guardarCompra=async function(){
     ['gas-fecha','gas-nro-factura','gas-vencimiento','gas-obs'].forEach(id=>document.getElementById(id).value='');
     document.getElementById('gas-proveedor').value='';
     document.getElementById('gas-iva').value='21';
-    document.getElementById('gas-estado').value='pagado';
+    document.getElementById('gas-forma-pago').value='efectivo';
+    toggleGasFormaPago();
     document.getElementById('gas-moneda').value='ARS';
     document.getElementById('gas-tc').value='';
     document.getElementById('gas-tc-group').style.display='none';
@@ -5806,9 +5830,11 @@ window.cargarCompras=async function(){
     const vencida=c.estado==='pendiente'&&c.vencimiento&&c.vencimiento<hoy;
     const estadoBadge=c.estado==='pagado'
       ?'<span class="badge badge-green">✅ Pagado</span>'
-      :vencida
-        ?'<span class="badge" style="background:#f8d7da;color:#721c24;">🔴 Vencida</span>'
-        :'<span class="badge badge-amber">⏳ Pendiente</span>';
+      :c.estado==='cuenta_corriente'||c.forma_pago==='credito'||c.forma_pago==='cuenta_corriente'
+        ?'<span style="color:var(--text2);">— Cta. cte.</span>'
+        :vencida
+          ?'<span class="badge" style="background:#f8d7da;color:#721c24;">🔴 Vencida</span>'
+          :'<span class="badge badge-amber">⏳ Pendiente</span>';
 
     const tiposBadges=(c.items||[]).map(it=>`<span style="font-size:.75rem;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:2px 7px;">${_tipoLabel[it.tipo]||it.tipo}</span>`).join(' ');
     const itemsResumen=(c.items||[]).map(it=>it.descripcion).join(', ');
@@ -8662,12 +8688,66 @@ window.confirmarRestore=async function(){
 // ============================================================
 
 window.iniciarCtaCteProveedores=async function(){
-  // Poblar selector de proveedores
+  await filtrarProveedoresCta();
+}
+
+window.filtrarProveedoresCta=async function(){
   const sel=document.getElementById('ctaprov-selector');
+  const filtro=document.getElementById('ctaprov-filtro').value;
   const cur=sel.value;
+
+  // Cargar todas las compras para saber quién tiene saldo
+  const [snapComp, snapPagos]=await Promise.all([
+    getDocsFromServer(collection(db,'compras')),
+    getDocsFromServer(collection(db,'pagos_proveedores'))
+  ]);
+
+  // Calcular saldo por proveedor
+  const saldos={};
+  snapComp.forEach(d=>{
+    const c=d.data();
+    const prov=c.proveedor||c.nombre_proveedor||'';
+    if(!prov) return;
+    const esCtaCte=c.forma_pago==='credito'||c.forma_pago==='cuenta_corriente';
+    if(!esCtaCte) return;
+    if(c.estado==='pagado') return;
+    const moneda=c.moneda||'ARS';
+    if(!saldos[prov]) saldos[prov]={ars:0,usd:0};
+    if(moneda==='ARS') saldos[prov].ars+=c.monto_total||0;
+    else saldos[prov].usd+=c.monto_total||0;
+  });
+  snapPagos.forEach(d=>{
+    const p=d.data();
+    const prov=p.proveedor||'';
+    if(!prov||!saldos[prov]) return;
+    if(p.moneda==='ARS') saldos[prov].ars-=p.importe||0;
+    else if(p.moneda==='USD') saldos[prov].usd-=p.importe||0;
+    else if(p.moneda==='USD_en_ARS'){saldos[prov].ars-=p.importe_ars||0;saldos[prov].usd-=p.importe_usd||0;}
+  });
+
+  // Cargar lista de proveedores
+  const snapProv=await getDocs(collection(db,'proveedores'));
   sel.innerHTML='<option value="">— Seleccioná proveedor —</option>';
-  const snap=await getDocs(collection(db,'proveedores'));
-  snap.forEach(d=>{const o=document.createElement('option');o.value=d.data().nombre;o.textContent=d.data().nombre;sel.appendChild(o);});
+  snapProv.forEach(d=>{
+    const nombre=d.data().nombre;
+    const saldo=saldos[nombre]||{ars:0,usd:0};
+    const tieneSaldo=saldo.ars>0.01||saldo.usd>0.01;
+    // filtro 'pendientes' → solo proveedores con saldo
+    // filtro 'todos' → solo proveedores con saldo=0 (al día)
+    if(filtro==='pendientes'&&!tieneSaldo) return;
+    if(filtro==='todos'&&tieneSaldo) return;
+    const o=document.createElement('option');
+    o.value=nombre;
+    let deudaLabel='';
+    if(tieneSaldo){
+      const partes=[];
+      if(saldo.ars>0.01) partes.push('$'+Math.round(saldo.ars).toLocaleString('es-AR'));
+      if(saldo.usd>0.01) partes.push('USD '+saldo.usd.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2}));
+      deudaLabel=' (debe '+partes.join(' + ')+')';
+    }
+    o.textContent=nombre+deudaLabel;
+    sel.appendChild(o);
+  });
   if(cur)sel.value=cur;
   if(sel.value) cargarCtaCteProveedor();
 }
@@ -8683,12 +8763,12 @@ window.cargarCtaCteProveedor=async function(){
 
   if(!prov){
     kpisEl.style.display='none';tablaEl.style.display='none';
-    emptyEl.style.display='block';btnPagar.style.display='none';return;
+    emptyEl.style.display='block';if(btnPagar)btnPagar.style.display='none';return;
   }
 
   tbody.innerHTML='<tr><td colspan="8" class="loading">Cargando...</td></tr>';
   kpisEl.style.display='grid';tablaEl.style.display='block';
-  emptyEl.style.display='none';btnPagar.style.display='';
+  emptyEl.style.display='none';if(btnPagar)btnPagar.style.display='';
 
   const [snapComp, snapPagos, snapPagosUSD]=await Promise.all([
     getDocsFromServer(query(collection(db,'compras'),orderBy('fecha','asc'))),
@@ -8701,7 +8781,10 @@ window.cargarCtaCteProveedor=async function(){
   snapComp.forEach(d=>{
     const c=d.data();
     if((c.proveedor||c.nombre_proveedor)!==prov) return;
-    if(c.forma_pago!=='cuenta_corriente'&&c.forma_pago!=='credito') return; // guardado como 'credito' o 'cuenta_corriente'
+    const esCtaCte=c.forma_pago==='cuenta_corriente'||c.forma_pago==='credito';
+    // pendientes: solo compras en cta cte sin pagar
+    // todos: todas las compras del proveedor (cta cte + contado)
+    if(filtro==='pendientes'&&!esCtaCte) return;
     if(filtro==='pendientes'&&c.estado==='pagado') return;
     const moneda=c.moneda||'ARS';
     movs.push({
@@ -8712,6 +8795,22 @@ window.cargarCtaCteProveedor=async function(){
       haberARS:0,haberUSD:0,id:d.id,estado:c.estado
     });
   });
+
+  // Para historial completo: si compra tiene estado='pagado' sin pago registrado,
+  // agregar un HABER implícito para que el saldo quede en cero
+  if(filtro==='todos'){
+    const pagosPorFecha={};
+    movs.filter(m=>m.tipo==='Pago'||m.tipo==='Pago USD').forEach(m=>{pagosPorFecha[m.ref]=true;});
+    movs.filter(m=>m.tipo==='Compra'&&m.estado==='pagado').forEach(m=>{
+      // Solo si no existe un pago registrado con esa referencia
+      if(!pagosPorFecha[m.ref]&&!pagosPorFecha[m.id]){
+        movs.push({fecha:m.fecha,tipo:'Pago (registrado)',ref:m.ref,desc:'Pago registrado en el gasto',
+          debeARS:0,debeUSD:0,haberARS:m.debeARS,haberUSD:m.debeUSD,id:'impl-'+m.id,estado:'pagado'});
+      }
+    });
+    movs.sort((a,b)=>(a.fecha||'').localeCompare(b.fecha||''));
+  }
+
   
   // HABER: pagos_proveedores
   snapPagos.forEach(d=>{
@@ -8720,9 +8819,20 @@ window.cargarCtaCteProveedor=async function(){
     let haberARS=0,haberUSD=0;
     if(p.moneda==='ARS') haberARS=p.importe||0;
     else if(p.moneda==='USD') haberUSD=p.importe||0;
-    else if(p.moneda==='USD_en_ARS') haberARS=p.importe_ars||0; // USD pagado en ARS
-    movs.push({fecha:p.fecha,tipo:'Pago',ref:p.ref||'—',desc:p.medio+(p.obs?' — '+p.obs:''),
-      debeARS:0,debeUSD:0,haberARS,haberUSD:haberUSD,id:d.id});
+    else if(p.moneda==='USD_en_ARS'){
+      // Pagado en ARS pero cancela deuda USD — mostrar en ambas columnas
+      haberARS=p.importe_ars||0;
+      haberUSD=p.importe_usd||0; // importe_usd = importe_ars/tc
+    }
+    // Cheque diferido: usar fecha de vencimiento del cheque como fecha efectiva del pago
+    const fechaEfectiva=p.medio==='Cheque'&&p.cheque_vencimiento?p.cheque_vencimiento:p.fecha;
+    const descPago=p.medio==='Cheque'&&p.cheque_vencimiento
+      ?`Cheque diferido — vence ${p.cheque_vencimiento.split('-').reverse().join('/')}`+(p.obs?' — '+p.obs:'')
+      :p.moneda==='USD_en_ARS'?`${p.medio} (USD→ARS TC:${parseFloat(p.tc||0).toLocaleString('es-AR',{minimumFractionDigits:1})})`+(p.obs?' — '+p.obs:'')
+      :p.medio+(p.obs?' — '+p.obs:'');
+    movs.push({fecha:fechaEfectiva,fechaEmision:p.fecha,tipo:'Pago',ref:p.ref||'—',
+      desc:descPago,
+      debeARS:0,debeUSD:0,haberARS,haberUSD,id:d.id});
   });
   // HABER: pagos_usd legacy
   snapPagosUSD.forEach(d=>{
@@ -8785,14 +8895,18 @@ window.cargarCtaCteProveedor=async function(){
 }
 
 window.abrirModalPagoProv=async function(){
-  // Puede ser llamado desde ctacte (con proveedor seleccionado) o desde pagos (sin prov)
+  // Poblar select de proveedor
+  const selPM=document.getElementById('pagprov-nombre');
   const ctaSel=document.getElementById('ctaprov-selector');
   const prov=ctaSel?ctaSel.value:'';
-  document.getElementById('pagprov-nombre').value=prov;
+  selPM.innerHTML='<option value="">— Seleccioná —</option>';
+  const _snapPM=await getDocs(collection(db,'proveedores'));
+  _snapPM.forEach(d=>{const o=document.createElement('option');o.value=d.data().nombre;o.textContent=d.data().nombre;selPM.appendChild(o);});
+  selPM.value=prov;
   document.getElementById('pagprov-fecha').value=today();
   document.getElementById('pagprov-importe').value='';
   document.getElementById('pagprov-tc').value='';
-  document.getElementById('pagprov-total-ars').value='';
+  document.getElementById('pagprov-total-usd').value='';
   document.getElementById('pagprov-ref').value='';
   document.getElementById('pagprov-obs').value='';
   document.getElementById('pagprov-moneda').value='ARS';
@@ -8805,8 +8919,12 @@ window.abrirModalPagoProv=async function(){
 
 window.toggleChequeVenc=function(){
   const medio=document.getElementById('pagprov-medio').value;
-  document.getElementById('pagprov-cheque-venc-group').style.display=medio==='Cheque'?'':'none';
-  if(medio!=='Cheque') document.getElementById('pagprov-cheque-venc').value='';
+  const esCheque=medio==='Cheque';
+  document.getElementById('pagprov-cheque-venc-group').style.display=esCheque?'':'none';
+  if(!esCheque) document.getElementById('pagprov-cheque-venc').value='';
+  // Actualizar label de fecha según medio
+  const lblFecha=document.querySelector('label[for="pagprov-fecha"],#pagprov-fecha').previousElementSibling;
+  if(lblFecha) lblFecha.textContent=esCheque?'Fecha de emisión *':'Fecha *';
 }
 
 window.togglePagProvTC=function(){
@@ -8814,13 +8932,18 @@ window.togglePagProvTC=function(){
   const showTC=moneda==='USD_en_ARS';
   document.getElementById('pagprov-tc-group').style.display=showTC?'':'none';
   document.getElementById('pagprov-total-group').style.display=showTC?'':'none';
+  // Actualizar label del importe
+  const lbl=document.getElementById('pagprov-importe-label');
+  if(lbl) lbl.textContent=moneda==='USD_en_ARS'?'Importe en ARS *':moneda==='USD'?'Importe en USD *':'Importe en ARS *';
+  document.getElementById('pagprov-importe').placeholder='0.00';
 }
 
 window.calcPagProvTotal=function(){
   const imp=parseFloat(document.getElementById('pagprov-importe').value)||0;
   const tc=parseFloat(document.getElementById('pagprov-tc').value)||0;
-  const total=imp*tc;
-  document.getElementById('pagprov-total-ars').value=total>0?'$ '+total.toLocaleString('es-AR',{minimumFractionDigits:1}):'';
+  // imp=ARS, tc=ARS/USD → USD = ARS/TC
+  const usd=tc>0?imp/tc:0;
+  document.getElementById('pagprov-total-usd').value=usd>0?'USD '+usd.toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2}):'';
 }
 
 window.guardarPagoProv=async function(){
@@ -8836,8 +8959,9 @@ window.guardarPagoProv=async function(){
   if(moneda==='USD_en_ARS'&&!tc){showAlert('Ingresá el tipo de cambio','error');return;}
   const importe_ars=moneda==='USD_en_ARS'?importe*tc:moneda==='ARS'?importe:0;
   const chequeVenc=document.getElementById('pagprov-cheque-venc').value||null;
+  const importe_usd=moneda==='USD_en_ARS'&&tc>0?importe/tc:moneda==='USD'?importe:0; // ARS/TC
   await addDoc(collection(db,'pagos_proveedores'),{
-    proveedor:prov,fecha,moneda,importe,tc:tc||null,importe_ars,medio,ref,obs,cheque_vencimiento:chequeVenc,creado:serverTimestamp()
+    proveedor:prov,fecha,moneda,importe,tc:tc||null,importe_ars,importe_usd,medio,ref,obs,cheque_vencimiento:chequeVenc,creado:serverTimestamp()
   });
   showAlert('✅ Pago registrado');
   cerrarModal('modal-pago-prov');
@@ -8913,7 +9037,7 @@ window.limpiarFiltrosPagProv=function(){
 window.cargarRegistroPagos=async function(){
   const tbody=document.getElementById('tbl-pagprov-body');
   if(!tbody) return;
-  tbody.innerHTML='<tr><td colspan="11" class="loading">Cargando...</td></tr>';
+  tbody.innerHTML='<tr><td colspan="8" class="loading">Cargando...</td></tr>';
   const provF=document.getElementById('f-pagprov-prov')?.value||'';
   const mesF=document.getElementById('f-pagprov-mes')?.value||'';
   const anioF=document.getElementById('f-pagprov-anio')?.value||'';
@@ -8939,24 +9063,30 @@ window.cargarRegistroPagos=async function(){
     if(anioF&&(p.fecha||'').slice(0,4)!==anioF) return;
     cnt++;
     const monedaLabel={'ARS':'🇦🇷 ARS','USD':'🇺🇸 USD','USD_en_ARS':'🇺🇸 USD→ARS'}[p.moneda]||p.moneda;
-    const importeFmt=p.moneda==='ARS'?fmt(p.importe):fmtU(p.importe);
-    const arsCol=p.moneda==='ARS'?'—':fmt(p.importe_ars||0);
+    // USD_en_ARS: importe=ARS, importe_usd=ARS/TC, importe_ars=ARS
+    const importeFmt=p.moneda==='USD'?fmtU(p.importe)
+      :p.moneda==='USD_en_ARS'?fmt(p.importe)+' (≈ '+fmtU(p.importe_usd||0)+')'
+      :fmt(p.importe);
+    const arsCol=p.moneda==='ARS'?'—'
+      :p.moneda==='USD_en_ARS'?'—'
+      :fmt(p.importe_ars||0);
     const tcCol=p.tc?parseFloat(p.tc).toLocaleString('es-AR',{minimumFractionDigits:1}):'—';
+    // Monto ARS y USD según moneda
+    const montoARS=p.moneda==='ARS'?fmt(p.importe):p.moneda==='USD_en_ARS'?fmt(p.importe_ars||p.importe||0):'—';
+    const montoUSD=p.moneda==='USD'?fmtU(p.importe):p.moneda==='USD_en_ARS'?fmtU(p.importe_usd||0):'—';
+    const tcDisplay=p.tc?parseFloat(p.tc).toLocaleString('es-AR',{minimumFractionDigits:1}):'—';
     tbody.innerHTML+=`<tr>
       <td>${(p.fecha||'').split('-').reverse().join('/')}</td>
       <td><strong>${p.proveedor||'—'}</strong></td>
-      <td><span style="font-size:.78rem;background:var(--bg2);border-radius:10px;padding:2px 7px;">${monedaLabel}</span></td>
-      <td style="text-align:right;font-weight:700;">${importeFmt}</td>
-      <td style="text-align:right;font-size:.82rem;color:var(--text2);">${tcCol}</td>
-      <td style="text-align:right;font-size:.82rem;">${arsCol}</td>
+      <td style="text-align:right;font-weight:700;">${montoARS}</td>
+      <td style="text-align:right;font-size:.82rem;color:var(--text2);">${tcDisplay}</td>
+      <td style="text-align:right;font-size:.82rem;color:var(--green);">${montoUSD}</td>
       <td>${p.medio||'—'}</td>
-      <td style="font-size:.82rem;">${p.ref||'—'}</td>
-      <td style="font-size:.82rem;${p.cheque_vencimiento?'color:var(--amber);':''}">${p.cheque_vencimiento?p.cheque_vencimiento.split('-').reverse().join('/'):'—'}</td>
-      <td style="font-size:.82rem;">${p.obs||'—'}</td>
+      <td style="font-size:.82rem;${p.cheque_vencimiento?'color:var(--amber);font-weight:600;':''}">${p.cheque_vencimiento?p.cheque_vencimiento.split('-').reverse().join('/'):'—'}</td>
       <td><button class="btn btn-danger btn-sm" onclick="eliminar('pagos_proveedores','${d.id}',cargarRegistroPagos)">🗑️</button></td>
     </tr>`;
   });
-  if(!cnt) tbody.innerHTML='<tr><td colspan="11" style="text-align:center;color:var(--text2);padding:20px;">No hay pagos registrados</td></tr>';
+  if(!cnt) tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text2);padding:20px;">No hay pagos registrados</td></tr>';
 }
 </script>
 <!-- MODAL NOTA DE CRÉDITO -->
@@ -9074,9 +9204,9 @@ window.cargarRegistroPagos=async function(){
           <option value="USD_en_ARS">🇺🇸 USD pagado en ARS (con TC)</option>
         </select>
       </div>
-      <div class="form-group"><label>Importe *</label><input type="number" id="pagprov-importe" placeholder="0.00" step="0.01" min="0" oninput="calcPagProvTotal()"></div>
+      <div class="form-group"><label id="pagprov-importe-label">Importe *</label><input type="number" id="pagprov-importe" placeholder="0.00" step="0.01" min="0" oninput="calcPagProvTotal()"></div>
       <div class="form-group" id="pagprov-tc-group" style="display:none;"><label>Tipo de cambio ($/USD) *</label><input type="number" id="pagprov-tc" placeholder="Ej: 1500" step="0.01" min="0" oninput="calcPagProvTotal()"></div>
-      <div class="form-group" id="pagprov-total-group" style="display:none;"><label>Total en ARS</label><input type="text" id="pagprov-total-ars" readonly style="background:var(--bg2);font-weight:700;"></div>
+      <div class="form-group" id="pagprov-total-group" style="display:none;"><label>Equivalente en USD</label><input type="text" id="pagprov-total-usd" readonly style="background:var(--bg2);font-weight:700;color:var(--green);"></div>
       <div class="form-group"><label>Medio de pago</label>
         <select id="pagprov-medio" onchange="toggleChequeVenc()">
           <option value="Efectivo">Efectivo</option>
