@@ -4746,10 +4746,12 @@ window.seleccionarReceta=async function(){
 }
 
 window.verificarStockNuez=async function(){
+  try{
+  if(!document.getElementById('coc-cat-nuez')) return;
   const cat=document.getElementById('coc-cat-nuez').value;
-  const kg=parseFloat(document.getElementById('coc-kg-nuez').value)||0;
+  const kg=parseFloat(document.getElementById('coc-kg-nuez')||{value:'0'}).value||0;
   const panel=document.getElementById('coc-stock-nuez-panel');
-  if(!cat){panel.style.display='none';return;}
+  if(!cat){if(panel)panel.style.display='none';return;}
   // Calcular stock PROPIO de esa categoría (salidas - retiros maquila)
   const [snapSal,snapRet]=await Promise.all([
     getDocsFromServer(query(collection(db,'salidas_fabrica'),where('propietario','==','PROPIO'))),
@@ -4773,6 +4775,7 @@ window.verificarStockNuez=async function(){
       <div style="font-size:.82rem;color:var(--text2);margin-top:3px;">Producido fábrica: ${prod.toFixed(1)} kg — Usado en cocina: ${usado.toFixed(1)} kg</div>
       ${kg>disp?`<div style="color:#c0392b;font-size:.83rem;margin-top:4px;">⚠️ Ingresaste ${kg.toFixed(1)} kg pero solo hay ${disp.toFixed(1)} kg disponibles</div>`:''}`;
   }
+  }catch(e){console.warn('verificarStockNuez:',e.message);}
 }
 
 // ---- LOTES COCINA ----
@@ -4897,7 +4900,11 @@ window.guardarLoteCocina=async function(){
 
     // Abrir etiqueta
     abrirEtiquetaCoc(null,fecha,rec.nombre,catNuez,loteId);
-  }catch(e){showAlert('Error: '+e.message,'error');}
+  }catch(e){
+    if(e.code==='resource-exhausted'||String(e.message).includes('429')){
+      showAlert('⚠️ Firestore saturado. Esperá 1-2 min y volvé a intentar.','error');
+    } else {showAlert('Error: '+e.message,'error');}
+  }
 }
 
 window.cargarTandas=async function(){
@@ -6796,6 +6803,11 @@ window.guardarEdicionCobroVenta=async function(){
 }
 
 async function initVentas(){
+  // Recargar recetas para tener lista actualizada de productos
+  try{
+    const snapRec=await getDocs(collection(db,'recetas'));
+    recetasCache=[];snapRec.forEach(d=>recetasCache.push({id:d.id,...d.data()}));
+  }catch(e){console.warn('initVentas recetas:',e);}
   // Cargar precios
   await cargarPrecios();
   // Prellenar número de remito
