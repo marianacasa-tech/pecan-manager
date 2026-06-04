@@ -3871,16 +3871,13 @@ window.guardarLiquidacion=async function(){
 
   try{
     // Traer salidas SIN liquidar del cliente + entradas + retiros
-    const [snapEnt,snapSal,snapRet]=await Promise.all([
+    const [snapEnt,snapSal]=await Promise.all([
       getDocsFromServer(query(collection(db,'entradas_fabrica'),where('propietario','==',cliente))),
       getDocsFromServer(query(collection(db,'salidas_fabrica'),where('propietario','==',cliente))),
-      getDocsFromServer(query(collection(db,'retiros_maquila'),where('cliente','==',cliente)))
     ]);
 
     const entradas=[];snapEnt.forEach(d=>entradas.push(d.data()));
     entradas.sort((a,b)=>(a.fecha||'').localeCompare(b.fecha||''));
-    const retiros=[];snapRet.forEach(d=>retiros.push(d.data()));
-
     // Solo las salidas pendientes de liquidar (liquidacion_id null o ausente)
     const salidasPendientes=[];
     const salidasIds=[];
@@ -3914,6 +3911,8 @@ window.guardarLiquidacion=async function(){
       lotesMap[lid].podridas+=s.podridas||0;
     });
     const lotes=Object.values(lotesMap).sort((a,b)=>a.fecha.localeCompare(b.fecha));
+
+    const retiros=[];
 
     // Número correlativo LIQ-0001, LIQ-0002...
     const liqRef=doc(db,'config','liquidaciones');
@@ -4347,21 +4346,19 @@ window.reimprimirLiquidacion=async function(id, enviarWA=false){
   if(!snapLiq.exists()){showAlert('No se encontró la liquidación','error');return;}
   const l=snapLiq.data();
 
-  const [snapEnt,snapSal,snapRet]=await Promise.all([
+  const [snapEnt,snapSal]=await Promise.all([
     getDocsFromServer(query(collection(db,'entradas_fabrica'),where('propietario','==',l.cliente))),
-    getDocsFromServer(query(collection(db,'salidas_fabrica'),where('propietario','==',l.cliente))),
-    getDocsFromServer(query(collection(db,'retiros_maquila'),where('cliente','==',l.cliente)))
+    getDocsFromServer(query(collection(db,'salidas_fabrica'),where('propietario','==',l.cliente)))
   ]);
   const entradas=[];snapEnt.forEach(d=>entradas.push(d.data()));
   entradas.sort((a,b)=>(a.fecha||'').localeCompare(b.fecha||''));
-  const retiros=[];snapRet.forEach(d=>retiros.push(d.data()));
-
   // Solo las salidas de esta liquidación específica
   const salidasLiq=[];
   snapSal.forEach(d=>{
     const s=d.data();
     if(s.liquidacion_id===id) salidasLiq.push(s);
   });
+  const retiros=[];
   salidasLiq.sort((a,b)=>(a.fecha||'').localeCompare(b.fecha||''));
 
   const lotesMap={};
@@ -8072,6 +8069,7 @@ async function initResumen(){
     if(!saldoPorCliente[cli]) return;
     if(c.tipo==='nota_credito') saldoPorCliente[cli]-=c.importe||0;
     else if(c.tipo==='nota_debito') saldoPorCliente[cli]+=(c.importe||0);
+    else if(c.tipo==='cobro_automatico') return; // cobro de venta al contado, no afecta cta cte
     else{
       saldoPorCliente[cli]-=c.importe||0;
       if(!fechaUltCobroCtaCte[cli]||c.fecha>fechaUltCobroCtaCte[cli]) fechaUltCobroCtaCte[cli]=c.fecha;
@@ -8612,6 +8610,8 @@ window.imprimirCotizacion=async function(cotId){
   p.text('Generado el '+new Date().toLocaleDateString('es-AR'),105,293,{align:'center'});
   p.save('cotizacion-'+(c.num||'COT')+'-'+c.cliente.replace(/\s+/g,'-')+'.pdf');
 }
+
+
 
 // Init — movido a cargarInicialApp() que se llama post-login
 
