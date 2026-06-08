@@ -875,10 +875,8 @@
             <option value="gasto_indirecto">🏢 Gasto indirecto</option>
             <option value="inversion">📈 Inversión</option>
           </select>
-          <select id="f-gas-estado" onchange="cargarCompras()">
-            <option value="">Todos los estados</option>
-            <option value="pagado">✅ Pagado</option>
-            <option value="pendiente">⏳ Pendiente</option>
+          <select id="f-gas-proveedor" onchange="cargarCompras()">
+            <option value="">Todos los proveedores</option>
           </select>
           <select id="f-gas-mes" onchange="cargarCompras()">
             <option value="">Todos los meses</option>
@@ -2618,6 +2616,16 @@ window.cargarClientes=async function(){
   const snap=await getDocs(query(collection(db,'clientes'),orderBy('nombre')));
   if(snap.empty){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--text2);padding:20px;">No hay clientes registrados</td></tr>';return;}
   tbody.innerHTML='';
+  // Poblar selector de proveedores
+  const selProv=document.getElementById('f-gas-proveedor');
+  if(selProv){
+    const curProv=selProv.value;
+    selProv.innerHTML='<option value="">Todos los proveedores</option>';
+    const provSet=new Set();
+    snap.forEach(d=>{const p=d.data().proveedor||d.data().nombre_proveedor||'';if(p)provSet.add(p);});
+    [...provSet].sort().forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p;selProv.appendChild(o);});
+    selProv.value=curProv;
+  }
   const _catLabel={'venta':'🛒 Venta','servicio':'🔄 Servicio','venta_servicio':'🛒🔄 Venta y serv.'};
   snap.forEach(d=>{
     const c=d.data();const esc=s=>(s||'').replace(/'/g,"\\'");
@@ -4432,7 +4440,7 @@ window.cargarDashboard=async function(){
   const skr=tKgCCProcesado>0?kernelCom/tKgCCProcesado*100:null;
   const enteroPct=kernelCom>0?tEnt/kernelCom*100:null;
   const partidoPct=kernelCom>0?(tPG+tPC)/kernelCom*100:null;
-  const danadoPct=kernelCom>0?tDan/kernelCom*100:null;
+  const danadoPct=tKgCCProcesado>0?tDan/tKgCCProcesado*100:null;
   const incomPct=tKgCCProcesado>0?tPod/tKgCCProcesado*100:null;
   const rendPot=tKgCCProcesado>0?kernelTotal/tKgCCProcesado*100:null;
   const fmt=v=>v!==null?v.toFixed(1)+'%':'—';
@@ -5854,7 +5862,7 @@ window.cargarCompras=async function(){
   const tbody=document.getElementById('tbl-compras-body');
   tbody.innerHTML='<tr><td colspan="12" class="loading">Cargando...</td></tr>';
   const tipoF=document.getElementById('f-gas-tipo').value;
-  const estadoF=document.getElementById('f-gas-estado').value;
+  const proveedorF=document.getElementById('f-gas-proveedor').value;
   const mesF=document.getElementById('f-gas-mes').value;
 
   const snap=await getDocs(query(collection(db,'compras'),orderBy('fecha','desc')));
@@ -5865,7 +5873,7 @@ window.cargarCompras=async function(){
     const c=d.data();
     // Filtros
     if(tipoF&&!c.items?.some(it=>it.tipo===tipoF))return;
-    if(estadoF&&c.estado!==estadoF)return;
+    if(proveedorF&&(c.proveedor||c.nombre_proveedor||'')!==proveedorF)return;
     if(mesF&&!c.fecha?.startsWith(c.fecha?.substring(0,4)+'-'+mesF))return;
     cnt++;totNeto+=c.monto_neto||0;totTotal+=c.monto_total||0;
 
@@ -5924,7 +5932,7 @@ window.cargarCompras=async function(){
 }
 
 window.limpiarFiltrosGastos=function(){
-  ['f-gas-tipo','f-gas-estado','f-gas-mes'].forEach(id=>document.getElementById(id).value='');
+  ['f-gas-tipo','f-gas-proveedor','f-gas-mes'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   cargarCompras();
 }
 
