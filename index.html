@@ -5866,6 +5866,18 @@ window.cargarCompras=async function(){
   const mesF=document.getElementById('f-gas-mes').value;
 
   const snap=await getDocs(query(collection(db,'compras'),orderBy('fecha','desc')));
+
+  // Poblar selector de proveedores
+  const selProv=document.getElementById('f-gas-proveedor');
+  if(selProv){
+    const curProv=selProv.value;
+    selProv.innerHTML='<option value="">Todos los proveedores</option>';
+    const provSet=new Set();
+    snap.forEach(d=>{const p=d.data().proveedor||d.data().nombre_proveedor||'';if(p)provSet.add(p);});
+    [...provSet].sort().forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p;selProv.appendChild(o);});
+    selProv.value=curProv;
+  }
+
   tbody.innerHTML='';
   let cnt=0,totNeto=0,totTotal=0;
 
@@ -5874,7 +5886,7 @@ window.cargarCompras=async function(){
     // Filtros
     if(tipoF&&!c.items?.some(it=>it.tipo===tipoF))return;
     if(proveedorF&&(c.proveedor||c.nombre_proveedor||'')!==proveedorF)return;
-    if(mesF&&!c.fecha?.startsWith(c.fecha?.substring(0,4)+'-'+mesF))return;
+    if(mesF&&!(c.fecha||'').slice(5,7)===mesF)return;
     cnt++;totNeto+=c.monto_neto||0;totTotal+=c.monto_total||0;
 
     const hoy=today();
