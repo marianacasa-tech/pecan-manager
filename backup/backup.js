@@ -21,13 +21,19 @@ if (!projectId || !clientEmail || !privateKey) {
 }
 
 // ── Inicializar Firebase Admin ───────────────────────────────────────────────
-admin.initializeApp({
-  credential: admin.credential.cert({
-    projectId:   projectId,
-    clientEmail: clientEmail,
-    privateKey:  privateKey.replace(/\\n/g, '\n'),
-  }),
-});
+const serviceAccount = {
+  type: 'service_account',
+  project_id: projectId,
+  client_email: clientEmail,
+  private_key: privateKey.replace(/\\n/g, '\n'),
+};
+
+// Compatible con firebase-admin v11 y v12+
+const credential = admin.credential
+  ? admin.credential.cert(serviceAccount)
+  : require('firebase-admin/app').cert(serviceAccount);
+
+admin.initializeApp({ credential });
 
 const db = admin.firestore();
 
@@ -37,8 +43,8 @@ const COLECCIONES = [
   'entradas_fabrica', 'salidas_fabrica',
   'retiros_maquila', 'liquidaciones_maquila',
   'recetas', 'insumos', 'tandas_cocina',
-  'compras', 'compras_nuez',
-  'ventas', 'cobros', 'config', 'pagos_usd', 'cotizaciones',
+  'compras', 'compras_nuez', 'pagos_proveedores',
+  'ventas', 'cobros', 'config', 'cotizaciones',
 ];
 
 // ── Función principal ────────────────────────────────────────────────────────
