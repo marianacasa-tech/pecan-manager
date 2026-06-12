@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
@@ -1319,10 +1320,16 @@
         <div id="res-label" style="font-size:.82rem;color:var(--text2);margin-top:3px;"></div>
       </div>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-        <div style="display:flex;background:var(--bg2);border-radius:10px;padding:3px;gap:2px;">
-          <button id="rbtn-semana" onclick="setResPeriodo('semana')" style="padding:7px 16px;border:none;border-radius:7px;cursor:pointer;font-size:.83rem;font-family:'DM Sans',sans-serif;font-weight:600;background:var(--brown);color:#fff9f0;transition:all .2s;">Semana</button>
-          <button id="rbtn-mes" onclick="setResPeriodo('mes')" style="padding:7px 16px;border:none;border-radius:7px;cursor:pointer;font-size:.83rem;font-family:'DM Sans',sans-serif;font-weight:400;background:transparent;color:var(--text2);transition:all .2s;">Mes</button>
-          <button id="rbtn-anio" onclick="setResPeriodo('anio')" style="padding:7px 16px;border:none;border-radius:7px;cursor:pointer;font-size:.83rem;font-family:'DM Sans',sans-serif;font-weight:400;background:transparent;color:var(--text2);transition:all .2s;">Año</button>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <select id="res-sel-mes" onchange="setResPeriodoMesAnio()" style="padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--card);font-size:.85rem;cursor:pointer;">
+            <option value="">— Mes —</option>
+            <option value="01">Enero</option><option value="02">Febrero</option><option value="03">Marzo</option>
+            <option value="04">Abril</option><option value="05">Mayo</option><option value="06">Junio</option>
+            <option value="07">Julio</option><option value="08">Agosto</option><option value="09">Septiembre</option>
+            <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
+          </select>
+          <select id="res-sel-anio" onchange="setResPeriodoMesAnio()" style="padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--card);font-size:.85rem;cursor:pointer;">
+          </select>
         </div>
         <button class="btn btn-secondary btn-sm" onclick="initResumen()" title="Actualizar">🔄</button>
       </div>
@@ -4546,22 +4553,37 @@ window.cargarDashboard=async function(){
 
   // ---- GRÁFICO 2: Composición del kernel (barras apiladas) ----
   _destroyChart('comp');
+  // Calcular porcentajes para barras 100%
+  const pct=(f,key)=>{
+    const tot=(porFecha[f].ent||0)+(porFecha[f].pg||0)+(porFecha[f].pc||0)+(porFecha[f].dan||0)+(porFecha[f].pod||0);
+    return tot>0?Math.round((porFecha[f][key]||0)/tot*1000)/10:0;
+  };
   _charts['comp']=new Chart(document.getElementById('chart-comp'),{
     type:'bar',
     data:{
       labels:fechas,
       datasets:[
-        {label:'Pecan Entero',data:fechas.map(f=>porFecha[f].ent),backgroundColor:'rgba(76,153,76,0.85)',stack:'k'},
-        {label:'Pecan Partido Grande',data:fechas.map(f=>porFecha[f].pg),backgroundColor:'rgba(200,129,26,0.85)',stack:'k'},
-        {label:'Pecan Partido Chico',data:fechas.map(f=>porFecha[f].pc),backgroundColor:'rgba(224,123,0,0.85)',stack:'k'},
-        {label:'Pecan Dañado',data:fechas.map(f=>porFecha[f].dan),backgroundColor:'rgba(192,57,43,0.75)',stack:'k'},
-        {label:'Podridas',data:fechas.map(f=>porFecha[f].pod),backgroundColor:'rgba(100,100,100,0.5)',stack:'k'},
+        {label:'Entero',data:fechas.map(f=>pct(f,'ent')),backgroundColor:'rgba(76,153,76,0.85)',stack:'k'},
+        {label:'Partido Gde',data:fechas.map(f=>pct(f,'pg')),backgroundColor:'rgba(200,129,26,0.85)',stack:'k'},
+        {label:'Partido Chico',data:fechas.map(f=>pct(f,'pc')),backgroundColor:'rgba(224,123,0,0.85)',stack:'k'},
+        {label:'Dañado',data:fechas.map(f=>pct(f,'dan')),backgroundColor:'rgba(192,57,43,0.75)',stack:'k'},
+        {label:'Podridas',data:fechas.map(f=>pct(f,'pod')),backgroundColor:'rgba(100,100,100,0.5)',stack:'k'},
       ]
     },
     options:{...baseOpts,
       scales:{
         x:{stacked:true,ticks:{color:C.text,font:{size:10},maxRotation:45},grid:{color:C.grid}},
-        y:{stacked:true,ticks:{color:C.text,font:{size:10}},grid:{color:C.grid},title:{display:true,text:'kg',color:C.text,font:{size:10}}}
+        y:{stacked:true,min:0,max:100,ticks:{color:C.text,font:{size:10},callback:v=>v+'%'},grid:{color:C.grid},title:{display:true,text:'%',color:C.text,font:{size:10}}}
+      },
+      plugins:{...baseOpts.plugins,
+        tooltip:{callbacks:{
+          label:ctx=>{
+            const f=fechas[ctx.dataIndex];
+            const key=['ent','pg','pc','dan','pod'][ctx.datasetIndex];
+            const kg=(porFecha[f][key]||0).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1});
+            return ` ${ctx.dataset.label}: ${ctx.parsed.y}%  (${kg} kg)`;
+          }
+        }}
       }
     }
   });
@@ -5806,6 +5828,7 @@ window.guardarCompra=async function(){
         medio:medioLabel[formaPago]||formaPago,
         ref:document.getElementById('gas-nro-factura').value.trim()||'',
         obs:'Pago automático — compra registrada',
+        compra_id:compraRef.id,
         cheque_vencimiento:formaPago==='cheque'?document.getElementById('gas-vencimiento').value||null:null,
         creado:serverTimestamp()
       });
@@ -7558,50 +7581,50 @@ window.calcCotizador=function(){
 // ============================================================
 // RESUMEN EJECUTIVO
 // ============================================================
-let _resPeriodo='semana';
 let _chartVentasEvol=null, _chartVentasTorta=null, _chartEconomico=null;
 
-window.setResPeriodo=function(p){
-  _resPeriodo=p;
-  ['semana','mes','anio'].forEach(x=>{
-    const b=document.getElementById('rbtn-'+x);
-    if(!b) return;
-    const a=x===p;
-    b.style.background=a?'var(--brown)':'transparent';
-    b.style.color=a?'#fff9f0':'var(--text2)';
-    b.style.fontWeight=a?'600':'400';
-  });
-  initResumen();
+window.setResPeriodo=function(p){initResumen();} // legacy compat
+
+window.setResPeriodoMesAnio=function(){initResumen();}
+
+// Poblar selector de años al cargar
+function poblarAniosResumen(){
+  const sel=document.getElementById('res-sel-anio');
+  if(!sel||sel.options.length>1) return;
+  const anioActual=new Date().getFullYear();
+  for(let a=anioActual;a>=anioActual-5;a--){
+    const o=document.createElement('option');
+    o.value=a;o.textContent=a;
+    if(a===anioActual) o.selected=true;
+    sel.appendChild(o);
+  }
+  // Preseleccionar mes actual
+  const mesSel=document.getElementById('res-sel-mes');
+  if(mesSel) mesSel.value=String(new Date().getMonth()+1).padStart(2,'0');
 }
 
-async function initResumen(){
+window.initResumen=async function initResumen(){
+  poblarAniosResumen();
   const hoy=new Date();
   const hoyStr=hoy.toISOString().split('T')[0];
-  const anio=hoy.getFullYear();
-  let desdeStr='', label='';
+  const mesSel=document.getElementById('res-sel-mes')?.value||'';
+  const anioSel=document.getElementById('res-sel-anio')?.value||String(hoy.getFullYear());
+  let desdeStr='', hastaStr='', label='';
 
-  if(_resPeriodo==='semana'){
-    const d=hoy.getDay()||7;
-    const lun=new Date(hoy); lun.setDate(hoy.getDate()-(d-1));
-    desdeStr=lun.toISOString().split('T')[0];
-    label='Semana: '+desdeStr.split('-').reverse().join('/')+' al '+hoyStr.split('-').reverse().join('/');
-  } else if(_resPeriodo==='mes'){
-    desdeStr=hoyStr.slice(0,7)+'-01';
-    label='Mes: '+hoy.toLocaleString('es-AR',{month:'long',year:'numeric'});
+  if(mesSel){
+    // Mes específico
+    desdeStr=`${anioSel}-${mesSel}-01`;
+    const diasMes=new Date(parseInt(anioSel),parseInt(mesSel),0).getDate();
+    hastaStr=`${anioSel}-${mesSel}-${String(diasMes).padStart(2,'0')}`;
+    const nombreMes=new Date(parseInt(anioSel),parseInt(mesSel)-1,1).toLocaleString('es-AR',{month:'long'});
+    label=nombreMes.charAt(0).toUpperCase()+nombreMes.slice(1)+' '+anioSel;
   } else {
-    desdeStr=anio+'-01-01';
-    label='Año '+anio;
+    // Año completo
+    desdeStr=`${anioSel}-01-01`;
+    hastaStr=`${anioSel}-12-31`;
+    label='Año '+anioSel;
   }
 
-  // Actualizar botones
-  ['semana','mes','anio'].forEach(x=>{
-    const b=document.getElementById('rbtn-'+x);
-    if(!b) return;
-    const a=x===_resPeriodo;
-    b.style.background=a?'var(--brown)':'transparent';
-    b.style.color=a?'#fff9f0':'var(--text2)';
-    b.style.fontWeight=a?'600':'400';
-  });
   document.getElementById('res-label').textContent=label;
 
   const fmtKg=v=>parseFloat(v||0).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1})+' kg';
@@ -7637,12 +7660,12 @@ async function initResumen(){
   snapEnt.forEach(d=>{
     const e=d.data();
     totEntAll+=e.kg||0;
-    if(e.fecha>=desdeStr) kgEnt+=e.kg||0;
+    if(e.fecha>=desdeStr&&e.fecha<=hastaStr) kgEnt+=e.kg||0;
   });
   snapSal.forEach(d=>{
     const s=d.data();
     totSalAll+=s.kg_cascara||0;
-    if(s.fecha>=desdeStr){
+    if(s.fecha>=desdeStr&&s.fecha<=hastaStr){
       kgSal+=s.kg_cascara||0;
       if(s.pct_kernel){kernelSum+=parseFloat(s.pct_kernel);kernelCnt++;}
       if(s.fecha) diasConProdFab.add(s.fecha);
@@ -7782,14 +7805,14 @@ async function initResumen(){
     const v=d.data();
     const mes=parseInt((v.fecha||'').slice(5,7))-1;
     const anioV=parseInt((v.fecha||'').slice(0,4));
-    if(anioV===anio&&mes>=0&&mes<12) mesesMonto[mes]+=v.monto_total||0;
-    if(v.fecha<desdeStr) return;
+    if(anioV===parseInt(anioSel)&&mes>=0&&mes<12) mesesMonto[mes]+=v.monto_total||0;
+    if(v.fecha<desdeStr||v.fecha>hastaStr) return;
     vMonto+=v.monto_total||0;
     (v.items||[]).forEach(it=>{
       const kg=it.kg||0;
       const key=it.prod_key||'';
       vTotalKg+=kg;
-      if(anioV===anio&&mes>=0) mesesKg[mes]+=kg;
+      if(anioV===parseInt(anioSel)&&mes>=0) mesesKg[mes]+=kg;
       // Clasificar por categoría usando prod_key
       if(key==='nuez_enteras') vEnt+=kg;
       else if(key==='nuez_part_grandes') vPG+=kg;
@@ -7858,11 +7881,33 @@ async function initResumen(){
   const ctxTorta=document.getElementById('chart-ventas-torta').getContext('2d');
   _chartVentasTorta=new Chart(ctxTorta,{
     type:'doughnut',
+    plugins:[ChartDataLabels],
     data:{
       labels:['Entero','Partido Gde','Partido Chico','Dañado','Elaborados'],
       datasets:[{data:[vEnt,vPG,vPC,vDan,vElabTotal],backgroundColor:['#3a6b35','#c8811a','#e07b00','#8b2e2e','#6b4226'],borderWidth:2,borderColor:'#fff9f0'}]
     },
-    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10},padding:8}}}}
+    options:{responsive:true,plugins:{
+      legend:{position:'bottom',labels:{font:{size:10},padding:8}},
+      datalabels:{
+        color:'#fff',
+        font:{weight:'bold',size:11},
+        formatter:(value,ctx)=>{
+          const total=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);
+          if(!total||value/total<0.03) return '';
+          return Math.round(value/total*100)+'%';
+        },
+        anchor:'center',align:'center'
+      },
+      tooltip:{callbacks:{
+        label:(ctx)=>{
+          const total=ctx.dataset.data.reduce((a,b)=>a+b,0);
+          const val=ctx.parsed;
+          const pct=total>0?Math.round(val/total*100):0;
+          const kg=val.toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1});
+          return ` ${kg} kg  (${pct}%)`;
+        }
+      }}
+    }}
   });
 
   // ── ECONÓMICO ────────────────────────────────────────────────────────────
@@ -7878,8 +7923,8 @@ async function initResumen(){
     const v=d.data();
     const mes=parseInt((v.fecha||'').slice(5,7))-1;
     const anioV=parseInt((v.fecha||'').slice(0,4));
-    if(anioV===anio&&mes>=0) mesesVentas[mes]+=v.monto_total||0;
-    if(v.fecha<desdeStr) return;
+    if(anioV===parseInt(anioSel)&&mes>=0) mesesVentas[mes]+=v.monto_total||0;
+    if(v.fecha<desdeStr||v.fecha>hastaStr) return;
     ventasNuez+=v.monto_total||0;
   });
 
@@ -7888,8 +7933,8 @@ async function initResumen(){
     const l=d.data();
     const mes=parseInt((l.fecha||'').slice(5,7))-1;
     const anioL=parseInt((l.fecha||'').slice(0,4));
-    if(anioL===anio&&mes>=0) mesesVentas[mes]+=l.total_servicio||0;
-    if(l.fecha<desdeStr) return;
+    if(anioL===parseInt(anioSel)&&mes>=0) mesesVentas[mes]+=l.total_servicio||0;
+    if(l.fecha<desdeStr||l.fecha>hastaStr) return;
     ventasServicio+=l.total_servicio||0;
   });
 
@@ -7899,8 +7944,8 @@ async function initResumen(){
     const c=d.data();
     const mes=parseInt((c.fecha||'').slice(5,7))-1;
     const anioC=parseInt((c.fecha||'').slice(0,4));
-    if(anioC===anio&&mes>=0&&c.tipo!=='nota_credito') mesesCobrado[mes]+=c.importe||0;
-    if(c.fecha<desdeStr) return;
+    if(anioC===parseInt(anioSel)&&mes>=0&&c.tipo!=='nota_credito') mesesCobrado[mes]+=c.importe||0;
+    if(c.fecha<desdeStr||c.fecha>hastaStr) return;
     if(c.tipo!=='nota_credito'&&c.tipo!=='nota_debito') cobrado+=c.importe||0;
   });
 
@@ -7911,7 +7956,7 @@ async function initResumen(){
     if((c.moneda||'ARS')==='USD'){
       const esCtaCte=c.forma_pago==='credito'||c.forma_pago==='cuenta_corriente';
       if(esCtaCte){const prov=c.proveedor||'';if(!saldoUSDPorProv[prov])saldoUSDPorProv[prov]=0;saldoUSDPorProv[prov]+=c.monto_total||0;}
-      if(c.fecha>=desdeStr) comprasUSD+=c.monto_total||0;
+      if(c.fecha>=desdeStr&&c.fecha<=hastaStr) comprasUSD+=c.monto_total||0;
     }
   });
   snapPagosProvRes.forEach(d=>{
@@ -7923,7 +7968,7 @@ async function initResumen(){
     if(p.moneda==='USD') usdPagado=p.importe||0;
     else if(p.moneda==='USD_en_ARS') usdPagado=p.importe_usd||(p.tc>0?(p.importe||0)/p.tc:0);
     if(saldoUSDPorProv[prov]!==undefined) saldoUSDPorProv[prov]-=usdPagado;
-    if(p.fecha>=desdeStr) pagadoUSD+=usdPagado;
+    if(p.fecha>=desdeStr&&p.fecha<=hastaStr) pagadoUSD+=usdPagado;
   });
   deudaProvUSD=Object.values(saldoUSDPorProv).filter(v=>v>0.01).reduce((s,v)=>s+v,0);
 
@@ -7946,8 +7991,8 @@ async function initResumen(){
       });
       // Si no hay items, usar monto_total como gasto directo
       if(!c.items?.length) montoDir+=c.monto_total||0;
-      if(anioC===anio&&mes>=0) mesesGastos[mes]+=c.monto_total||0;
-      if(c.fecha>=desdeStr){
+      if(anioC===parseInt(anioSel)&&mes>=0) mesesGastos[mes]+=c.monto_total||0;
+      if(c.fecha>=desdeStr&&c.fecha<=hastaStr){
         gastosDir+=montoDir;
         gastosInd+=montoInd;
         inversiones+=montoInv;
@@ -7977,7 +8022,7 @@ async function initResumen(){
   const rankVentas={};
   snapVent.forEach(d=>{
     const v=d.data();
-    if(v.fecha<desdeStr) return;
+    if(v.fecha<desdeStr||v.fecha>hastaStr) return;
     const cli=v.cliente||'Sin nombre';
     rankVentas[cli]=(rankVentas[cli]||0)+(v.monto_total||0);
   });
@@ -8007,7 +8052,7 @@ async function initResumen(){
   const rankServicio={};
   snapLiqsMaq.forEach(d=>{
     const l=d.data();
-    if(l.fecha<desdeStr) return;
+    if(l.fecha<desdeStr||l.fecha>hastaStr) return;
     const cli=l.cliente||'Sin nombre';
     if(!rankServicio[cli]) rankServicio[cli]={monto:0,kg:0};
     rankServicio[cli].monto+=l.total_servicio||0;
@@ -8868,15 +8913,16 @@ window.filtrarProveedoresCta=async function(){
   ]);
 
   // Calcular saldo por proveedor
-  // Incluir TODAS las compras en ctacte (incluso pagadas) para balance correcto
+  // Mapear compras por ID para cruzar con pagos
+  const comprasPorId={};
   const saldos={};
   snapComp.forEach(d=>{
     const c=d.data();
     const prov=c.proveedor||c.nombre_proveedor||'';
     if(!prov) return;
+    comprasPorId[d.id]={prov,moneda:c.moneda||'ARS',monto:c.monto_total||0,forma_pago:c.forma_pago||''};
     const esCtaCte=c.forma_pago==='credito'||c.forma_pago==='cuenta_corriente';
-    if(!esCtaCte) return;
-    // NO excluir estado='pagado' — incluir todo para balance real
+    if(!esCtaCte) return; // las de contado se suman solo si tienen pago asociado
     const moneda=c.moneda||'ARS';
     if(!saldos[prov]) saldos[prov]={ars:0,usd:0};
     if(moneda==='ARS') saldos[prov].ars+=c.monto_total||0;
@@ -8887,6 +8933,12 @@ window.filtrarProveedoresCta=async function(){
     const p=d.data();
     const prov=p.proveedor||'';
     if(!prov) return;
+    // Ignorar pagos automáticos de compras al contado (no afectan CC)
+    const esPagoAutomatico=p.obs==='Pago automático — compra registrada'&&!p.compra_id;
+    // Si tiene compra_id, verificar si esa compra es ctacte o contado
+    const compraAsociada=p.compra_id?comprasPorId[p.compra_id]:null;
+    const esCompraContado=compraAsociada&&compraAsociada.forma_pago!=='credito'&&compraAsociada.forma_pago!=='cuenta_corriente';
+    if(esPagoAutomatico||esCompraContado) return;
     // Cheque diferido no vencido → sigue siendo deuda, no resta
     const esChequeNoCobrado=p.medio==='Cheque'&&p.cheque_vencimiento&&p.cheque_vencimiento>hoyStrFilt;
     if(esChequeNoCobrado) return;
@@ -9003,6 +9055,8 @@ window.cargarCtaCteProveedor=async function(){
   snapPagos.forEach(d=>{
     const p=d.data();
     if(p.proveedor!==prov) return;
+    // Excluir pagos automáticos de compras al contado — son duplicados
+    if(p.obs==='Pago automático — compra registrada') return;
     let haberARS=0,haberUSD=0;
     if(p.moneda==='ARS') haberARS=p.importe||0;
     else if(p.moneda==='USD') haberUSD=p.importe||0;
