@@ -1105,10 +1105,8 @@
         <h2>📋 Historial de ventas</h2>
         <div class="filters">
           <select id="f-vent-cliente" onchange="cargarVentas()"><option value="">Todos los clientes</option></select>
-          <select id="f-vent-estado" onchange="cargarVentas()">
-            <option value="">Todos los estados</option>
-            <option value="cobrado">✅ Cobrado</option>
-            <option value="cuenta_corriente">⏳ Cta. corriente</option>
+          <select id="f-vent-producto" onchange="cargarVentas()">
+            <option value="">Todos los productos</option>
           </select>
           <input type="date" id="f-vent-fecha" onchange="cargarVentas()" style="padding:6px 8px;border-radius:6px;border:1.5px solid var(--border);font-size:.85rem;">
           <button class="btn btn-secondary btn-sm" onclick="limpiarFiltrosVentas()">✖ Limpiar</button>
@@ -6776,16 +6774,26 @@ window.cargarVentas=async function(){
   const tbody=document.getElementById('tbl-ventas-body');
   tbody.innerHTML='<tr><td colspan="10" class="loading">Cargando...</td></tr>';
   const clienteF=document.getElementById('f-vent-cliente')?.value||'';
-  const estadoF=document.getElementById('f-vent-estado')?.value||'';
+  const productoF=document.getElementById('f-vent-producto')?.value||'';
   const fechaF=document.getElementById('f-vent-fecha')?.value||'';
   const snap=await getDocs(query(collection(db,'ventas'),orderBy('fecha','desc')));
+  // Poblar selector de productos
+  const selProd=document.getElementById('f-vent-producto');
+  if(selProd){
+    const curProd=selProd.value;
+    selProd.innerHTML='<option value="">Todos los productos</option>';
+    const prodSet=new Set();
+    snap.forEach(d=>{(d.data().items||[]).forEach(it=>{const n=it.nombre||it.descripcion||'';if(n)prodSet.add(n);});});
+    [...prodSet].sort().forEach(p=>{const o=document.createElement('option');o.value=p;o.textContent=p;selProd.appendChild(o);});
+    selProd.value=curProd;
+  }
   tbody.innerHTML='';
   let cnt=0,totTotal=0;
   const hoy=today();
   snap.forEach(d=>{
     const v=d.data();
     if(clienteF&&v.cliente!==clienteF)return;
-    if(estadoF&&v.estado!==estadoF)return;
+    if(productoF&&!(v.items||[]).some(it=>(it.nombre||it.descripcion||'')===productoF))return;
     if(fechaF&&v.fecha!==fechaF)return;
     cnt++;totTotal+=v.monto_total||0;
     const vencida=v.estado==='cuenta_corriente'&&v.vencimiento&&v.vencimiento<hoy;
@@ -6819,7 +6827,7 @@ window.cargarVentas=async function(){
 }
 
 window.limpiarFiltrosVentas=function(){
-  ['f-vent-cliente','f-vent-estado','f-vent-fecha'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['f-vent-cliente','f-vent-producto','f-vent-fecha'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   cargarVentas();
 }
 
@@ -7603,6 +7611,39 @@ function poblarAniosResumen(){
   if(mesSel) mesSel.value=String(new Date().getMonth()+1).padStart(2,'0');
 }
 
+window.irCtaCteProveedor=function(prov){
+  const btn=document.querySelector('[data-sec="gastos"]');
+  if(btn) showSection('gastos',btn);
+  setTimeout(()=>{
+    gasTab('ctacte');
+    setTimeout(()=>{
+      const sel=document.getElementById('ctaprov-selector');
+      if(sel){
+        sel.value=prov;
+        cargarCtaCteProveedor();
+      }
+    },400);
+  },300);
+}
+
+window.irCtaCteCliente=function(cli){
+  // Navegar a Cobros → Cuenta corriente con el cliente preseleccionado
+  const btn=document.querySelector('[data-sec="cobros"]');
+  if(btn) showSection('cobros',btn);
+  // Esperar a que cargue la sección y seleccionar el cliente
+  setTimeout(()=>{
+    const tab=document.getElementById('ctab-cta');
+    if(tab) tab.click();
+    setTimeout(()=>{
+      const sel=document.getElementById('f-cta-cliente');
+      if(sel){
+        sel.value=cli;
+        cargarCtaCte();
+      }
+    },300);
+  },300);
+}
+
 window.initResumen=async function initResumen(){
   poblarAniosResumen();
   const hoy=new Date();
@@ -7866,12 +7907,33 @@ window.initResumen=async function initResumen(){
       datasets:[
         {type:'bar',label:'Kg vendidos',data:mesesKg,backgroundColor:'rgba(200,129,26,.6)',borderColor:'rgba(200,129,26,1)',borderWidth:1,yAxisID:'y'},
         {type:'line',label:'Monto ($)',data:mesesMonto,borderColor:'#3a6b35',backgroundColor:'rgba(58,107,53,.1)',tension:.4,pointRadius:3,yAxisID:'y2'},
+        {type:'line',label:'Precio prom. $/kg',
+          data:mesesKg.map((kg,i)=>kg>0?Math.round(mesesMonto[i]/kg):null),
+          borderColor:'#c0392b',backgroundColor:'rgba(192,57,43,.1)',
+          borderWidth:2.5,borderDash:[6,3],tension:.3,pointRadius:5,pointBackgroundColor:'#c0392b',
+          spanGaps:true,yAxisID:'y3'},
       ]
     },
-    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10}}}},
+    options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10}}},
+      tooltip:{callbacks:{
+        label:ctx=>{
+          if(ctx.dataset.label==='Precio prom. $/kg'){
+            return ` Precio prom: $${(ctx.parsed.y||0).toLocaleString('es-AR')}/kg`;
+          }
+          if(ctx.dataset.label==='Monto ($)'){
+            return ` Monto: $${(ctx.parsed.y||0).toLocaleString('es-AR')}`;
+          }
+          return ` ${ctx.dataset.label}: ${(ctx.parsed.y||0).toLocaleString('es-AR',{minimumFractionDigits:1,maximumFractionDigits:1})} kg`;
+        }
+      }}
+    },
       scales:{
         y:{position:'left',title:{display:true,text:'Kg',font:{size:10}},ticks:{font:{size:9}}},
         y2:{position:'right',title:{display:true,text:'$ ARS',font:{size:10}},ticks:{font:{size:9},callback:v=>'$'+v.toLocaleString('es-AR')},grid:{drawOnChartArea:false}},
+        y3:{position:'right',display:false,grid:{drawOnChartArea:false},
+          ticks:{font:{size:9},callback:v=>'$'+v.toLocaleString('es-AR')+'/kg'},
+          // Escala independiente para magnificar variaciones de precio
+        },
       }
     }
   });
@@ -8084,6 +8146,7 @@ window.initResumen=async function initResumen(){
   const saldoPorCliente={};
   const fechaPrimerDebeCtaCte={}; // fecha desde cuando la cta cte está negativa
   const fechaUltCobroCtaCte={};   // fecha del último cobro realizado
+  const ventasPorCliente={}; // para calcular fecha primer debe real después
 
   // Sumar DEBE: ventas en cta cte
   const snapVentAll=await getDocsFromServer(collection(db,'ventas'));
@@ -8092,9 +8155,8 @@ window.initResumen=async function initResumen(){
     if(v.estado==='cuenta_corriente'){
       const cli=v.cliente||'Sin nombre';
       saldoPorCliente[cli]=(saldoPorCliente[cli]||0)+(v.monto_total||0);
-      // Fecha más antigua de cuando quedó en cta cte
-      if(!fechaPrimerDebeCtaCte[cli]||v.fecha<fechaPrimerDebeCtaCte[cli])
-        fechaPrimerDebeCtaCte[cli]=v.fecha;
+      if(!ventasPorCliente[cli]) ventasPorCliente[cli]=[];
+      ventasPorCliente[cli].push({fecha:v.fecha,monto:v.monto_total||0});
     }
   });
 
@@ -8142,6 +8204,28 @@ window.initResumen=async function initResumen(){
   });
 
   // Filtrar saldos positivos y ordenar de mayor a menor
+  // Calcular fecha primer debe real: la venta más antigua cuyo saldo aún no fue cubierto
+  // Ordenar ventas por fecha y simular pagos
+  Object.entries(ventasPorCliente).forEach(([cli,ventas])=>{
+    const cobrado=ventasPorCliente[cli+'__cobrado']||0;
+    let saldoRestante=cobrado; // cuánto se ha cobrado para este cliente
+    const cobroCliente=(saldoPorCliente[cli]||0)-Object.values(ventasPorCliente[cli]||[]).reduce((s,v)=>s+v.monto,0);
+    // saldo actual = suma debidos - cobros
+    const saldoActual=saldoPorCliente[cli]||0;
+    if(saldoActual<=0.01){fechaPrimerDebeCtaCte[cli]=null;return;}
+    // Encontrar la venta más reciente que esté sin cobrar
+    // Ordenar por fecha desc y quedarse con las últimas que suman el saldo
+    const sorted=[...ventas].sort((a,b)=>b.fecha.localeCompare(a.fecha));
+    let acum=0;
+    let fechaMasAntigua=null;
+    for(const v of sorted){
+      acum+=v.monto;
+      fechaMasAntigua=v.fecha;
+      if(acum>=saldoActual-0.01) break;
+    }
+    fechaPrimerDebeCtaCte[cli]=fechaMasAntigua;
+  });
+
   const ctaCtes=Object.entries(saldoPorCliente)
     .filter(([,s])=>s>0.01)
     .sort((a,b)=>b[1]-a[1]);
@@ -8161,17 +8245,19 @@ window.initResumen=async function initResumen(){
         <table class="table">
           <thead><tr><th>#</th><th>Cliente</th><th style="text-align:right;">Saldo</th><th style="text-align:right;">% del total</th><th style="text-align:center;">Cta. neg. desde</th><th style="text-align:center;">Último pago</th></tr></thead>
           <tbody>${ctaCtes.map(([cli,saldo],i)=>{
+            const hoyLocal=new Date(); hoyLocal.setHours(0,0,0,0);
+            const parseFecha=f=>{const[y,m,d]=f.split('-');return new Date(parseInt(y),parseInt(m)-1,parseInt(d));};
             const fechaDeude=fechaPrimerDebeCtaCte[cli]||null;
             let desdeHtml='—';
             if(fechaDeude){
-              const dias=Math.floor((new Date()-new Date(fechaDeude))/(1000*60*60*24));
+              const dias=Math.floor((hoyLocal-parseFecha(fechaDeude))/(1000*60*60*24));
               const color=dias>30?'var(--red)':dias>15?'var(--amber)':'var(--green)';
               desdeHtml='<span style="color:'+color+';font-weight:600;font-size:.82rem;">'+dias+' días</span>';
             }
             const fechaPago=fechaUltCobroCtaCte[cli]||null;
             let pagoHtml='<span style="color:var(--red);font-weight:700;">⚠️ Sin pagos</span>';
             if(fechaPago){
-              const diasP=Math.floor((new Date()-new Date(fechaPago))/(1000*60*60*24));
+              const diasP=Math.floor((hoyLocal-parseFecha(fechaPago))/(1000*60*60*24));
               const colorP=diasP>30?'var(--red)':diasP>15?'var(--amber)':'var(--green)';
               const iconoP=diasP>30?'🔴':diasP>15?'🟡':'🟢';
               pagoHtml='<span style="color:'+colorP+';font-weight:600;font-size:.82rem;white-space:nowrap;">'+iconoP+' '+diasP+' días</span>';
@@ -8179,7 +8265,7 @@ window.initResumen=async function initResumen(){
             return `
             <tr>
               <td style="color:var(--text2);font-size:.8rem;">${i+1}</td>
-              <td><strong>${cli}</strong></td>
+              <td><strong style="cursor:pointer;color:var(--brown);text-decoration:underline dotted;" onclick="irCtaCteCliente('${cli}')" title="Ver cuenta corriente">${cli}</strong></td>
               <td style="text-align:right;color:var(--red);font-weight:700;">${fmt(saldo)}</td>
               <td style="text-align:right;color:var(--text2);font-size:.82rem;">${(saldo/totalDeuda*100).toFixed(1)}%</td>
               <td style="text-align:center;">${desdeHtml}</td>
@@ -8247,7 +8333,7 @@ window.initResumen=async function initResumen(){
           <thead><tr><th>#</th><th>Proveedor</th><th style="text-align:right;">Saldo ARS</th><th style="text-align:right;">Saldo USD</th></tr></thead>
           <tbody>${deudores.map(([prov,s],i)=>`<tr>
             <td style="color:var(--text2);font-size:.8rem;">${i+1}</td>
-            <td><strong>${prov}</strong></td>
+            <td><strong style="cursor:pointer;color:var(--brown);text-decoration:underline dotted;" onclick="irCtaCteProveedor('${prov}')" title="Ver cuenta corriente">${prov}</strong></td>
             <td style="text-align:right;color:var(--amber);font-weight:700;">${s.ars>0.01?fmtN(s.ars):'—'}</td>
             <td style="text-align:right;color:var(--amber);font-weight:700;">${s.usd>0.01?fmtU(s.usd):'—'}</td>
           </tr>`).join('')}</tbody>
