@@ -1155,7 +1155,7 @@
         <div class="form-grid">
           <div class="form-group">
             <label>Cliente *</label>
-            <input type="text" id="cob-cliente" list="cob-cli-list" placeholder="Nombre del cliente" oninput="mostrarSaldoCobro()">
+            <input type="text" id="cob-cliente" list="cob-cli-list" placeholder="Nombre del cliente" oninput="mostrarSaldoCobro()" onblur="validarClienteLista('cob-cliente')">
             <datalist id="cob-cli-list"></datalist>
           </div>
           <div class="form-group">
@@ -7626,6 +7626,19 @@ window.irCtaCteProveedor=function(prov){
   },300);
 }
 
+window.validarClienteLista=function(inputId){
+  const el=document.getElementById(inputId);
+  if(!el) return;
+  const val=el.value.trim();
+  if(!val) return;
+  const existe=clientesCache.some(c=>c.nombre===val);
+  if(!existe){
+    showAlert('⚠️ "'+val+'" no es un cliente de la lista. Seleccioná uno del desplegable.','error');
+    el.value='';
+    el.focus();
+  }
+}
+
 window.irCtaCteCliente=function(cli){
   // Navegar a Cobros → Cuenta corriente con el cliente preseleccionado
   const btn=document.querySelector('[data-sec="cobros"]');
@@ -9439,7 +9452,7 @@ window.cargarRegistroPagos=async function(){
     <div class="form-grid">
       <div class="form-group">
         <label>Cliente *</label>
-        <input type="text" id="nc-cliente" list="nc-cli-list" placeholder="Nombre del cliente">
+        <input type="text" id="nc-cliente" list="nc-cli-list" placeholder="Nombre del cliente" onblur="validarClienteLista('nc-cliente')">
         <datalist id="nc-cli-list"></datalist>
       </div>
       <div class="form-group">
@@ -9482,7 +9495,7 @@ window.cargarRegistroPagos=async function(){
     <div class="form-grid">
       <div class="form-group">
         <label>Cliente *</label>
-        <input type="text" id="nd-cliente" list="nd-cli-list" placeholder="Nombre del cliente">
+        <input type="text" id="nd-cliente" list="nd-cli-list" placeholder="Nombre del cliente" onblur="validarClienteLista('nd-cliente')">
         <datalist id="nd-cli-list"></datalist>
       </div>
       <div class="form-group">
