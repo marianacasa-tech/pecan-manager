@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-07-20T08:55:11.610Z",
-    "fecha_legible": "20/7/2026, 05:55:11",
+    "fecha": "2026-07-21T08:25:40.715Z",
+    "fecha_legible": "21/7/2026, 05:25:40",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -3558,7 +3558,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1761
+        "stock_actual": 1756
       },
       {
         "_id": "FWRpi32rFH6KBhdYmDjM",
@@ -14878,6 +14878,47 @@
         "creado": "2026-05-06T12:51:14.997Z"
       },
       {
+        "_id": "4T7skNJtwOC2Ge9JNlKu",
+        "estado": "cuenta_corriente",
+        "cliente": "Altieri Junín",
+        "flete": 0,
+        "cliente_cuit": "",
+        "observaciones": "",
+        "vencimiento": "",
+        "descuento_pct": 0,
+        "monto_total": 195000,
+        "nro_remito": "R-0214",
+        "cliente_telefono": "",
+        "monto_iva": 0,
+        "items": [
+          {
+            "cajas": 1,
+            "prod_key": "nuez_enteras",
+            "precio_kg": 21000,
+            "nombre": "Pecan Entero",
+            "kg": 5,
+            "subtotal": 105000
+          },
+          {
+            "precio_kg": 18000,
+            "prod_key": "nuez_part_grandes",
+            "cajas": 0,
+            "subtotal": 90000,
+            "kg": 5,
+            "nombre": "Pecan Partido Grande"
+          }
+        ],
+        "forma_pago": "cuenta_corriente",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "monto_desc": 0,
+        "fecha": "2026-07-20",
+        "monto_sub": 195000,
+        "cliente_email": "",
+        "iva_pct": 0,
+        "cliente_provincia": "Tucumán",
+        "creado": "2026-07-20T13:27:21.931Z"
+      },
+      {
         "_id": "4xpef6htBY5JdJA1Aqu3",
         "fecha": "2026-07-11",
         "cliente": "La Gringa",
@@ -16368,6 +16409,47 @@
         "creado": "2026-05-14T21:34:25.812Z"
       },
       {
+        "_id": "Q2C1dWadw3Ws50bXbeHA",
+        "forma_pago": "efectivo",
+        "vencimiento": "",
+        "monto_iva": 0,
+        "monto_total": 275000,
+        "monto_sub": 275000,
+        "observaciones": "",
+        "cliente_email": "",
+        "estado": "cobrado",
+        "cliente_provincia": "Tucumán",
+        "iva_pct": 0,
+        "nro_remito": "R-0213",
+        "cliente_cuit": "",
+        "monto_desc": 0,
+        "cliente_localidad": "",
+        "cliente": "Consumidor Final",
+        "descuento_pct": 0,
+        "fecha": "2026-07-20",
+        "items": [
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "cajas": 1,
+            "nombre": "Pecan Garrapiñado",
+            "subtotal": 125000,
+            "kg": 5,
+            "precio_kg": 25000
+          },
+          {
+            "cajas": 1,
+            "nombre": "Pecan Tostado salado",
+            "prod_key": "receta_nEcIJUPYxV7SLvIV2zcP",
+            "kg": 5,
+            "subtotal": 150000,
+            "precio_kg": 30000
+          }
+        ],
+        "cliente_telefono": "",
+        "flete": 0,
+        "creado": "2026-07-20T10:25:47.414Z"
+      },
+      {
         "_id": "QPRhFitZhEiHuszg7x4V",
         "fecha": "2026-06-29",
         "cliente": "Grupo Framap",
@@ -16884,6 +16966,55 @@
         "vencimiento": "",
         "observaciones": "",
         "creado": "2026-06-26T14:14:05.835Z"
+      },
+      {
+        "_id": "Vc5DIm0bYngTRW9kXD4n",
+        "fecha": "2026-07-20",
+        "descuento_pct": 0,
+        "estado": "cuenta_corriente",
+        "forma_pago": "cuenta_corriente",
+        "vencimiento": "",
+        "iva_pct": 0,
+        "nro_remito": "R-0215",
+        "observaciones": "",
+        "monto_desc": 0,
+        "cliente_localidad": "San Miguel de Tucumán",
+        "monto_total": 385000,
+        "monto_sub": 385000,
+        "monto_iva": 0,
+        "cliente_telefono": "3813441588",
+        "cliente_provincia": "Tucumán",
+        "flete": 0,
+        "cliente_email": "",
+        "cliente_cuit": "",
+        "items": [
+          {
+            "nombre": "Pecan Entero",
+            "subtotal": 210000,
+            "kg": 10,
+            "prod_key": "nuez_enteras",
+            "cajas": 1,
+            "precio_kg": 21000
+          },
+          {
+            "nombre": "Pecan Partido Grande",
+            "prod_key": "nuez_part_grandes",
+            "kg": 5,
+            "subtotal": 90000,
+            "cajas": 1,
+            "precio_kg": 18000
+          },
+          {
+            "cajas": 0,
+            "precio_kg": 17000,
+            "nombre": "Pecan Partido Chico",
+            "subtotal": 85000,
+            "prod_key": "nuez_part_chicas",
+            "kg": 5
+          }
+        ],
+        "cliente": "Frutos Secos del Noa",
+        "creado": "2026-07-20T14:30:33.098Z"
       },
       {
         "_id": "WqMVKwxiW2iasjq46VbH",
@@ -19023,6 +19154,19 @@
         "creado": "2026-06-24T13:00:15.112Z"
       },
       {
+        "_id": "82Vd1jToyHCbAqokudyS",
+        "tipo": "cobro_automatico",
+        "nro_cobro": "COB-0176",
+        "medio": "efectivo",
+        "importe": 275000,
+        "obs": "Cobro automático por venta cobrada en el momento",
+        "fecha": "2026-07-20",
+        "ref_remito": "R-0213",
+        "referencia": "R-0213",
+        "cliente": "Consumidor Final",
+        "creado": "2026-07-20T10:25:48.385Z"
+      },
+      {
         "_id": "8eIjruydAD5Gsc7YyUPz",
         "tipo": "cobro",
         "cliente": "Expo Food SAS",
@@ -19790,6 +19934,18 @@
         "obs": "",
         "nro_cobro": "COB-0156",
         "creado": "2026-07-03T12:44:42.897Z"
+      },
+      {
+        "_id": "ZXgvylA5bA7FHZHBUtNB",
+        "obs": "",
+        "medio": "efectivo",
+        "cliente": "Altieri Junín",
+        "importe": 195000,
+        "tipo": "cobro",
+        "referencia": "",
+        "fecha": "2026-07-20",
+        "nro_cobro": "COB-0177",
+        "creado": "2026-07-20T14:51:42.921Z"
       },
       {
         "_id": "ZdAsiXRGTlXOztDOx5ri",
@@ -20716,7 +20872,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 175
+        "ultimo": 177
       },
       {
         "_id": "cotizaciones",
@@ -20761,7 +20917,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 212
+        "ultimo": 215
       },
       {
         "_id": "variedades",
