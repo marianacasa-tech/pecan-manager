@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-07-21T08:25:40.715Z",
-    "fecha_legible": "21/7/2026, 05:25:40",
+    "fecha": "2026-07-22T08:26:29.272Z",
+    "fecha_legible": "22/7/2026, 05:26:29",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -3558,7 +3558,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1756
+        "stock_actual": 1755
       },
       {
         "_id": "FWRpi32rFH6KBhdYmDjM",
@@ -14639,6 +14639,39 @@
         "creado": "2026-05-05T00:02:03.174Z"
       },
       {
+        "_id": "20GHlKYoR35rJsgfE8Xg",
+        "fecha": "2026-07-21",
+        "monto_total": 226000,
+        "items": [
+          {
+            "nombre": "Pecan Entero",
+            "subtotal": 210000,
+            "precio_kg": 21000,
+            "cajas": 1,
+            "kg": 10,
+            "prod_key": "nuez_enteras"
+          }
+        ],
+        "cliente": "Turmalina",
+        "iva_pct": 0,
+        "nro_remito": "R-0216",
+        "cliente_telefono": "1128952881",
+        "estado": "cuenta_corriente",
+        "observaciones": "",
+        "flete": 16000,
+        "vencimiento": "",
+        "cliente_email": "",
+        "monto_sub": 210000,
+        "cliente_provincia": "Mendoza",
+        "descuento_pct": 0,
+        "cliente_cuit": "",
+        "monto_desc": 0,
+        "cliente_localidad": "San Rafael",
+        "monto_iva": 0,
+        "forma_pago": "cuenta_corriente",
+        "creado": "2026-07-21T12:48:16.585Z"
+      },
+      {
         "_id": "2JZp9YdtX7aiqaxTAX20",
         "fecha": "2026-06-23",
         "cliente": "Octaviano",
@@ -18375,6 +18408,39 @@
         "creado": "2026-05-05T16:42:16.812Z"
       },
       {
+        "_id": "tFQcYSFXXnQkUmhaLStL",
+        "observaciones": "",
+        "estado": "cuenta_corriente",
+        "cliente": "Picar",
+        "cliente_provincia": "Tucumán",
+        "cliente_cuit": "",
+        "monto_iva": 0,
+        "flete": 0,
+        "cliente_email": "",
+        "monto_total": 125000,
+        "iva_pct": 0,
+        "cliente_telefono": "",
+        "monto_desc": 0,
+        "items": [
+          {
+            "kg": 5,
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "subtotal": 125000,
+            "precio_kg": 25000,
+            "cajas": 0
+          }
+        ],
+        "monto_sub": 125000,
+        "vencimiento": "",
+        "descuento_pct": 0,
+        "forma_pago": "cuenta_corriente",
+        "nro_remito": "R-0217",
+        "fecha": "2026-07-21",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "creado": "2026-07-21T16:16:39.189Z"
+      },
+      {
         "_id": "tHoY43KoMU1jP05mecyN",
         "fecha": "2026-06-02",
         "cliente": "Nutrifrut",
@@ -19141,6 +19207,18 @@
         "creado": "2026-06-18T14:42:39.660Z"
       },
       {
+        "_id": "7A6YQuK2nKPAwoyrsMWA",
+        "fecha": "2026-07-21",
+        "tipo": "cobro",
+        "importe": 210000,
+        "cliente": "Frutos Secos del Noa",
+        "nro_cobro": "COB-0180",
+        "referencia": "",
+        "medio": "transferencia",
+        "obs": "",
+        "creado": "2026-07-21T17:35:19.307Z"
+      },
+      {
         "_id": "7E5vlzxVNtI1kbqY2YLe",
         "tipo": "cobro_automatico",
         "cliente": "Nutra",
@@ -19348,6 +19426,18 @@
         "obs": "",
         "nro_cobro": "COB-0163",
         "creado": "2026-07-08T12:24:41.723Z"
+      },
+      {
+        "_id": "Gl3rIMU83JPdA5NDXjAB",
+        "importe": 226000,
+        "obs": "",
+        "fecha": "2026-07-21",
+        "nro_cobro": "COB-0178",
+        "medio": "efectivo",
+        "tipo": "cobro",
+        "referencia": "",
+        "cliente": "Turmalina",
+        "creado": "2026-07-21T15:40:40.556Z"
       },
       {
         "_id": "GxhXEb3xLsN6vw27fYop",
@@ -20536,6 +20626,18 @@
         "creado": "2026-06-16T12:26:35.118Z"
       },
       {
+        "_id": "sK0qwH7IikMwnjwLZ44I",
+        "obs": "",
+        "fecha": "2026-07-21",
+        "importe": 1505000,
+        "nro_cobro": "COB-0179",
+        "medio": "efectivo",
+        "referencia": "",
+        "cliente": "Octaviano",
+        "tipo": "cobro",
+        "creado": "2026-07-21T16:25:04.018Z"
+      },
+      {
         "_id": "sX8lNHHwMnpjgET7WPCG",
         "tipo": "cobro",
         "cliente": "Rio Negro Yerba Buena",
@@ -20872,7 +20974,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 177
+        "ultimo": 180
       },
       {
         "_id": "cotizaciones",
@@ -20917,7 +21019,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 215
+        "ultimo": 217
       },
       {
         "_id": "variedades",
