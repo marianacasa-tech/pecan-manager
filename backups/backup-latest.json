@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-07-24T08:25:11.702Z",
-    "fecha_legible": "24/7/2026, 05:25:11",
+    "fecha": "2026-07-25T08:04:01.610Z",
+    "fecha_legible": "25/7/2026, 05:04:01",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -3505,6 +3505,13 @@
         ]
       },
       {
+        "_id": "TMZlB4FiMj6tAnVzRuAG",
+        "nombre": "Pasta de Pecan",
+        "insumos": [],
+        "descripcion": "",
+        "creado": "2026-07-24T10:14:17.106Z"
+      },
+      {
         "_id": "nEcIJUPYxV7SLvIV2zcP",
         "descripcion": "",
         "creado": "2026-03-08T13:28:04.019Z",
@@ -3574,28 +3581,28 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:34:49.660Z",
-        "stock_actual": 4038.2000000000007
+        "stock_actual": 4032.600000000001
       },
       {
         "_id": "nd7NEWbpA51DRrmoEoDe",
         "nombre": "Chocolate Semiamargo Baño",
         "unidad": "kg",
         "creado": "2026-03-08T13:23:37.574Z",
-        "stock_actual": 122.4
+        "stock_actual": 128.4
       },
       {
         "_id": "qdZf2Q6o7ByDNPPc7AuH",
         "nombre": "Agua",
         "unidad": "l",
         "creado": "2026-03-07T15:10:25.012Z",
-        "stock_actual": 212.244
+        "stock_actual": 205.244
       },
       {
         "_id": "qkjirFvH2ZswS3cZ2H7z",
         "nombre": "Azucar",
         "unidad": "kg",
         "creado": "2026-03-07T15:08:43.376Z",
-        "stock_actual": 371.3
+        "stock_actual": 354.5
       }
     ],
     "tandas_cocina": [
@@ -3975,6 +3982,39 @@
         "lote_id": "LOT-COC-20260605-014",
         "nro_tanda": 1,
         "creado": "2026-06-05T12:44:18.236Z"
+      },
+      {
+        "_id": "2zBq1Vk36fVZCym4QL7W",
+        "observaciones": "",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "kg_producido": 3.8,
+        "nro_tanda": 2,
+        "receta_nombre": "Pecan Garrapiñado",
+        "insumos_usados": [
+          {
+            "cantidad": 1.2,
+            "nombre": "Azucar",
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "unidad": "kg"
+          },
+          {
+            "cantidad": 0.5,
+            "nombre": "Agua",
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "unidad": "l"
+          },
+          {
+            "cantidad": 0.4,
+            "nombre": "Bolsa Polipropileno",
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "unidad": "u"
+          }
+        ],
+        "fecha": "2026-07-20",
+        "lote_id": "LOT-COC-20260724-039",
+        "kg_nuez": 1.95,
+        "categoria_nuez": "part_grandes",
+        "creado": "2026-07-24T10:49:12.933Z"
       },
       {
         "_id": "3DSXPfbPeMlqY509ND25",
@@ -4604,6 +4644,39 @@
         "creado": "2026-06-18T12:41:46.948Z"
       },
       {
+        "_id": "APpQi2NvSlYtnTeiLghG",
+        "lote_id": "LOT-COC-20260724-038",
+        "receta_nombre": "Pecan Garrapiñado",
+        "insumos_usados": [
+          {
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "unidad": "kg",
+            "nombre": "Azucar",
+            "cantidad": 1.2
+          },
+          {
+            "nombre": "Agua",
+            "cantidad": 0.5,
+            "unidad": "l",
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH"
+          },
+          {
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "unidad": "u",
+            "nombre": "Bolsa Polipropileno",
+            "cantidad": 0.4
+          }
+        ],
+        "observaciones": "",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "categoria_nuez": "enteras",
+        "fecha": "2026-07-20",
+        "nro_tanda": 6,
+        "kg_producido": 2.9,
+        "kg_nuez": 2.2,
+        "creado": "2026-07-24T10:43:00.477Z"
+      },
+      {
         "_id": "ASQ0MuYTLTWR086fSk7E",
         "fecha": "2026-06-05",
         "receta_id": "DdHndtIU5V3y2nRItFNH",
@@ -5066,6 +5139,39 @@
         "creado": "2026-07-08T10:37:58.259Z"
       },
       {
+        "_id": "DqSSjyx2C6XAUiMRZ7kK",
+        "lote_id": "LOT-COC-20260724-038",
+        "receta_nombre": "Pecan Garrapiñado",
+        "observaciones": "",
+        "insumos_usados": [
+          {
+            "cantidad": 1.2,
+            "nombre": "Azucar",
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "unidad": "kg"
+          },
+          {
+            "unidad": "l",
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "cantidad": 0.5,
+            "nombre": "Agua"
+          },
+          {
+            "cantidad": 0.4,
+            "nombre": "Bolsa Polipropileno",
+            "unidad": "u",
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1"
+          }
+        ],
+        "nro_tanda": 8,
+        "kg_producido": 2.9,
+        "kg_nuez": 2.2,
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "categoria_nuez": "enteras",
+        "fecha": "2026-07-20",
+        "creado": "2026-07-24T10:43:00.477Z"
+      },
+      {
         "_id": "E0KSxnNvkmZ2RLKSBoy6",
         "fecha": "2026-05-30",
         "receta_id": "DdHndtIU5V3y2nRItFNH",
@@ -5229,6 +5335,39 @@
         "lote_id": "LOT-COC-20260604-013",
         "nro_tanda": 2,
         "creado": "2026-06-04T14:33:10.020Z"
+      },
+      {
+        "_id": "GdTBMVOKhYqG4s9PlbEu",
+        "observaciones": "",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "nro_tanda": 1,
+        "receta_nombre": "Pecan Garrapiñado",
+        "kg_producido": 3.8,
+        "fecha": "2026-07-20",
+        "insumos_usados": [
+          {
+            "cantidad": 1.2,
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "unidad": "kg",
+            "nombre": "Azucar"
+          },
+          {
+            "cantidad": 0.5,
+            "nombre": "Agua",
+            "unidad": "l",
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH"
+          },
+          {
+            "cantidad": 0.4,
+            "nombre": "Bolsa Polipropileno",
+            "unidad": "u",
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1"
+          }
+        ],
+        "lote_id": "LOT-COC-20260724-039",
+        "kg_nuez": 1.95,
+        "categoria_nuez": "part_grandes",
+        "creado": "2026-07-24T10:49:12.933Z"
       },
       {
         "_id": "GrN0KyUCpQ76m5danG5Q",
@@ -6054,6 +6193,39 @@
         "lote_id": "LOT-COC-20260601-009",
         "nro_tanda": 3,
         "creado": "2026-06-01T11:09:46.365Z"
+      },
+      {
+        "_id": "N3z0yof4NOEchDdpv75x",
+        "observaciones": "",
+        "insumos_usados": [
+          {
+            "nombre": "Azucar",
+            "cantidad": 1.2,
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "unidad": "kg"
+          },
+          {
+            "cantidad": 0.5,
+            "nombre": "Agua",
+            "unidad": "l",
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH"
+          },
+          {
+            "nombre": "Bolsa Polipropileno",
+            "cantidad": 0.4,
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "unidad": "u"
+          }
+        ],
+        "nro_tanda": 4,
+        "kg_producido": 2.9,
+        "kg_nuez": 2.2,
+        "categoria_nuez": "enteras",
+        "fecha": "2026-07-20",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "lote_id": "LOT-COC-20260724-038",
+        "receta_nombre": "Pecan Garrapiñado",
+        "creado": "2026-07-24T10:43:00.477Z"
       },
       {
         "_id": "NDPkKVmDLlcGEuRk71tf",
@@ -7079,6 +7251,39 @@
         "creado": "2026-06-10T13:26:47.347Z"
       },
       {
+        "_id": "V1YvVx0Ajpe25tojTkRL",
+        "nro_tanda": 1,
+        "kg_producido": 2.9,
+        "kg_nuez": 2.2,
+        "categoria_nuez": "enteras",
+        "fecha": "2026-07-20",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "observaciones": "",
+        "insumos_usados": [
+          {
+            "cantidad": 1.2,
+            "nombre": "Azucar",
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "unidad": "kg"
+          },
+          {
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "unidad": "l",
+            "cantidad": 0.5,
+            "nombre": "Agua"
+          },
+          {
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "unidad": "u",
+            "cantidad": 0.4,
+            "nombre": "Bolsa Polipropileno"
+          }
+        ],
+        "lote_id": "LOT-COC-20260724-038",
+        "receta_nombre": "Pecan Garrapiñado",
+        "creado": "2026-07-24T10:43:00.477Z"
+      },
+      {
         "_id": "VGeY3p5T4QwVuIhz4M4Q",
         "fecha": "2026-07-08",
         "receta_id": "DdHndtIU5V3y2nRItFNH",
@@ -7143,6 +7348,39 @@
         "lote_id": "LOT-COC-20260618-017",
         "nro_tanda": 6,
         "creado": "2026-06-18T10:39:32.828Z"
+      },
+      {
+        "_id": "VP3mmBOLWGqoAlZjJbA9",
+        "lote_id": "LOT-COC-20260724-038",
+        "receta_nombre": "Pecan Garrapiñado",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "categoria_nuez": "enteras",
+        "fecha": "2026-07-20",
+        "nro_tanda": 5,
+        "kg_producido": 2.9,
+        "kg_nuez": 2.2,
+        "insumos_usados": [
+          {
+            "cantidad": 1.2,
+            "nombre": "Azucar",
+            "unidad": "kg",
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z"
+          },
+          {
+            "unidad": "l",
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "cantidad": 0.5,
+            "nombre": "Agua"
+          },
+          {
+            "nombre": "Bolsa Polipropileno",
+            "cantidad": 0.4,
+            "unidad": "u",
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1"
+          }
+        ],
+        "observaciones": "",
+        "creado": "2026-07-24T10:43:00.477Z"
       },
       {
         "_id": "Vt4qxPDd7gVmM6Hichh4",
@@ -8795,6 +9033,39 @@
         "creado": "2026-05-30T12:12:01.614Z"
       },
       {
+        "_id": "gqK6sqMD41SwZKg3T8kE",
+        "observaciones": "",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "nro_tanda": 4,
+        "receta_nombre": "Pecan Garrapiñado",
+        "kg_producido": 3.8,
+        "lote_id": "LOT-COC-20260724-039",
+        "fecha": "2026-07-20",
+        "insumos_usados": [
+          {
+            "cantidad": 1.2,
+            "unidad": "kg",
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "nombre": "Azucar"
+          },
+          {
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "unidad": "l",
+            "nombre": "Agua",
+            "cantidad": 0.5
+          },
+          {
+            "nombre": "Bolsa Polipropileno",
+            "unidad": "u",
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 0.4
+          }
+        ],
+        "categoria_nuez": "part_grandes",
+        "kg_nuez": 1.95,
+        "creado": "2026-07-24T10:49:12.933Z"
+      },
+      {
         "_id": "hgJkHrRK7mqrhdV7IJqR",
         "fecha": "2026-07-06",
         "receta_id": "nEcIJUPYxV7SLvIV2zcP",
@@ -9123,6 +9394,20 @@
         "lote_id": "LOT-COC-20260618-020",
         "nro_tanda": 7,
         "creado": "2026-06-18T12:41:46.948Z"
+      },
+      {
+        "_id": "jlfhIsL7O81kwqRr71WO",
+        "observaciones": "",
+        "kg_nuez": 17.8,
+        "categoria_nuez": "danadas",
+        "insumos_usados": [],
+        "fecha": "2026-07-21",
+        "lote_id": "LOT-COC-20260724-037",
+        "receta_id": "TMZlB4FiMj6tAnVzRuAG",
+        "nro_tanda": 1,
+        "receta_nombre": "Pasta de Pecan",
+        "kg_producido": 4.4,
+        "creado": "2026-07-24T10:21:39.098Z"
       },
       {
         "_id": "jy4GMChlU7qnrHz3D1tb",
@@ -9686,6 +9971,39 @@
         "creado": "2026-06-18T12:41:46.948Z"
       },
       {
+        "_id": "qO5luq3Y3h0UmUwvb4qs",
+        "lote_id": "LOT-COC-20260724-038",
+        "receta_nombre": "Pecan Garrapiñado",
+        "observaciones": "",
+        "insumos_usados": [
+          {
+            "unidad": "kg",
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "cantidad": 1.2,
+            "nombre": "Azucar"
+          },
+          {
+            "nombre": "Agua",
+            "cantidad": 0.5,
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "unidad": "l"
+          },
+          {
+            "cantidad": 0.4,
+            "nombre": "Bolsa Polipropileno",
+            "unidad": "u",
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1"
+          }
+        ],
+        "nro_tanda": 2,
+        "kg_producido": 2.9,
+        "kg_nuez": 2.2,
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "categoria_nuez": "enteras",
+        "fecha": "2026-07-20",
+        "creado": "2026-07-24T10:43:00.477Z"
+      },
+      {
         "_id": "qVGP80HKtrUPuXH0RJyu",
         "fecha": "2026-07-07",
         "receta_id": "DdHndtIU5V3y2nRItFNH",
@@ -9783,6 +10101,39 @@
         "lote_id": "LOT-COC-20260618-021",
         "nro_tanda": 2,
         "creado": "2026-06-18T12:42:39.381Z"
+      },
+      {
+        "_id": "rwIX7uuER3iqCsXgVP1X",
+        "nro_tanda": 9,
+        "kg_producido": 2.9,
+        "kg_nuez": 2,
+        "categoria_nuez": "enteras",
+        "fecha": "2026-07-20",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "observaciones": "",
+        "insumos_usados": [
+          {
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "unidad": "kg",
+            "nombre": "Azucar",
+            "cantidad": 1.2
+          },
+          {
+            "nombre": "Agua",
+            "cantidad": 0.5,
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "unidad": "l"
+          },
+          {
+            "cantidad": 0.4,
+            "nombre": "Bolsa Polipropileno",
+            "unidad": "u",
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1"
+          }
+        ],
+        "lote_id": "LOT-COC-20260724-038",
+        "receta_nombre": "Pecan Garrapiñado",
+        "creado": "2026-07-24T10:43:00.477Z"
       },
       {
         "_id": "s6B1VJaTxYwATPLdWsBs",
@@ -10016,6 +10367,39 @@
         "creado": "2026-06-18T10:39:32.828Z"
       },
       {
+        "_id": "u9mGur3M5bksV8w5AHep",
+        "insumos_usados": [
+          {
+            "unidad": "kg",
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "nombre": "Azucar",
+            "cantidad": 1.2
+          },
+          {
+            "cantidad": 0.5,
+            "nombre": "Agua",
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "unidad": "l"
+          },
+          {
+            "nombre": "Bolsa Polipropileno",
+            "cantidad": 0.4,
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "unidad": "u"
+          }
+        ],
+        "observaciones": "",
+        "categoria_nuez": "enteras",
+        "fecha": "2026-07-20",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "nro_tanda": 7,
+        "kg_producido": 2.9,
+        "kg_nuez": 2.2,
+        "lote_id": "LOT-COC-20260724-038",
+        "receta_nombre": "Pecan Garrapiñado",
+        "creado": "2026-07-24T10:43:00.477Z"
+      },
+      {
         "_id": "uAxgWIqdq3KmDjpPIH4d",
         "fecha": "2026-06-24",
         "receta_id": "nEcIJUPYxV7SLvIV2zcP",
@@ -10214,6 +10598,39 @@
         "creado": "2026-06-23T11:23:27.528Z"
       },
       {
+        "_id": "wbN3uQFWfiCF2pIpANjl",
+        "observaciones": "",
+        "insumos_usados": [
+          {
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "unidad": "kg",
+            "cantidad": 1.2,
+            "nombre": "Azucar"
+          },
+          {
+            "unidad": "l",
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "cantidad": 0.5,
+            "nombre": "Agua"
+          },
+          {
+            "unidad": "u",
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 0.4,
+            "nombre": "Bolsa Polipropileno"
+          }
+        ],
+        "nro_tanda": 3,
+        "kg_producido": 2.9,
+        "kg_nuez": 2.2,
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "categoria_nuez": "enteras",
+        "fecha": "2026-07-20",
+        "lote_id": "LOT-COC-20260724-038",
+        "receta_nombre": "Pecan Garrapiñado",
+        "creado": "2026-07-24T10:43:00.477Z"
+      },
+      {
         "_id": "whBNuvcGvPy3MBnCz23i",
         "fecha": "2026-06-24",
         "receta_id": "nEcIJUPYxV7SLvIV2zcP",
@@ -10245,6 +10662,39 @@
         "lote_id": "LOT-COC-20260703-030",
         "nro_tanda": 4,
         "creado": "2026-07-03T10:43:15.948Z"
+      },
+      {
+        "_id": "xP3fEHkIEzoLPgdDfwnA",
+        "insumos_usados": [
+          {
+            "cantidad": 1.2,
+            "unidad": "kg",
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "nombre": "Azucar"
+          },
+          {
+            "nombre": "Agua",
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "unidad": "l",
+            "cantidad": 0.5
+          },
+          {
+            "unidad": "u",
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "nombre": "Bolsa Polipropileno",
+            "cantidad": 0.4
+          }
+        ],
+        "fecha": "2026-07-20",
+        "lote_id": "LOT-COC-20260724-039",
+        "kg_nuez": 1.9,
+        "categoria_nuez": "part_grandes",
+        "observaciones": "",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "kg_producido": 3.7,
+        "nro_tanda": 5,
+        "receta_nombre": "Pecan Garrapiñado",
+        "creado": "2026-07-24T10:49:12.933Z"
       },
       {
         "_id": "xXw0k3xO5mFQlnl8Lce0",
@@ -10410,6 +10860,39 @@
         "lote_id": "LOT-COC-20260703-032",
         "nro_tanda": 4,
         "creado": "2026-07-03T10:52:33.301Z"
+      },
+      {
+        "_id": "zRdhOYKPFzmuVCX01hdz",
+        "kg_producido": 3.8,
+        "nro_tanda": 3,
+        "receta_nombre": "Pecan Garrapiñado",
+        "observaciones": "",
+        "receta_id": "DdHndtIU5V3y2nRItFNH",
+        "kg_nuez": 1.95,
+        "categoria_nuez": "part_grandes",
+        "insumos_usados": [
+          {
+            "cantidad": 1.2,
+            "nombre": "Azucar",
+            "insumo_id": "qkjirFvH2ZswS3cZ2H7z",
+            "unidad": "kg"
+          },
+          {
+            "cantidad": 0.5,
+            "nombre": "Agua",
+            "insumo_id": "qdZf2Q6o7ByDNPPc7AuH",
+            "unidad": "l"
+          },
+          {
+            "cantidad": 0.4,
+            "insumo_id": "YYbZJUzPqOqZACGH6KD1",
+            "unidad": "u",
+            "nombre": "Bolsa Polipropileno"
+          }
+        ],
+        "fecha": "2026-07-20",
+        "lote_id": "LOT-COC-20260724-039",
+        "creado": "2026-07-24T10:49:12.933Z"
       },
       {
         "_id": "zSEPcat1ZxbLpaQyPDDH",
@@ -11182,6 +11665,36 @@
           }
         ],
         "creado": "2026-06-23T16:22:16.890Z"
+      },
+      {
+        "_id": "GP77D6NnroawtJM5iFH0",
+        "fecha": "2026-07-23",
+        "forma_pago": "efectivo",
+        "moneda": "ARS",
+        "nro_factura": "",
+        "vencimiento": "",
+        "items": [
+          {
+            "insumo_id": "nd7NEWbpA51DRrmoEoDe",
+            "precio_unitario": 18000,
+            "insumo_nombre": "Chocolate Semiamargo Baño",
+            "descripcion": "Chocolate Semiamargo Baño",
+            "cantidad": 6,
+            "unidad": "kg",
+            "subtotal": 108000,
+            "tipo": "insumo",
+            "cat_nuez": ""
+          }
+        ],
+        "tc_referencial": 0,
+        "monto_neto": 108000,
+        "iva_pct": 0,
+        "monto_total": 108000,
+        "monto_iva": 0,
+        "estado": "pagado",
+        "observaciones": "",
+        "proveedor": "",
+        "creado": "2026-07-24T10:56:29.084Z"
       },
       {
         "_id": "H709NOITiSs5Ssymntc4",
@@ -19464,6 +19977,18 @@
         "creado": "2026-06-08T14:02:18.814Z"
       },
       {
+        "_id": "HyQl0akWNvdDJBc21iqo",
+        "tipo": "cobro",
+        "cliente": "Semilleria Nogales",
+        "obs": "",
+        "medio": "efectivo",
+        "fecha": "2026-07-24",
+        "nro_cobro": "COB-0184",
+        "importe": 80000,
+        "referencia": "",
+        "creado": "2026-07-24T17:38:35.027Z"
+      },
+      {
         "_id": "I3Kn57PvtZzC3gdsE8Zm",
         "tipo": "cobro_automatico",
         "cliente": "Consumidor Final",
@@ -19499,6 +20024,18 @@
         "obs": "",
         "nro_cobro": "COB-0108",
         "creado": "2026-06-19T13:52:44.768Z"
+      },
+      {
+        "_id": "IZGCyDXWGstS15QSWp6Z",
+        "cliente": "Expo Food SAS",
+        "tipo": "cobro",
+        "nro_cobro": "COB-0181",
+        "importe": 250000,
+        "obs": "",
+        "medio": "transferencia",
+        "fecha": "2026-07-24",
+        "referencia": "",
+        "creado": "2026-07-24T17:36:31.079Z"
       },
       {
         "_id": "IwTDYTcY1xCpqkIo5wL6",
@@ -20097,6 +20634,18 @@
         "obs": "",
         "nro_cobro": "COB-0132",
         "creado": "2026-06-26T11:49:13.661Z"
+      },
+      {
+        "_id": "c9IQtTS9mBwjAC0jYoli",
+        "referencia": "",
+        "nro_cobro": "COB-0182",
+        "importe": 130000,
+        "obs": "",
+        "medio": "efectivo",
+        "fecha": "2026-07-24",
+        "cliente": "Altieri",
+        "tipo": "cobro",
+        "creado": "2026-07-24T17:37:13.836Z"
       },
       {
         "_id": "criI1O6w6faY1wV0etpP",
@@ -20870,6 +21419,18 @@
         "creado": "2026-07-14T15:14:54.510Z"
       },
       {
+        "_id": "z36ZIRGBTXh3Km3Ood66",
+        "referencia": "",
+        "nro_cobro": "COB-0183",
+        "importe": 95000,
+        "obs": "",
+        "medio": "efectivo",
+        "fecha": "2026-07-24",
+        "cliente": "Gran Diet - Facundo Violetto",
+        "tipo": "cobro",
+        "creado": "2026-07-24T17:37:58.462Z"
+      },
+      {
         "_id": "z57fl3jPTOb0wwSOWCVr",
         "tipo": "cobro",
         "cliente": "Estancia Don Miguel",
@@ -20974,7 +21535,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 180
+        "ultimo": 184
       },
       {
         "_id": "cotizaciones",
@@ -21007,7 +21568,7 @@
       },
       {
         "_id": "lotes_coc",
-        "ultimo": 35
+        "ultimo": 39
       },
       {
         "_id": "lotes_fab",
