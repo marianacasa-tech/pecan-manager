@@ -2745,6 +2745,86 @@ window.guardarEntrada=async function(){
       const ref=doc(collection(db,'entradas_fabrica'));
       batch.set(ref,{fecha,propietario:prop,variedad:l.variedad,kg:l.kg,humedad:l.humedad,observaciones:obs,num_remito:num,creado:serverTimestamp()});
     });
+    // ── DESCONTAR FRACCIONADOS ──────────────────────────────────────────────
+    const fracItems=items.filter(it=>it.es_fraccionado);
+    if(fracItems.length){
+      const batchFrac=writeBatch(db);
+      // Agrupar insumos a descontar
+      const insumosDescontar={};
+      const stockTandas={}; // para elaborados
+      const stockNuez={}; // para pecan entero
+
+      for(const it of fracItems){
+        const unidades=it.kg; // en fraccionados, kg = unidades
+        const kgBase=it.frac_kg_unit*unidades;
+
+        // Insumo packaging
+        const insName=it.frac_insumo;
+        insumosDescontar[insName]=(insumosDescontar[insName]||0)+unidades;
+
+        // Stock base
+        if(it.frac_base.startsWith('nuez_')){
+          const cat=it.frac_base.replace('nuez_','');
+          stockNuez[cat]=(stockNuez[cat]||0)+kgBase;
+        } else if(it.frac_base.startsWith('receta_nombre:')){
+          const recNombre=it.frac_base.replace('receta_nombre:','');
+          stockTandas[recNombre]=(stockTandas[recNombre]||0)+kgBase;
+        }
+      }
+
+      // Descontar insumos packaging
+      const snapIns=await getDocsFromServer(collection(db,'insumos'));
+      snapIns.forEach(d=>{
+        const ins=d.data();
+        if(insumosDescontar[ins.nombre]){
+          const nuevo=(ins.stock_actual||0)-insumosDescontar[ins.nombre];
+          batchFrac.update(doc(db,'insumos',d.id),{stock_actual:Math.max(0,nuevo)});
+        }
+      });
+
+      // Descontar tandas cocina para elaborados
+      if(Object.keys(stockTandas).length){
+        const snapTandas=await getDocsFromServer(query(collection(db,'tandas_cocina'),orderBy('fecha','asc')));
+        // Para cada receta, descontar de las tandas más antiguas (FIFO)
+        const tandasPorReceta={};
+        snapTandas.forEach(d=>{
+          const t=d.data();
+          const rNombre=recetasCache.find(r=>r.id===t.receta_id)?.nombre||'';
+          if(!tandasPorReceta[rNombre]) tandasPorReceta[rNombre]=[];
+          tandasPorReceta[rNombre].push({id:d.id,stock:t.stock_kg||0});
+        });
+        for(const[recNombre,kgDescontar] of Object.entries(stockTandas)){
+          let restante=kgDescontar;
+          for(const tanda of (tandasPorReceta[recNombre]||[])){
+            if(restante<=0) break;
+            const desc=Math.min(tanda.stock,restante);
+            batchFrac.update(doc(db,'tandas_cocina',tanda.id),{stock_kg:Math.max(0,tanda.stock-desc)});
+            restante-=desc;
+          }
+        }
+      }
+
+      // Descontar stock vendible (salidas_fabrica) para pecan entero
+      // Se crea un registro de salida especial
+      if(Object.keys(stockNuez).length){
+        const catMap={enteras:'enteras',part_grandes:'part_grandes',part_chicas:'part_chicas'};
+        for(const[cat,kg] of Object.entries(stockNuez)){
+          const salRef=doc(collection(db,'salidas_fabrica'));
+          batchFrac.set(salRef,{
+            fecha,propietario:'PROPIO',variedad:'',
+            categoria_vendible:cat,
+            [cat]:kg,kg_total:kg,
+            tipo:'fraccionado',
+            venta_id:ventaRef.id,
+            creado:serverTimestamp()
+          });
+        }
+      }
+
+      await batchFrac.commit();
+    }
+    // ── FIN FRACCIONADOS ─────────────────────────────────────────────────────
+
     await batch.commit();
     generarPDF({num,fecha,propietario:prop,clienteInfo:buildClienteInfo(prop),lineas,observaciones:obs});
     showAlert('✅ '+lineas.length+' registro(s) guardados — Remito '+num+' generado');
@@ -6369,7 +6449,34 @@ const EMPRESA={
 };
 
 let _ventaItemIdx=0;
-let _preciosCache={};  // {producto_key: precio}
+let _preciosCache={};
+
+// ── FRACCIONADOS CONFIG ──────────────────────────────────────────────────────
+// Definición de todos los SKUs fraccionados
+const FRACCIONADOS=[
+  // Pecan Entero
+  {key:'frac_entero_80',  label:'🌰 Pecan Entero Doypack 80g',   base:'nuez_enteras',  kg:0.080, insumo:'Doypack 80g',  unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_entero_250', label:'🌰 Pecan Entero Doypack 250g',  base:'nuez_enteras',  kg:0.250, insumo:'Doypack 250g', unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_entero_500', label:'🌰 Pecan Entero Doypack 500g',  base:'nuez_enteras',  kg:0.500, insumo:'Doypack 500g', unidad:'u', grupo:'Fraccionados'},
+  // Garrapiñada
+  {key:'frac_garrap_80',  label:'🍬 Garrapiñada Doypack 80g',    base:'receta_nombre:Garrapiñada', kg:0.080, insumo:'Doypack 80g',  unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_garrap_250', label:'🍬 Garrapiñada Doypack 250g',   base:'receta_nombre:Garrapiñada', kg:0.250, insumo:'Doypack 250g', unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_garrap_500', label:'🍬 Garrapiñada Doypack 500g',   base:'receta_nombre:Garrapiñada', kg:0.500, insumo:'Doypack 500g', unidad:'u', grupo:'Fraccionados'},
+  // Tostado Salado
+  {key:'frac_tostado_80',  label:'🧂 Tostado Salado Doypack 80g',  base:'receta_nombre:Tostado Salado', kg:0.080, insumo:'Doypack 80g',  unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_tostado_250', label:'🧂 Tostado Salado Doypack 250g', base:'receta_nombre:Tostado Salado', kg:0.250, insumo:'Doypack 250g', unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_tostado_500', label:'🧂 Tostado Salado Doypack 500g', base:'receta_nombre:Tostado Salado', kg:0.500, insumo:'Doypack 500g', unidad:'u', grupo:'Fraccionados'},
+  // Chocolate
+  {key:'frac_choco_80',  label:'🍫 Pecan Chocolate Doypack 80g',  base:'receta_nombre:Pecan con Chocolate', kg:0.080, insumo:'Doypack 80g',  unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_choco_250', label:'🍫 Pecan Chocolate Doypack 250g', base:'receta_nombre:Pecan con Chocolate', kg:0.250, insumo:'Doypack 250g', unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_choco_500', label:'🍫 Pecan Chocolate Doypack 500g', base:'receta_nombre:Pecan con Chocolate', kg:0.500, insumo:'Doypack 500g', unidad:'u', grupo:'Fraccionados'},
+  // Pasta de Pecan
+  {key:'frac_pasta_200', label:'🥜 Pasta de Pecan Frasco 200g', base:'receta_nombre:Pasta de Pecan', kg:0.200, insumo:'Frasco 200g', unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_pasta_300', label:'🥜 Pasta de Pecan Frasco 300g', base:'receta_nombre:Pasta de Pecan', kg:0.300, insumo:'Frasco 300g', unidad:'u', grupo:'Fraccionados'},
+];
+
+// Insumos de packaging a crear si no existen
+const PACKAGING_INSUMOS=['Doypack 80g','Doypack 250g','Doypack 500g','Frasco 200g','Frasco 300g'];  // {producto_key: precio}
 let _ventaClientesCache=[];
 
 const _catLabelV={enteras:'Pecan Entero',part_grandes:'Pecan Partido Grande',part_chicas:'Pecan Partido Chico',danadas:'Pecan Dañado'};
@@ -6423,16 +6530,19 @@ window.cargarTablaPrecios=async function(){
     recetasCache=[];snap.forEach(d=>recetasCache.push({id:d.id,...d.data()}));
   }
 
-  // Productos: 4 categorías nuez + recetas cocina
+  // Productos: 4 categorías nuez + recetas cocina + fraccionados
   const productos=[];
   ['enteras','part_grandes','part_chicas','danadas'].forEach(c=>{
-    productos.push({key:'nuez_'+c,label:'🌰 '+_catLabelV[c],grupo:'Pecan Pelado'});
+    productos.push({key:'nuez_'+c,label:'🌰 '+_catLabelV[c],grupo:'Pecan Pelado',unidad:'kg'});
   });
   recetasCache.forEach(r=>{
-    productos.push({key:'receta_'+r.id,label:'🍫 '+r.nombre,grupo:'Productos Cocina'});
+    productos.push({key:'receta_'+r.id,label:'🍫 '+r.nombre,grupo:'Productos Cocina',unidad:'kg'});
+  });
+  FRACCIONADOS.forEach(f=>{
+    productos.push({key:f.key,label:f.label,grupo:'Fraccionados',unidad:'u'});
   });
 
-  let html='<div class="table-wrap"><table><thead><tr><th>Producto</th><th>Precio por kg ($)</th></tr></thead><tbody>';
+  let html='<div class="table-wrap"><table><thead><tr><th>Producto</th><th>Precio unitario ($)</th></tr></thead><tbody>';
   let grupoActual='';
   productos.forEach(p=>{
     if(p.grupo!==grupoActual){
@@ -6440,7 +6550,7 @@ window.cargarTablaPrecios=async function(){
       html+=`<tr><td colspan="2" style="background:var(--brown);color:#fff9f0;font-weight:700;font-size:.8rem;padding:6px 12px;text-transform:uppercase;">${grupoActual}</td></tr>`;
     }
     html+=`<tr>
-      <td><strong>${p.label}</strong></td>
+      <td><strong>${p.label}</strong> <span style="color:var(--text2);font-size:.78rem;">/ ${p.unidad||'kg'}</span></td>
       <td><input type="number" id="precio-input-${p.key}" value="${_preciosCache[p.key]||''}"
         min="0" step="0.01" placeholder="0.00"
         style="width:130px;padding:6px 10px;border-radius:6px;border:1.5px solid var(--border);"
@@ -6463,6 +6573,8 @@ window.agregarItemVenta=function(){
     `<option value="nuez_${c}">🌰 ${_catLabelV[c]}</option>`).join('');
   const optsRecetas=recetasCache.map(r=>
     `<option value="receta_${r.id}">🍫 ${r.nombre}</option>`).join('');
+  const optsFrac=FRACCIONADOS.map(f=>
+    `<option value="${f.key}">${f.label}</option>`).join('');
 
   div.innerHTML=`
     <select id="vi-prod-${idx}" onchange="selProductoVenta(${idx})"
@@ -6470,6 +6582,7 @@ window.agregarItemVenta=function(){
       <option value="">— Producto —</option>
       <optgroup label="Pecan Pelado">${optsNuez}</optgroup>
       ${recetasCache.length?`<optgroup label="Prod. Cocina">${optsRecetas}</optgroup>`:''}
+      <optgroup label="Fraccionados">${optsFrac}</optgroup>
     </select>
     <input type="number" id="vi-kg-${idx}" step="0.01" min="0" placeholder="0.00"
       style="padding:7px 8px;border-radius:6px;border:1.5px solid var(--border);width:100%;box-sizing:border-box;font-size:.85rem;"
@@ -6492,6 +6605,14 @@ window.selProductoVenta=function(idx){
   if(!key) return;
   const precio=_preciosCache[key]||0;
   document.getElementById('vi-precio-'+idx).value=precio||'';
+  // Cambiar label según tipo
+  const esFrac=FRACCIONADOS.some(f=>f.key===key);
+  const kgInput=document.getElementById('vi-kg-'+idx);
+  if(kgInput){
+    kgInput.placeholder=esFrac?'Unidades':'kg';
+    kgInput.step=esFrac?'1':'0.01';
+    if(esFrac) kgInput.min='1';
+  }
   recalcItemVenta(idx);
 }
 
@@ -6554,9 +6675,16 @@ window.guardarVenta=async function(){
     if(!prod||!kg){showAlert('Completá producto y kg en todos los ítems','error');valido=false;return;}
     // Nombre del producto
     let nombre='';
-    if(prod.startsWith('nuez_')) nombre=_catLabelV[prod.replace('nuez_','')]||prod;
+    const fracDef=FRACCIONADOS.find(f=>f.key===prod);
+    if(fracDef) nombre=fracDef.label;
+    else if(prod.startsWith('nuez_')) nombre=_catLabelV[prod.replace('nuez_','')]||prod;
     else{const r=recetasCache.find(x=>'receta_'+x.id===prod);nombre=r?r.nombre:prod;}
-    items.push({prod_key:prod,nombre,kg,precio_kg:precio,subtotal:subItem,cajas});
+    const esFrac=!!fracDef;
+    items.push({prod_key:prod,nombre,kg,precio_kg:precio,subtotal:subItem,cajas,
+      es_fraccionado:esFrac,
+      frac_insumo:esFrac?fracDef.insumo:null,
+      frac_kg_unit:esFrac?fracDef.kg:null,
+      frac_base:esFrac?fracDef.base:null});
     sub+=subItem;
   });
   if(!valido||!items.length){if(valido)showAlert('Agregá al menos un producto','error');return;}
