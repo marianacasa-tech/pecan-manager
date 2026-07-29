@@ -6757,7 +6757,7 @@ window.abrirRemitoModal=function(v){
   const estadoLabel={cobrado:'Cobrado ✅',cuenta_corriente:'Cuenta Corriente ⏳'};
 
   const itemsHtml=(v.items||[]).map(it=>{
-    const esFrac=it.es_fraccionado||FRACCIONADOS.some(f=>f.key===it.prod_key);
+    const esFrac=!!it.es_fraccionado;
     const cantStr=esFrac?Math.round(it.kg)+' u':parseFloat(it.kg).toFixed(1)+' kg';
     const precioLabel=esFrac?fmtMoneda(it.precio_kg)+'/u':fmtMoneda(it.precio_kg)+'/kg';
     return `<tr>
@@ -6846,7 +6846,7 @@ window.abrirRemitoModal=function(v){
     const _vd=${JSON.stringify({...v,empresa:EMPRESA})};
     document.getElementById('btn-wa-remito').addEventListener('click',function(){
       const emp=_vd.empresa;
-      const items=(_vd.items||[]).map(it=>{const esFracWa=it.es_fraccionado||FRACCIONADOS.some(f=>f.key===it.prod_key);const cantWa=esFracWa?Math.round(it.kg||0)+'u':parseFloat(it.kg||0).toFixed(1)+'kg';return '• '+it.nombre+': '+cantWa+' @ $'+parseFloat(it.precio_kg||0).toFixed(1)+(esFracWa?'/u':'/kg')+' = $'+parseFloat(it.subtotal||0).toFixed(1);}).join('%0A');
+      const items=(_vd.items||[]).map(it=>{const esFracWa=!!it.es_fraccionado;const cantWa=esFracWa?Math.round(it.kg||0)+'u':parseFloat(it.kg||0).toFixed(1)+'kg';return '• '+it.nombre+': '+cantWa+' @ $'+parseFloat(it.precio_kg||0).toFixed(1)+(esFracWa?'/u':'/kg')+' = $'+parseFloat(it.subtotal||0).toFixed(1);}).join('%0A');
       const totales=(_vd.descuento_pct>0?'Descuento '+_vd.descuento_pct+'%: -$'+parseFloat(_vd.monto_desc||0).toFixed(1)+'%0A':'')+(_vd.iva_pct>0?'IVA '+_vd.iva_pct+'%: $'+parseFloat(_vd.monto_iva||0).toFixed(1)+'%0A':'')+(_vd.flete>0?'Flete: $'+parseFloat(_vd.flete||0).toFixed(1)+'%0A':'')+'*TOTAL: $'+parseFloat(_vd.monto_total||0).toFixed(1)+'*';
       const msg='*Remito '+_vd.nro_remito+'* — '+(_vd.fecha||'').split('-').reverse().join('/')+'%0A'+emp.nombre+'%0ACUIT: '+emp.cuit+'%0A%0ACliente: *'+_vd.cliente+'*%0A%0A'+items+'%0A%0A'+totales+'%0A%0AForma de pago: '+_vd.forma_pago;
       const tel=(_vd.cliente_telefono||'').replace(/\D/g,'');
