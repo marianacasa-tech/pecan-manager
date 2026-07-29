@@ -2745,86 +2745,6 @@ window.guardarEntrada=async function(){
       const ref=doc(collection(db,'entradas_fabrica'));
       batch.set(ref,{fecha,propietario:prop,variedad:l.variedad,kg:l.kg,humedad:l.humedad,observaciones:obs,num_remito:num,creado:serverTimestamp()});
     });
-    // ── DESCONTAR FRACCIONADOS ──────────────────────────────────────────────
-    const fracItems=items.filter(it=>it.es_fraccionado);
-    if(fracItems.length){
-      const batchFrac=writeBatch(db);
-      // Agrupar insumos a descontar
-      const insumosDescontar={};
-      const stockTandas={}; // para elaborados
-      const stockNuez={}; // para pecan entero
-
-      for(const it of fracItems){
-        const unidades=it.kg; // en fraccionados, kg = unidades
-        const kgBase=it.frac_kg_unit*unidades;
-
-        // Insumo packaging
-        const insName=it.frac_insumo;
-        insumosDescontar[insName]=(insumosDescontar[insName]||0)+unidades;
-
-        // Stock base
-        if(it.frac_base.startsWith('nuez_')){
-          const cat=it.frac_base.replace('nuez_','');
-          stockNuez[cat]=(stockNuez[cat]||0)+kgBase;
-        } else if(it.frac_base.startsWith('receta_nombre:')){
-          const recNombre=it.frac_base.replace('receta_nombre:','');
-          stockTandas[recNombre]=(stockTandas[recNombre]||0)+kgBase;
-        }
-      }
-
-      // Descontar insumos packaging
-      const snapIns=await getDocsFromServer(collection(db,'insumos'));
-      snapIns.forEach(d=>{
-        const ins=d.data();
-        if(insumosDescontar[ins.nombre]){
-          const nuevo=(ins.stock_actual||0)-insumosDescontar[ins.nombre];
-          batchFrac.update(doc(db,'insumos',d.id),{stock_actual:Math.max(0,nuevo)});
-        }
-      });
-
-      // Descontar tandas cocina para elaborados
-      if(Object.keys(stockTandas).length){
-        const snapTandas=await getDocsFromServer(query(collection(db,'tandas_cocina'),orderBy('fecha','asc')));
-        // Para cada receta, descontar de las tandas más antiguas (FIFO)
-        const tandasPorReceta={};
-        snapTandas.forEach(d=>{
-          const t=d.data();
-          const rNombre=recetasCache.find(r=>r.id===t.receta_id)?.nombre||'';
-          if(!tandasPorReceta[rNombre]) tandasPorReceta[rNombre]=[];
-          tandasPorReceta[rNombre].push({id:d.id,stock:t.stock_kg||0});
-        });
-        for(const[recNombre,kgDescontar] of Object.entries(stockTandas)){
-          let restante=kgDescontar;
-          for(const tanda of (tandasPorReceta[recNombre]||[])){
-            if(restante<=0) break;
-            const desc=Math.min(tanda.stock,restante);
-            batchFrac.update(doc(db,'tandas_cocina',tanda.id),{stock_kg:Math.max(0,tanda.stock-desc)});
-            restante-=desc;
-          }
-        }
-      }
-
-      // Descontar stock vendible (salidas_fabrica) para pecan entero
-      // Se crea un registro de salida especial
-      if(Object.keys(stockNuez).length){
-        const catMap={enteras:'enteras',part_grandes:'part_grandes',part_chicas:'part_chicas'};
-        for(const[cat,kg] of Object.entries(stockNuez)){
-          const salRef=doc(collection(db,'salidas_fabrica'));
-          batchFrac.set(salRef,{
-            fecha,propietario:'PROPIO',variedad:'',
-            categoria_vendible:cat,
-            [cat]:kg,kg_total:kg,
-            tipo:'fraccionado',
-            venta_id:ventaRef.id,
-            creado:serverTimestamp()
-          });
-        }
-      }
-
-      await batchFrac.commit();
-    }
-    // ── FIN FRACCIONADOS ─────────────────────────────────────────────────────
-
     await batch.commit();
     generarPDF({num,fecha,propietario:prop,clienteInfo:buildClienteInfo(prop),lineas,observaciones:obs});
     showAlert('✅ '+lineas.length+' registro(s) guardados — Remito '+num+' generado');
@@ -6734,6 +6654,61 @@ window.guardarVenta=async function(){
       const ins=insumosCache.find(x=>x.id===_envConfig.ins_caja_id);
       if(ins) batch.update(doc(db,'insumos',_envConfig.ins_caja_id),{stock_actual:(ins.stock_actual||0)-totalCajas});
     }
+    // ── DESCONTAR FRACCIONADOS ──────────────────────────────────────────────
+    const fracItems=items.filter(it=>it.es_fraccionado);
+    if(fracItems.length){
+      const batchFrac=writeBatch(db);
+      const insumosDescontar={};
+      const stockTandas={};
+      const stockNuez={};
+      for(const it of fracItems){
+        const unidades=it.kg;
+        const kgBase=it.frac_kg_unit*unidades;
+        insumosDescontar[it.frac_insumo]=(insumosDescontar[it.frac_insumo]||0)+unidades;
+        if(it.frac_base.startsWith('nuez_')){
+          const cat=it.frac_base.replace('nuez_','');
+          stockNuez[cat]=(stockNuez[cat]||0)+kgBase;
+        } else if(it.frac_base.startsWith('receta_nombre:')){
+          const recNombre=it.frac_base.replace('receta_nombre:','');
+          stockTandas[recNombre]=(stockTandas[recNombre]||0)+kgBase;
+        }
+      }
+      // Descontar insumos packaging
+      const snapInsFrac=await getDocsFromServer(collection(db,'insumos'));
+      snapInsFrac.forEach(d=>{
+        const ins=d.data();
+        if(insumosDescontar[ins.nombre]){
+          batchFrac.update(doc(db,'insumos',d.id),{stock_actual:Math.max(0,(ins.stock_actual||0)-insumosDescontar[ins.nombre])});
+        }
+      });
+      // Descontar tandas cocina (FIFO)
+      if(Object.keys(stockTandas).length){
+        const snapTandasF=await getDocsFromServer(query(collection(db,'tandas_cocina'),orderBy('fecha','asc')));
+        const tandasPorReceta={};
+        snapTandasF.forEach(d=>{
+          const t=d.data();
+          const rNombre=recetasCache.find(r=>r.id===t.receta_id)?.nombre||'';
+          if(!tandasPorReceta[rNombre]) tandasPorReceta[rNombre]=[];
+          tandasPorReceta[rNombre].push({id:d.id,stock:t.stock_kg||0});
+        });
+        for(const[recNombre,kgDesc] of Object.entries(stockTandas)){
+          let restante=kgDesc;
+          for(const tanda of (tandasPorReceta[recNombre]||[])){
+            if(restante<=0) break;
+            const desc=Math.min(tanda.stock,restante);
+            batchFrac.update(doc(db,'tandas_cocina',tanda.id),{stock_kg:Math.max(0,tanda.stock-desc)});
+            restante-=desc;
+          }
+        }
+      }
+      // Crear salida de fábrica para pecan entero fraccionado
+      for(const[cat,kg] of Object.entries(stockNuez)){
+        const salRef=doc(collection(db,'salidas_fabrica'));
+        batchFrac.set(salRef,{fecha,propietario:'PROPIO',variedad:'',categoria_vendible:cat,[cat]:kg,kg_total:kg,tipo:'fraccionado',venta_id:ventaRef.id,creado:serverTimestamp()});
+      }
+      await batchFrac.commit();
+    }
+    // ── FIN FRACCIONADOS ─────────────────────────────────────────────────────
     await batch.commit();
 
     // Cobro automático si venta cobrada al contado
@@ -6781,13 +6756,17 @@ window.abrirRemitoModal=function(v){
   const formaPagoLabel={efectivo:'Efectivo',transferencia:'Transferencia',cheque:'Cheque',cuenta_corriente:'Cuenta Corriente'};
   const estadoLabel={cobrado:'Cobrado ✅',cuenta_corriente:'Cuenta Corriente ⏳'};
 
-  const itemsHtml=(v.items||[]).map(it=>`
-    <tr>
+  const itemsHtml=(v.items||[]).map(it=>{
+    const esFrac=it.es_fraccionado||FRACCIONADOS.some(f=>f.key===it.prod_key);
+    const cantStr=esFrac?Math.round(it.kg)+' u':parseFloat(it.kg).toFixed(1)+' kg';
+    const precioLabel=esFrac?fmtMoneda(it.precio_kg)+'/u':fmtMoneda(it.precio_kg)+'/kg';
+    return `<tr>
       <td style="padding:8px 10px;border-bottom:1px solid #eee;">${it.nombre}</td>
-      <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;">${parseFloat(it.kg).toFixed(1)} kg</td>
-      <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;">${fmtMoneda(it.precio_kg)}</td>
+      <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;">${cantStr}</td>
+      <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;">${precioLabel}</td>
       <td style="padding:8px 10px;border-bottom:1px solid #eee;text-align:right;font-weight:600;">${fmtMoneda(it.subtotal)}</td>
-    </tr>`).join('');
+    </tr>`;
+  }).join('');
 
   const totalesHtml=`
     <tr><td colspan="3" style="text-align:right;padding:5px 10px;">Subtotal:</td><td style="text-align:right;padding:5px 10px;">${fmtMoneda(v.monto_sub)}</td></tr>
@@ -6842,7 +6821,7 @@ window.abrirRemitoModal=function(v){
     ${v.cliente_email?`<span style="font-size:11px;color:#666;">${v.cliente_email}</span>`:''}
   </div>
   <table>
-    <thead><tr><th>Producto</th><th>Kg</th><th>Precio/kg</th><th>Subtotal</th></tr></thead>
+    <thead><tr><th>Producto</th><th>Cant.</th><th>Precio</th><th>Subtotal</th></tr></thead>
     <tbody>${itemsHtml}</tbody>
     <tfoot>${totalesHtml}</tfoot>
   </table>
@@ -6867,7 +6846,7 @@ window.abrirRemitoModal=function(v){
     const _vd=${JSON.stringify({...v,empresa:EMPRESA})};
     document.getElementById('btn-wa-remito').addEventListener('click',function(){
       const emp=_vd.empresa;
-      const items=(_vd.items||[]).map(it=>'• '+it.nombre+': '+parseFloat(it.kg||0).toFixed(1)+'kg @ $'+parseFloat(it.precio_kg||0).toFixed(1)+'/kg = $'+parseFloat(it.subtotal||0).toFixed(1)).join('%0A');
+      const items=(_vd.items||[]).map(it=>{const esFracWa=it.es_fraccionado||FRACCIONADOS.some(f=>f.key===it.prod_key);const cantWa=esFracWa?Math.round(it.kg||0)+'u':parseFloat(it.kg||0).toFixed(1)+'kg';return '• '+it.nombre+': '+cantWa+' @ $'+parseFloat(it.precio_kg||0).toFixed(1)+(esFracWa?'/u':'/kg')+' = $'+parseFloat(it.subtotal||0).toFixed(1);}).join('%0A');
       const totales=(_vd.descuento_pct>0?'Descuento '+_vd.descuento_pct+'%: -$'+parseFloat(_vd.monto_desc||0).toFixed(1)+'%0A':'')+(_vd.iva_pct>0?'IVA '+_vd.iva_pct+'%: $'+parseFloat(_vd.monto_iva||0).toFixed(1)+'%0A':'')+(_vd.flete>0?'Flete: $'+parseFloat(_vd.flete||0).toFixed(1)+'%0A':'')+'*TOTAL: $'+parseFloat(_vd.monto_total||0).toFixed(1)+'*';
       const msg='*Remito '+_vd.nro_remito+'* — '+(_vd.fecha||'').split('-').reverse().join('/')+'%0A'+emp.nombre+'%0ACUIT: '+emp.cuit+'%0A%0ACliente: *'+_vd.cliente+'*%0A%0A'+items+'%0A%0A'+totales+'%0A%0AForma de pago: '+_vd.forma_pago;
       const tel=(_vd.cliente_telefono||'').replace(/\D/g,'');
