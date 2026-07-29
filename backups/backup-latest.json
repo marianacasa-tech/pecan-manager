@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-07-28T08:31:07.499Z",
-    "fecha_legible": "28/7/2026, 05:31:07",
+    "fecha": "2026-07-29T08:38:17.788Z",
+    "fecha_legible": "29/7/2026, 05:38:17",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -317,6 +317,17 @@
         "creado": "2026-05-28T16:47:20.707Z"
       },
       {
+        "_id": "Tk1FbemMd5chHoSQmIlE",
+        "nombre": "Naturaldiet Mitre",
+        "categoria": "",
+        "cuit": "",
+        "localidad": "San Miguel de Tucumán",
+        "provincia": "Tucumán",
+        "email": "",
+        "telefono": "3815199364",
+        "creado": "2026-07-28T14:13:05.350Z"
+      },
+      {
         "_id": "TukgXIDK5K2hz7WLCl8a",
         "nombre": "Nutrifrut",
         "categoria": "venta",
@@ -436,6 +447,17 @@
         "email": "",
         "telefono": "3794542016",
         "creado": "2026-05-16T15:49:35.561Z"
+      },
+      {
+        "_id": "g66xommleBYGjC0s4e01",
+        "nombre": "Francisco Rios",
+        "categoria": "servicio",
+        "cuit": "",
+        "localidad": "Choromoro",
+        "provincia": "Tucumán",
+        "email": "",
+        "telefono": "3813326606",
+        "creado": "2026-07-28T18:33:11.295Z"
       },
       {
         "_id": "gGM39G4sqtqaQOpuftLR",
@@ -924,6 +946,16 @@
         "creado": "2026-05-23T12:12:29.286Z"
       },
       {
+        "_id": "eVZ356xRuC9uMpKnie4f",
+        "nombre": "Centro Envases",
+        "cuit": "20226653792",
+        "rubro": "",
+        "telefono": "",
+        "email": "",
+        "observaciones": "",
+        "creado": "2026-07-28T11:46:10.737Z"
+      },
+      {
         "_id": "efQxdw4G1jfLiZToYdjT",
         "nombre": "Electro Hogar",
         "cuit": "",
@@ -972,6 +1004,16 @@
         "email": "",
         "observaciones": "",
         "creado": "2026-05-05T23:15:19.986Z"
+      },
+      {
+        "_id": "oJx5a9oWyZsWMeq1SS5v",
+        "nombre": "Todolandia s.r.l",
+        "cuit": "33715109099",
+        "rubro": "",
+        "telefono": "",
+        "email": "",
+        "observaciones": "",
+        "creado": "2026-07-28T13:39:59.291Z"
       },
       {
         "_id": "oxmlLmYBEQg7STqn9pjP",
@@ -3576,7 +3618,15 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1747
+        "stock_actual": 1745
+      },
+      {
+        "_id": "EieJJxEEtHrJtOiJ7LWo",
+        "nombre": "Doypack 500g",
+        "unidad": "u",
+        "packaging": true,
+        "creado": "2026-07-28T12:50:37.187Z",
+        "stock_actual": 100
       },
       {
         "_id": "FWRpi32rFH6KBhdYmDjM",
@@ -3587,12 +3637,35 @@
         "stock_actual": 100.87600000000002
       },
       {
+        "_id": "LLl9UJ6lmx2MyTBdgipI",
+        "nombre": "Doypack 80g",
+        "unidad": "u",
+        "creado": "2026-07-28T12:49:43.730Z",
+        "packaging": true,
+        "stock_actual": 55
+      },
+      {
+        "_id": "WgnAxLHfFbkfuNc0t9O7",
+        "nombre": "Frasco 300g",
+        "unidad": "u",
+        "packaging": true,
+        "creado": "2026-07-28T12:51:17.216Z"
+      },
+      {
         "_id": "YYbZJUzPqOqZACGH6KD1",
         "nombre": "Bolsa Polipropileno",
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:34:49.660Z",
         "stock_actual": 4031.400000000001
+      },
+      {
+        "_id": "j8wVUWl641tOVbWn2zOA",
+        "nombre": "Doypack 250g",
+        "unidad": "u",
+        "packaging": true,
+        "creado": "2026-07-28T12:50:13.220Z",
+        "stock_actual": 100
       },
       {
         "_id": "nd7NEWbpA51DRrmoEoDe",
@@ -3614,6 +3687,13 @@
         "unidad": "kg",
         "creado": "2026-03-07T15:08:43.376Z",
         "stock_actual": 354.5
+      },
+      {
+        "_id": "yw8uQDrCVc25AiPNHBjT",
+        "nombre": "Frasco 200g",
+        "unidad": "u",
+        "packaging": true,
+        "creado": "2026-07-28T12:51:01.134Z"
       }
     ],
     "tandas_cocina": [
@@ -12629,6 +12709,36 @@
         "creado": "2026-05-29T21:32:00.762Z"
       },
       {
+        "_id": "TDonqtrUuMuV9lvqwDMp",
+        "fecha": "2026-07-24",
+        "proveedor": "Todolandia s.r.l",
+        "nro_factura": "564",
+        "moneda": "ARS",
+        "tc_referencial": 0,
+        "iva_pct": 21,
+        "monto_neto": 31145.5,
+        "monto_iva": 6540.555,
+        "monto_total": 37686.055,
+        "forma_pago": "efectivo",
+        "estado": "pagado",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "gasto_indirecto",
+            "descripcion": "Fechador de tinta",
+            "insumo_id": "",
+            "insumo_nombre": "",
+            "unidad": "u",
+            "cat_nuez": "",
+            "cantidad": 1,
+            "precio_unitario": 31145.46,
+            "subtotal": 31145.5
+          }
+        ],
+        "creado": "2026-07-28T13:43:22.206Z"
+      },
+      {
         "_id": "U8czoOTbbqOQJE3uFpiq",
         "fecha": "2026-06-03",
         "proveedor": "Pedidos Ya Market",
@@ -12657,6 +12767,36 @@
           }
         ],
         "creado": "2026-06-03T13:43:39.847Z"
+      },
+      {
+        "_id": "UtddF8xNR1DDKEnhtxW9",
+        "fecha": "2026-07-20",
+        "proveedor": "Via Cargo s.a",
+        "nro_factura": "18100",
+        "moneda": "ARS",
+        "tc_referencial": 0,
+        "iva_pct": 21,
+        "monto_neto": 19256.2,
+        "monto_iva": 4043.802,
+        "monto_total": 23300.002,
+        "forma_pago": "transferencia",
+        "estado": "pagado",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "gasto_directo",
+            "descripcion": "Flete",
+            "insumo_id": "",
+            "insumo_nombre": "",
+            "unidad": "u",
+            "cat_nuez": "",
+            "cantidad": 1,
+            "precio_unitario": 19256.2,
+            "subtotal": 19256.2
+          }
+        ],
+        "creado": "2026-07-28T11:40:27.793Z"
       },
       {
         "_id": "VEJXMtFlADJlVNfC2DhT",
@@ -13077,6 +13217,36 @@
           }
         ],
         "creado": "2026-06-04T14:04:57.124Z"
+      },
+      {
+        "_id": "cTmlqktx3p9z0iYe8Yj6",
+        "fecha": "2026-07-20",
+        "proveedor": "Albiero Sistema de Seguridad s.r.l",
+        "nro_factura": "6608",
+        "moneda": "ARS",
+        "tc_referencial": 0,
+        "iva_pct": 21,
+        "monto_neto": 64462.9,
+        "monto_iva": 13537.209,
+        "monto_total": 78000.109,
+        "forma_pago": "transferencia",
+        "estado": "pagado",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "gasto_indirecto",
+            "descripcion": "Monitoreo",
+            "insumo_id": "",
+            "insumo_nombre": "",
+            "unidad": "u",
+            "cat_nuez": "",
+            "cantidad": 1,
+            "precio_unitario": 64462.86,
+            "subtotal": 64462.9
+          }
+        ],
+        "creado": "2026-07-28T11:42:18.570Z"
       },
       {
         "_id": "dZgHEfGseckLI4MoieQ2",
@@ -13739,6 +13909,58 @@
         "creado": "2026-06-30T18:02:01.519Z"
       },
       {
+        "_id": "tqHXSwnrIyXyh4zsAWEv",
+        "fecha": "2026-07-27",
+        "proveedor": "Centro Envases",
+        "nro_factura": "213",
+        "moneda": "ARS",
+        "tc_referencial": 0,
+        "iva_pct": 21,
+        "monto_neto": 52782.9,
+        "monto_iva": 11084.409000000001,
+        "monto_total": 63867.309,
+        "forma_pago": "efectivo",
+        "estado": "pagado",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "insumo",
+            "descripcion": "Doypack 500g",
+            "insumo_id": "EieJJxEEtHrJtOiJ7LWo",
+            "insumo_nombre": "Doypack 500g",
+            "unidad": "u",
+            "cat_nuez": "",
+            "cantidad": 100,
+            "precio_unitario": 254.314,
+            "subtotal": 25431.4
+          },
+          {
+            "tipo": "insumo",
+            "descripcion": "Doypack 250g",
+            "insumo_id": "j8wVUWl641tOVbWn2zOA",
+            "insumo_nombre": "Doypack 250g",
+            "unidad": "u",
+            "cat_nuez": "",
+            "cantidad": 100,
+            "precio_unitario": 204.2149,
+            "subtotal": 20421.5
+          },
+          {
+            "tipo": "insumo",
+            "descripcion": "Doypack 80g",
+            "insumo_id": "LLl9UJ6lmx2MyTBdgipI",
+            "insumo_nombre": "Doypack 80g",
+            "unidad": "u",
+            "cat_nuez": "",
+            "cantidad": 55,
+            "precio_unitario": 126,
+            "subtotal": 6930
+          }
+        ],
+        "creado": "2026-07-28T13:39:12.657Z"
+      },
+      {
         "_id": "tvuv6tX5Alvyaob3401X",
         "fecha": "2026-05-05",
         "proveedor": "Lonera Cordoba",
@@ -14117,6 +14339,21 @@
         "creado": "2026-06-11T14:38:01.254Z"
       },
       {
+        "_id": "1cISM5UjElcLZ7LyWrpI",
+        "proveedor": "Todolandia s.r.l",
+        "fecha": "2026-07-24",
+        "moneda": "ARS",
+        "importe": 37686.055,
+        "importe_ars": 37686.055,
+        "tc": null,
+        "medio": "Efectivo",
+        "ref": "564",
+        "obs": "Pago automático — compra registrada",
+        "compra_id": "TDonqtrUuMuV9lvqwDMp",
+        "cheque_vencimiento": null,
+        "creado": "2026-07-28T13:43:22.206Z"
+      },
+      {
         "_id": "2JA2eYZFHYUP7p7OsHmb",
         "proveedor": "Los Pecanes s.a",
         "fecha": "2026-06-08",
@@ -14145,6 +14382,21 @@
         "obs": "retencion gcias.",
         "cheque_vencimiento": null,
         "creado": "2026-06-04T14:17:19.020Z"
+      },
+      {
+        "_id": "5OnrTd4flr0gBCbmbmmP",
+        "proveedor": "Albiero Sistema de Seguridad s.r.l",
+        "fecha": "2026-07-20",
+        "moneda": "ARS",
+        "importe": 78000.109,
+        "importe_ars": 78000.109,
+        "tc": null,
+        "medio": "Transferencia",
+        "ref": "6608",
+        "obs": "Pago automático — compra registrada",
+        "compra_id": "cTmlqktx3p9z0iYe8Yj6",
+        "cheque_vencimiento": null,
+        "creado": "2026-07-28T11:42:18.570Z"
       },
       {
         "_id": "668LhFg12wCages59a1x",
@@ -14320,6 +14572,21 @@
         "obs": "",
         "cheque_vencimiento": "2026-06-21",
         "creado": "2026-06-12T15:29:49.085Z"
+      },
+      {
+        "_id": "IUgJMPdUaJeMPynApGhZ",
+        "proveedor": "Beccaria y Vincenti",
+        "fecha": "2026-07-27",
+        "moneda": "USD_en_ARS",
+        "importe": 12360000,
+        "tc": 1520,
+        "importe_ars": 18787200000,
+        "importe_usd": 8131.578947368421,
+        "medio": "Transferencia",
+        "ref": "",
+        "obs": "",
+        "cheque_vencimiento": null,
+        "creado": "2026-07-28T15:24:06.236Z"
       },
       {
         "_id": "J1FoWNtswGvXqBgBSGv0",
@@ -14834,6 +15101,21 @@
         "creado": "2026-06-19T15:54:39.401Z"
       },
       {
+        "_id": "oOh37WaUhic1MixSt0Xq",
+        "proveedor": "Centro Envases",
+        "fecha": "2026-07-27",
+        "moneda": "ARS",
+        "importe": 63867.309,
+        "importe_ars": 63867.309,
+        "tc": null,
+        "medio": "Efectivo",
+        "ref": "213",
+        "obs": "Pago automático — compra registrada",
+        "compra_id": "tqHXSwnrIyXyh4zsAWEv",
+        "cheque_vencimiento": null,
+        "creado": "2026-07-28T13:39:12.657Z"
+      },
+      {
         "_id": "pK97jcqqYknlVuFJMiSd",
         "proveedor": "Beccaria y Vincenti",
         "fecha": "2026-01-05",
@@ -14906,6 +15188,21 @@
         "compra_id": "IADQZk3Szwcz7lCKypXn",
         "cheque_vencimiento": null,
         "creado": "2026-06-18T12:24:25.002Z"
+      },
+      {
+        "_id": "qPhqkE4HNMZLKNE902b9",
+        "proveedor": "Via Cargo s.a",
+        "fecha": "2026-07-20",
+        "moneda": "ARS",
+        "importe": 23300.002,
+        "importe_ars": 23300.002,
+        "tc": null,
+        "medio": "Transferencia",
+        "ref": "18100",
+        "obs": "Pago automático — compra registrada",
+        "compra_id": "UtddF8xNR1DDKEnhtxW9",
+        "cheque_vencimiento": null,
+        "creado": "2026-07-28T11:40:27.793Z"
       },
       {
         "_id": "qmfwDNCsEK148AiX4R2e",
@@ -15604,6 +15901,55 @@
         "iva_pct": 0,
         "cliente_provincia": "Tucumán",
         "creado": "2026-07-20T13:27:21.931Z"
+      },
+      {
+        "_id": "4tnTRjxDw75klZCqoSTw",
+        "fecha": "2026-07-28",
+        "cliente": "Naturaldiet Mitre",
+        "cliente_cuit": "",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3815199364",
+        "cliente_email": "",
+        "nro_remito": "R-0231",
+        "items": [
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 4.5,
+            "precio_kg": 25000,
+            "subtotal": 112500,
+            "cajas": 0,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 0.5,
+            "precio_kg": 0,
+            "subtotal": 0,
+            "cajas": 0,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 112500,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 112500,
+        "forma_pago": "efectivo",
+        "estado": "cobrado",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-07-28T14:13:58.699Z"
       },
       {
         "_id": "4xpef6htBY5JdJA1Aqu3",
@@ -16378,6 +16724,43 @@
         "vencimiento": "",
         "observaciones": "",
         "creado": "2026-06-02T16:56:14.562Z"
+      },
+      {
+        "_id": "H7aSitT8TKfAvF1lcYuP",
+        "fecha": "2026-07-28",
+        "cliente": "Frutos Secos del Noa",
+        "cliente_cuit": "",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3813441588",
+        "cliente_email": "",
+        "nro_remito": "R-0232",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 20,
+            "precio_kg": 21000,
+            "subtotal": 420000,
+            "cajas": 2,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 420000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 420000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-07-28T15:23:57.819Z"
       },
       {
         "_id": "HX6FZ80aEWfeu07Gg5KE",
@@ -20092,6 +20475,18 @@
         "creado": "2026-05-13T15:11:16.429Z"
       },
       {
+        "_id": "10CiA2FuPEF2lXmla2Ip",
+        "tipo": "cobro",
+        "cliente": "Frutiro",
+        "fecha": "2026-07-28",
+        "importe": 210000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0193",
+        "creado": "2026-07-28T13:51:47.759Z"
+      },
+      {
         "_id": "1LlvP4lhDrEKvcIumfna",
         "tipo": "cobro",
         "cliente": "Dietetica Puiggari",
@@ -20127,6 +20522,19 @@
         "obs": "Retiro 2 barritas prota de lobo",
         "nro_cobro": "COB-0101",
         "creado": "2026-06-17T23:23:47.056Z"
+      },
+      {
+        "_id": "2ZYgDqOEhSIwRDfTBD6b",
+        "tipo": "cobro_automatico",
+        "cliente": "Naturaldiet Mitre",
+        "fecha": "2026-07-28",
+        "importe": 112500,
+        "medio": "efectivo",
+        "referencia": "R-0231",
+        "obs": "Cobro automático por venta cobrada en el momento",
+        "nro_cobro": "COB-0194",
+        "ref_remito": "R-0231",
+        "creado": "2026-07-28T14:13:59.438Z"
       },
       {
         "_id": "2bXckhqhW82qQZXZGQ3T",
@@ -22119,7 +22527,8 @@
           "Material Electrico",
           "Utensillos cocina",
           "Junta danesa",
-          "Motoreductor"
+          "Motoreductor",
+          "Fechador de tinta"
         ]
       },
       {
@@ -22146,7 +22555,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 192
+        "ultimo": 194
       },
       {
         "_id": "cotizaciones",
@@ -22191,7 +22600,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 230
+        "ultimo": 247
       },
       {
         "_id": "variedades",
