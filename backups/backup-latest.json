@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-07-29T08:38:17.788Z",
-    "fecha_legible": "29/7/2026, 05:38:17",
+    "fecha": "2026-07-30T08:24:04.866Z",
+    "fecha_legible": "30/7/2026, 05:24:04",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -293,6 +293,17 @@
         "telefono": "",
         "creado": "2026-05-05T00:07:33.265Z",
         "categoria": "venta"
+      },
+      {
+        "_id": "M80yBnJHdP1duPfnLTpr",
+        "categoria": "venta",
+        "cuit": "",
+        "localidad": "Yerba Buena",
+        "provincia": "Tucumán",
+        "email": "",
+        "telefono": "1157699950",
+        "creado": "2026-07-29T13:31:40.363Z",
+        "nombre": "Kuibi"
       },
       {
         "_id": "POgzLSjZILsElRr6f36v",
@@ -1361,6 +1372,17 @@
         "fecha": "2026-05-27"
       },
       {
+        "_id": "dCcq86yrbHv2qHJNmwOe",
+        "fecha": "2026-07-29",
+        "propietario": "Francisco Rios",
+        "variedad": "Otra",
+        "kg": 133.6,
+        "humedad": 5,
+        "observaciones": "",
+        "num_remito": "R-0253",
+        "creado": "2026-07-29T13:00:06.431Z"
+      },
+      {
         "_id": "dSdU8Yir07M1GzJWM749",
         "fecha": "2026-05-11",
         "propietario": "PROPIO",
@@ -1549,6 +1571,18 @@
       }
     ],
     "salidas_fabrica": [
+      {
+        "_id": "1r363Bzvo5yJqj7L6NCa",
+        "fecha": "2026-07-29",
+        "propietario": "PROPIO",
+        "variedad": "",
+        "categoria_vendible": "enteras",
+        "enteras": 1,
+        "kg_total": 1,
+        "tipo": "fraccionado",
+        "venta_id": "rodyEmCHdf1haciJ86pQ",
+        "creado": "2026-07-29T12:38:54.682Z"
+      },
       {
         "_id": "2Grizxb1jnnRNdln3blx",
         "fecha": "2026-04-30",
@@ -2105,6 +2139,18 @@
         ],
         "creado": "2026-06-29T19:40:25.279Z",
         "fecha": "2026-06-26"
+      },
+      {
+        "_id": "KTcQnHJSylf6RempdpxM",
+        "fecha": "2026-07-29",
+        "propietario": "PROPIO",
+        "variedad": "",
+        "categoria_vendible": "enteras",
+        "enteras": 1,
+        "kg_total": 1,
+        "tipo": "fraccionado",
+        "venta_id": "AVcsK9sKTzkiAmpLAAAs",
+        "creado": "2026-07-29T12:41:54.379Z"
       },
       {
         "_id": "KmgHjKFpuMAUPb8ONu65",
@@ -3618,7 +3664,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1745
+        "stock_actual": 1738
       },
       {
         "_id": "EieJJxEEtHrJtOiJ7LWo",
@@ -3626,7 +3672,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-07-28T12:50:37.187Z",
-        "stock_actual": 100
+        "stock_actual": 96
       },
       {
         "_id": "FWRpi32rFH6KBhdYmDjM",
@@ -16149,6 +16195,43 @@
         "creado": "2026-06-12T20:30:40.797Z"
       },
       {
+        "_id": "6lVc3Yv0eD8qelf7ywxb",
+        "fecha": "2026-07-29",
+        "cliente": "El Nogal",
+        "cliente_cuit": "",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3815286896",
+        "cliente_email": "",
+        "nro_remito": "R-0257",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 10,
+            "precio_kg": 21000,
+            "subtotal": 210000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 210000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 210000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-07-29T19:02:04.138Z"
+      },
+      {
         "_id": "8GxGDLylXwtVlsbvbKsE",
         "fecha": "2026-05-05",
         "cliente": "Altieri Junín",
@@ -16485,6 +16568,43 @@
         "vencimiento": "2026-05-04",
         "observaciones": "",
         "creado": "2026-05-05T00:13:50.667Z"
+      },
+      {
+        "_id": "DKq3wMfvwJnYDsfaesPC",
+        "fecha": "2026-07-29",
+        "cliente": "Kuibi",
+        "cliente_cuit": "",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "1157699950",
+        "cliente_email": "",
+        "nro_remito": "R-0255",
+        "items": [
+          {
+            "prod_key": "nuez_part_grandes",
+            "nombre": "Pecan Partido Grande",
+            "kg": 10,
+            "precio_kg": 17000,
+            "subtotal": 170000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 170000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 170000,
+        "forma_pago": "transferencia",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-07-29T13:35:29.463Z"
       },
       {
         "_id": "DV5qwfdjtRhFgUGv0eor",
@@ -17049,6 +17169,43 @@
         "vencimiento": "2026-06-16",
         "observaciones": "",
         "creado": "2026-06-09T14:57:59.072Z"
+      },
+      {
+        "_id": "JgB4M9nTYeVG9G2ThUMk",
+        "fecha": "2026-07-29",
+        "cliente": "Expo Food SAS",
+        "cliente_cuit": "30-71855433-7",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3816576565",
+        "cliente_email": "",
+        "nro_remito": "R-0256",
+        "items": [
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 10,
+            "precio_kg": 25000,
+            "subtotal": 250000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 250000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 250000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-07-29T14:24:31.918Z"
       },
       {
         "_id": "KDNDMTGZfXVdZiPwr9Mz",
@@ -19724,6 +19881,55 @@
         "creado": "2026-05-05T16:42:16.812Z"
       },
       {
+        "_id": "s3L9DQTnz8VdTixr0PBn",
+        "fecha": "2026-07-29",
+        "cliente": "Tolva",
+        "cliente_cuit": "",
+        "cliente_localidad": "San Miguel de Tucuman",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "",
+        "cliente_email": "",
+        "nro_remito": "R-0254",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 10,
+            "precio_kg": 21000,
+            "subtotal": 210000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 10,
+            "precio_kg": 25000,
+            "subtotal": 250000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 460000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 460000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-07-29T13:01:23.298Z"
+      },
+      {
         "_id": "tFQcYSFXXnQkUmhaLStL",
         "observaciones": "",
         "estado": "cuenta_corriente",
@@ -20208,6 +20414,43 @@
         "vencimiento": "",
         "observaciones": "",
         "creado": "2026-06-18T13:00:01.307Z"
+      },
+      {
+        "_id": "y4l2NF6akhvCqtB77Z80",
+        "fecha": "2026-07-29",
+        "cliente": "Raices Cafe",
+        "cliente_cuit": "",
+        "cliente_localidad": "",
+        "cliente_provincia": "Jujuy",
+        "cliente_telefono": "",
+        "cliente_email": "",
+        "nro_remito": "R-0258",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 10,
+            "precio_kg": 21000,
+            "subtotal": 210000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 210000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 210000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-07-29T20:43:34.542Z"
       },
       {
         "_id": "yIu0nPoxz9WcHACNeGc1",
@@ -21567,6 +21810,18 @@
         "creado": "2026-07-27T17:44:45.588Z"
       },
       {
+        "_id": "ZwMApe0aAlhnuUOdqPJm",
+        "tipo": "cobro",
+        "cliente": "Kuibi",
+        "fecha": "2026-07-29",
+        "importe": 170000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0197",
+        "creado": "2026-07-29T16:54:03.318Z"
+      },
+      {
         "_id": "au8kNCVr8FeQD6WPU2LW",
         "tipo": "cobro",
         "cliente": "El Nogal",
@@ -22555,7 +22810,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 194
+        "ultimo": 197
       },
       {
         "_id": "cotizaciones",
@@ -22600,7 +22855,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 247
+        "ultimo": 258
       },
       {
         "_id": "variedades",
