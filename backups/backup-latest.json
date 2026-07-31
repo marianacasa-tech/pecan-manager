@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-07-30T08:24:04.866Z",
-    "fecha_legible": "30/7/2026, 05:24:04",
+    "fecha": "2026-07-31T08:47:17.677Z",
+    "fecha_legible": "31/7/2026, 05:47:17",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -568,6 +568,17 @@
         "email": "",
         "telefono": "3816576565",
         "creado": "2026-06-02T14:38:30.962Z"
+      },
+      {
+        "_id": "sEnN1VLurk0leWRa18Vi",
+        "nombre": "Simon Asfoura",
+        "categoria": "servicio",
+        "cuit": "",
+        "localidad": "San miguel de Tucumán",
+        "provincia": "Tucumán",
+        "email": "",
+        "telefono": "3815 940452",
+        "creado": "2026-07-30T15:31:45.642Z"
       },
       {
         "_id": "szFq2ikz0spcwahBAtMe",
@@ -1174,6 +1185,17 @@
         "creado": "2026-04-23T15:48:55.205Z"
       },
       {
+        "_id": "A1xC1UGDskyTrkYWIftK",
+        "fecha": "2026-07-30",
+        "propietario": "Tinkuy",
+        "variedad": "Wichita",
+        "kg": 106.6,
+        "humedad": 5,
+        "observaciones": "",
+        "num_remito": "R-0263",
+        "creado": "2026-07-30T21:36:55.129Z"
+      },
+      {
         "_id": "AdEFfAjOpm7aFOEfPgKv",
         "fecha": "2026-05-11",
         "propietario": "PROPIO",
@@ -1295,6 +1317,17 @@
         "creado": "2026-06-19T13:48:37.314Z"
       },
       {
+        "_id": "XJ5hOU1QHmzS8XtRjpik",
+        "fecha": "2026-07-30",
+        "propietario": "Simon Asfoura",
+        "variedad": "Otra",
+        "kg": 468.6,
+        "humedad": 5,
+        "observaciones": "",
+        "num_remito": "R-0260",
+        "creado": "2026-07-30T15:32:02.018Z"
+      },
+      {
         "_id": "Ygu51fzQXDGVccJ1VlA7",
         "fecha": "2026-06-25",
         "propietario": "Cien Soles SRL",
@@ -1348,6 +1381,17 @@
         "num_remito": "R-0060",
         "creado": "2026-05-05T13:54:42.083Z",
         "kg": 73.8
+      },
+      {
+        "_id": "bX7NbDroRzRZ6wPRrGeb",
+        "fecha": "2026-07-30",
+        "propietario": "Tinkuy",
+        "variedad": "Pawnee",
+        "kg": 317,
+        "humedad": 5,
+        "observaciones": "",
+        "num_remito": "R-0263",
+        "creado": "2026-07-30T21:36:55.129Z"
       },
       {
         "_id": "cwIfKnPZDo75M0lW4OPk",
@@ -2234,6 +2278,37 @@
         "fecha": "2026-06-01"
       },
       {
+        "_id": "NLD6OFVWtlIW1NWTqQ2F",
+        "propietario": "Francisco Rios",
+        "variedad": "Otra",
+        "kg_cascara": 133.6,
+        "enteras": 46.8,
+        "part_grandes": 3.2,
+        "part_chicas": 0,
+        "danadas": 0,
+        "podridas": 0,
+        "total_pelado": 50,
+        "pct_kernel": "37.43",
+        "pct_partido": "6.40",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260730-082",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 11,
+            "label": "bolsas"
+          },
+          {
+            "id": "0cPXv9ENRFupq1fbOKs9",
+            "cantidad": 5,
+            "label": "cajas"
+          }
+        ],
+        "creado": "2026-07-30T18:10:23.745Z",
+        "fecha": "2026-07-29",
+        "liquidacion_id": "wGsjunR5mjcHcbzqZaQa"
+      },
+      {
         "_id": "P4NJsuZrjVP999Ynu2am",
         "fecha": "2026-07-08",
         "propietario": "Facundo Tejerina",
@@ -2913,6 +2988,31 @@
         "creado": "2026-06-09T20:08:15.736Z"
       },
       {
+        "_id": "p4yZQyippJ6n3qwX8HCL",
+        "fecha": "2026-07-30",
+        "variedad": "Pawnee",
+        "kg_cascara": 307.6,
+        "enteras": 95,
+        "part_grandes": 25,
+        "part_chicas": 14.9,
+        "danadas": 0,
+        "podridas": 0,
+        "total_pelado": 134.9,
+        "pct_kernel": "43.86",
+        "pct_partido": "29.58",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260730-083",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 27,
+            "label": "bolsas"
+          }
+        ],
+        "creado": "2026-07-30T18:12:49.157Z",
+        "propietario": "Tinkuy"
+      },
+      {
         "_id": "p92QWO33LXeagAWvp7oi",
         "fecha": "2026-07-15",
         "enteras": 121.8,
@@ -3362,6 +3462,32 @@
         "creado": "2026-07-14T10:07:42.292Z"
       },
       {
+        "_id": "giAP5Uo6jrZKd3Cm9Epd",
+        "cliente": "Tinkuy",
+        "fecha": "2026-07-30",
+        "num_remito": "R-0262",
+        "enteras": 95,
+        "part_grandes": 25,
+        "part_chicas": 14.9,
+        "danadas": 0,
+        "observaciones": "",
+        "estado": "activo",
+        "creado": "2026-07-30T21:34:22.516Z"
+      },
+      {
+        "_id": "kE7E6Glq3vS3F21v17A4",
+        "cliente": "Francisco Rios",
+        "fecha": "2026-07-30",
+        "num_remito": "R-0261",
+        "enteras": 46.8,
+        "part_grandes": 3.2,
+        "part_chicas": 0,
+        "danadas": 0,
+        "observaciones": "",
+        "estado": "activo",
+        "creado": "2026-07-30T19:12:46.846Z"
+      },
+      {
         "_id": "xAEodSiUmFJXTCSh9Vdv",
         "cliente": "Sebastián calleri e hijos sa",
         "fecha": "2026-07-07",
@@ -3543,6 +3669,25 @@
         "estado_cobro": "cuenta_corriente"
       },
       {
+        "_id": "wGsjunR5mjcHcbzqZaQa",
+        "cliente": "Francisco Rios",
+        "fecha": "2026-07-30",
+        "num_liquidacion": "LIQ-0030",
+        "kg_cascara": 133.6,
+        "precio_kg": 2272.4999999999995,
+        "total_servicio": 303605.99999999994,
+        "precio_usd": 1.5,
+        "tc_bna": 1515,
+        "kg_con_iva": 0,
+        "kg_sin_iva": 133.6,
+        "subtotal_sin_iva": 303605.99999999994,
+        "subtotal_con_iva": 0,
+        "iva_21": 0,
+        "forma_pago": "Efectivo",
+        "observaciones": "",
+        "creado": "2026-07-30T19:12:09.591Z"
+      },
+      {
         "_id": "whpkcTEiuCvnrvHZRTcx",
         "cliente": "Anibal Garcia Romano",
         "fecha": "2026-05-21",
@@ -3664,7 +3809,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1738
+        "stock_actual": 1733
       },
       {
         "_id": "EieJJxEEtHrJtOiJ7LWo",
@@ -3703,7 +3848,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:34:49.660Z",
-        "stock_actual": 4031.400000000001
+        "stock_actual": 3993.400000000001
       },
       {
         "_id": "j8wVUWl641tOVbWn2zOA",
@@ -18869,6 +19014,55 @@
         "creado": "2026-07-28T00:05:52.263Z"
       },
       {
+        "_id": "eSFhYUduLpgvhKmGDFzQ",
+        "fecha": "2026-07-30",
+        "cliente": "El Nogal",
+        "cliente_cuit": "",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3815286896",
+        "cliente_email": "",
+        "nro_remito": "R-0259",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 5,
+            "precio_kg": 21000,
+            "subtotal": 105000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 5,
+            "precio_kg": 25000,
+            "subtotal": 125000,
+            "cajas": 0,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 230000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 230000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-07-30T13:56:08.966Z"
+      },
+      {
         "_id": "eZp6zEktGsFp7zY7QNRp",
         "fecha": "2026-06-04",
         "cliente": "Frutos Secos del Noa",
@@ -22055,6 +22249,18 @@
         "creado": "2026-06-30T14:09:44.165Z"
       },
       {
+        "_id": "gTVLUgDBmjXetFk1Hk7c",
+        "tipo": "cobro",
+        "cliente": "Raices Cafe",
+        "fecha": "2026-07-30",
+        "importe": 210000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0198",
+        "creado": "2026-07-30T13:41:15.831Z"
+      },
+      {
         "_id": "glDGdI6umt6RqL82FvR5",
         "tipo": "cobro_automatico",
         "cliente": "Mabel Vuagniaux",
@@ -22810,7 +23016,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 197
+        "ultimo": 198
       },
       {
         "_id": "cotizaciones",
@@ -22827,7 +23033,7 @@
       },
       {
         "_id": "liquidaciones",
-        "ultimo": 29
+        "ultimo": 30
       },
       {
         "_id": "lista_precios",
@@ -22847,7 +23053,7 @@
       },
       {
         "_id": "lotes_fab",
-        "ultimo": 81
+        "ultimo": 83
       },
       {
         "_id": "recibos",
@@ -22855,7 +23061,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 258
+        "ultimo": 263
       },
       {
         "_id": "variedades",
