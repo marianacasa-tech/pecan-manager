@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-07-31T08:47:17.677Z",
-    "fecha_legible": "31/7/2026, 05:47:17",
+    "fecha": "2026-08-01T08:17:56.979Z",
+    "fecha_legible": "1/8/2026, 05:17:56",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -2306,7 +2306,7 @@
         ],
         "creado": "2026-07-30T18:10:23.745Z",
         "fecha": "2026-07-29",
-        "liquidacion_id": "wGsjunR5mjcHcbzqZaQa"
+        "liquidacion_id": "j09cq76XldMeguQXlLE2"
       },
       {
         "_id": "P4NJsuZrjVP999Ynu2am",
@@ -3669,10 +3669,10 @@
         "estado_cobro": "cuenta_corriente"
       },
       {
-        "_id": "wGsjunR5mjcHcbzqZaQa",
+        "_id": "j09cq76XldMeguQXlLE2",
         "cliente": "Francisco Rios",
-        "fecha": "2026-07-30",
-        "num_liquidacion": "LIQ-0030",
+        "fecha": "2026-07-31",
+        "num_liquidacion": "LIQ-0031",
         "kg_cascara": 133.6,
         "precio_kg": 2272.4999999999995,
         "total_servicio": 303605.99999999994,
@@ -3685,7 +3685,7 @@
         "iva_21": 0,
         "forma_pago": "Efectivo",
         "observaciones": "",
-        "creado": "2026-07-30T19:12:09.591Z"
+        "creado": "2026-07-31T10:55:47.838Z"
       },
       {
         "_id": "whpkcTEiuCvnrvHZRTcx",
@@ -3809,7 +3809,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1733
+        "stock_actual": 1717
       },
       {
         "_id": "EieJJxEEtHrJtOiJ7LWo",
@@ -16377,6 +16377,55 @@
         "creado": "2026-07-29T19:02:04.138Z"
       },
       {
+        "_id": "76NbdSUZReUuBJumvaMk",
+        "fecha": "2026-07-31",
+        "cliente": "Wako",
+        "cliente_cuit": "",
+        "cliente_localidad": "La Plata",
+        "cliente_provincia": "Buenos Aires",
+        "cliente_telefono": "",
+        "cliente_email": "",
+        "nro_remito": "R-0266",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 150,
+            "precio_kg": 20300,
+            "subtotal": 3045000,
+            "cajas": 15,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_nEcIJUPYxV7SLvIV2zcP",
+            "nombre": "Pecan Tostado salado",
+            "kg": 10,
+            "precio_kg": 29000,
+            "subtotal": 290000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 21,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 3335000,
+        "monto_desc": 0,
+        "monto_iva": 700350,
+        "monto_total": 4035350,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-07-31T13:49:26.625Z"
+      },
+      {
         "_id": "8GxGDLylXwtVlsbvbKsE",
         "fecha": "2026-05-05",
         "cliente": "Altieri Junín",
@@ -20124,6 +20173,55 @@
         "creado": "2026-07-29T13:01:23.298Z"
       },
       {
+        "_id": "ssrPLejhEsdJuQ98KUTB",
+        "fecha": "2026-07-31",
+        "cliente": "Especiera Amaicha",
+        "cliente_cuit": "",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "",
+        "cliente_email": "",
+        "nro_remito": "R-0264",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 10,
+            "precio_kg": 21000,
+            "subtotal": 210000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_0Uln4BozQJ8dbpW5vDVI",
+            "nombre": "Harina de Pecan",
+            "kg": 5,
+            "precio_kg": 17000,
+            "subtotal": 85000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 295000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 295000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-07-31T12:38:48.866Z"
+      },
+      {
         "_id": "tFQcYSFXXnQkUmhaLStL",
         "observaciones": "",
         "estado": "cuenta_corriente",
@@ -20295,6 +20393,43 @@
         "vencimiento": "",
         "observaciones": "",
         "creado": "2026-05-28T16:50:16.804Z"
+      },
+      {
+        "_id": "tm7VkyzqFu0fwCrV3Vyb",
+        "fecha": "2026-07-31",
+        "cliente": "Semilleria del Mercado",
+        "cliente_cuit": "",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "",
+        "cliente_email": "",
+        "nro_remito": "R-0265",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 20,
+            "precio_kg": 21000,
+            "subtotal": 420000,
+            "cajas": 2,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 420000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 420000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-07-31T13:03:21.492Z"
       },
       {
         "_id": "u19TnP0f6YeFG8Jpz0xU",
@@ -21075,6 +21210,18 @@
         "creado": "2026-06-29T17:33:10.093Z"
       },
       {
+        "_id": "73uRQdmBAvxRPvnOmG6K",
+        "tipo": "cobro",
+        "cliente": "Tolva",
+        "fecha": "2026-07-31",
+        "importe": 460000,
+        "medio": "efectivo",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0201",
+        "creado": "2026-07-31T13:42:10.289Z"
+      },
+      {
         "_id": "76cvZBXhhcYgEAJOnndX",
         "tipo": "cobro",
         "cliente": "Nutrifrut",
@@ -21234,6 +21381,18 @@
         "obs": "",
         "nro_cobro": "COB-0096",
         "creado": "2026-06-15T16:19:12.531Z"
+      },
+      {
+        "_id": "CwIXdRG36Jy2Ix5Z59az",
+        "tipo": "cobro",
+        "cliente": "Especiera Amaicha",
+        "fecha": "2026-07-31",
+        "importe": 295000,
+        "medio": "efectivo",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0202",
+        "creado": "2026-07-31T13:46:05.503Z"
       },
       {
         "_id": "D9DF1sYmaIQNeqZKANA8",
@@ -21772,6 +21931,19 @@
         "creado": "2026-05-23T23:50:42.828Z"
       },
       {
+        "_id": "T8SFAPV9MSyKW6NbrGUI",
+        "tipo": "cobro_automatico",
+        "cliente": "Francisco Rios",
+        "fecha": "2026-07-31",
+        "importe": 303605.99999999994,
+        "medio": "Efectivo",
+        "referencia": "LIQ-0031",
+        "obs": "Cobro automático — Maquila LIQ-0031",
+        "nro_cobro": "COB-0199",
+        "liq_id": "j09cq76XldMeguQXlLE2",
+        "creado": "2026-07-31T10:55:48.497Z"
+      },
+      {
         "_id": "TJv2VXNLo6zMO8KgNSKn",
         "tipo": "cobro",
         "cliente": "Semilleria Nogales",
@@ -21808,6 +21980,18 @@
         "creado": "2026-05-14T21:29:25.443Z"
       },
       {
+        "_id": "V6HSk74zxbLRiWQA6s4h",
+        "tipo": "cobro",
+        "cliente": "Picar",
+        "fecha": "2026-07-31",
+        "importe": 125000,
+        "medio": "efectivo",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0200",
+        "creado": "2026-07-31T13:14:43.202Z"
+      },
+      {
         "_id": "VcjmTjNTIP89D5cGtfFL",
         "tipo": "cobro_automatico",
         "cliente": "Facundo Tejerina",
@@ -21819,6 +22003,18 @@
         "nro_cobro": "COB-0030",
         "liq_id": "ZSIstbDJj3HtCs3aMoqe",
         "creado": "2026-05-12T23:41:03.031Z"
+      },
+      {
+        "_id": "Vg7Ou2suwYWunXRgilAs",
+        "tipo": "cobro",
+        "cliente": "El Nogal",
+        "fecha": "2026-08-01",
+        "importe": 300000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0203",
+        "creado": "2026-08-01T01:07:21.379Z"
       },
       {
         "_id": "Vztycav3Xj5oZhzDRpRp",
@@ -23016,7 +23212,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 198
+        "ultimo": 203
       },
       {
         "_id": "cotizaciones",
@@ -23033,7 +23229,7 @@
       },
       {
         "_id": "liquidaciones",
-        "ultimo": 30
+        "ultimo": 31
       },
       {
         "_id": "lista_precios",
@@ -23061,7 +23257,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 263
+        "ultimo": 266
       },
       {
         "_id": "variedades",
