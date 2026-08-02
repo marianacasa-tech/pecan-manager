@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-08-01T08:17:56.979Z",
-    "fecha_legible": "1/8/2026, 05:17:56",
+    "fecha": "2026-08-02T08:22:06.189Z",
+    "fecha_legible": "2/8/2026, 05:22:06",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -21613,6 +21613,18 @@
         "creado": "2026-05-18T10:53:49.369Z"
       },
       {
+        "_id": "K2Lr5MLANNMhUiqT8jG4",
+        "tipo": "cobro",
+        "cliente": "Expo Food SAS",
+        "fecha": "2026-08-01",
+        "importe": 210000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0204",
+        "creado": "2026-08-01T15:40:24.103Z"
+      },
+      {
         "_id": "KNfTCl2WLRwqXO9DCNDt",
         "tipo": "cobro",
         "cliente": "Agustina Alonso",
@@ -23212,7 +23224,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 203
+        "ultimo": 204
       },
       {
         "_id": "cotizaciones",
