@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-08-03T09:41:01.340Z",
-    "fecha_legible": "3/8/2026, 06:41:01",
+    "fecha": "2026-08-04T08:33:47.363Z",
+    "fecha_legible": "4/8/2026, 05:33:47",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -1720,6 +1720,37 @@
         ],
         "creado": "2026-06-16T17:59:00.212Z",
         "fecha": "2026-06-12"
+      },
+      {
+        "_id": "5EQQgDyZHz9YXvooCPGB",
+        "propietario": "Simon Asfoura",
+        "variedad": "Otra",
+        "kg_cascara": 468.6,
+        "enteras": 145,
+        "part_grandes": 138.7,
+        "part_chicas": 125,
+        "danadas": 12.9,
+        "podridas": 0,
+        "total_pelado": 421.59999999999997,
+        "pct_kernel": "89.97",
+        "pct_partido": "62.55",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260803-084",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 85,
+            "label": "bolsas"
+          },
+          {
+            "id": "0cPXv9ENRFupq1fbOKs9",
+            "cantidad": 43,
+            "label": "cajas"
+          }
+        ],
+        "creado": "2026-08-03T13:24:38.409Z",
+        "liquidacion_id": "07CH0GVJMPiYS74hT05f",
+        "fecha": "2026-07-31"
       },
       {
         "_id": "5u1Ztc2M7a1WX2TFyNHP",
@@ -3516,6 +3547,25 @@
     ],
     "liquidaciones_maquila": [
       {
+        "_id": "07CH0GVJMPiYS74hT05f",
+        "cliente": "Simon Asfoura",
+        "fecha": "2026-08-03",
+        "num_liquidacion": "LIQ-0032",
+        "kg_cascara": 468.6,
+        "precio_kg": 1750.4399999999998,
+        "total_servicio": 820256.184,
+        "precio_usd": 1.16,
+        "tc_bna": 1509,
+        "kg_con_iva": 0,
+        "kg_sin_iva": 468.6,
+        "subtotal_sin_iva": 820256.184,
+        "subtotal_con_iva": 0,
+        "iva_21": 0,
+        "forma_pago": "Efectivo",
+        "observaciones": "",
+        "creado": "2026-08-03T13:27:36.931Z"
+      },
+      {
         "_id": "1VYGbN5h2XVYr2GkI6Se",
         "cliente": "Facundo Tejerina",
         "fecha": "2026-06-04",
@@ -3809,7 +3859,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1717
+        "stock_actual": 1674
       },
       {
         "_id": "EieJJxEEtHrJtOiJ7LWo",
@@ -3848,7 +3898,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:34:49.660Z",
-        "stock_actual": 3993.400000000001
+        "stock_actual": 3908.400000000001
       },
       {
         "_id": "j8wVUWl641tOVbWn2zOA",
@@ -11430,6 +11480,36 @@
         "creado": "2026-05-13T12:31:20.388Z"
       },
       {
+        "_id": "0uxfnYLPeVL9CrlDNHxZ",
+        "fecha": "2026-08-03",
+        "proveedor": "Municipalidad de San Miguel de Tucuman",
+        "nro_factura": "",
+        "moneda": "ARS",
+        "tc_referencial": 0,
+        "iva_pct": 0,
+        "monto_neto": 2815,
+        "monto_iva": 0,
+        "monto_total": 2815,
+        "forma_pago": "efectivo",
+        "estado": "pagado",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "gasto_indirecto",
+            "descripcion": "Impuestos/tasas",
+            "insumo_id": "",
+            "insumo_nombre": "",
+            "unidad": "u",
+            "cat_nuez": "",
+            "cantidad": 1,
+            "precio_unitario": 2815,
+            "subtotal": 2815
+          }
+        ],
+        "creado": "2026-08-03T14:25:41.526Z"
+      },
+      {
         "_id": "1S5SuVw8uarf5hAQCVrl",
         "fecha": "2026-06-08",
         "proveedor": "Sat Tucuman",
@@ -11608,6 +11688,36 @@
           }
         ],
         "creado": "2026-06-12T12:24:20.294Z"
+      },
+      {
+        "_id": "75SGWFsMT75fdn1S6qxK",
+        "fecha": "2026-08-03",
+        "proveedor": "Sat Tucuman",
+        "nro_factura": "",
+        "moneda": "ARS",
+        "tc_referencial": 0,
+        "iva_pct": 0,
+        "monto_neto": 30671,
+        "monto_iva": 0,
+        "monto_total": 30671,
+        "forma_pago": "efectivo",
+        "estado": "pagado",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "gasto_indirecto",
+            "descripcion": "Agua",
+            "insumo_id": "",
+            "insumo_nombre": "",
+            "unidad": "u",
+            "cat_nuez": "",
+            "cantidad": 1,
+            "precio_unitario": 30671,
+            "subtotal": 30671
+          }
+        ],
+        "creado": "2026-08-03T14:18:23.272Z"
       },
       {
         "_id": "7d5mNXIkxYsi42if7v7I",
@@ -13620,6 +13730,36 @@
         "creado": "2026-07-06T13:56:54.122Z"
       },
       {
+        "_id": "kFJWuJF7N8kdvijesa5s",
+        "fecha": "2026-08-03",
+        "proveedor": "Atenor Hno s.r.l",
+        "nro_factura": "",
+        "moneda": "ARS",
+        "tc_referencial": 0,
+        "iva_pct": 21,
+        "monto_neto": 7933.9,
+        "monto_iva": 1666.119,
+        "monto_total": 9600.019,
+        "forma_pago": "efectivo",
+        "estado": "pagado",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "gasto_directo",
+            "descripcion": "Bolsas blancas",
+            "insumo_id": "",
+            "insumo_nombre": "",
+            "unidad": "u",
+            "cat_nuez": "",
+            "cantidad": 1,
+            "precio_unitario": 7933.92,
+            "subtotal": 7933.9
+          }
+        ],
+        "creado": "2026-08-03T12:33:03.290Z"
+      },
+      {
         "_id": "kmCcztRzCOAgPQhwxLES",
         "fecha": "2026-06-11",
         "proveedor": "Propanorte s.a.c.i.f",
@@ -14545,6 +14685,21 @@
         "creado": "2026-07-28T13:43:22.206Z"
       },
       {
+        "_id": "29AvOQGFhDUAE4ngUiXU",
+        "proveedor": "Atenor Hno s.r.l",
+        "fecha": "2026-08-03",
+        "moneda": "ARS",
+        "importe": 9600.019,
+        "importe_ars": 9600.019,
+        "tc": null,
+        "medio": "Efectivo",
+        "ref": "",
+        "obs": "Pago automático — compra registrada",
+        "compra_id": "kFJWuJF7N8kdvijesa5s",
+        "cheque_vencimiento": null,
+        "creado": "2026-08-03T12:33:03.290Z"
+      },
+      {
         "_id": "2JA2eYZFHYUP7p7OsHmb",
         "proveedor": "Los Pecanes s.a",
         "fecha": "2026-06-08",
@@ -14661,6 +14816,21 @@
         "obs": "Pago automático — compra registrada",
         "cheque_vencimiento": null,
         "creado": "2026-06-08T11:05:45.090Z"
+      },
+      {
+        "_id": "9hJuzPVETurOsSyBJuXc",
+        "proveedor": "Sat Tucuman",
+        "fecha": "2026-08-03",
+        "moneda": "ARS",
+        "importe": 30671,
+        "importe_ars": 30671,
+        "tc": null,
+        "medio": "Efectivo",
+        "ref": "",
+        "obs": "Pago automático — compra registrada",
+        "compra_id": "75SGWFsMT75fdn1S6qxK",
+        "cheque_vencimiento": null,
+        "creado": "2026-08-03T14:18:23.272Z"
       },
       {
         "_id": "9swI94lZvmWrvEOBNjQZ",
@@ -14838,6 +15008,21 @@
         "obs": "",
         "cheque_vencimiento": null,
         "creado": "2026-06-04T14:22:01.500Z"
+      },
+      {
+        "_id": "NFfdo3AL8mG2DAsf1rxV",
+        "proveedor": "Municipalidad de San Miguel de Tucuman",
+        "fecha": "2026-08-03",
+        "moneda": "ARS",
+        "importe": 2815,
+        "importe_ars": 2815,
+        "tc": null,
+        "medio": "Efectivo",
+        "ref": "",
+        "obs": "Pago automático — compra registrada",
+        "compra_id": "0uxfnYLPeVL9CrlDNHxZ",
+        "cheque_vencimiento": null,
+        "creado": "2026-08-03T14:25:41.526Z"
       },
       {
         "_id": "NxMG6gpDV1KjJpyL3eSS",
@@ -15713,6 +15898,43 @@
         "vencimiento": "",
         "observaciones": "",
         "creado": "2026-06-23T15:14:23.955Z"
+      },
+      {
+        "_id": "1TzoRO25fMmfz0xZxkKv",
+        "fecha": "2026-08-03",
+        "cliente": "El Nogal",
+        "cliente_cuit": "",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3815286896",
+        "cliente_email": "",
+        "nro_remito": "R-0267",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 5,
+            "precio_kg": 21000,
+            "subtotal": 105000,
+            "cajas": 0,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 105000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 105000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-03T10:57:35.043Z"
       },
       {
         "_id": "1W3XnghtVTUzunNjdnAC",
@@ -21808,6 +22030,18 @@
         "creado": "2026-06-19T14:03:56.565Z"
       },
       {
+        "_id": "QtXlZLszdSUXkom6o7Ae",
+        "tipo": "cobro",
+        "cliente": "La Verdu",
+        "fecha": "2026-08-03",
+        "importe": 240000,
+        "medio": "efectivo",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0206",
+        "creado": "2026-08-03T17:03:07.991Z"
+      },
+      {
         "_id": "QvlMV6WNWL59Bl8KjKBn",
         "tipo": "cobro_automatico",
         "cliente": "Anibal Garcia Romano",
@@ -22002,6 +22236,18 @@
         "obs": "",
         "nro_cobro": "COB-0200",
         "creado": "2026-07-31T13:14:43.202Z"
+      },
+      {
+        "_id": "VYWZ0c0e8uG02tAP3x3H",
+        "tipo": "cobro",
+        "cliente": "Frutos Secos del Noa",
+        "fecha": "2026-08-03",
+        "importe": 22700,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "Retiro cafe",
+        "nro_cobro": "COB-0205",
+        "creado": "2026-08-03T16:04:25.997Z"
       },
       {
         "_id": "VcjmTjNTIP89D5cGtfFL",
@@ -23197,7 +23443,8 @@
           "Utensillos cocina",
           "Junta danesa",
           "Motoreductor",
-          "Fechador de tinta"
+          "Fechador de tinta",
+          "Agua"
         ]
       },
       {
@@ -23224,7 +23471,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 204
+        "ultimo": 206
       },
       {
         "_id": "cotizaciones",
@@ -23241,7 +23488,7 @@
       },
       {
         "_id": "liquidaciones",
-        "ultimo": 31
+        "ultimo": 32
       },
       {
         "_id": "lista_precios",
@@ -23261,7 +23508,7 @@
       },
       {
         "_id": "lotes_fab",
-        "ultimo": 83
+        "ultimo": 84
       },
       {
         "_id": "recibos",
@@ -23269,7 +23516,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 266
+        "ultimo": 267
       },
       {
         "_id": "variedades",
