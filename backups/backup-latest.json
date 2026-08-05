@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-08-04T08:33:47.363Z",
-    "fecha_legible": "4/8/2026, 05:33:47",
+    "fecha": "2026-08-05T08:33:15.063Z",
+    "fecha_legible": "5/8/2026, 05:33:15",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -95,6 +95,17 @@
         "email": "",
         "telefono": "381 409-3167",
         "creado": "2026-06-30T23:34:41.381Z"
+      },
+      {
+        "_id": "5OI6uGoud6y64ksHQZGN",
+        "nombre": "Pablo Grandval",
+        "categoria": "servicio",
+        "cuit": "",
+        "localidad": "Yerba Buena",
+        "provincia": "Tucumán",
+        "email": "",
+        "telefono": "",
+        "creado": "2026-08-04T11:12:58.301Z"
       },
       {
         "_id": "6C5NNQTaVmJ3Eyb3FdbZ",
@@ -1227,6 +1238,17 @@
         "observaciones": "",
         "num_remito": "R-0167",
         "creado": "2026-06-24T11:11:04.220Z"
+      },
+      {
+        "_id": "CNJIDyRKaB1kzG4Kav5J",
+        "fecha": "2026-08-04",
+        "propietario": "Pablo Grandval",
+        "variedad": "Desconocida",
+        "kg": 59.8,
+        "humedad": 5,
+        "observaciones": "",
+        "num_remito": "R-0268",
+        "creado": "2026-08-04T11:13:30.293Z"
       },
       {
         "_id": "EGyWrGZlDaghQf5MNm0W",
@@ -3859,7 +3881,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1674
+        "stock_actual": 1672
       },
       {
         "_id": "EieJJxEEtHrJtOiJ7LWo",
@@ -3867,7 +3889,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-07-28T12:50:37.187Z",
-        "stock_actual": 96
+        "stock_actual": 91
       },
       {
         "_id": "FWRpi32rFH6KBhdYmDjM",
@@ -3934,7 +3956,8 @@
         "nombre": "Frasco 200g",
         "unidad": "u",
         "packaging": true,
-        "creado": "2026-07-28T12:51:01.134Z"
+        "creado": "2026-07-28T12:51:01.134Z",
+        "stock_actual": 0
       }
     ],
     "tandas_cocina": [
@@ -9793,7 +9816,8 @@
         "nro_tanda": 1,
         "receta_nombre": "Pasta de Pecan",
         "kg_producido": 4.4,
-        "creado": "2026-07-24T10:21:39.098Z"
+        "creado": "2026-07-24T10:21:39.098Z",
+        "stock_kg": 0
       },
       {
         "_id": "jy4GMChlU7qnrHz3D1tb",
@@ -17130,6 +17154,43 @@
         "creado": "2026-05-07T13:57:42.408Z"
       },
       {
+        "_id": "FIArcgLdBRc4U9I19szg",
+        "fecha": "2026-08-05",
+        "cliente": "El Nogal",
+        "cliente_cuit": "",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3815286896",
+        "cliente_email": "",
+        "nro_remito": "R-0272",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 10,
+            "precio_kg": 21000,
+            "subtotal": 210000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 210000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 210000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-05T00:27:30.256Z"
+      },
+      {
         "_id": "Fd820Em5TU2ind5H1aQY",
         "fecha": "2026-06-02",
         "cliente": "La Calendula",
@@ -18150,6 +18211,43 @@
         "creado": "2026-05-14T21:34:25.812Z"
       },
       {
+        "_id": "PMKnCOwN944VK9co592e",
+        "fecha": "2026-08-04",
+        "cliente": "Comotti",
+        "cliente_cuit": "",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "",
+        "cliente_email": "",
+        "nro_remito": "R-0269",
+        "items": [
+          {
+            "prod_key": "nuez_part_chicas",
+            "nombre": "Pecan Partido Chico",
+            "kg": 10,
+            "precio_kg": 17000,
+            "subtotal": 170000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 170000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 170000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-04T13:17:34.113Z"
+      },
+      {
         "_id": "QPRhFitZhEiHuszg7x4V",
         "fecha": "2026-06-29",
         "cliente": "Grupo Framap",
@@ -18296,6 +18394,43 @@
         "vencimiento": "",
         "observaciones": "",
         "creado": "2026-06-10T12:11:46.381Z"
+      },
+      {
+        "_id": "RGxTyz68U7tFoSoGL1Sv",
+        "fecha": "2026-08-04",
+        "cliente": "Consumidor Final",
+        "cliente_cuit": "",
+        "cliente_localidad": "",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "",
+        "cliente_email": "",
+        "nro_remito": "R-0270",
+        "items": [
+          {
+            "prod_key": "frac_garrap_500",
+            "nombre": "🍬 Garrapiñada Doypack 500g",
+            "kg": 4,
+            "precio_kg": 10000,
+            "subtotal": 40000,
+            "cajas": 0,
+            "es_fraccionado": true,
+            "frac_insumo": "Doypack 500g",
+            "frac_kg_unit": 0.5,
+            "frac_base": "receta_nombre:Garrapiñada"
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 40000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 40000,
+        "forma_pago": "efectivo",
+        "estado": "cobrado",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-04T18:39:47.641Z"
       },
       {
         "_id": "RT34jp0Ch8xVLfQhtJ5d",
@@ -20967,6 +21102,55 @@
         "creado": "2026-06-18T13:00:01.307Z"
       },
       {
+        "_id": "xx4siyP6pw6TpDudbHCt",
+        "fecha": "2026-08-04",
+        "cliente": "Consumidor Final",
+        "cliente_cuit": "",
+        "cliente_localidad": "",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "",
+        "cliente_email": "",
+        "nro_remito": "R-0271",
+        "items": [
+          {
+            "prod_key": "frac_tostado_500",
+            "nombre": "🧂 Tostado Salado Doypack 500g",
+            "kg": 1,
+            "precio_kg": 20000,
+            "subtotal": 20000,
+            "cajas": 0,
+            "es_fraccionado": true,
+            "frac_insumo": "Doypack 500g",
+            "frac_kg_unit": 0.5,
+            "frac_base": "receta_nombre:Tostado Salado"
+          },
+          {
+            "prod_key": "frac_pasta_200",
+            "nombre": "🥜 Pasta de Pecan Frasco 200g",
+            "kg": 3,
+            "precio_kg": 10000,
+            "subtotal": 30000,
+            "cajas": 0,
+            "es_fraccionado": true,
+            "frac_insumo": "Frasco 200g",
+            "frac_kg_unit": 0.2,
+            "frac_base": "receta_nombre:Pasta de Pecan"
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 50000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 50000,
+        "forma_pago": "transferencia",
+        "estado": "cobrado",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-04T21:49:06.951Z"
+      },
+      {
         "_id": "y4l2NF6akhvCqtB77Z80",
         "fecha": "2026-07-29",
         "cliente": "Raices Cafe",
@@ -21430,6 +21614,18 @@
         "nro_cobro": "COB-0143",
         "ref_remito": "R-0181",
         "creado": "2026-06-29T17:33:10.093Z"
+      },
+      {
+        "_id": "6VFzcZ53nH0xLmNUKyNr",
+        "tipo": "cobro",
+        "cliente": "Frutos Secos del Noa",
+        "fecha": "2026-08-04",
+        "importe": 362284,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0208",
+        "creado": "2026-08-04T16:37:04.768Z"
       },
       {
         "_id": "73uRQdmBAvxRPvnOmG6K",
@@ -21958,6 +22154,18 @@
         "creado": "2026-06-05T14:35:59.734Z"
       },
       {
+        "_id": "O67AhKL4nTYN5QSuWemf",
+        "tipo": "cobro",
+        "cliente": "Wako",
+        "fecha": "2026-08-03",
+        "importe": 4035350,
+        "medio": "cheque",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0207",
+        "creado": "2026-08-04T12:46:52.327Z"
+      },
+      {
         "_id": "PJb168Xk5CpxtRlJoBTe",
         "tipo": "cobro",
         "cliente": "Octaviano",
@@ -22297,6 +22505,19 @@
         "obs": "",
         "nro_cobro": "COB-0128",
         "creado": "2026-06-24T18:22:57.041Z"
+      },
+      {
+        "_id": "WhiwwlPamFbVnJBMqiJU",
+        "tipo": "cobro_automatico",
+        "cliente": "Consumidor Final",
+        "fecha": "2026-08-04",
+        "importe": 50000,
+        "medio": "transferencia",
+        "referencia": "R-0271",
+        "obs": "Cobro automático por venta cobrada en el momento",
+        "nro_cobro": "COB-0211",
+        "ref_remito": "R-0271",
+        "creado": "2026-08-04T21:49:07.543Z"
       },
       {
         "_id": "WzWnuue9tqXJCPCDpCEf",
@@ -22741,6 +22962,19 @@
         "creado": "2026-07-03T10:53:33.731Z"
       },
       {
+        "_id": "hBKSEZegQs7wF9hEOJOo",
+        "tipo": "cobro_automatico",
+        "cliente": "Consumidor Final",
+        "fecha": "2026-08-04",
+        "importe": 40000,
+        "medio": "efectivo",
+        "referencia": "R-0270",
+        "obs": "Cobro automático por venta cobrada en el momento",
+        "nro_cobro": "COB-0210",
+        "ref_remito": "R-0270",
+        "creado": "2026-08-04T18:39:48.173Z"
+      },
+      {
         "_id": "horGMSMWHvXKyafEl8DZ",
         "tipo": "cobro",
         "cliente": "Fafá",
@@ -22837,6 +23071,18 @@
         "obs": "",
         "nro_cobro": "COB-0080",
         "creado": "2026-06-05T14:14:16.588Z"
+      },
+      {
+        "_id": "jwktKuTsErkfV6wkccCw",
+        "tipo": "cobro",
+        "cliente": "Comotti",
+        "fecha": "2026-08-04",
+        "importe": 170000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0209",
+        "creado": "2026-08-04T18:26:26.033Z"
       },
       {
         "_id": "jwp3WmSBjpFtSWySoDgV",
@@ -23471,7 +23717,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 206
+        "ultimo": 211
       },
       {
         "_id": "cotizaciones",
@@ -23516,7 +23762,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 267
+        "ultimo": 272
       },
       {
         "_id": "variedades",
