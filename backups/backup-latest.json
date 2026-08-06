@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-08-05T08:33:15.063Z",
-    "fecha_legible": "5/8/2026, 05:33:15",
+    "fecha": "2026-08-06T08:33:27.849Z",
+    "fecha_legible": "6/8/2026, 05:33:27",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -29,6 +29,17 @@
         "email": "",
         "telefono": "3878439503",
         "creado": "2026-06-12T20:29:06.042Z"
+      },
+      {
+        "_id": "1wgMc3UwymgeZj1FAlUK",
+        "nombre": "El Roble tienda natural",
+        "categoria": "venta",
+        "cuit": "",
+        "localidad": "Yerba Buena",
+        "provincia": "Tucumán",
+        "email": "",
+        "telefono": "3815668942",
+        "creado": "2026-08-05T23:17:35.587Z"
       },
       {
         "_id": "2imR8LyxBQrsfacSbyDQ",
@@ -425,6 +436,17 @@
         "creado": "2026-05-05T16:36:13.924Z",
         "nombre": "Altieri",
         "categoria": "venta"
+      },
+      {
+        "_id": "YrRX0LdYX5OpBwTtJuDK",
+        "nombre": "TUCU-SNACK SRL",
+        "categoria": "venta",
+        "cuit": "30709807672",
+        "localidad": "San Miguel de Tucumán",
+        "provincia": "Tucumán",
+        "email": "",
+        "telefono": "381 4776734",
+        "creado": "2026-08-05T13:24:37.731Z"
       },
       {
         "_id": "Z32RLRpNPd26NsM79JI0",
@@ -3881,7 +3903,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1672
+        "stock_actual": 1668
       },
       {
         "_id": "EieJJxEEtHrJtOiJ7LWo",
@@ -16878,6 +16900,43 @@
         "creado": "2026-07-16T14:24:30.872Z"
       },
       {
+        "_id": "BMadFtio4MfzhSzG1EB8",
+        "fecha": "2026-08-05",
+        "cliente": "El Roble tienda natural",
+        "cliente_cuit": "",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3815668942",
+        "cliente_email": "",
+        "nro_remito": "R-0275",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 1,
+            "precio_kg": 21000,
+            "subtotal": 21000,
+            "cajas": 0,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 21000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 21000,
+        "forma_pago": "efectivo",
+        "estado": "cobrado",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-05T23:18:01.509Z"
+      },
+      {
         "_id": "Bb6NSYIsL12zQWUh7Ao1",
         "fecha": "2026-05-05",
         "cliente": "Rio Negro",
@@ -19469,6 +19528,43 @@
         "creado": "2026-07-30T13:56:08.966Z"
       },
       {
+        "_id": "eUtMS5dv9qOorVuz6ogA",
+        "fecha": "2026-08-05",
+        "cliente": "TUCU-SNACK SRL",
+        "cliente_cuit": "30709807672",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "381 4776734",
+        "cliente_email": "",
+        "nro_remito": "R-0274",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 20,
+            "precio_kg": 21000,
+            "subtotal": 420000,
+            "cajas": 2,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 420000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 420000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-05T13:25:25.790Z"
+      },
+      {
         "_id": "eZp6zEktGsFp7zY7QNRp",
         "fecha": "2026-06-04",
         "cliente": "Frutos Secos del Noa",
@@ -20200,6 +20296,43 @@
         "vencimiento": "",
         "observaciones": "",
         "creado": "2026-07-03T13:05:11.643Z"
+      },
+      {
+        "_id": "pC4HiqHRGEDAdxGfUUd0",
+        "fecha": "2026-08-05",
+        "cliente": "Grupo Framap",
+        "cliente_cuit": "33-71695754-9",
+        "cliente_localidad": "Corrientes",
+        "cliente_provincia": "Corrientes",
+        "cliente_telefono": "3794845519",
+        "cliente_email": "",
+        "nro_remito": "R-0273",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 20,
+            "precio_kg": 21000,
+            "subtotal": 420000,
+            "cajas": 2,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 21,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 420000,
+        "monto_desc": 0,
+        "monto_iva": 88200,
+        "monto_total": 508200,
+        "forma_pago": "transferencia",
+        "estado": "cobrado",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-05T11:17:52.927Z"
       },
       {
         "_id": "q4S4r80hDToLsiivH8Di",
@@ -21789,6 +21922,19 @@
         "creado": "2026-05-07T13:57:43.632Z"
       },
       {
+        "_id": "CRqo8aC0J4vNXcrXtl0f",
+        "tipo": "cobro_automatico",
+        "cliente": "El Roble tienda natural",
+        "fecha": "2026-08-05",
+        "importe": 21000,
+        "medio": "efectivo",
+        "referencia": "R-0275",
+        "obs": "Cobro automático por venta cobrada en el momento",
+        "nro_cobro": "COB-0215",
+        "ref_remito": "R-0275",
+        "creado": "2026-08-05T23:18:02.379Z"
+      },
+      {
         "_id": "Cgs5H3l84CY4Zz2foqf6",
         "tipo": "cobro",
         "cliente": "Comotti",
@@ -22703,6 +22849,18 @@
         "creado": "2026-05-29T21:06:37.068Z"
       },
       {
+        "_id": "bHWr9NvExeOYKZgljmgc",
+        "tipo": "cobro",
+        "cliente": "TUCU-SNACK SRL",
+        "fecha": "2026-08-05",
+        "importe": 420000,
+        "medio": "efectivo",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0213",
+        "creado": "2026-08-05T16:07:13.964Z"
+      },
+      {
         "_id": "bRvgEsOK5hxR5KqDEDaf",
         "tipo": "cobro",
         "cliente": "El Nogal",
@@ -23219,6 +23377,19 @@
         "creado": "2026-07-13T12:44:51.207Z"
       },
       {
+        "_id": "oHfiPsYkRDa9KZ5X4FSR",
+        "tipo": "cobro_automatico",
+        "cliente": "Grupo Framap",
+        "fecha": "2026-08-05",
+        "importe": 508200,
+        "medio": "transferencia",
+        "referencia": "R-0273",
+        "obs": "Cobro automático por venta cobrada en el momento",
+        "nro_cobro": "COB-0212",
+        "ref_remito": "R-0273",
+        "creado": "2026-08-05T11:17:54.280Z"
+      },
+      {
         "_id": "oSZn0YRFNfGjH7WZobgx",
         "tipo": "cobro_automatico",
         "cliente": "Mario Bolzoni",
@@ -23280,6 +23451,18 @@
         "nro_cobro": "COB-0102",
         "ref_remito": "R-0156",
         "creado": "2026-06-18T13:00:01.977Z"
+      },
+      {
+        "_id": "pUrWpVPO0lFhstk5dnni",
+        "tipo": "cobro",
+        "cliente": "Semilleria del Mercado",
+        "fecha": "2026-08-05",
+        "importe": 420000,
+        "medio": "efectivo",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0214",
+        "creado": "2026-08-05T16:09:42.678Z"
       },
       {
         "_id": "pxQejnyRy4w0z7EItHGe",
@@ -23717,7 +23900,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 211
+        "ultimo": 215
       },
       {
         "_id": "cotizaciones",
@@ -23762,7 +23945,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 272
+        "ultimo": 275
       },
       {
         "_id": "variedades",
