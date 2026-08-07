@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-08-06T08:33:27.849Z",
-    "fecha_legible": "6/8/2026, 05:33:27",
+    "fecha": "2026-08-07T07:12:41.266Z",
+    "fecha_legible": "7/8/2026, 04:12:41",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -3903,7 +3903,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1668
+        "stock_actual": 1664
       },
       {
         "_id": "EieJJxEEtHrJtOiJ7LWo",
@@ -3911,7 +3911,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-07-28T12:50:37.187Z",
-        "stock_actual": 91
+        "stock_actual": 87
       },
       {
         "_id": "FWRpi32rFH6KBhdYmDjM",
@@ -16694,6 +16694,55 @@
         "creado": "2026-07-31T13:49:26.625Z"
       },
       {
+        "_id": "7aen69hSY1UiSSvjoNqq",
+        "fecha": "2026-08-06",
+        "cliente": "Expo Food SAS",
+        "cliente_cuit": "30-71855433-7",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3816576565",
+        "cliente_email": "",
+        "nro_remito": "R-0279",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 5,
+            "precio_kg": 21000,
+            "subtotal": 105000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 5,
+            "precio_kg": 25000,
+            "subtotal": 125000,
+            "cajas": 0,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 230000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 230000,
+        "forma_pago": "efectivo",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-06T15:19:49.804Z"
+      },
+      {
         "_id": "8GxGDLylXwtVlsbvbKsE",
         "fecha": "2026-05-05",
         "cliente": "Altieri Junín",
@@ -19306,6 +19355,55 @@
         "creado": "2026-06-25T19:42:30.989Z"
       },
       {
+        "_id": "Zgd3MTj81g2Faz2AWKfR",
+        "fecha": "2026-08-06",
+        "cliente": "La Gringa",
+        "cliente_cuit": "",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "",
+        "cliente_email": "",
+        "nro_remito": "R-0278",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 10,
+            "precio_kg": 21000,
+            "subtotal": 210000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 5,
+            "precio_kg": 25000,
+            "subtotal": 125000,
+            "cajas": 0,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 335000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 335000,
+        "forma_pago": "efectivo",
+        "estado": "cobrado",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-06T14:00:53.243Z"
+      },
+      {
         "_id": "ZlcSL6pLYYqHrleY1qkm",
         "fecha": "2026-06-26",
         "cliente": "Altieri",
@@ -19444,6 +19542,55 @@
         "vencimiento": "",
         "observaciones": "",
         "creado": "2026-06-12T20:56:19.672Z"
+      },
+      {
+        "_id": "dIFao3X4e31iwqitgKZZ",
+        "fecha": "2026-08-06",
+        "cliente": "Huerto Privada SAS",
+        "cliente_cuit": "",
+        "cliente_localidad": "Oran",
+        "cliente_provincia": "Salta",
+        "cliente_telefono": "3878439503",
+        "cliente_email": "",
+        "nro_remito": "R-0276",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 10,
+            "precio_kg": 21000,
+            "subtotal": 210000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 10,
+            "precio_kg": 25000,
+            "subtotal": 250000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 460000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 460000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-06T12:51:10.672Z"
       },
       {
         "_id": "dUOUIJrbhZCGTWMsiPXM",
@@ -21557,6 +21704,55 @@
         "vencimiento": "",
         "observaciones": "",
         "creado": "2026-05-05T00:08:18.532Z"
+      },
+      {
+        "_id": "zR3WI8aqjBIg9jIKgoYM",
+        "fecha": "2026-08-06",
+        "cliente": "Consumidor Final",
+        "cliente_cuit": "",
+        "cliente_localidad": "",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "",
+        "cliente_email": "",
+        "nro_remito": "R-0277",
+        "items": [
+          {
+            "prod_key": "frac_garrap_500",
+            "nombre": "🍬 Garrapiñada Doypack 500g",
+            "kg": 2,
+            "precio_kg": 18000,
+            "subtotal": 36000,
+            "cajas": 1,
+            "es_fraccionado": true,
+            "frac_insumo": "Doypack 500g",
+            "frac_kg_unit": 0.5,
+            "frac_base": "receta_nombre:Garrapiñada"
+          },
+          {
+            "prod_key": "frac_tostado_500",
+            "nombre": "🧂 Tostado Salado Doypack 500g",
+            "kg": 2,
+            "precio_kg": 20000,
+            "subtotal": 40000,
+            "cajas": 1,
+            "es_fraccionado": true,
+            "frac_insumo": "Doypack 500g",
+            "frac_kg_unit": 0.5,
+            "frac_base": "receta_nombre:Tostado Salado"
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 76000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 76000,
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-06T12:55:50.245Z",
+        "estado": "cobrado",
+        "forma_pago": "transferencia"
       }
     ],
     "cobros": [
@@ -21858,6 +22054,19 @@
         "obs": "",
         "nro_cobro": "COB-0119",
         "creado": "2026-06-23T15:53:24.745Z"
+      },
+      {
+        "_id": "A5KUYN3RL5mdH5pEhWlS",
+        "tipo": "cobro_automatico",
+        "cliente": "La Gringa",
+        "fecha": "2026-08-06",
+        "importe": 335000,
+        "medio": "efectivo",
+        "referencia": "R-0278",
+        "obs": "Cobro automático por venta cobrada en el momento",
+        "nro_cobro": "COB-0217",
+        "ref_remito": "R-0278",
+        "creado": "2026-08-06T14:00:53.751Z"
       },
       {
         "_id": "ANHuApJLTeu3RURyLDdn",
@@ -23465,6 +23674,18 @@
         "creado": "2026-08-05T16:09:42.678Z"
       },
       {
+        "_id": "pVqPVTvbp0dNALW2aB8F",
+        "tipo": "cobro",
+        "cliente": "Altieri",
+        "fecha": "2026-08-06",
+        "importe": 135000,
+        "medio": "efectivo",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0218",
+        "creado": "2026-08-06T14:02:50.139Z"
+      },
+      {
         "_id": "pxQejnyRy4w0z7EItHGe",
         "tipo": "cobro",
         "cliente": "Forrajeria Artigas",
@@ -23487,6 +23708,18 @@
         "obs": "",
         "nro_cobro": "COB-0077",
         "creado": "2026-06-03T23:14:00.882Z"
+      },
+      {
+        "_id": "qPb2O9Cy15x9GYU8eIlS",
+        "tipo": "cobro",
+        "cliente": "Forrajeria Artigas",
+        "fecha": "2026-08-06",
+        "importe": 100000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0216",
+        "creado": "2026-08-06T13:59:37.697Z"
       },
       {
         "_id": "rbKWZRC2lWkeC6sjYmb3",
@@ -23900,7 +24133,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 215
+        "ultimo": 218
       },
       {
         "_id": "cotizaciones",
@@ -23945,7 +24178,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 275
+        "ultimo": 279
       },
       {
         "_id": "variedades",
