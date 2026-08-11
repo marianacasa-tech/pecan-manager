@@ -1382,6 +1382,11 @@
         <div style="font-size:.75rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">🍫 Elaborados cocina vendidos</div>
         <div id="rv-elab-grid" class="metrics-grid"></div>
       </div>
+      <!-- Fraccionados vendidos -->
+      <div id="rv-frac-detalle" style="display:none;margin-bottom:20px;">
+        <div style="font-size:.75rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">📦 Fraccionados vendidos</div>
+        <div id="rv-frac-grid" class="metrics-grid"></div>
+      </div>
       <!-- Gráficos ventas -->
       <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;align-items:start;">
         <div>
@@ -6332,23 +6337,39 @@ window.calcStockInsumos=async function(){
     });
   });
 
+  // Salidas por ventas de fraccionados (por nombre de insumo)
+  const snapVentasFrac=await getDocsFromServer(collection(db,'ventas'));
+  const salidaVenta={}; // {nombre_insumo: unidades}
+  snapVentasFrac.forEach(d=>{
+    (d.data().items||[]).forEach(it=>{
+      const esFr=!!it.es_fraccionado||it.prod_key?.startsWith('frac_');
+      if(!esFr) return;
+      const fracDef=FRACCIONADOS.find(f=>f.key===it.prod_key);
+      if(!fracDef) return;
+      const insNombre=fracDef.insumo;
+      salidaVenta[insNombre]=(salidaVenta[insNombre]||0)+(it.kg||0); // kg = unidades
+    });
+  });
+
   if(!insumosCache.length){container.innerHTML='<p style="color:var(--text2);">No hay insumos en el catálogo.</p>';return;}
 
   let html=`<div class="table-wrap"><table>
-    <thead><tr><th>Insumo</th><th>Unidad</th><th>Entradas (compras)</th><th>Salidas cocina</th><th>Salidas fábrica</th><th>Stock actual</th></tr></thead><tbody>`;
+    <thead><tr><th>Insumo</th><th>Unidad</th><th style="color:var(--green);">Entradas</th><th style="color:var(--amber);">Salidas cocina</th><th style="color:var(--amber);">Salidas fábrica</th><th style="color:#c0392b;">Salidas ventas</th><th>Stock actual</th></tr></thead><tbody>`;
 
   insumosCache.forEach(ins=>{
     const ent=entradas[ins.id]||0;
     const sc=salidaCocina[ins.id]||0;
     const sf=salidaFab[ins.id]||0;
-    const stock=ent-sc-sf;
+    const sv=salidaVenta[ins.nombre]||0;
+    const stock=ent-sc-sf-sv;
     const color=stock>0?'var(--green)':stock===0?'var(--text2)':'#c0392b';
     html+=`<tr>
       <td><strong>${ins.nombre}</strong></td>
       <td>${ins.unidad}</td>
-      <td style="color:var(--green);">${ent>0?'+'+ent.toFixed(1):'—'}</td>
-      <td style="color:var(--amber);">${sc>0?'−'+sc.toFixed(1):'—'}</td>
-      <td style="color:var(--amber);">${sf>0?'−'+sf.toFixed(1):'—'}</td>
+      <td style="text-align:right;color:var(--green);">${ent>0?'+'+ent.toFixed(1):'—'}</td>
+      <td style="text-align:right;color:var(--amber);">${sc>0?'−'+sc.toFixed(1):'—'}</td>
+      <td style="text-align:right;color:var(--amber);">${sf>0?'−'+sf.toFixed(1):'—'}</td>
+      <td style="text-align:right;color:#c0392b;">${sv>0?'−'+sv.toFixed(0)+' u':'—'}</td>
       <td><strong style="color:${color};font-size:1.05rem;">${stock.toFixed(1)} ${ins.unidad}</strong>
         ${stock<0?'<span style="font-size:.75rem;color:#c0392b;margin-left:4px;">⚠️ negativo</span>':''}</td>
     </tr>`;
@@ -7990,6 +8011,7 @@ window.initResumen=async function initResumen(){
   // ── VENTAS ───────────────────────────────────────────────────────────────
   let vTotalKg=0, vEnt=0, vPG=0, vPC=0, vDan=0, vMonto=0;
   const vElabPorReceta={}; // {nombre: kg}
+  const vFracPorProd={}; // {label: {unidades, kg}}
   const mesesKg=Array(12).fill(0);
   const mesesMonto=Array(12).fill(0);
 
@@ -8003,23 +8025,53 @@ window.initResumen=async function initResumen(){
     (v.items||[]).forEach(it=>{
       const kg=it.kg||0;
       const key=it.prod_key||'';
-      vTotalKg+=kg;
-      if(anioV===parseInt(anioSel)&&mes>=0) mesesKg[mes]+=kg;
+      const esFrac=!!it.es_fraccionado||FRACCIONADOS.some(f=>f.key===key)||key.startsWith('frac_');
+      // Para fraccionados: calcular kg reales para el gráfico
+      let kgReales=kg;
+      if(esFrac){
+        const fracDef=FRACCIONADOS.find(f=>f.key===key);
+        kgReales=fracDef?kg*(fracDef.kg):0; // unidades × kg_unit
+      }
+      if(!esFrac){
+        vTotalKg+=kg;
+        if(anioV===parseInt(anioSel)&&mes>=0) mesesKg[mes]+=kg;
+      } else {
+        // Fraccionados: sumar kg reales al total y al gráfico
+        vTotalKg+=kgReales;
+        if(anioV===parseInt(anioSel)&&mes>=0) mesesKg[mes]+=kgReales;
+      }
       // Clasificar por categoría usando prod_key
       if(key==='nuez_enteras') vEnt+=kg;
       else if(key==='nuez_part_grandes') vPG+=kg;
       else if(key==='nuez_part_chicas') vPC+=kg;
       else if(key==='nuez_danadas') vDan+=kg;
+      else if(esFrac){
+        // Fraccionado: registrar en tabla separada + sumar al stock base
+        const fracDef=FRACCIONADOS.find(f=>f.key===key);
+        // Tabla de fraccionados: clave = label del producto
+        const fracLabel=fracDef?fracDef.label:(it.nombre||key);
+        if(!vFracPorProd[fracLabel]) vFracPorProd[fracLabel]={unidades:0,kg:0};
+        vFracPorProd[fracLabel].unidades+=kg; // kg aquí = unidades
+        vFracPorProd[fracLabel].kg+=kgReales;
+        // También sumar al stock base para totales
+        if(fracDef){
+          if(fracDef.base==='nuez_enteras') vEnt+=kgReales;
+          else if(fracDef.base.startsWith('receta_nombre:')){
+            const recNombreBase=fracDef.base.replace('receta_nombre:','');
+            vElabPorReceta[recNombreBase]=(vElabPorReceta[recNombreBase]||0)+kgReales;
+          }
+        }
+      }
       else if(key.startsWith('receta_')||porReceta[it.nombre]){
         const nombre=it.nombre||key;
         vElabPorReceta[nombre]=(vElabPorReceta[nombre]||0)+kg;
       } else {
-        // fallback por nombre
+        // fallback por nombre — solo para ítems no fraccionados
         const n=(it.nombre||'').toLowerCase();
         if(n.includes('entera')||n.includes('entero')) vEnt+=kg;
         else if(n.includes('grande')) vPG+=kg;
         else if(n.includes('chico')||n.includes('chica')) vPC+=kg;
-        else if(n.includes('da')) vDan+=kg;
+        else if(n.includes('dañado')||key==='nuez_danadas') vDan+=kg;
         else{
           const nombre=it.nombre||'Otro';
           vElabPorReceta[nombre]=(vElabPorReceta[nombre]||0)+kg;
@@ -8046,6 +8098,19 @@ window.initResumen=async function initResumen(){
     ).join('');
   } else {
     elabDiv.style.display='none';
+  }
+
+  // Fraccionados vendidos
+  const fracDiv=document.getElementById('rv-frac-detalle');
+  const fracGrid=document.getElementById('rv-frac-grid');
+  const fracEntries=Object.entries(vFracPorProd).sort((a,b)=>b[1].unidades-a[1].unidades);
+  if(fracEntries.length&&fracDiv&&fracGrid){
+    fracDiv.style.display='block';
+    fracGrid.innerHTML=fracEntries.map(([label,data])=>
+      `<div class="metric-card"><div class="val" style="font-size:1rem;">${Math.round(data.unidades)} u</div><div class="lbl">${label}</div><div style="font-size:.72rem;color:var(--text2);">(${fmtKg(data.kg)})</div></div>`
+    ).join('');
+  } else if(fracDiv) {
+    fracDiv.style.display='none';
   }
 
   // Gráfico evolución ventas (barras kg + línea monto)
