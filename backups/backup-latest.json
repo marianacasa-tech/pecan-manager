@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-08-10T07:37:44.971Z",
-    "fecha_legible": "10/8/2026, 04:37:44",
+    "fecha": "2026-08-11T07:04:09.104Z",
+    "fecha_legible": "11/8/2026, 04:04:09",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -678,6 +678,17 @@
         "email": "",
         "telefono": "3794845519",
         "creado": "2026-06-29T17:30:37.505Z"
+      },
+      {
+        "_id": "yEv1PSLmcMJesFuiuOpZ",
+        "nombre": "Mush",
+        "categoria": "venta",
+        "cuit": "",
+        "localidad": "Yerba Buena",
+        "provincia": "Tucumán",
+        "email": "",
+        "telefono": "3815810300",
+        "creado": "2026-08-10T21:43:29.624Z"
       }
     ],
     "proveedores": [
@@ -3974,7 +3985,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1639
+        "stock_actual": 1637
       },
       {
         "_id": "EieJJxEEtHrJtOiJ7LWo",
@@ -17946,6 +17957,43 @@
         "creado": "2026-06-11T21:23:14.684Z"
       },
       {
+        "_id": "KWCpDhd9MzEqLBihRtoh",
+        "fecha": "2026-08-10",
+        "cliente": "Mush",
+        "cliente_cuit": "",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3815810300",
+        "cliente_email": "",
+        "nro_remito": "R-0285",
+        "items": [
+          {
+            "prod_key": "nuez_part_grandes",
+            "nombre": "Pecan Partido Grande",
+            "kg": 5,
+            "precio_kg": 17000,
+            "subtotal": 85000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 85000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 85000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-10T21:44:05.408Z"
+      },
+      {
         "_id": "L7Jis5VaOpZFnW6RWnMV",
         "fecha": "2026-05-16",
         "cliente": "Agustina Alonso",
@@ -20337,6 +20385,43 @@
         "creado": "2026-07-03T10:53:33.089Z"
       },
       {
+        "_id": "hX6bsr1wpx0pWxmopLKt",
+        "fecha": "2026-08-10",
+        "cliente": "El Nogal",
+        "cliente_cuit": "",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3815286896",
+        "cliente_email": "",
+        "nro_remito": "R-0288",
+        "items": [
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 5,
+            "precio_kg": 25000,
+            "subtotal": 125000,
+            "cajas": 0,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 125000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 125000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-10T23:57:36.061Z"
+      },
+      {
         "_id": "hwVzBqJTC4rKejv38X31",
         "fecha": "2026-06-01",
         "cliente": "Rio Negro Yerba Buena",
@@ -21528,6 +21613,67 @@
         "vencimiento": "",
         "observaciones": "",
         "creado": "2026-05-14T21:30:57.327Z"
+      },
+      {
+        "_id": "wrIpGJ13Vvudp6d83Dkc",
+        "fecha": "2026-08-10",
+        "cliente": "Rio Negro Yerba Buena",
+        "cliente_cuit": "",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "",
+        "cliente_email": "",
+        "nro_remito": "R-0287",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 5,
+            "precio_kg": 21000,
+            "subtotal": 105000,
+            "cajas": 0,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 5,
+            "precio_kg": 25000,
+            "subtotal": 125000,
+            "cajas": 0,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "frac_pasta_200",
+            "nombre": "🥜 Pasta de Pecan Frasco 200g",
+            "kg": 12,
+            "precio_kg": 7000,
+            "subtotal": 84000,
+            "cajas": 0,
+            "es_fraccionado": true,
+            "frac_insumo": "Frasco 200g",
+            "frac_kg_unit": 0.2,
+            "frac_base": "receta_nombre:Pasta de Pecan"
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 314000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 314000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-10T23:56:46.939Z"
       },
       {
         "_id": "xT16t4BBcSkYHNvMuswx",
@@ -24470,7 +24616,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 284
+        "ultimo": 288
       },
       {
         "_id": "variedades",
