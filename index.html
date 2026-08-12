@@ -6414,6 +6414,8 @@ const FRACCIONADOS=[
   // Pasta de Pecan
   {key:'frac_pasta_200', label:'🥜 Pasta de Pecan Frasco 200g', base:'receta_nombre:Pasta de Pecan', kg:0.200, insumo:'Frasco 200g', unidad:'u', grupo:'Fraccionados'},
   {key:'frac_pasta_300', label:'🥜 Pasta de Pecan Frasco 300g', base:'receta_nombre:Pasta de Pecan', kg:0.300, insumo:'Frasco 300g', unidad:'u', grupo:'Fraccionados'},
+  // Alfajor
+  {key:'alfajor_u', label:'🍪 Alfajor', base:'insumo_directo', kg:1, insumo:'Alfajor', unidad:'u', grupo:'Alfajores'},
 ];
 
 // Insumos de packaging a crear si no existen
@@ -6514,8 +6516,11 @@ window.agregarItemVenta=function(){
     `<option value="nuez_${c}">🌰 ${_catLabelV[c]}</option>`).join('');
   const optsRecetas=recetasCache.map(r=>
     `<option value="receta_${r.id}">🍫 ${r.nombre}</option>`).join('');
-  const optsFrac=FRACCIONADOS.map(f=>
-    `<option value="${f.key}">${f.label}</option>`).join('');
+  const fracGrupos=[...new Set(FRACCIONADOS.map(f=>f.grupo))];
+  const optsFrac=fracGrupos.map(g=>{
+    const items=FRACCIONADOS.filter(f=>f.grupo===g).map(f=>`<option value="${f.key}">${f.label}</option>`).join('');
+    return `<optgroup label="${g}">${items}</optgroup>`;
+  }).join('');
 
   div.innerHTML=`
     <select id="vi-prod-${idx}" onchange="selProductoVenta(${idx})"
@@ -6523,7 +6528,7 @@ window.agregarItemVenta=function(){
       <option value="">— Producto —</option>
       <optgroup label="Pecan Pelado">${optsNuez}</optgroup>
       ${recetasCache.length?`<optgroup label="Prod. Cocina">${optsRecetas}</optgroup>`:''}
-      <optgroup label="Fraccionados">${optsFrac}</optgroup>
+      ${optsFrac}
     </select>
     <input type="number" id="vi-kg-${idx}" step="0.01" min="0" placeholder="0.00"
       style="padding:7px 8px;border-radius:6px;border:1.5px solid var(--border);width:100%;box-sizing:border-box;font-size:.85rem;"
