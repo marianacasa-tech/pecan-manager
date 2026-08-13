@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-08-12T07:21:57.633Z",
-    "fecha_legible": "12/8/2026, 04:21:57",
+    "fecha": "2026-08-13T07:23:59.910Z",
+    "fecha_legible": "13/8/2026, 04:23:59",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -813,6 +813,16 @@
         "creado": "2026-05-18T11:06:43.965Z"
       },
       {
+        "_id": "CysMhFSAqoiTbWo7PAk1",
+        "nombre": "Octaviano",
+        "cuit": "30717678105",
+        "rubro": "",
+        "telefono": "",
+        "email": "",
+        "observaciones": "",
+        "creado": "2026-08-12T13:16:29.308Z"
+      },
+      {
         "_id": "F0IJMbfbvw9a4lIzetcH",
         "cuit": "20237824319",
         "rubro": "Agroquimicos",
@@ -851,6 +861,16 @@
         "email": "",
         "observaciones": "",
         "creado": "2026-06-01T18:17:53.929Z"
+      },
+      {
+        "_id": "JMnqsOBLE5dk2WSSWB5o",
+        "nombre": "Mush",
+        "cuit": "",
+        "rubro": "",
+        "telefono": "",
+        "email": "",
+        "observaciones": "",
+        "creado": "2026-08-12T12:48:10.637Z"
       },
       {
         "_id": "Jh0VyH04VgJ59xk0gPqy",
@@ -1356,6 +1376,17 @@
         "observaciones": "",
         "num_remito": "R-0080",
         "creado": "2026-05-12T16:25:13.176Z"
+      },
+      {
+        "_id": "IVaAonB0hIdAZa2wn56s",
+        "fecha": "2026-08-12",
+        "propietario": "Facundo Tejerina",
+        "variedad": "Kiowa",
+        "kg": 399.8,
+        "humedad": 5,
+        "observaciones": "",
+        "num_remito": "R-0289",
+        "creado": "2026-08-12T11:32:33.390Z"
       },
       {
         "_id": "LoYsp0k1Gy1mfek6Ey4C",
@@ -3988,6 +4019,38 @@
         ]
       },
       {
+        "_id": "nrPD45KWvTg7A2y35N9U",
+        "nombre": "Pecan Picante",
+        "descripcion": "",
+        "insumos": [
+          {
+            "insumo_id": "FWRpi32rFH6KBhdYmDjM",
+            "nombre": "Sal",
+            "cantidad": 0.06,
+            "unidad": "kg"
+          },
+          {
+            "insumo_id": "LbwCf0otEUw5RgkhxCra",
+            "nombre": "Goma Arabiga",
+            "cantidad": 0.06,
+            "unidad": "kg"
+          },
+          {
+            "insumo_id": "BmF6DKCYucbLtgYeh7GG",
+            "nombre": "Acido citrico",
+            "cantidad": 0.01,
+            "unidad": "kg"
+          },
+          {
+            "insumo_id": "mmTiqc1yuWNv9XvlPdi5",
+            "nombre": "Aji",
+            "cantidad": 0.1,
+            "unidad": "kg"
+          }
+        ],
+        "creado": "2026-08-12T12:57:00.573Z"
+      },
+      {
         "_id": "wEJeQWHwy1G9P2R0LLG5",
         "descripcion": "",
         "creado": "2026-03-08T13:24:35.662Z",
@@ -4015,7 +4078,15 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1637
+        "stock_actual": 1631
+      },
+      {
+        "_id": "BmF6DKCYucbLtgYeh7GG",
+        "nombre": "Acido citrico",
+        "unidad": "kg",
+        "packaging": false,
+        "creado": "2026-08-12T12:48:02.342Z",
+        "stock_actual": 0.97
       },
       {
         "_id": "EieJJxEEtHrJtOiJ7LWo",
@@ -4031,7 +4102,15 @@
         "unidad": "kg",
         "creado": "2026-03-08T13:26:53.385Z",
         "packaging": false,
-        "stock_actual": 100.87600000000002
+        "stock_actual": 100.69600000000001
+      },
+      {
+        "_id": "HXSshi7T2iR9uGvFlOHh",
+        "nombre": "Avena",
+        "unidad": "kg",
+        "packaging": false,
+        "creado": "2026-08-12T13:15:47.163Z",
+        "stock_actual": 10
       },
       {
         "_id": "LLl9UJ6lmx2MyTBdgipI",
@@ -4040,6 +4119,22 @@
         "creado": "2026-07-28T12:49:43.730Z",
         "packaging": true,
         "stock_actual": 55
+      },
+      {
+        "_id": "LbwCf0otEUw5RgkhxCra",
+        "nombre": "Goma Arabiga",
+        "unidad": "kg",
+        "packaging": false,
+        "creado": "2026-08-12T12:47:19.847Z",
+        "stock_actual": 0.8200000000000001
+      },
+      {
+        "_id": "QLq2RQuBzATB3CXtWOkt",
+        "nombre": "Alfajor",
+        "unidad": "u",
+        "packaging": false,
+        "creado": "2026-08-12T12:33:01.355Z",
+        "stock_actual": 24
       },
       {
         "_id": "WgnAxLHfFbkfuNc0t9O7",
@@ -4064,6 +4159,14 @@
         "packaging": true,
         "creado": "2026-07-28T12:50:13.220Z",
         "stock_actual": 100
+      },
+      {
+        "_id": "mmTiqc1yuWNv9XvlPdi5",
+        "nombre": "Aji",
+        "unidad": "kg",
+        "packaging": false,
+        "creado": "2026-08-12T12:48:21.901Z",
+        "stock_actual": 0.19999999999999996
       },
       {
         "_id": "nd7NEWbpA51DRrmoEoDe",
@@ -4862,6 +4965,45 @@
         "lote_id": "LOT-COC-20260604-012",
         "nro_tanda": 3,
         "creado": "2026-06-04T14:31:33.444Z"
+      },
+      {
+        "_id": "6f9JMXUVlIy9QUNDbYhO",
+        "fecha": "2026-08-12",
+        "receta_id": "nrPD45KWvTg7A2y35N9U",
+        "receta_nombre": "Pecan Picante",
+        "categoria_nuez": "enteras",
+        "kg_nuez": 2,
+        "kg_producido": 2,
+        "insumos_usados": [
+          {
+            "nombre": "Sal",
+            "unidad": "kg",
+            "insumo_id": "FWRpi32rFH6KBhdYmDjM",
+            "cantidad": 0.06
+          },
+          {
+            "insumo_id": "LbwCf0otEUw5RgkhxCra",
+            "cantidad": 0.06,
+            "nombre": "Goma Arabiga",
+            "unidad": "kg"
+          },
+          {
+            "insumo_id": "BmF6DKCYucbLtgYeh7GG",
+            "unidad": "kg",
+            "nombre": "Acido citrico",
+            "cantidad": 0.01
+          },
+          {
+            "cantidad": 0.1,
+            "unidad": "kg",
+            "nombre": "Aji",
+            "insumo_id": "mmTiqc1yuWNv9XvlPdi5"
+          }
+        ],
+        "observaciones": "",
+        "lote_id": "LOT-COC-20260812-041",
+        "nro_tanda": 1,
+        "creado": "2026-08-12T12:59:28.136Z"
       },
       {
         "_id": "6nMhJcu5kgsavlcet6vQ",
@@ -7471,6 +7613,45 @@
         "creado": "2026-07-13T10:42:42.554Z"
       },
       {
+        "_id": "SrROCFylF2NGiJjLT8vU",
+        "fecha": "2026-08-12",
+        "receta_id": "nrPD45KWvTg7A2y35N9U",
+        "receta_nombre": "Pecan Picante",
+        "categoria_nuez": "enteras",
+        "kg_nuez": 2,
+        "kg_producido": 2,
+        "insumos_usados": [
+          {
+            "nombre": "Sal",
+            "unidad": "kg",
+            "insumo_id": "FWRpi32rFH6KBhdYmDjM",
+            "cantidad": 0.06
+          },
+          {
+            "insumo_id": "LbwCf0otEUw5RgkhxCra",
+            "cantidad": 0.06,
+            "nombre": "Goma Arabiga",
+            "unidad": "kg"
+          },
+          {
+            "insumo_id": "BmF6DKCYucbLtgYeh7GG",
+            "unidad": "kg",
+            "nombre": "Acido citrico",
+            "cantidad": 0.01
+          },
+          {
+            "cantidad": 0.1,
+            "unidad": "kg",
+            "nombre": "Aji",
+            "insumo_id": "mmTiqc1yuWNv9XvlPdi5"
+          }
+        ],
+        "observaciones": "",
+        "lote_id": "LOT-COC-20260812-041",
+        "nro_tanda": 2,
+        "creado": "2026-08-12T12:59:28.136Z"
+      },
+      {
         "_id": "SrxIKa2mU95IhqEMNyYg",
         "fecha": "2026-06-01",
         "receta_id": "DdHndtIU5V3y2nRItFNH",
@@ -8657,6 +8838,45 @@
         "lote_id": "LOT-COC-20260713-035",
         "nro_tanda": 10,
         "creado": "2026-07-13T10:42:42.554Z"
+      },
+      {
+        "_id": "auwjzJt35uZwBbYQLG8D",
+        "fecha": "2026-08-12",
+        "receta_id": "nrPD45KWvTg7A2y35N9U",
+        "receta_nombre": "Pecan Picante",
+        "categoria_nuez": "enteras",
+        "kg_nuez": 2,
+        "kg_producido": 2,
+        "insumos_usados": [
+          {
+            "nombre": "Sal",
+            "unidad": "kg",
+            "insumo_id": "FWRpi32rFH6KBhdYmDjM",
+            "cantidad": 0.06
+          },
+          {
+            "insumo_id": "LbwCf0otEUw5RgkhxCra",
+            "cantidad": 0.06,
+            "nombre": "Goma Arabiga",
+            "unidad": "kg"
+          },
+          {
+            "insumo_id": "BmF6DKCYucbLtgYeh7GG",
+            "unidad": "kg",
+            "nombre": "Acido citrico",
+            "cantidad": 0.01
+          },
+          {
+            "cantidad": 0.1,
+            "unidad": "kg",
+            "nombre": "Aji",
+            "insumo_id": "mmTiqc1yuWNv9XvlPdi5"
+          }
+        ],
+        "observaciones": "",
+        "lote_id": "LOT-COC-20260812-041",
+        "nro_tanda": 3,
+        "creado": "2026-08-12T12:59:28.136Z"
       },
       {
         "_id": "bh2JZ7DoEneaXtaZYgY0",
@@ -11549,6 +11769,36 @@
     ],
     "compras": [
       {
+        "_id": "05IvXTk8OIZmCU3M0czN",
+        "fecha": "2026-07-21",
+        "proveedor": "Octaviano",
+        "nro_factura": "",
+        "moneda": "ARS",
+        "tc_referencial": 0,
+        "iva_pct": 0,
+        "monto_neto": 12300,
+        "monto_iva": 0,
+        "monto_total": 12300,
+        "forma_pago": "efectivo",
+        "estado": "pagado",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "insumo",
+            "descripcion": "Avena",
+            "insumo_id": "HXSshi7T2iR9uGvFlOHh",
+            "insumo_nombre": "Avena",
+            "unidad": "kg",
+            "cat_nuez": "",
+            "cantidad": 10,
+            "precio_unitario": 1230,
+            "subtotal": 12300
+          }
+        ],
+        "creado": "2026-08-12T13:17:23.696Z"
+      },
+      {
         "_id": "0EXQ8qXaONW33TYxdlHU",
         "fecha": "2026-07-07",
         "proveedor": "Marola Atilio s.r.l",
@@ -12267,6 +12517,36 @@
           }
         ],
         "creado": "2026-05-05T22:53:42.210Z"
+      },
+      {
+        "_id": "E0qYQaByagwihQXeG8Ts",
+        "fecha": "2026-08-11",
+        "proveedor": "Mush",
+        "nro_factura": "",
+        "moneda": "ARS",
+        "tc_referencial": 0,
+        "iva_pct": 0,
+        "monto_neto": 87012,
+        "monto_iva": 0,
+        "monto_total": 87012,
+        "forma_pago": "efectivo",
+        "estado": "pagado",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "insumo",
+            "descripcion": "Alfajor",
+            "insumo_id": "QLq2RQuBzATB3CXtWOkt",
+            "insumo_nombre": "Alfajor",
+            "unidad": "u",
+            "cat_nuez": "",
+            "cantidad": 36,
+            "precio_unitario": 2417,
+            "subtotal": 87012
+          }
+        ],
+        "creado": "2026-08-12T12:49:32.243Z"
       },
       {
         "_id": "E3LMu7jfiEQG5X9j4RtX",
@@ -14159,6 +14439,36 @@
         "creado": "2026-06-08T14:15:03.589Z"
       },
       {
+        "_id": "g8FlHvY1QI1PC9N5RAvW",
+        "fecha": "2026-08-11",
+        "proveedor": "",
+        "nro_factura": "",
+        "moneda": "ARS",
+        "tc_referencial": 0,
+        "iva_pct": 0,
+        "monto_neto": 8000,
+        "monto_iva": 0,
+        "monto_total": 8000,
+        "forma_pago": "efectivo",
+        "estado": "pagado",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "insumo",
+            "descripcion": "Aji",
+            "insumo_id": "mmTiqc1yuWNv9XvlPdi5",
+            "insumo_nombre": "Aji",
+            "unidad": "kg",
+            "cat_nuez": "",
+            "cantidad": 0.5,
+            "precio_unitario": 16000,
+            "subtotal": 8000
+          }
+        ],
+        "creado": "2026-08-12T12:58:42.998Z"
+      },
+      {
         "_id": "ho0vwDmn7tcv9LVuuLEL",
         "fecha": "2026-07-10",
         "proveedor": "Paola Boscarino",
@@ -14577,6 +14887,47 @@
           }
         ],
         "creado": "2026-04-19T20:36:29.719Z"
+      },
+      {
+        "_id": "pTEXcSQAWzREh4CVa52O",
+        "fecha": "2026-08-11",
+        "proveedor": "",
+        "nro_factura": "",
+        "moneda": "ARS",
+        "tc_referencial": 0,
+        "iva_pct": 0,
+        "monto_neto": 27635,
+        "monto_iva": 0,
+        "monto_total": 27635,
+        "forma_pago": "efectivo",
+        "estado": "pagado",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "insumo",
+            "descripcion": "Goma Arabiga",
+            "insumo_id": "LbwCf0otEUw5RgkhxCra",
+            "insumo_nombre": "Goma Arabiga",
+            "unidad": "kg",
+            "cat_nuez": "",
+            "cantidad": 1,
+            "precio_unitario": 24800,
+            "subtotal": 24800
+          },
+          {
+            "tipo": "insumo",
+            "descripcion": "Acido citrico",
+            "insumo_id": "BmF6DKCYucbLtgYeh7GG",
+            "insumo_nombre": "Acido citrico",
+            "unidad": "kg",
+            "cat_nuez": "",
+            "cantidad": 1,
+            "precio_unitario": 2835,
+            "subtotal": 2835
+          }
+        ],
+        "creado": "2026-08-12T12:55:32.068Z"
       },
       {
         "_id": "piY9N9BbhfWnni46Ck9Q",
@@ -15339,6 +15690,21 @@
         "creado": "2026-06-08T17:08:04.938Z"
       },
       {
+        "_id": "3QQVtRCq0wvFf1Ku7W6R",
+        "proveedor": "Mush",
+        "fecha": "2026-08-11",
+        "moneda": "ARS",
+        "importe": 87012,
+        "importe_ars": 87012,
+        "tc": null,
+        "medio": "Efectivo",
+        "ref": "",
+        "obs": "Pago automático — compra registrada",
+        "compra_id": "E0qYQaByagwihQXeG8Ts",
+        "cheque_vencimiento": null,
+        "creado": "2026-08-12T12:49:32.243Z"
+      },
+      {
         "_id": "3Uu1wRXWn1EyKm4fB7W4",
         "proveedor": "Multicajas s.a",
         "fecha": "2026-06-04",
@@ -15587,6 +15953,21 @@
         "obs": "Pago automático — compra registrada",
         "cheque_vencimiento": null,
         "creado": "2026-06-10T13:24:50.115Z"
+      },
+      {
+        "_id": "H5dzYDyPDpiK4WOMeZCu",
+        "proveedor": "Octaviano",
+        "fecha": "2026-07-21",
+        "moneda": "ARS",
+        "importe": 12300,
+        "importe_ars": 12300,
+        "tc": null,
+        "medio": "Efectivo",
+        "ref": "",
+        "obs": "Pago automático — compra registrada",
+        "compra_id": "05IvXTk8OIZmCU3M0czN",
+        "cheque_vencimiento": null,
+        "creado": "2026-08-12T13:17:23.696Z"
       },
       {
         "_id": "I7TJzCeyBMI14tPOPo8r",
@@ -16046,6 +16427,21 @@
         "proveedor": "Dyfma"
       },
       {
+        "_id": "Zaa0olxjef6qjt2jIwzT",
+        "proveedor": "Beccaria y Vincenti",
+        "fecha": "2026-08-12",
+        "moneda": "USD",
+        "importe": 1900,
+        "tc": null,
+        "importe_ars": 0,
+        "importe_usd": 1900,
+        "medio": "Efectivo",
+        "ref": "",
+        "obs": "",
+        "cheque_vencimiento": null,
+        "creado": "2026-08-12T12:17:28.357Z"
+      },
+      {
         "_id": "bD7P1J7N0uBHLaOwMSsT",
         "proveedor": "Via Cargo s.a",
         "fecha": "2026-06-11",
@@ -16162,6 +16558,21 @@
         "compra_id": "VEJXMtFlADJlVNfC2DhT",
         "cheque_vencimiento": null,
         "creado": "2026-07-06T13:59:48.570Z"
+      },
+      {
+        "_id": "fyexQcMUaaeaQTNT8uSy",
+        "proveedor": "Dyfma",
+        "fecha": "2026-08-12",
+        "moneda": "USD_en_ARS",
+        "importe": 15500000,
+        "tc": 1515,
+        "importe_ars": 23482500000,
+        "importe_usd": 10231.023102310231,
+        "medio": "Efectivo",
+        "ref": "",
+        "obs": "",
+        "cheque_vencimiento": null,
+        "creado": "2026-08-12T12:28:53.220Z"
       },
       {
         "_id": "hHeRtspKcr4ucHRIdNmx",
@@ -17226,6 +17637,43 @@
         "vencimiento": "",
         "observaciones": "",
         "creado": "2026-06-22T20:48:04.152Z"
+      },
+      {
+        "_id": "5VCna2HMZ4EhRaWtnI95",
+        "fecha": "2026-08-12",
+        "cliente": "Frutos Secos del Noa",
+        "cliente_cuit": "",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3813441588",
+        "cliente_email": "",
+        "nro_remito": "R-0294",
+        "items": [
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 10,
+            "precio_kg": 25000,
+            "subtotal": 250000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 250000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 250000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "2026-08-27",
+        "observaciones": "",
+        "creado": "2026-08-12T16:47:33.674Z"
       },
       {
         "_id": "5ZXDDBsuZ3MD6P9N7nF4",
@@ -18515,6 +18963,55 @@
         "creado": "2026-05-05T00:24:51.286Z"
       },
       {
+        "_id": "J9wtBdoZbJmoozH6CMEe",
+        "fecha": "2026-08-12",
+        "cliente": "Forrajeria Artigas",
+        "cliente_cuit": "",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "381 236-3651",
+        "cliente_email": "",
+        "nro_remito": "R-0291",
+        "items": [
+          {
+            "prod_key": "receta_nrPD45KWvTg7A2y35N9U",
+            "nombre": "Pecan Picante",
+            "kg": 3,
+            "precio_kg": 30000,
+            "subtotal": 90000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_wEJeQWHwy1G9P2R0LLG5",
+            "nombre": "Pecan con Chocolate Semiamargo",
+            "kg": 5,
+            "precio_kg": 30000,
+            "subtotal": 150000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 240000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 240000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-12T13:00:39.881Z"
+      },
+      {
         "_id": "JQLML1Ae3pjJiBWoZwz9",
         "fecha": "2026-06-09",
         "cliente": "Semilleria Nogales",
@@ -18974,6 +19471,43 @@
         "estado": "cuenta_corriente",
         "cliente_email": "",
         "creado": "2026-07-27T15:46:43.783Z"
+      },
+      {
+        "_id": "OTTHjDEEM9nVqcDx1TlS",
+        "fecha": "2026-08-12",
+        "cliente": "Comotti",
+        "cliente_cuit": "",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "",
+        "cliente_email": "",
+        "nro_remito": "R-0290",
+        "items": [
+          {
+            "prod_key": "nuez_part_chicas",
+            "nombre": "Pecan Partido Chico",
+            "kg": 10,
+            "precio_kg": 17000,
+            "subtotal": 170000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 170000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 170000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-12T12:26:27.302Z"
       },
       {
         "_id": "OhAN7Fit757pjWOaQlPb",
@@ -20407,6 +20941,55 @@
         "vencimiento": "",
         "observaciones": "",
         "creado": "2026-06-26T16:48:01.928Z"
+      },
+      {
+        "_id": "bw7LF792f6GdMLMWBC3q",
+        "fecha": "2026-08-12",
+        "cliente": "Expo Food SAS",
+        "cliente_cuit": "30-71855433-7",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3816576565",
+        "cliente_email": "",
+        "nro_remito": "R-0293",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 5,
+            "precio_kg": 21000,
+            "subtotal": 105000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 5,
+            "precio_kg": 25000,
+            "subtotal": 125000,
+            "cajas": 0,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 230000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 230000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-12T14:40:14.083Z"
       },
       {
         "_id": "cDWr4zm4eU7mszidBZlz",
@@ -22103,6 +22686,43 @@
         "creado": "2026-05-13T15:17:18.906Z"
       },
       {
+        "_id": "uQPwy2qLn7gYVx577opt",
+        "fecha": "2026-08-11",
+        "cliente": "El Nogal",
+        "cliente_cuit": "",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3815286896",
+        "cliente_email": "",
+        "nro_remito": "R-0292",
+        "items": [
+          {
+            "prod_key": "alfajor_u",
+            "nombre": "🍪 Alfajor",
+            "kg": 12,
+            "precio_kg": 2417,
+            "subtotal": 29004,
+            "cajas": 2,
+            "es_fraccionado": true,
+            "frac_insumo": "Alfajor",
+            "frac_kg_unit": 1,
+            "frac_base": "insumo_directo"
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 29004,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 29004,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-12T13:05:06.044Z"
+      },
+      {
         "_id": "uSrIX0ySJbukfuPJ3LGt",
         "fecha": "2026-04-30",
         "cliente": "Turmalina",
@@ -23267,6 +23887,18 @@
         "creado": "2026-06-29T16:11:08.967Z"
       },
       {
+        "_id": "DZV3jIL2Or1Up0E4lU8C",
+        "tipo": "cobro",
+        "cliente": "Comotti",
+        "fecha": "2026-08-12",
+        "importe": 170000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0225",
+        "creado": "2026-08-12T13:02:26.277Z"
+      },
+      {
         "_id": "DmooqTAvsUl4hsKlwkjG",
         "tipo": "cobro",
         "cliente": "La Calendula",
@@ -24192,6 +24824,18 @@
         "nro_cobro": "COB-0021",
         "ref_remito": "R-0061",
         "creado": "2026-05-05T16:38:18.923Z"
+      },
+      {
+        "_id": "bcWYvWk2ZswnoEbdn426",
+        "tipo": "cobro",
+        "cliente": "Forrajeria Artigas",
+        "fecha": "2026-08-12",
+        "importe": 75000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0224",
+        "creado": "2026-08-12T13:01:24.221Z"
       },
       {
         "_id": "byFOGOGSzvhNC2GXOhU6",
@@ -25258,7 +25902,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 223
+        "ultimo": 225
       },
       {
         "_id": "cotizaciones",
@@ -25291,7 +25935,7 @@
       },
       {
         "_id": "lotes_coc",
-        "ultimo": 40
+        "ultimo": 41
       },
       {
         "_id": "lotes_fab",
@@ -25303,7 +25947,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 288
+        "ultimo": 294
       },
       {
         "_id": "variedades",
@@ -25333,6 +25977,7 @@
           "Kernodle",
           "Harris Super",
           "Oconee",
+          "Kiowa",
           "Otra"
         ]
       }
