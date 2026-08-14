@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-08-13T07:23:59.910Z",
-    "fecha_legible": "13/8/2026, 04:23:59",
+    "fecha": "2026-08-14T07:21:40.911Z",
+    "fecha_legible": "14/8/2026, 04:21:40",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -1409,6 +1409,17 @@
         "num_remito": "R-0104",
         "creado": "2026-05-27T19:40:11.755Z",
         "fecha": "2026-05-27"
+      },
+      {
+        "_id": "Ryye4mwBHpvHVGFITMZs",
+        "fecha": "2026-08-12",
+        "propietario": "Tinkuy",
+        "variedad": "Wichita",
+        "kg": 83.2,
+        "humedad": 5,
+        "observaciones": "",
+        "num_remito": "R-0295",
+        "creado": "2026-08-13T14:11:49.687Z"
       },
       {
         "_id": "SiW8AvOKGHURe3WvjOBP",
@@ -4078,7 +4089,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1631
+        "stock_actual": 1625
       },
       {
         "_id": "BmF6DKCYucbLtgYeh7GG",
@@ -4134,7 +4145,7 @@
         "unidad": "u",
         "packaging": false,
         "creado": "2026-08-12T12:33:01.355Z",
-        "stock_actual": 24
+        "stock_actual": 12
       },
       {
         "_id": "WgnAxLHfFbkfuNc0t9O7",
@@ -18243,6 +18254,55 @@
         "creado": "2026-05-18T17:46:35.622Z"
       },
       {
+        "_id": "BqnftliXD4jsHL3zkhYR",
+        "fecha": "2026-08-13",
+        "cliente": "Forrajeria Artigas",
+        "cliente_cuit": "",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "381 236-3651",
+        "cliente_email": "",
+        "nro_remito": "R-0298",
+        "items": [
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 5,
+            "precio_kg": 25000,
+            "subtotal": 125000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_wEJeQWHwy1G9P2R0LLG5",
+            "nombre": "Pecan con Chocolate Semiamargo",
+            "kg": 5,
+            "precio_kg": 30000,
+            "subtotal": 150000,
+            "cajas": 0,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 275000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 275000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-13T21:15:44.161Z"
+      },
+      {
         "_id": "CF8fIc8A55eY7BAhlj4G",
         "fecha": "2026-06-16",
         "cliente": "El Nogal",
@@ -19432,6 +19492,43 @@
         "creado": "2026-07-08T13:53:33.539Z"
       },
       {
+        "_id": "NNDgh4RPCaBaJQR10fcr",
+        "fecha": "2026-08-13",
+        "cliente": "Nutra",
+        "cliente_cuit": "30-71910302-9",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3815863496",
+        "cliente_email": "",
+        "nro_remito": "R-0296",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 50,
+            "precio_kg": 20000,
+            "subtotal": 1000000,
+            "cajas": 5,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 1000000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 1000000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-13T15:03:44.567Z"
+      },
+      {
         "_id": "NuqOUQV2f6avvDD62IAT",
         "monto_desc": 0,
         "iva_pct": 0,
@@ -20161,6 +20258,55 @@
         "vencimiento": "",
         "observaciones": "",
         "creado": "2026-07-02T20:28:20.725Z"
+      },
+      {
+        "_id": "TIdQmVQ3ARs0yHLLBIr6",
+        "fecha": "2026-08-13",
+        "cliente": "Picar",
+        "cliente_cuit": "",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "",
+        "cliente_email": "",
+        "nro_remito": "R-0297",
+        "items": [
+          {
+            "prod_key": "receta_0Uln4BozQJ8dbpW5vDVI",
+            "nombre": "Harina de Pecan",
+            "kg": 2,
+            "precio_kg": 15000,
+            "subtotal": 30000,
+            "cajas": 0,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "alfajor_u",
+            "nombre": "🍪 Alfajor",
+            "kg": 12,
+            "precio_kg": 2417,
+            "subtotal": 29004,
+            "cajas": 0,
+            "es_fraccionado": true,
+            "frac_insumo": "Alfajor",
+            "frac_kg_unit": 1,
+            "frac_base": "insumo_directo"
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 59004,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 59004,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-13T16:33:21.191Z"
       },
       {
         "_id": "Tnh0DTdWrihUfYgK01iO",
@@ -23738,6 +23884,18 @@
         "creado": "2026-06-23T15:53:24.745Z"
       },
       {
+        "_id": "99CnIkRl9YmELZOeb5XO",
+        "tipo": "cobro",
+        "cliente": "Forrajeria Artigas",
+        "fecha": "2026-08-12",
+        "importe": 90000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0227",
+        "creado": "2026-08-13T10:42:19.069Z"
+      },
+      {
         "_id": "A5KUYN3RL5mdH5pEhWlS",
         "tipo": "cobro_automatico",
         "cliente": "La Gringa",
@@ -24188,6 +24346,30 @@
         "obs": "",
         "nro_cobro": "COB-0055",
         "creado": "2026-05-22T13:58:09.501Z"
+      },
+      {
+        "_id": "MBm2ADLBZPgLv9Ij2TZz",
+        "tipo": "cobro",
+        "cliente": "Frutos Secos del Noa",
+        "fecha": "2026-08-13",
+        "importe": 336819,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0228",
+        "creado": "2026-08-13T14:37:13.229Z"
+      },
+      {
+        "_id": "MojyJZaidEg6W07bIj2R",
+        "tipo": "cobro",
+        "cliente": "Nutra",
+        "fecha": "2026-08-13",
+        "importe": 1000000,
+        "medio": "efectivo",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0230",
+        "creado": "2026-08-13T16:31:26.334Z"
       },
       {
         "_id": "NfUfOIBhG2fbGz4A2s7W",
@@ -24997,6 +25179,18 @@
         "creado": "2026-06-10T12:40:55.745Z"
       },
       {
+        "_id": "fG3oJjN6jM3kGTNlJLOd",
+        "tipo": "cobro",
+        "cliente": "Expo Food SAS",
+        "fecha": "2026-08-13",
+        "importe": 390000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0229",
+        "creado": "2026-08-13T14:38:44.164Z"
+      },
+      {
         "_id": "fGLhICJRC8PREdRJfc49",
         "tipo": "cobro_automatico",
         "cliente": "Altieri Junín",
@@ -25769,6 +25963,18 @@
         "creado": "2026-07-14T15:14:54.510Z"
       },
       {
+        "_id": "ynNZPXTLofqb5mSBVald",
+        "tipo": "cobro",
+        "cliente": "Mush",
+        "fecha": "2026-08-13",
+        "importe": 87000,
+        "medio": "otro",
+        "referencia": "",
+        "obs": "Retiro 3 cajas de Alfajores de Pecan",
+        "nro_cobro": "COB-0231",
+        "creado": "2026-08-13T19:10:22.443Z"
+      },
+      {
         "_id": "z36ZIRGBTXh3Km3Ood66",
         "referencia": "",
         "nro_cobro": "COB-0183",
@@ -25902,7 +26108,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 225
+        "ultimo": 231
       },
       {
         "_id": "cotizaciones",
@@ -25947,7 +26153,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 294
+        "ultimo": 298
       },
       {
         "_id": "variedades",
