@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-08-14T07:21:40.911Z",
-    "fecha_legible": "14/8/2026, 04:21:40",
+    "fecha": "2026-08-15T06:34:50.349Z",
+    "fecha_legible": "15/8/2026, 03:34:50",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -2478,6 +2478,37 @@
         "liquidacion_id": "j09cq76XldMeguQXlLE2"
       },
       {
+        "_id": "OKL0WAoGFgqsFo3fNWHu",
+        "fecha": "2026-08-14",
+        "propietario": "Tinkuy",
+        "variedad": "Pawnee",
+        "kg_cascara": 624.6,
+        "enteras": 205.6,
+        "part_grandes": 58.5,
+        "part_chicas": 41.4,
+        "danadas": 0,
+        "podridas": 0,
+        "total_pelado": 305.5,
+        "pct_kernel": "48.91",
+        "pct_partido": "32.70",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260814-087",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 63,
+            "label": "bolsas"
+          },
+          {
+            "id": "0cPXv9ENRFupq1fbOKs9",
+            "cantidad": 31,
+            "label": "cajas"
+          }
+        ],
+        "creado": "2026-08-14T11:12:22.158Z",
+        "liquidacion_id": "oBAY4P9s8lkVJEKvPmqR"
+      },
+      {
         "_id": "P4NJsuZrjVP999Ynu2am",
         "fecha": "2026-07-08",
         "propietario": "Facundo Tejerina",
@@ -2532,36 +2563,6 @@
           }
         ],
         "creado": "2026-06-04T19:01:09.161Z"
-      },
-      {
-        "_id": "QkTCe5ToLXHWpaG5gHbv",
-        "fecha": "2026-08-03",
-        "propietario": "Tinkuy",
-        "variedad": "Pawnee",
-        "kg_cascara": 317,
-        "enteras": 110.6,
-        "part_grandes": 21.4,
-        "part_chicas": 13.7,
-        "danadas": 0,
-        "podridas": 0,
-        "total_pelado": 145.7,
-        "pct_kernel": "45.96",
-        "pct_partido": "24.09",
-        "pct_podrido": "0.00",
-        "lote_id": "LOT-FAB-20260807-085",
-        "insumos_usados": [
-          {
-            "id": "YYbZJUzPqOqZACGH6KD1",
-            "cantidad": 31,
-            "label": "bolsas"
-          },
-          {
-            "id": "0cPXv9ENRFupq1fbOKs9",
-            "cantidad": 15,
-            "label": "cajas"
-          }
-        ],
-        "creado": "2026-08-07T11:51:41.802Z"
       },
       {
         "_id": "QvNnttopB9azLpzonNhw",
@@ -2649,36 +2650,6 @@
         "pct_kernel": "46.42",
         "total_pelado": 11.49,
         "liquidacion_id": "ZSIstbDJj3HtCs3aMoqe"
-      },
-      {
-        "_id": "UxPoHjsVH5cy9KbGFzH8",
-        "propietario": "Tinkuy",
-        "variedad": "Wichita",
-        "kg_cascara": 106.6,
-        "enteras": 26.3,
-        "part_grandes": 16.3,
-        "part_chicas": 9.1,
-        "danadas": 0,
-        "podridas": 0,
-        "total_pelado": 51.7,
-        "pct_kernel": "48.50",
-        "pct_partido": "49.13",
-        "pct_podrido": "0.00",
-        "lote_id": "LOT-FAB-20260807-086",
-        "insumos_usados": [
-          {
-            "id": "YYbZJUzPqOqZACGH6KD1",
-            "cantidad": 12,
-            "label": "bolsas"
-          },
-          {
-            "id": "0cPXv9ENRFupq1fbOKs9",
-            "cantidad": 6,
-            "label": "cajas"
-          }
-        ],
-        "creado": "2026-08-07T11:52:36.216Z",
-        "fecha": "2026-08-04"
       },
       {
         "_id": "WHnem20RSqJrZQLMQOc2",
@@ -2949,6 +2920,37 @@
         "creado": "2026-05-14T13:16:56.103Z"
       },
       {
+        "_id": "ht38Fq9qFOGwwWYeD2Pr",
+        "fecha": "2026-08-14",
+        "propietario": "Tinkuy",
+        "variedad": "Wichita",
+        "kg_cascara": 106.6,
+        "enteras": 26.375,
+        "part_grandes": 18.6,
+        "part_chicas": 13.1,
+        "danadas": 0,
+        "podridas": 0,
+        "total_pelado": 58.075,
+        "pct_kernel": "54.48",
+        "pct_partido": "54.58",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260814-088",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 13,
+            "label": "bolsas"
+          },
+          {
+            "id": "0cPXv9ENRFupq1fbOKs9",
+            "cantidad": 6,
+            "label": "cajas"
+          }
+        ],
+        "creado": "2026-08-14T11:37:50.545Z",
+        "liquidacion_id": "oBAY4P9s8lkVJEKvPmqR"
+      },
+      {
         "_id": "jBITU2u40dPAoFk1WBC8",
         "fecha": "2026-05-11",
         "propietario": "PROPIO",
@@ -3215,31 +3217,6 @@
           }
         ],
         "creado": "2026-06-09T20:08:15.736Z"
-      },
-      {
-        "_id": "p4yZQyippJ6n3qwX8HCL",
-        "fecha": "2026-07-30",
-        "variedad": "Pawnee",
-        "kg_cascara": 307.6,
-        "enteras": 95,
-        "part_grandes": 25,
-        "part_chicas": 14.9,
-        "danadas": 0,
-        "podridas": 0,
-        "total_pelado": 134.9,
-        "pct_kernel": "43.86",
-        "pct_partido": "29.58",
-        "pct_podrido": "0.00",
-        "lote_id": "LOT-FAB-20260730-083",
-        "insumos_usados": [
-          {
-            "id": "YYbZJUzPqOqZACGH6KD1",
-            "cantidad": 27,
-            "label": "bolsas"
-          }
-        ],
-        "creado": "2026-07-30T18:12:49.157Z",
-        "propietario": "Tinkuy"
       },
       {
         "_id": "p92QWO33LXeagAWvp7oi",
@@ -3652,6 +3629,19 @@
         "creado": "2026-05-18T19:10:14.828Z"
       },
       {
+        "_id": "PcZ1JReYbzjtTkpa5jpK",
+        "cliente": "Tinkuy",
+        "fecha": "2026-08-14",
+        "num_remito": "R-0299",
+        "enteras": 136.9,
+        "part_grandes": 52.1,
+        "part_chicas": 39.6,
+        "danadas": 0,
+        "observaciones": "",
+        "estado": "activo",
+        "creado": "2026-08-14T11:39:00.329Z"
+      },
+      {
         "_id": "QAby0ztAoxK0styOecJq",
         "cliente": "Facundo Tejerina",
         "fecha": "2026-06-01",
@@ -3936,6 +3926,25 @@
         "creado": "2026-07-31T10:55:47.838Z"
       },
       {
+        "_id": "oBAY4P9s8lkVJEKvPmqR",
+        "cliente": "Tinkuy",
+        "fecha": "2026-08-14",
+        "num_liquidacion": "LIQ-0033",
+        "kg_cascara": 731.1999999999999,
+        "precio_kg": 2474.7525,
+        "total_servicio": 1809539.028,
+        "precio_usd": 1.35,
+        "tc_bna": 1515,
+        "kg_con_iva": 731.1999999999999,
+        "kg_sin_iva": 0,
+        "subtotal_sin_iva": 0,
+        "subtotal_con_iva": 1495486.8,
+        "iva_21": 314052.228,
+        "forma_pago": "Transferencia",
+        "observaciones": "",
+        "creado": "2026-08-14T11:41:52.672Z"
+      },
+      {
         "_id": "whpkcTEiuCvnrvHZRTcx",
         "cliente": "Anibal Garcia Romano",
         "fecha": "2026-05-21",
@@ -4089,7 +4098,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1625
+        "stock_actual": 1587
       },
       {
         "_id": "BmF6DKCYucbLtgYeh7GG",
@@ -4161,7 +4170,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:34:49.660Z",
-        "stock_actual": 3865.400000000001
+        "stock_actual": 3789.400000000001
       },
       {
         "_id": "j8wVUWl641tOVbWn2zOA",
@@ -15701,6 +15710,21 @@
         "creado": "2026-06-08T17:08:04.938Z"
       },
       {
+        "_id": "2OIbmoQQB6aPN6zRvrkD",
+        "proveedor": "Dyfma",
+        "fecha": "2026-08-13",
+        "moneda": "USD_en_ARS",
+        "importe": 15500000,
+        "tc": 1515,
+        "importe_ars": 23482500000,
+        "importe_usd": 10231.023102310231,
+        "medio": "Efectivo",
+        "ref": "",
+        "obs": "",
+        "cheque_vencimiento": null,
+        "creado": "2026-08-14T14:16:28.361Z"
+      },
+      {
         "_id": "3QQVtRCq0wvFf1Ku7W6R",
         "proveedor": "Mush",
         "fecha": "2026-08-11",
@@ -20621,6 +20645,43 @@
         "creado": "2026-07-20T14:30:33.098Z"
       },
       {
+        "_id": "WGajpnkucuCqfW6GxnvM",
+        "fecha": "2026-08-11",
+        "cliente": "Los Aliva",
+        "cliente_cuit": "",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3815664250",
+        "cliente_email": "",
+        "nro_remito": "R-0300",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 15,
+            "precio_kg": 21000,
+            "subtotal": 315000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 315000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 315000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-14T14:24:51.258Z"
+      },
+      {
         "_id": "WqMVKwxiW2iasjq46VbH",
         "fecha": "2026-06-12",
         "cliente": "Agustina Alonso",
@@ -23697,6 +23758,18 @@
         "creado": "2026-05-16T15:50:36.288Z"
       },
       {
+        "_id": "3YhpjKMJ1zGQmUoi4upR",
+        "tipo": "cobro",
+        "cliente": "Frutos Secos del Noa",
+        "fecha": "2026-08-14",
+        "importe": 66,
+        "medio": "efectivo",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0234",
+        "creado": "2026-08-14T14:59:00.225Z"
+      },
+      {
         "_id": "3g6mIvfgAsfIspAmY2wC",
         "tipo": "cobro_automatico",
         "cliente": "Wako",
@@ -23746,6 +23819,19 @@
         "obs": "",
         "nro_cobro": "COB-0063",
         "creado": "2026-05-29T13:02:27.726Z"
+      },
+      {
+        "_id": "589WVLCVQwMHDVXfZZ2F",
+        "tipo": "cobro_automatico",
+        "cliente": "Tinkuy",
+        "fecha": "2026-08-14",
+        "importe": 1809539.028,
+        "medio": "Transferencia",
+        "referencia": "LIQ-0033",
+        "obs": "Cobro automático — Maquila LIQ-0033",
+        "nro_cobro": "COB-0232",
+        "liq_id": "oBAY4P9s8lkVJEKvPmqR",
+        "creado": "2026-08-14T11:41:53.315Z"
       },
       {
         "_id": "5gUJOmJgVzMbuexHrsFl",
@@ -24456,6 +24542,18 @@
         "obs": "",
         "nro_cobro": "COB-0121",
         "creado": "2026-06-23T16:56:29.110Z"
+      },
+      {
+        "_id": "PU7EOIEEykvXzRmr7kgz",
+        "tipo": "cobro",
+        "cliente": "Frutos Secos del Noa",
+        "fecha": "2026-08-14",
+        "importe": 83131,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0233",
+        "creado": "2026-08-14T12:41:40.992Z"
       },
       {
         "_id": "PV6P64wakPa71ixQ0Mod",
@@ -25389,6 +25487,18 @@
         "creado": "2026-06-05T14:14:16.588Z"
       },
       {
+        "_id": "jqqfkRjyDPtk2p66OAh5",
+        "tipo": "cobro",
+        "cliente": "Los Aliva",
+        "fecha": "2026-08-14",
+        "importe": 315000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0235",
+        "creado": "2026-08-14T15:36:26.158Z"
+      },
+      {
         "_id": "jwktKuTsErkfV6wkccCw",
         "tipo": "cobro",
         "cliente": "Comotti",
@@ -25757,6 +25867,18 @@
         "creado": "2026-06-05T15:01:12.781Z"
       },
       {
+        "_id": "t6ohMnV0bPZLRHJbU7jh",
+        "tipo": "cobro",
+        "cliente": "Semilleria La Victoria",
+        "fecha": "2026-08-14",
+        "importe": 250000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0237",
+        "creado": "2026-08-14T16:48:53.019Z"
+      },
+      {
         "_id": "t77595tBxSEs339fibHL",
         "tipo": "cobro",
         "cliente": "La Verdu",
@@ -26024,6 +26146,18 @@
         "creado": "2026-07-27T17:45:53.762Z"
       },
       {
+        "_id": "zki4JTQQ63mBHalMTIJw",
+        "tipo": "cobro",
+        "cliente": "Gran Diet - Facundo Violetto",
+        "fecha": "2026-08-14",
+        "importe": 175000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0236",
+        "creado": "2026-08-14T15:50:09.059Z"
+      },
+      {
         "_id": "zqnTH6gNOb7glupsDu3a",
         "tipo": "cobro",
         "cliente": "Semilleria La Victoria",
@@ -26108,7 +26242,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 231
+        "ultimo": 237
       },
       {
         "_id": "cotizaciones",
@@ -26125,7 +26259,7 @@
       },
       {
         "_id": "liquidaciones",
-        "ultimo": 32
+        "ultimo": 33
       },
       {
         "_id": "lista_precios",
@@ -26145,7 +26279,7 @@
       },
       {
         "_id": "lotes_fab",
-        "ultimo": 86
+        "ultimo": 88
       },
       {
         "_id": "recibos",
@@ -26153,7 +26287,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 298
+        "ultimo": 300
       },
       {
         "_id": "variedades",
