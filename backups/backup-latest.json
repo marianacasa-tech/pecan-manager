@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-08-15T06:34:50.349Z",
-    "fecha_legible": "15/8/2026, 03:34:50",
+    "fecha": "2026-08-16T06:36:42.425Z",
+    "fecha_legible": "16/8/2026, 03:36:42",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -24057,6 +24057,18 @@
         "creado": "2026-05-07T13:57:43.632Z"
       },
       {
+        "_id": "CRiSm4Km6iuJlqoMG81P",
+        "tipo": "cobro",
+        "cliente": "Simple",
+        "fecha": "2026-06-11",
+        "importe": 62500,
+        "medio": "efectivo",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0238",
+        "creado": "2026-08-15T13:18:42.107Z"
+      },
+      {
         "_id": "CRqo8aC0J4vNXcrXtl0f",
         "tipo": "cobro_automatico",
         "cliente": "El Roble tienda natural",
@@ -24715,18 +24727,6 @@
         "creado": "2026-06-23T17:09:53.137Z"
       },
       {
-        "_id": "SnLxeku2RqHfQmVuCV1g",
-        "tipo": "cobro",
-        "cliente": "Simple",
-        "fecha": "2026-06-11",
-        "importe": 63500,
-        "medio": "efectivo",
-        "referencia": "",
-        "obs": "",
-        "nro_cobro": "COB-0093",
-        "creado": "2026-06-11T20:38:51.112Z"
-      },
-      {
         "_id": "Soqrkb5PnINdopGJzRGL",
         "tipo": "cobro",
         "cliente": "Rio Negro Yerba Buena",
@@ -24994,6 +24994,18 @@
         "nro_cobro": "COB-0148",
         "ref_remito": "R-0186",
         "creado": "2026-07-01T13:13:29.921Z"
+      },
+      {
+        "_id": "ZKOlLsijJ0lDp6Y9PC5V",
+        "tipo": "cobro",
+        "cliente": "Simple",
+        "fecha": "2026-08-15",
+        "importe": 195000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0239",
+        "creado": "2026-08-15T13:18:55.033Z"
       },
       {
         "_id": "ZVtjt08Vx6vC62e5GgjS",
@@ -26242,7 +26254,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 237
+        "ultimo": 239
       },
       {
         "_id": "cotizaciones",
