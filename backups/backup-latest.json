@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-08-18T06:39:39.698Z",
-    "fecha_legible": "18/8/2026, 03:39:39",
+    "fecha": "2026-08-19T06:40:08.258Z",
+    "fecha_legible": "19/8/2026, 03:40:08",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -1211,6 +1211,16 @@
         "email": "",
         "observaciones": "",
         "creado": "2026-04-19T20:32:50.854Z"
+      },
+      {
+        "_id": "yzWKTsi0jlCFSmMAoLb0",
+        "nombre": "PVC Tucuman",
+        "cuit": "",
+        "rubro": "",
+        "telefono": "",
+        "email": "",
+        "observaciones": "",
+        "creado": "2026-08-18T13:40:17.948Z"
       },
       {
         "_id": "z4bsoRiFfpfK4NQVb4xu",
@@ -2478,8 +2488,37 @@
         "liquidacion_id": "j09cq76XldMeguQXlLE2"
       },
       {
+        "_id": "NQvecyY2HzF7GOaFMQzd",
+        "fecha": "2026-08-18",
+        "propietario": "Facundo Tejerina",
+        "variedad": "Kiowa",
+        "kg_cascara": 399.8,
+        "enteras": 132.9,
+        "part_grandes": 8.2,
+        "part_chicas": 8,
+        "danadas": 15.5,
+        "podridas": 0,
+        "total_pelado": 164.6,
+        "pct_kernel": "41.17",
+        "pct_partido": "9.84",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260818-089",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 35,
+            "label": "bolsas"
+          },
+          {
+            "id": "0cPXv9ENRFupq1fbOKs9",
+            "cantidad": 17,
+            "label": "cajas"
+          }
+        ],
+        "creado": "2026-08-18T18:58:06.914Z"
+      },
+      {
         "_id": "OKL0WAoGFgqsFo3fNWHu",
-        "fecha": "2026-08-14",
         "propietario": "Tinkuy",
         "variedad": "Pawnee",
         "kg_cascara": 624.6,
@@ -2506,7 +2545,8 @@
           }
         ],
         "creado": "2026-08-14T11:12:22.158Z",
-        "liquidacion_id": "oBAY4P9s8lkVJEKvPmqR"
+        "liquidacion_id": "oBAY4P9s8lkVJEKvPmqR",
+        "fecha": "2026-08-13"
       },
       {
         "_id": "P4NJsuZrjVP999Ynu2am",
@@ -4098,7 +4138,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1587
+        "stock_actual": 1570
       },
       {
         "_id": "BmF6DKCYucbLtgYeh7GG",
@@ -4170,7 +4210,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:34:49.660Z",
-        "stock_actual": 3789.400000000001
+        "stock_actual": 3754.400000000001
       },
       {
         "_id": "j8wVUWl641tOVbWn2zOA",
@@ -12599,6 +12639,36 @@
         "creado": "2026-08-11T13:10:20.364Z"
       },
       {
+        "_id": "ELDbAJD8LwUpn6wCljmy",
+        "fecha": "2026-08-14",
+        "proveedor": "Atenor Hno s.r.l",
+        "nro_factura": "",
+        "moneda": "ARS",
+        "tc_referencial": 0,
+        "iva_pct": 21,
+        "monto_neto": 13223.2,
+        "monto_iva": 2776.8720000000003,
+        "monto_total": 16000.072,
+        "forma_pago": "efectivo",
+        "estado": "pagado",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "gasto_indirecto",
+            "descripcion": "Bolsas escombro",
+            "insumo_id": "",
+            "insumo_nombre": "",
+            "unidad": "u",
+            "cat_nuez": "",
+            "cantidad": 1,
+            "precio_unitario": 13223.2,
+            "subtotal": 13223.2
+          }
+        ],
+        "creado": "2026-08-18T13:38:26.222Z"
+      },
+      {
         "_id": "EUHO8vwSPJpLQAHn7Ve8",
         "fecha": "2026-06-18",
         "proveedor": "Atenor Hno s.r.l",
@@ -15602,6 +15672,36 @@
         "creado": "2026-08-11T13:14:13.161Z"
       },
       {
+        "_id": "zV7YG8WKMBs5YBhpQ3F4",
+        "fecha": "2026-08-13",
+        "proveedor": "PVC Tucuman",
+        "nro_factura": "2233",
+        "moneda": "ARS",
+        "tc_referencial": 0,
+        "iva_pct": 21,
+        "monto_neto": 9256.2,
+        "monto_iva": 1943.8020000000001,
+        "monto_total": 11200.002,
+        "forma_pago": "efectivo",
+        "estado": "pagado",
+        "vencimiento": "",
+        "observaciones": "",
+        "items": [
+          {
+            "tipo": "gasto_indirecto",
+            "descripcion": "Materiales agua",
+            "insumo_id": "",
+            "insumo_nombre": "",
+            "unidad": "u",
+            "cat_nuez": "",
+            "cantidad": 1,
+            "precio_unitario": 9256.2,
+            "subtotal": 9256.2
+          }
+        ],
+        "creado": "2026-08-18T13:41:00.237Z"
+      },
+      {
         "_id": "zzuhUSIqjVvVEBrwAZLE",
         "fecha": "2026-06-06",
         "proveedor": "Santiago Kohn s.a",
@@ -16140,6 +16240,21 @@
         "creado": "2026-08-03T14:25:41.526Z"
       },
       {
+        "_id": "NMBZTQCEoJucUenWAiS8",
+        "proveedor": "Atenor Hno s.r.l",
+        "fecha": "2026-08-14",
+        "moneda": "ARS",
+        "importe": 16000.072,
+        "importe_ars": 16000.072,
+        "tc": null,
+        "medio": "Efectivo",
+        "ref": "",
+        "obs": "Pago automático — compra registrada",
+        "compra_id": "ELDbAJD8LwUpn6wCljmy",
+        "cheque_vencimiento": null,
+        "creado": "2026-08-18T13:38:26.222Z"
+      },
+      {
         "_id": "NxMG6gpDV1KjJpyL3eSS",
         "proveedor": "Pedidos Ya Market",
         "fecha": "2026-06-01",
@@ -16608,6 +16723,21 @@
         "obs": "",
         "cheque_vencimiento": null,
         "creado": "2026-08-12T12:28:53.220Z"
+      },
+      {
+        "_id": "gO0uIHDgvrQFyz90sGAQ",
+        "proveedor": "PVC Tucuman",
+        "fecha": "2026-08-13",
+        "moneda": "ARS",
+        "importe": 11200.002,
+        "importe_ars": 11200.002,
+        "tc": null,
+        "medio": "Efectivo",
+        "ref": "2233",
+        "obs": "Pago automático — compra registrada",
+        "compra_id": "zV7YG8WKMBs5YBhpQ3F4",
+        "cheque_vencimiento": null,
+        "creado": "2026-08-18T13:41:00.237Z"
       },
       {
         "_id": "hHeRtspKcr4ucHRIdNmx",
@@ -17744,6 +17874,43 @@
         "creado": "2026-06-16T20:48:10.151Z"
       },
       {
+        "_id": "5nHD4zk7BA9EZtTNRHaj",
+        "fecha": "2026-08-18",
+        "cliente": "Expo Food SAS",
+        "cliente_cuit": "30-71855433-7",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3816576565",
+        "cliente_email": "",
+        "nro_remito": "R-0304",
+        "items": [
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 10,
+            "precio_kg": 25000,
+            "subtotal": 250000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 250000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 250000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-18T14:15:01.811Z"
+      },
+      {
         "_id": "66O3zRAY07IL6i9Sqsh3",
         "fecha": "2026-06-11",
         "cliente": "Octaviano",
@@ -17869,6 +18036,55 @@
         "vencimiento": "",
         "observaciones": "",
         "creado": "2026-07-29T19:02:04.138Z"
+      },
+      {
+        "_id": "6q6mDeN9dHtCTQCtQwKw",
+        "fecha": "2026-08-18",
+        "cliente": "Octaviano",
+        "cliente_cuit": "",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "3816136567",
+        "cliente_email": "",
+        "nro_remito": "R-0302",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 80,
+            "precio_kg": 21000,
+            "subtotal": 1680000,
+            "cajas": 8,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 20,
+            "precio_kg": 25000,
+            "subtotal": 500000,
+            "cajas": 2,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 2180000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 2180000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-18T12:22:19.411Z"
       },
       {
         "_id": "76NbdSUZReUuBJumvaMk",
@@ -18504,6 +18720,55 @@
         "creado": "2026-07-17T01:10:58.173Z"
       },
       {
+        "_id": "DqIzPV646Pm597Cr71oa",
+        "fecha": "2026-08-18",
+        "cliente": "Comotti",
+        "cliente_cuit": "",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "",
+        "cliente_email": "",
+        "nro_remito": "R-0301",
+        "items": [
+          {
+            "prod_key": "nuez_part_chicas",
+            "nombre": "Pecan Partido Chico",
+            "kg": 10,
+            "precio_kg": 17000,
+            "subtotal": 170000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 5,
+            "precio_kg": 25000,
+            "subtotal": 125000,
+            "cajas": 0,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 295000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 295000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-18T11:28:27.897Z"
+      },
+      {
         "_id": "EwL8F1IefzF70bKzQoCb",
         "fecha": "2026-05-07",
         "cliente": "Comotti",
@@ -18847,6 +19112,43 @@
         "cliente_telefono": "",
         "fecha": "2026-07-27",
         "creado": "2026-07-27T17:44:44.715Z"
+      },
+      {
+        "_id": "HgcNnpCMZ53iIhu2r9Na",
+        "fecha": "2026-08-18",
+        "cliente": "Kuibi",
+        "cliente_cuit": "",
+        "cliente_localidad": "Yerba Buena",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "1157699950",
+        "cliente_email": "",
+        "nro_remito": "R-0303",
+        "items": [
+          {
+            "prod_key": "nuez_part_grandes",
+            "nombre": "Pecan Partido Grande",
+            "kg": 10,
+            "precio_kg": 17000,
+            "subtotal": 170000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 170000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 170000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-18T14:00:16.126Z"
       },
       {
         "_id": "ICP8vwd3hn4pOqx3llqH",
@@ -21296,55 +21598,6 @@
         "vencimiento": "",
         "observaciones": "",
         "creado": "2026-06-12T20:56:19.672Z"
-      },
-      {
-        "_id": "dIFao3X4e31iwqitgKZZ",
-        "fecha": "2026-08-06",
-        "cliente": "Huerto Privada SAS",
-        "cliente_cuit": "",
-        "cliente_localidad": "Oran",
-        "cliente_provincia": "Salta",
-        "cliente_telefono": "3878439503",
-        "cliente_email": "",
-        "nro_remito": "R-0276",
-        "items": [
-          {
-            "prod_key": "nuez_enteras",
-            "nombre": "Pecan Entero",
-            "kg": 10,
-            "precio_kg": 21000,
-            "subtotal": 210000,
-            "cajas": 1,
-            "es_fraccionado": false,
-            "frac_insumo": null,
-            "frac_kg_unit": null,
-            "frac_base": null
-          },
-          {
-            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
-            "nombre": "Pecan Garrapiñado",
-            "kg": 10,
-            "precio_kg": 25000,
-            "subtotal": 250000,
-            "cajas": 1,
-            "es_fraccionado": false,
-            "frac_insumo": null,
-            "frac_kg_unit": null,
-            "frac_base": null
-          }
-        ],
-        "iva_pct": 0,
-        "descuento_pct": 0,
-        "flete": 0,
-        "monto_sub": 460000,
-        "monto_desc": 0,
-        "monto_iva": 0,
-        "monto_total": 460000,
-        "forma_pago": "cuenta_corriente",
-        "estado": "cuenta_corriente",
-        "vencimiento": "",
-        "observaciones": "",
-        "creado": "2026-08-06T12:51:10.672Z"
       },
       {
         "_id": "dUOUIJrbhZCGTWMsiPXM",
@@ -25499,6 +25752,18 @@
         "creado": "2026-06-05T14:14:16.588Z"
       },
       {
+        "_id": "jkqsXzp14DHisqOhAOU4",
+        "tipo": "cobro",
+        "cliente": "Comotti",
+        "fecha": "2026-08-18",
+        "importe": 295000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0240",
+        "creado": "2026-08-18T12:12:16.068Z"
+      },
+      {
         "_id": "jqqfkRjyDPtk2p66OAh5",
         "tipo": "cobro",
         "cliente": "Los Aliva",
@@ -26025,6 +26290,18 @@
         "creado": "2026-06-03T13:28:56.370Z"
       },
       {
+        "_id": "wonFaLjuDG097NOy6KLG",
+        "tipo": "cobro",
+        "cliente": "Kuibi",
+        "fecha": "2026-08-18",
+        "importe": 170000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0241",
+        "creado": "2026-08-18T14:15:42.513Z"
+      },
+      {
         "_id": "wx4ninzSQrcds6fMgS9S",
         "referencia": "",
         "cliente": "Frutos Secos del Noa",
@@ -26254,7 +26531,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 239
+        "ultimo": 241
       },
       {
         "_id": "cotizaciones",
@@ -26291,7 +26568,7 @@
       },
       {
         "_id": "lotes_fab",
-        "ultimo": 88
+        "ultimo": 89
       },
       {
         "_id": "recibos",
@@ -26299,7 +26576,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 300
+        "ultimo": 304
       },
       {
         "_id": "variedades",
