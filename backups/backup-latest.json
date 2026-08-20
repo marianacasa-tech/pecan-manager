@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-08-19T06:40:08.258Z",
-    "fecha_legible": "19/8/2026, 03:40:08",
+    "fecha": "2026-08-20T06:41:55.154Z",
+    "fecha_legible": "20/8/2026, 03:41:55",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -557,6 +557,17 @@
         "email": "",
         "telefono": "3815664250",
         "creado": "2026-05-27T15:32:02.512Z"
+      },
+      {
+        "_id": "kDnzT9IKgrD05iXbAhTo",
+        "nombre": "Siete Árboles SRL",
+        "categoria": "servicio",
+        "cuit": "30-71605651-8",
+        "localidad": "Yerba Buena",
+        "provincia": "Tucumán",
+        "email": "",
+        "telefono": "3816440094",
+        "creado": "2026-08-19T15:48:23.199Z"
       },
       {
         "_id": "kneJ9zCjbMQg6Qcwx75b",
@@ -1377,6 +1388,17 @@
         "creado": "2026-05-21T10:52:27.092Z"
       },
       {
+        "_id": "FeQcudsmDAFTZmP3ReMT",
+        "fecha": "2026-08-19",
+        "propietario": "Siete Árboles SRL",
+        "variedad": "Mohawk",
+        "kg": 35.2,
+        "humedad": 5,
+        "observaciones": "",
+        "num_remito": "R-0308",
+        "creado": "2026-08-19T16:00:15.769Z"
+      },
+      {
         "_id": "IOcY3YmOqWUibx7pHaE2",
         "fecha": "2026-05-12",
         "propietario": "Anibal Garcia Romano",
@@ -1421,6 +1443,17 @@
         "fecha": "2026-05-27"
       },
       {
+        "_id": "MXmBKXtnvlISJ0glbx0o",
+        "fecha": "2026-08-19",
+        "propietario": "Siete Árboles SRL",
+        "variedad": "Pawnee",
+        "kg": 82.4,
+        "humedad": 5,
+        "observaciones": "",
+        "num_remito": "R-0308",
+        "creado": "2026-08-19T16:00:15.769Z"
+      },
+      {
         "_id": "Ryye4mwBHpvHVGFITMZs",
         "fecha": "2026-08-12",
         "propietario": "Tinkuy",
@@ -1452,6 +1485,28 @@
         "observaciones": "",
         "num_remito": "R-0198",
         "creado": "2026-07-07T12:48:42.381Z"
+      },
+      {
+        "_id": "UNCAnQTJPYimXGyNAKcH",
+        "fecha": "2026-08-19",
+        "propietario": "Siete Árboles SRL",
+        "variedad": "Desconocida",
+        "kg": 24.4,
+        "humedad": 5,
+        "observaciones": "",
+        "num_remito": "R-0308",
+        "creado": "2026-08-19T16:00:15.769Z"
+      },
+      {
+        "_id": "Uuf6rZb5d2rKnOzxkn0M",
+        "fecha": "2026-08-19",
+        "propietario": "Siete Árboles SRL",
+        "variedad": "Oconee",
+        "kg": 125.2,
+        "humedad": 5,
+        "observaciones": "",
+        "num_remito": "R-0308",
+        "creado": "2026-08-19T16:00:15.769Z"
       },
       {
         "_id": "VcyqWBYZUjQgsvjE0GrF",
@@ -1683,6 +1738,17 @@
         "observaciones": "",
         "num_remito": "R-0114",
         "creado": "2026-06-01T16:33:13.425Z"
+      },
+      {
+        "_id": "nix1Qq1YTLRTVRk6qRWu",
+        "fecha": "2026-08-19",
+        "propietario": "Siete Árboles SRL",
+        "variedad": "Shoshoni",
+        "kg": 250,
+        "humedad": 5,
+        "observaciones": "",
+        "num_remito": "R-0308",
+        "creado": "2026-08-19T16:00:15.769Z"
       },
       {
         "_id": "o7S5MgZGC0wlmmMOSV0Y",
@@ -2495,12 +2561,8 @@
         "kg_cascara": 399.8,
         "enteras": 132.9,
         "part_grandes": 8.2,
-        "part_chicas": 8,
         "danadas": 15.5,
         "podridas": 0,
-        "total_pelado": 164.6,
-        "pct_kernel": "41.17",
-        "pct_partido": "9.84",
         "pct_podrido": "0.00",
         "lote_id": "LOT-FAB-20260818-089",
         "insumos_usados": [
@@ -2515,7 +2577,11 @@
             "label": "cajas"
           }
         ],
-        "creado": "2026-08-18T18:58:06.914Z"
+        "creado": "2026-08-18T18:58:06.914Z",
+        "pct_partido": "10.82",
+        "part_chicas": 9.8,
+        "pct_kernel": "41.62",
+        "total_pelado": 166.4
       },
       {
         "_id": "OKL0WAoGFgqsFo3fNWHu",
@@ -2958,6 +3024,37 @@
           }
         ],
         "creado": "2026-05-14T13:16:56.103Z"
+      },
+      {
+        "_id": "dzAwMR3MpAFq0vuHb2Pw",
+        "fecha": "2026-08-18",
+        "propietario": "Pablo Grandval",
+        "variedad": "Desconocida",
+        "kg_cascara": 59.8,
+        "enteras": 16.4,
+        "part_grandes": 3.9,
+        "part_chicas": 0,
+        "danadas": 2.9,
+        "podridas": 0,
+        "total_pelado": 23.199999999999996,
+        "pct_kernel": "38.80",
+        "pct_partido": "16.81",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260819-090",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 6,
+            "label": "bolsas"
+          },
+          {
+            "id": "0cPXv9ENRFupq1fbOKs9",
+            "cantidad": 3,
+            "label": "cajas"
+          }
+        ],
+        "creado": "2026-08-19T12:48:05.861Z",
+        "liquidacion_id": "aEG7WlDhLEgUVTHULO2q"
       },
       {
         "_id": "ht38Fq9qFOGwwWYeD2Pr",
@@ -3452,6 +3549,37 @@
         "total_pelado": 80.5
       },
       {
+        "_id": "uZdFaesuMHMDxGth9EqJ",
+        "fecha": "2026-08-18",
+        "propietario": "Tinkuy",
+        "variedad": "Wichita",
+        "kg_cascara": 83.2,
+        "enteras": 36.8,
+        "part_grandes": 5.3,
+        "part_chicas": 4.2,
+        "danadas": 0,
+        "podridas": 0,
+        "total_pelado": 46.3,
+        "pct_kernel": "55.65",
+        "pct_partido": "20.52",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260819-091",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 11,
+            "label": "bolsas"
+          },
+          {
+            "id": "0cPXv9ENRFupq1fbOKs9",
+            "cantidad": 5,
+            "label": "cajas"
+          }
+        ],
+        "creado": "2026-08-19T12:52:36.706Z",
+        "liquidacion_id": "aLF1udjGm06yuz4VTmgi"
+      },
+      {
         "_id": "vnnePH7kFd1Au1jVhdH9",
         "propietario": "Facundo Tejerina",
         "variedad": "Nacono",
@@ -3927,6 +4055,44 @@
         "creado": "2026-05-12T23:41:02.489Z"
       },
       {
+        "_id": "aEG7WlDhLEgUVTHULO2q",
+        "cliente": "Pablo Grandval",
+        "fecha": "2026-08-19",
+        "num_liquidacion": "LIQ-0035",
+        "kg_cascara": 59.8,
+        "precio_kg": 2272.4999999999995,
+        "total_servicio": 135895.49999999997,
+        "precio_usd": 1.5,
+        "tc_bna": 1515,
+        "kg_con_iva": 0,
+        "kg_sin_iva": 59.8,
+        "subtotal_sin_iva": 135895.49999999997,
+        "subtotal_con_iva": 0,
+        "iva_21": 0,
+        "forma_pago": "Efectivo",
+        "observaciones": "",
+        "creado": "2026-08-19T13:02:46.339Z"
+      },
+      {
+        "_id": "aLF1udjGm06yuz4VTmgi",
+        "cliente": "Tinkuy",
+        "fecha": "2026-08-19",
+        "num_liquidacion": "LIQ-0034",
+        "kg_cascara": 83.20000000000005,
+        "precio_kg": 2045.2500000000002,
+        "total_servicio": 170164.8000000001,
+        "precio_usd": 1.35,
+        "tc_bna": 1515,
+        "kg_con_iva": 0,
+        "kg_sin_iva": 83.20000000000005,
+        "subtotal_sin_iva": 170164.8000000001,
+        "subtotal_con_iva": 0,
+        "iva_21": 0,
+        "forma_pago": "Efectivo",
+        "observaciones": "",
+        "creado": "2026-08-19T12:58:53.639Z"
+      },
+      {
         "_id": "iBzi55AnbEqDeo0PhG79",
         "cliente": "Estancia Don Miguel",
         "fecha": "2026-05-12",
@@ -4138,7 +4304,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1570
+        "stock_actual": 1558
       },
       {
         "_id": "BmF6DKCYucbLtgYeh7GG",
@@ -4210,7 +4376,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:34:49.660Z",
-        "stock_actual": 3754.400000000001
+        "stock_actual": 3737.400000000001
       },
       {
         "_id": "j8wVUWl641tOVbWn2zOA",
@@ -23257,6 +23423,55 @@
         "creado": "2026-06-17T16:22:34.573Z"
       },
       {
+        "_id": "vXQ0lZq4ilAKEdRt5Scg",
+        "fecha": "2026-08-19",
+        "cliente": "Tolva",
+        "cliente_cuit": "",
+        "cliente_localidad": "San Miguel de Tucuman",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "",
+        "cliente_email": "",
+        "nro_remito": "R-0306",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 10,
+            "precio_kg": 21000,
+            "subtotal": 210000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 10,
+            "precio_kg": 25000,
+            "subtotal": 250000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 460000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 460000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-19T14:05:23.497Z"
+      },
+      {
         "_id": "vhrn7pKqWzyl6m95OO8S",
         "fecha": "2026-05-08",
         "cliente": "Semilleria Nogales",
@@ -24807,6 +25022,19 @@
         "obs": "",
         "nro_cobro": "COB-0121",
         "creado": "2026-06-23T16:56:29.110Z"
+      },
+      {
+        "_id": "PRlcAzac2uO7jwyz4Z9Y",
+        "tipo": "cobro_automatico",
+        "cliente": "Tolva",
+        "fecha": "2026-08-19",
+        "importe": 460000,
+        "medio": "efectivo",
+        "referencia": "R-0305",
+        "obs": "Cobro automático por venta cobrada en el momento",
+        "nro_cobro": "COB-0242",
+        "ref_remito": "R-0305",
+        "creado": "2026-08-19T13:46:30.273Z"
       },
       {
         "_id": "PU7EOIEEykvXzRmr7kgz",
@@ -26531,7 +26759,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 241
+        "ultimo": 242
       },
       {
         "_id": "cotizaciones",
@@ -26548,7 +26776,7 @@
       },
       {
         "_id": "liquidaciones",
-        "ultimo": 33
+        "ultimo": 35
       },
       {
         "_id": "lista_precios",
@@ -26568,7 +26796,7 @@
       },
       {
         "_id": "lotes_fab",
-        "ultimo": 89
+        "ultimo": 91
       },
       {
         "_id": "recibos",
@@ -26576,7 +26804,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 304
+        "ultimo": 308
       },
       {
         "_id": "variedades",
