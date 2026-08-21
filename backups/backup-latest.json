@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-08-20T06:41:55.154Z",
-    "fecha_legible": "20/8/2026, 03:41:55",
+    "fecha": "2026-08-21T06:42:15.770Z",
+    "fecha_legible": "21/8/2026, 03:42:15",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -2581,7 +2581,8 @@
         "pct_partido": "10.82",
         "part_chicas": 9.8,
         "pct_kernel": "41.62",
-        "total_pelado": 166.4
+        "total_pelado": 166.4,
+        "liquidacion_id": "oH1XN8ESlQLpvKEkKl7S"
       },
       {
         "_id": "OKL0WAoGFgqsFo3fNWHu",
@@ -3875,6 +3876,32 @@
         "creado": "2026-07-30T19:12:46.846Z"
       },
       {
+        "_id": "sYaqyxRE6zrxpg01oFvv",
+        "cliente": "Tinkuy",
+        "fecha": "2026-08-20",
+        "num_remito": "R-0310",
+        "enteras": 36.8,
+        "part_grandes": 5.3,
+        "part_chicas": 4.2,
+        "danadas": 0,
+        "observaciones": "",
+        "estado": "activo",
+        "creado": "2026-08-20T19:47:46.334Z"
+      },
+      {
+        "_id": "vPz9rzqXHJag57jUcCn0",
+        "cliente": "Facundo Tejerina",
+        "fecha": "2026-08-20",
+        "num_remito": "R-0311",
+        "enteras": 132.9,
+        "part_grandes": 8.2,
+        "part_chicas": 9.8,
+        "danadas": 15.5,
+        "observaciones": "",
+        "estado": "activo",
+        "creado": "2026-08-20T20:48:40.696Z"
+      },
+      {
         "_id": "xAEodSiUmFJXTCSh9Vdv",
         "cliente": "Sebastián calleri e hijos sa",
         "fecha": "2026-07-07",
@@ -4149,6 +4176,25 @@
         "forma_pago": "Transferencia",
         "observaciones": "",
         "creado": "2026-08-14T11:41:52.672Z"
+      },
+      {
+        "_id": "oH1XN8ESlQLpvKEkKl7S",
+        "cliente": "Facundo Tejerina",
+        "fecha": "2026-08-20",
+        "num_liquidacion": "LIQ-0036",
+        "kg_cascara": 399.79999999999995,
+        "precio_kg": 2272.5,
+        "total_servicio": 908545.4999999999,
+        "precio_usd": 1.5,
+        "tc_bna": 1515,
+        "kg_con_iva": 0,
+        "kg_sin_iva": 399.79999999999995,
+        "subtotal_sin_iva": 908545.4999999999,
+        "subtotal_con_iva": 0,
+        "iva_21": 0,
+        "forma_pago": "Efectivo",
+        "observaciones": "",
+        "creado": "2026-08-20T20:44:17.850Z"
       },
       {
         "_id": "whpkcTEiuCvnrvHZRTcx",
@@ -21064,6 +21110,55 @@
         "creado": "2026-08-07T20:28:07.251Z"
       },
       {
+        "_id": "VMGHaVXiOupHr1CFfoMu",
+        "fecha": "2026-08-20",
+        "cliente": "La Calendula",
+        "cliente_cuit": "",
+        "cliente_localidad": "San Miguel de Tucumán",
+        "cliente_provincia": "Tucumán",
+        "cliente_telefono": "",
+        "cliente_email": "",
+        "nro_remito": "R-0309",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 5,
+            "precio_kg": 21000,
+            "subtotal": 105000,
+            "cajas": 0,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 5,
+            "precio_kg": 25000,
+            "subtotal": 125000,
+            "cajas": 0,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 230000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 230000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-20T16:20:43.865Z"
+      },
+      {
         "_id": "Vc5DIm0bYngTRW9kXD4n",
         "fecha": "2026-07-20",
         "descuento_pct": 0,
@@ -24213,6 +24308,18 @@
         "creado": "2026-06-01T16:10:22.443Z"
       },
       {
+        "_id": "2tWFGGbXkvuEHzPuOJMH",
+        "tipo": "cobro",
+        "cliente": "Tinkuy",
+        "fecha": "2026-08-20",
+        "importe": 170000,
+        "medio": "efectivo",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0244",
+        "creado": "2026-08-20T19:48:37.004Z"
+      },
+      {
         "_id": "3PauyTRlSsCfFjTssoYx",
         "tipo": "cobro_automatico",
         "cliente": "Mun Biomarket",
@@ -24839,6 +24946,18 @@
         "obs": "",
         "nro_cobro": "COB-0040",
         "creado": "2026-05-18T10:53:49.369Z"
+      },
+      {
+        "_id": "JvurNHgXX8nbgZbBqvTJ",
+        "tipo": "cobro",
+        "cliente": "La Calendula",
+        "fecha": "2026-08-20",
+        "importe": 230000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0243",
+        "creado": "2026-08-20T16:59:07.446Z"
       },
       {
         "_id": "K2Lr5MLANNMhUiqT8jG4",
@@ -26759,7 +26878,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 242
+        "ultimo": 244
       },
       {
         "_id": "cotizaciones",
@@ -26776,7 +26895,7 @@
       },
       {
         "_id": "liquidaciones",
-        "ultimo": 35
+        "ultimo": 36
       },
       {
         "_id": "lista_precios",
@@ -26804,7 +26923,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 308
+        "ultimo": 311
       },
       {
         "_id": "variedades",
