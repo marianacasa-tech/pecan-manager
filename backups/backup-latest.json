@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-08-23T06:37:51.141Z",
-    "fecha_legible": "23/8/2026, 03:37:51",
+    "fecha": "2026-08-24T06:54:36.853Z",
+    "fecha_legible": "24/8/2026, 03:54:36",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -25007,6 +25007,18 @@
         "creado": "2026-06-09T13:23:20.138Z"
       },
       {
+        "_id": "Ed6vYIrHFlbkI5XyRBcV",
+        "tipo": "cobro",
+        "cliente": "Forrajeria Artigas",
+        "fecha": "2026-08-23",
+        "importe": 100000,
+        "medio": "transferencia",
+        "referencia": "",
+        "obs": "",
+        "nro_cobro": "COB-0249",
+        "creado": "2026-08-23T20:49:23.336Z"
+      },
+      {
         "_id": "F6gNUQ9sT5E1uziGtEuL",
         "tipo": "cobro",
         "cliente": "El Nogal",
@@ -27182,7 +27194,7 @@
       },
       {
         "_id": "cobros_nro",
-        "ultimo": 248
+        "ultimo": 249
       },
       {
         "_id": "cotizaciones",
