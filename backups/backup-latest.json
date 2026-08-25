@@ -1,7 +1,7 @@
 {
   "meta": {
-    "fecha": "2026-08-24T06:54:36.853Z",
-    "fecha_legible": "24/8/2026, 03:54:36",
+    "fecha": "2026-08-25T06:42:55.742Z",
+    "fecha_legible": "25/8/2026, 03:42:55",
     "version": "1.0",
     "app": "Pecan Manager",
     "tipo": "automatico"
@@ -293,6 +293,17 @@
         "telefono": "",
         "creado": "2026-05-05T15:56:52.192Z",
         "categoria": "venta"
+      },
+      {
+        "_id": "KCfDMlfPbb6PRsZaxZQN",
+        "nombre": "Fabian Marcelo Esparza",
+        "categoria": "venta",
+        "cuit": "",
+        "localidad": "San Justo",
+        "provincia": "Santa Fe",
+        "email": "",
+        "telefono": "3498411510",
+        "creado": "2026-08-24T19:05:04.916Z"
       },
       {
         "_id": "L1688T8z9yXRE3vHYwii",
@@ -1907,6 +1918,36 @@
         "total_pelado": 107.9
       },
       {
+        "_id": "3YbhCbZcak5ILny8mOyn",
+        "fecha": "2026-08-20",
+        "propietario": "Siete Árboles SRL",
+        "variedad": "Oconee",
+        "kg_cascara": 125.2,
+        "enteras": 56.1,
+        "part_grandes": 3.6,
+        "part_chicas": 2.1,
+        "danadas": 0,
+        "podridas": 0,
+        "total_pelado": 61.800000000000004,
+        "pct_kernel": "49.36",
+        "pct_partido": "9.22",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260824-093",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 14,
+            "label": "bolsas"
+          },
+          {
+            "id": "0cPXv9ENRFupq1fbOKs9",
+            "cantidad": 7,
+            "label": "cajas"
+          }
+        ],
+        "creado": "2026-08-24T19:20:32.607Z"
+      },
+      {
         "_id": "48DH7d0JZyVLQUQz94aZ",
         "fecha": "2026-06-09",
         "propietario": "PROPIO",
@@ -2451,6 +2492,36 @@
         "fecha": "2026-06-26"
       },
       {
+        "_id": "KH25f8byNoN5BFgAx4b0",
+        "fecha": "2026-08-20",
+        "propietario": "Siete Árboles SRL",
+        "variedad": "Shoshoni",
+        "kg_cascara": 250,
+        "enteras": 102.5,
+        "part_grandes": 3.4,
+        "danadas": 0,
+        "podridas": 0,
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260824-092",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 23,
+            "label": "bolsas"
+          },
+          {
+            "id": "0cPXv9ENRFupq1fbOKs9",
+            "cantidad": 11,
+            "label": "cajas"
+          }
+        ],
+        "creado": "2026-08-24T18:56:16.066Z",
+        "pct_partido": "6.31",
+        "part_chicas": 3.5,
+        "pct_kernel": "43.76",
+        "total_pelado": 109.4
+      },
+      {
         "_id": "KTcQnHJSylf6RempdpxM",
         "fecha": "2026-07-29",
         "propietario": "PROPIO",
@@ -2917,6 +2988,36 @@
         "fecha": "2026-05-20"
       },
       {
+        "_id": "a8beD0h504uWABMlC12W",
+        "fecha": "2026-08-20",
+        "propietario": "Siete Árboles SRL",
+        "variedad": "Mohawk",
+        "kg_cascara": 35.2,
+        "enteras": 13.8,
+        "part_grandes": 0.4,
+        "part_chicas": 0,
+        "danadas": 0,
+        "podridas": 0,
+        "total_pelado": 14.200000000000001,
+        "pct_kernel": "40.34",
+        "pct_partido": "2.82",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260824-095",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 4,
+            "label": "bolsas"
+          },
+          {
+            "id": "0cPXv9ENRFupq1fbOKs9",
+            "cantidad": 2,
+            "label": "cajas"
+          }
+        ],
+        "creado": "2026-08-24T19:22:22.746Z"
+      },
+      {
         "_id": "aXInu2UTAK00GcDn3eQ4",
         "propietario": "PROPIO",
         "variedad": "Shoshoni 2",
@@ -2940,6 +3041,36 @@
         "enteras": 47.3,
         "pct_kernel": "18.75",
         "total_pelado": 55.949999999999996
+      },
+      {
+        "_id": "ag6HjMdUOjF6BJNSRJWK",
+        "fecha": "2026-08-20",
+        "propietario": "Siete Árboles SRL",
+        "variedad": "Pawnee",
+        "kg_cascara": 82.4,
+        "enteras": 37,
+        "part_grandes": 2.4,
+        "part_chicas": 1.4,
+        "danadas": 0,
+        "podridas": 0,
+        "total_pelado": 40.8,
+        "pct_kernel": "49.51",
+        "pct_partido": "9.31",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260824-094",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 10,
+            "label": "bolsas"
+          },
+          {
+            "id": "0cPXv9ENRFupq1fbOKs9",
+            "cantidad": 5,
+            "label": "cajas"
+          }
+        ],
+        "creado": "2026-08-24T19:21:31.049Z"
       },
       {
         "_id": "cN4ERCDSN7AXPXuQ32TM",
@@ -3664,6 +3795,36 @@
         "liquidacion_id": "ZSIstbDJj3HtCs3aMoqe"
       },
       {
+        "_id": "wT4xr2Ob7fYtOqUI6lC3",
+        "fecha": "2026-08-20",
+        "propietario": "Siete Árboles SRL",
+        "variedad": "Desconocida",
+        "kg_cascara": 24.4,
+        "enteras": 7.2,
+        "part_grandes": 2.1,
+        "part_chicas": 1.8,
+        "danadas": 0,
+        "podridas": 0,
+        "total_pelado": 11.100000000000001,
+        "pct_kernel": "45.49",
+        "pct_partido": "35.14",
+        "pct_podrido": "0.00",
+        "lote_id": "LOT-FAB-20260824-096",
+        "insumos_usados": [
+          {
+            "id": "YYbZJUzPqOqZACGH6KD1",
+            "cantidad": 4,
+            "label": "bolsas"
+          },
+          {
+            "id": "0cPXv9ENRFupq1fbOKs9",
+            "cantidad": 2,
+            "label": "cajas"
+          }
+        ],
+        "creado": "2026-08-24T19:24:22.570Z"
+      },
+      {
         "_id": "xbdrmhAd6FTRUF1WXR34",
         "propietario": "PROPIO",
         "variedad": "Starking 2",
@@ -4371,7 +4532,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:35:13.560Z",
-        "stock_actual": 1556
+        "stock_actual": 1529
       },
       {
         "_id": "BmF6DKCYucbLtgYeh7GG",
@@ -4443,7 +4604,7 @@
         "unidad": "u",
         "packaging": true,
         "creado": "2026-03-08T22:34:49.660Z",
-        "stock_actual": 3737.400000000001
+        "stock_actual": 3682.400000000001
       },
       {
         "_id": "j8wVUWl641tOVbWn2zOA",
@@ -19843,6 +20004,91 @@
         "creado": "2026-06-11T21:23:14.684Z"
       },
       {
+        "_id": "KVc876ANEdAfEnMfrxQo",
+        "fecha": "2026-08-24",
+        "cliente": "Fabian Marcelo Esparza",
+        "cliente_cuit": "",
+        "cliente_localidad": "San Justo",
+        "cliente_provincia": "Santa Fe",
+        "cliente_telefono": "3498411510",
+        "cliente_email": "",
+        "nro_remito": "R-0318",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 2,
+            "precio_kg": 21000,
+            "subtotal": 42000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "nuez_part_grandes",
+            "nombre": "Pecan Partido Grande",
+            "kg": 2,
+            "precio_kg": 18000,
+            "subtotal": 36000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "nuez_part_chicas",
+            "nombre": "Pecan Partido Chico",
+            "kg": 2,
+            "precio_kg": 17000,
+            "subtotal": 34000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_DdHndtIU5V3y2nRItFNH",
+            "nombre": "Pecan Garrapiñado",
+            "kg": 2,
+            "precio_kg": 25000,
+            "subtotal": 50000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          },
+          {
+            "prod_key": "receta_nEcIJUPYxV7SLvIV2zcP",
+            "nombre": "Pecan Tostado salado",
+            "kg": 2,
+            "precio_kg": 30000,
+            "subtotal": 60000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 222000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 222000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-24T19:08:04.425Z"
+      },
+      {
         "_id": "KWCpDhd9MzEqLBihRtoh",
         "fecha": "2026-08-10",
         "cliente": "Mush",
@@ -22059,6 +22305,43 @@
         "observaciones": "",
         "cliente": "Forrajeria Artigas",
         "creado": "2026-07-28T00:05:52.263Z"
+      },
+      {
+        "_id": "dhIRHPlG5rqn6jImIQDm",
+        "fecha": "2026-08-24",
+        "cliente": "Frutiro",
+        "cliente_cuit": "",
+        "cliente_localidad": "Resistencia+54 9 362 420-2560",
+        "cliente_provincia": "Chaco",
+        "cliente_telefono": "362 420-2560",
+        "cliente_email": "",
+        "nro_remito": "R-0317",
+        "items": [
+          {
+            "prod_key": "nuez_enteras",
+            "nombre": "Pecan Entero",
+            "kg": 10,
+            "precio_kg": 21000,
+            "subtotal": 210000,
+            "cajas": 1,
+            "es_fraccionado": false,
+            "frac_insumo": null,
+            "frac_kg_unit": null,
+            "frac_base": null
+          }
+        ],
+        "iva_pct": 0,
+        "descuento_pct": 0,
+        "flete": 0,
+        "monto_sub": 210000,
+        "monto_desc": 0,
+        "monto_iva": 0,
+        "monto_total": 210000,
+        "forma_pago": "cuenta_corriente",
+        "estado": "cuenta_corriente",
+        "vencimiento": "",
+        "observaciones": "",
+        "creado": "2026-08-24T14:27:28.749Z"
       },
       {
         "_id": "eSFhYUduLpgvhKmGDFzQ",
@@ -27231,7 +27514,7 @@
       },
       {
         "_id": "lotes_fab",
-        "ultimo": 91
+        "ultimo": 96
       },
       {
         "_id": "recibos",
@@ -27239,7 +27522,7 @@
       },
       {
         "_id": "remitos",
-        "ultimo": 316
+        "ultimo": 318
       },
       {
         "_id": "variedades",
