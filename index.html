@@ -3337,6 +3337,19 @@ window.calcStockVendible=async function(){
         const cat=key.replace('nuez_','');
         if(cats.includes(cat)) vendidoNuez[cat]+=it.kg||0;
       }
+      // Fraccionados de nuez entero — descuentan kg reales
+      const fracDefSV=FRACCIONADOS.find(f=>f.key===key&&f.base==='nuez_enteras');
+      if(fracDefSV){
+        const kgRealesSV=(it.kg||0)*fracDefSV.kg;
+        vendidoNuez['enteras']+=kgRealesSV;
+      }
+      // Fraccionados de elaborados — descuentan de la receta
+      const fracDefElab=FRACCIONADOS.find(f=>f.key===key&&f.base?.startsWith('receta_nombre:'));
+      if(fracDefElab){
+        const recNombreSV=fracDefElab.base.replace('receta_nombre:','');
+        const kgRealesElab=(it.kg||0)*fracDefElab.kg;
+        if(porReceta[recNombreSV]) porReceta[recNombreSV].vendido+=kgRealesElab;
+      }
       // Elaborados cocina — por receta_id o nombre
       if(key.startsWith('receta_')){
         // buscar por nombre del item
@@ -7928,7 +7941,7 @@ window.initResumen=async function initResumen(){
     porReceta[t.receta_nombre].producido+=t.kg_producido||0;
   });
 
-  // Ventas: nuez pelada y elaborados
+  // Ventas: nuez pelada, elaborados y fraccionados
   const vendNuez={enteras:0,part_grandes:0,part_chicas:0,danadas:0};
   snapVent.forEach(d=>{
     (d.data().items||[]).forEach(it=>{
@@ -7936,6 +7949,15 @@ window.initResumen=async function initResumen(){
       if(key.startsWith('nuez_')){
         const cat=key.replace('nuez_','');
         if(_cats.includes(cat)) vendNuez[cat]+=it.kg||0;
+      }
+      // Fraccionados de nuez entero
+      const fracSV=FRACCIONADOS.find(f=>f.key===key&&f.base==='nuez_enteras');
+      if(fracSV) vendNuez['enteras']+=(it.kg||0)*fracSV.kg;
+      // Fraccionados de elaborados
+      const fracElabSV=FRACCIONADOS.find(f=>f.key===key&&f.base?.startsWith('receta_nombre:'));
+      if(fracElabSV){
+        const rn=fracElabSV.base.replace('receta_nombre:','');
+        if(porReceta[rn]) porReceta[rn].vendido+=(it.kg||0)*fracElabSV.kg;
       }
       if(key.startsWith('receta_')&&porReceta[it.nombre])
         porReceta[it.nombre].vendido+=it.kg||0;
@@ -8041,9 +8063,13 @@ window.initResumen=async function initResumen(){
         vTotalKg+=kg;
         if(anioV===parseInt(anioSel)&&mes>=0) mesesKg[mes]+=kg;
       } else {
-        // Fraccionados: sumar kg reales al total y al gráfico
-        vTotalKg+=kgReales;
-        if(anioV===parseInt(anioSel)&&mes>=0) mesesKg[mes]+=kgReales;
+        // Fraccionados: sumar kg reales al total (solo si tienen base de producto pecan)
+        const fracDefKg=FRACCIONADOS.find(f=>f.key===key);
+        const esInsumoDirecto=fracDefKg?.base==='insumo_directo';
+        if(!esInsumoDirecto){
+          vTotalKg+=kgReales;
+          if(anioV===parseInt(anioSel)&&mes>=0) mesesKg[mes]+=kgReales;
+        }
       }
       // Clasificar por categoría usando prod_key
       if(key==='nuez_enteras') vEnt+=kg;
