@@ -3295,12 +3295,18 @@ window.calcStockVendible=async function(){
   const cats=['enteras','part_grandes','part_chicas','danadas'];
   const catLabel={enteras:'🟢 Pecan Entero',part_grandes:'🟡 Pecan Partido Grande',part_chicas:'🟠 Pecan Partido Chico',danadas:'🔴 Pecan Dañado'};
 
-  // Producción propia de fábrica
+  // Producción propia de fábrica (excluir salidas de fraccionados)
   const producido={enteras:0,part_grandes:0,part_chicas:0,danadas:0};
+  const vendidoFrac={enteras:0,part_grandes:0,part_chicas:0,danadas:0};
   snapSal.forEach(d=>{
     const s=d.data();
     if(s.propietario!=='PROPIO') return;
-    cats.forEach(c=>producido[c]+=s[c]||0);
+    if(s.tipo==='fraccionado'){
+      // Salida por venta fraccionada — va al vendido, no al producido
+      cats.forEach(c=>vendidoFrac[c]+=s[c]||0);
+    } else {
+      cats.forEach(c=>producido[c]+=s[c]||0);
+    }
   });
 
   // Pecan pelado comprada (suma al disponible)
@@ -3348,7 +3354,13 @@ window.calcStockVendible=async function(){
       if(fracDefElab){
         const recNombreSV=fracDefElab.base.replace('receta_nombre:','');
         const kgRealesElab=(it.kg||0)*fracDefElab.kg;
-        if(porReceta[recNombreSV]) porReceta[recNombreSV].vendido+=kgRealesElab;
+        // Buscar clave exacta o parcial en porReceta
+        const claveElab=Object.keys(porReceta).find(k=>
+          k===recNombreSV||
+          k.toLowerCase().includes(recNombreSV.toLowerCase())||
+          recNombreSV.toLowerCase().includes(k.toLowerCase())
+        );
+        if(claveElab) porReceta[claveElab].vendido+=kgRealesElab;
       }
       // Elaborados cocina — por receta_id o nombre
       if(key.startsWith('receta_')){
@@ -3357,6 +3369,9 @@ window.calcStockVendible=async function(){
       }
     });
   });
+
+  // Sumar fraccionados al vendido
+  cats.forEach(c=>vendidoNuez[c]+=vendidoFrac[c]);
 
   // Stock neto = producido + comprada - usado en cocina - vendido
   const catsShow=catF?[catF]:cats;
@@ -6413,17 +6428,17 @@ const FRACCIONADOS=[
   {key:'frac_entero_250', label:'🌰 Pecan Entero Doypack 250g',  base:'nuez_enteras',  kg:0.250, insumo:'Doypack 250g', unidad:'u', grupo:'Fraccionados'},
   {key:'frac_entero_500', label:'🌰 Pecan Entero Doypack 500g',  base:'nuez_enteras',  kg:0.500, insumo:'Doypack 500g', unidad:'u', grupo:'Fraccionados'},
   // Garrapiñada
-  {key:'frac_garrap_80',  label:'🍬 Garrapiñada Doypack 80g',    base:'receta_nombre:Garrapiñada', kg:0.080, insumo:'Doypack 80g',  unidad:'u', grupo:'Fraccionados'},
-  {key:'frac_garrap_250', label:'🍬 Garrapiñada Doypack 250g',   base:'receta_nombre:Garrapiñada', kg:0.250, insumo:'Doypack 250g', unidad:'u', grupo:'Fraccionados'},
-  {key:'frac_garrap_500', label:'🍬 Garrapiñada Doypack 500g',   base:'receta_nombre:Garrapiñada', kg:0.500, insumo:'Doypack 500g', unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_garrap_80',  label:'🍬 Garrapiñada Doypack 80g',    base:'receta_nombre:Pecan Garrapiñado', kg:0.080, insumo:'Doypack 80g',  unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_garrap_250', label:'🍬 Garrapiñada Doypack 250g',   base:'receta_nombre:Pecan Garrapiñado', kg:0.250, insumo:'Doypack 250g', unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_garrap_500', label:'🍬 Garrapiñada Doypack 500g',   base:'receta_nombre:Pecan Garrapiñado', kg:0.500, insumo:'Doypack 500g', unidad:'u', grupo:'Fraccionados'},
   // Tostado Salado
-  {key:'frac_tostado_80',  label:'🧂 Tostado Salado Doypack 80g',  base:'receta_nombre:Tostado Salado', kg:0.080, insumo:'Doypack 80g',  unidad:'u', grupo:'Fraccionados'},
-  {key:'frac_tostado_250', label:'🧂 Tostado Salado Doypack 250g', base:'receta_nombre:Tostado Salado', kg:0.250, insumo:'Doypack 250g', unidad:'u', grupo:'Fraccionados'},
-  {key:'frac_tostado_500', label:'🧂 Tostado Salado Doypack 500g', base:'receta_nombre:Tostado Salado', kg:0.500, insumo:'Doypack 500g', unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_tostado_80',  label:'🧂 Tostado Salado Doypack 80g',  base:'receta_nombre:Pecan Tostado salado', kg:0.080, insumo:'Doypack 80g',  unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_tostado_250', label:'🧂 Tostado Salado Doypack 250g', base:'receta_nombre:Pecan Tostado salado', kg:0.250, insumo:'Doypack 250g', unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_tostado_500', label:'🧂 Tostado Salado Doypack 500g', base:'receta_nombre:Pecan Tostado salado', kg:0.500, insumo:'Doypack 500g', unidad:'u', grupo:'Fraccionados'},
   // Chocolate
-  {key:'frac_choco_80',  label:'🍫 Pecan Chocolate Doypack 80g',  base:'receta_nombre:Pecan con Chocolate', kg:0.080, insumo:'Doypack 80g',  unidad:'u', grupo:'Fraccionados'},
-  {key:'frac_choco_250', label:'🍫 Pecan Chocolate Doypack 250g', base:'receta_nombre:Pecan con Chocolate', kg:0.250, insumo:'Doypack 250g', unidad:'u', grupo:'Fraccionados'},
-  {key:'frac_choco_500', label:'🍫 Pecan Chocolate Doypack 500g', base:'receta_nombre:Pecan con Chocolate', kg:0.500, insumo:'Doypack 500g', unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_choco_80',  label:'🍫 Pecan Chocolate Doypack 80g',  base:'receta_nombre:Pecan con Chocolate Semiamargo', kg:0.080, insumo:'Doypack 80g',  unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_choco_250', label:'🍫 Pecan Chocolate Doypack 250g', base:'receta_nombre:Pecan con Chocolate Semiamargo', kg:0.250, insumo:'Doypack 250g', unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_choco_500', label:'🍫 Pecan Chocolate Doypack 500g', base:'receta_nombre:Pecan con Chocolate Semiamargo', kg:0.500, insumo:'Doypack 500g', unidad:'u', grupo:'Fraccionados'},
   // Pasta de Pecan
   {key:'frac_pasta_200', label:'🥜 Pasta de Pecan Frasco 200g', base:'receta_nombre:Pasta de Pecan', kg:0.200, insumo:'Frasco 200g', unidad:'u', grupo:'Fraccionados'},
   {key:'frac_pasta_300', label:'🥜 Pasta de Pecan Frasco 300g', base:'receta_nombre:Pasta de Pecan', kg:0.300, insumo:'Frasco 300g', unidad:'u', grupo:'Fraccionados'},
@@ -7916,12 +7931,17 @@ window.initResumen=async function initResumen(){
   const _catLbl={enteras:'Pecan entero',part_grandes:'Partido grande',part_chicas:'Partido chico',danadas:'Dañado'};
   const _catCol={enteras:'var(--green)',part_grandes:'var(--amber)',part_chicas:'#e07b00',danadas:'var(--red)'};
 
-  // Producción fábrica propia
+  // Producción fábrica propia (excluir salidas de fraccionados)
   const prodFab={enteras:0,part_grandes:0,part_chicas:0,danadas:0};
+  const vendFracRes={enteras:0,part_grandes:0,part_chicas:0,danadas:0};
   snapSal.forEach(d=>{
     const s=d.data();
     if(s.propietario!=='PROPIO') return;
-    _cats.forEach(c=>prodFab[c]+=s[c]||0);
+    if(s.tipo==='fraccionado'){
+      _cats.forEach(c=>vendFracRes[c]+=s[c]||0);
+    } else {
+      _cats.forEach(c=>prodFab[c]+=s[c]||0);
+    }
   });
 
   // Pecan pelado comprada
@@ -7956,13 +7976,19 @@ window.initResumen=async function initResumen(){
       // Fraccionados de elaborados
       const fracElabSV=FRACCIONADOS.find(f=>f.key===key&&f.base?.startsWith('receta_nombre:'));
       if(fracElabSV){
-        const rn=fracElabSV.base.replace('receta_nombre:','');
-        if(porReceta[rn]) porReceta[rn].vendido+=(it.kg||0)*fracElabSV.kg;
+        const rnBase=fracElabSV.base.replace('receta_nombre:','');
+        const rnReal=Object.keys(porReceta).find(k=>
+          k===rnBase||k.toLowerCase().includes(rnBase.toLowerCase())||rnBase.toLowerCase().includes(k.toLowerCase())
+        )||rnBase;
+        if(porReceta[rnReal]) porReceta[rnReal].vendido+=(it.kg||0)*fracElabSV.kg;
       }
       if(key.startsWith('receta_')&&porReceta[it.nombre])
         porReceta[it.nombre].vendido+=it.kg||0;
     });
   });
+
+  // Sumar fraccionados al vendido en resumen
+  _cats.forEach(c=>vendNuez[c]+=vendFracRes[c]);
 
   // Stock neto pecan pelado
   const stockNuez=_cats.map(c=>({
@@ -8042,6 +8068,21 @@ window.initResumen=async function initResumen(){
   const mesesKg=Array(12).fill(0);
   const mesesMonto=Array(12).fill(0);
 
+  // Primera pasada: establecer claves reales de recetas en vElabPorReceta
+  snapVent.forEach(d=>{
+    (d.data().items||[]).forEach(it=>{
+      const key=it.prod_key||'';
+      const esFr=!!it.es_fraccionado||FRACCIONADOS.some(f=>f.key===key)||key.startsWith('frac_');
+      if(esFr) return;
+      if(key.startsWith('receta_')){
+        const recId=key.replace('receta_','');
+        const recObj=recetasCache.find(r=>r.id===recId);
+        const nombreRec=recObj?recObj.nombre:(it.nombre||key);
+        if(!vElabPorReceta[nombreRec]) vElabPorReceta[nombreRec]=0;
+      }
+    });
+  });
+  // Segunda pasada: procesar montos, kg y clasificaciones
   snapVent.forEach(d=>{
     const v=d.data();
     const mes=parseInt((v.fecha||'').slice(5,7))-1;
@@ -8089,13 +8130,31 @@ window.initResumen=async function initResumen(){
           if(fracDef.base==='nuez_enteras') vEnt+=kgReales;
           else if(fracDef.base.startsWith('receta_nombre:')){
             const recNombreBase=fracDef.base.replace('receta_nombre:','');
-            vElabPorReceta[recNombreBase]=(vElabPorReceta[recNombreBase]||0)+kgReales;
+            // Primero buscar clave existente en vElabPorReceta (creada en pasada 1)
+            const claveExistente=Object.keys(vElabPorReceta).find(k=>
+              k===recNombreBase||
+              k.toLowerCase().includes(recNombreBase.toLowerCase())||
+              recNombreBase.toLowerCase().includes(k.toLowerCase())
+            );
+            // Si no existe, buscar en recetasCache
+            const recReal=claveExistente||recetasCache.find(r=>
+              r.nombre===recNombreBase||
+              r.nombre.toLowerCase().includes(recNombreBase.toLowerCase())||
+              recNombreBase.toLowerCase().includes(r.nombre.toLowerCase())
+            )?.nombre||recNombreBase;
+            vElabPorReceta[recReal]=(vElabPorReceta[recReal]||0)+kgReales;
           }
         }
       }
       else if(key.startsWith('receta_')||porReceta[it.nombre]){
-        const nombre=it.nombre||key;
-        vElabPorReceta[nombre]=(vElabPorReceta[nombre]||0)+kg;
+        // Buscar nombre normalizado desde recetasCache para evitar duplicados
+        let nombreRec=it.nombre||key;
+        if(key.startsWith('receta_')){
+          const recId=key.replace('receta_','');
+          const recObj=recetasCache.find(r=>r.id===recId);
+          if(recObj) nombreRec=recObj.nombre;
+        }
+        vElabPorReceta[nombreRec]=(vElabPorReceta[nombreRec]||0)+kg;
       } else {
         // fallback por nombre — solo para ítems no fraccionados
         const n=(it.nombre||'').toLowerCase();
