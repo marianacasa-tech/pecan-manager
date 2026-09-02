@@ -472,7 +472,7 @@
         <div class="form-group"><label>🟢 Pecan entera</label><input type="number" id="sal-enteras" placeholder="0.00" step="0.01" min="0" oninput="calcPorcentajes()"></div>
         <div class="form-group"><label>🟡 Pecan Partido Grande</label><input type="number" id="sal-part-grandes" placeholder="0.00" step="0.01" min="0" oninput="calcPorcentajes()"></div>
         <div class="form-group"><label>🟠 Pecan Partido Chico</label><input type="number" id="sal-part-chicas" placeholder="0.00" step="0.01" min="0" oninput="calcPorcentajes()"></div>
-        <div class="form-group"><label>🔴 Pecan Dañado</label><input type="number" id="sal-danadas" placeholder="0.00" step="0.01" min="0" oninput="calcPorcentajes()"></div>
+        <div class="form-group"><label>🔴 Pecan Grado 2</label><input type="number" id="sal-danadas" placeholder="0.00" step="0.01" min="0" oninput="calcPorcentajes()"></div>
         <div class="form-group"><label>⚫ Incomestibles</label><input type="number" id="sal-podridas" placeholder="0.00" step="0.01" min="0" oninput="calcPorcentajes()"></div>
         <div class="form-group"><label>💀 Cáscara / merma</label><input type="number" id="sal-cascara" placeholder="0.00" step="0.01" min="0"></div>
       </div>
@@ -514,7 +514,7 @@
       </div>
       <div class="table-wrap">
         <table id="tbl-salidas">
-          <thead><tr><th>Fecha</th><th>Propietario</th><th>Variedad</th><th>Kg c/cáscara</th><th>Pecan Entero</th><th>Pecan Partido Grande</th><th>Pecan Partido Chico</th><th>Pecan Dañado</th><th>Incomestibles</th><th>%Kernel</th><th>%Partido</th><th>Acciones</th></tr></thead>
+          <thead><tr><th>Fecha</th><th>Propietario</th><th>Variedad</th><th>Kg c/cáscara</th><th>Pecan Entero</th><th>Pecan Partido Grande</th><th>Pecan Partido Chico</th><th>Pecan Grado 2</th><th>Incomestibles</th><th>%Kernel</th><th>%Partido</th><th>Acciones</th></tr></thead>
           <tbody><tr><td colspan="11" class="loading">Cargando...</td></tr></tbody>
         </table>
       </div>
@@ -561,7 +561,7 @@
             <option value="enteras">🟢 Pecan Entero</option>
             <option value="part_grandes">🟡 Pecan Partido Grande</option>
             <option value="part_chicas">🟠 Pecan Partido Chico</option>
-            <option value="danadas">🔴 Pecan Dañado</option>
+            <option value="danadas">🔴 Pecan Grado 2</option>
           </select>
         </div>
       </div>
@@ -583,7 +583,7 @@
             <option value="enteras">🟢 Pecan Entero</option>
             <option value="part_grandes">🟡 Pecan Partido Grande</option>
             <option value="part_chicas">🟠 Pecan Partido Chico</option>
-            <option value="danadas">🔴 Pecan Dañado</option>
+            <option value="danadas">🔴 Pecan Grado 2</option>
           </select>
         </div>
         <div style="align-self:flex-end;"><button class="btn btn-secondary btn-sm" onclick="calcStockVendible()">🔄 Actualizar</button></div>
@@ -666,7 +666,7 @@
               <option value="enteras">🟢 Pecan Entero</option>
               <option value="part_grandes">🟡 Pecan Partido Grande</option>
               <option value="part_chicas">🟠 Pecan Partido Chico</option>
-              <option value="danadas">🔴 Pecan Dañado</option>
+              <option value="danadas">🔴 Pecan Grado 2</option>
             </select>
           </div>
         </div>
@@ -715,7 +715,7 @@
           <select id="f-coc-cat" onchange="cargarTandas()">
             <option value="">Todas las categorías</option>
             <option value="enteras">Pecan Entero</option><option value="part_grandes">Pecan Partido Grande</option>
-            <option value="part_chicas">Pecan Partido Chico</option><option value="danadas">Pecan Dañado</option>
+            <option value="part_chicas">Pecan Partido Chico</option><option value="danadas">Pecan Grado 2</option>
           </select>
           <input type="date" id="f-coc-fecha" onchange="cargarTandas()" style="padding:6px 8px;border-radius:6px;border:1.5px solid var(--border);font-size:.85rem;">
           <button class="btn btn-secondary btn-sm" onclick="limpiarFiltrosCocina()">✖ Limpiar</button>
@@ -1374,7 +1374,7 @@
         <div class="metric-card"><div class="val" id="rv-entero-kg">—</div><div class="lbl">Pecan entero</div></div>
         <div class="metric-card"><div class="val" id="rv-pg-kg">—</div><div class="lbl">Partido grande</div></div>
         <div class="metric-card"><div class="val" id="rv-pc-kg">—</div><div class="lbl">Partido chico</div></div>
-        <div class="metric-card"><div class="val" id="rv-dan-kg">—</div><div class="lbl">Dañado</div></div>
+        <div class="metric-card"><div class="val" id="rv-dan-kg">—</div><div class="lbl">Grado 2</div></div>
         <div class="metric-card"><div class="val" id="rv-monto">—</div><div class="lbl">Monto total vendido</div></div>
       </div>
       <!-- Elaborados desglosados por receta -->
@@ -1858,7 +1858,7 @@
       <div class="form-group"><label>🟢 Pecan Entero</label><input type="number" id="edit-ret-enteras" step="0.01" min="0" placeholder="0.00"></div>
       <div class="form-group"><label>🟡 Pecan Partido Grande</label><input type="number" id="edit-ret-pg" step="0.01" min="0" placeholder="0.00"></div>
       <div class="form-group"><label>🟠 Pecan Partido Chico</label><input type="number" id="edit-ret-pc" step="0.01" min="0" placeholder="0.00"></div>
-      <div class="form-group"><label>🔴 Pecan Dañado</label><input type="number" id="edit-ret-dan" step="0.01" min="0" placeholder="0.00"></div>
+      <div class="form-group"><label>🔴 Pecan Grado 2</label><input type="number" id="edit-ret-dan" step="0.01" min="0" placeholder="0.00"></div>
       <div class="form-group full"><label>Observaciones</label><input type="text" id="edit-ret-obs"></div>
     </div>
     <div style="display:flex;gap:12px;margin-top:20px;">
@@ -1920,7 +1920,7 @@
       <div class="form-group"><label>🟢 Pecan Entero</label><input type="number" id="ret-enteras" placeholder="0.00" step="0.01" min="0"></div>
       <div class="form-group"><label>🟡 Pecan Partido Grande</label><input type="number" id="ret-pg" placeholder="0.00" step="0.01" min="0"></div>
       <div class="form-group"><label>🟠 Pecan Partido Chico</label><input type="number" id="ret-pc" placeholder="0.00" step="0.01" min="0"></div>
-      <div class="form-group"><label>🔴 Pecan Dañado</label><input type="number" id="ret-dan" placeholder="0.00" step="0.01" min="0"></div>
+      <div class="form-group"><label>🔴 Pecan Grado 2</label><input type="number" id="ret-dan" placeholder="0.00" step="0.01" min="0"></div>
     </div>
     <div class="form-group" style="margin-top:12px;"><label>Observaciones</label><input type="text" id="ret-obs" placeholder="Notas del retiro..."></div>
     <div style="display:flex;gap:12px;margin-top:20px;">
@@ -2091,7 +2091,7 @@
       <div class="form-group"><label>🟢 Pecan Entero</label><input type="number" id="edit-sal-enteras" step="0.01" min="0"></div>
       <div class="form-group"><label>🟡 Pecan Partido Grande</label><input type="number" id="edit-sal-pg" step="0.01" min="0"></div>
       <div class="form-group"><label>🟠 Pecan Partido Chico</label><input type="number" id="edit-sal-pc" step="0.01" min="0"></div>
-      <div class="form-group"><label>🔴 Pecan Dañado</label><input type="number" id="edit-sal-dan" step="0.01" min="0"></div>
+      <div class="form-group"><label>🔴 Pecan Grado 2</label><input type="number" id="edit-sal-dan" step="0.01" min="0"></div>
       <div class="form-group"><label>⚫ Incomestibles</label><input type="number" id="edit-sal-pod" step="0.01" min="0"></div>
     </div>
     <div style="display:flex;gap:12px;margin-top:20px;">
@@ -3207,7 +3207,7 @@ window.calcStockFabrica=async function(){
 
   // ---- BLOQUE 2: Pecan pelado (produccion - retiros maquila) ----
   const cats=['enteras','part_grandes','part_chicas','danadas'];
-  const catLabel={enteras:'🟢 Pecan Entero',part_grandes:'🟡 Pecan Partido Grande',part_chicas:'🟠 Pecan Partido Chico',danadas:'🔴 Pecan Dañado'};
+  const catLabel={enteras:'🟢 Pecan Entero',part_grandes:'🟡 Pecan Partido Grande',part_chicas:'🟠 Pecan Partido Chico',danadas:'🔴 Pecan Grado 2'};
   const pelMap={};
 
   snapSal.forEach(d=>{
@@ -3293,7 +3293,7 @@ window.calcStockVendible=async function(){
   ]);
 
   const cats=['enteras','part_grandes','part_chicas','danadas'];
-  const catLabel={enteras:'🟢 Pecan Entero',part_grandes:'🟡 Pecan Partido Grande',part_chicas:'🟠 Pecan Partido Chico',danadas:'🔴 Pecan Dañado'};
+  const catLabel={enteras:'🟢 Pecan Entero',part_grandes:'🟡 Pecan Partido Grande',part_chicas:'🟠 Pecan Partido Chico',danadas:'🔴 Pecan Grado 2'};
 
   // Producción propia de fábrica (excluir salidas de fraccionados)
   const producido={enteras:0,part_grandes:0,part_chicas:0,danadas:0};
@@ -3512,7 +3512,7 @@ window.cargarPanelMaquila=async function(){
   snapLiq.forEach(d=>liqs.push({id:d.id,...d.data()}));
   liqs.sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||''));
 
-  const catL={enteras:'🟢 Pecan Entero',part_grandes:'🟡 Pecan Partido Grande',part_chicas:'🟠 Pecan Partido Chico',danadas:'🔴 Pecan Dañado'};
+  const catL={enteras:'🟢 Pecan Entero',part_grandes:'🟡 Pecan Partido Grande',part_chicas:'🟠 Pecan Partido Chico',danadas:'🔴 Pecan Grado 2'};
   const fmtM=n=>n>0?`<strong style="color:var(--green);">${n.toFixed(1)} kg</strong>`:`<span style="color:#ccc;">—</span>`;
 
   // Producción agrupada por variedad
@@ -3543,7 +3543,7 @@ window.cargarPanelMaquila=async function(){
   if(Object.keys(salPorVar).length){
     html+=`<div style="font-weight:700;color:var(--brown2);font-size:.88rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">Procesamiento por Variedad</div>
     <div class="table-wrap"><table>
-      <thead><tr><th>Variedad</th><th>Kg c/c</th><th>🟢 Pecan Entero</th><th>🟡 P.Gdes</th><th>🟠 Pecan Partido Chico</th><th>🔴 Pecan Dañado</th><th>⚫ Incomestibles</th><th>% Kernel</th></tr></thead><tbody>`;
+      <thead><tr><th>Variedad</th><th>Kg c/c</th><th>🟢 Pecan Entero</th><th>🟡 P.Gdes</th><th>🟠 Pecan Partido Chico</th><th>🔴 Pecan Grado 2</th><th>⚫ Incomestibles</th><th>% Kernel</th></tr></thead><tbody>`;
     let tKC=0,tEnt=0,tPG=0,tPC=0,tDan=0,tPod=0;
     Object.entries(salPorVar).forEach(([v,s])=>{
       const kernel=s.kg_cascara>0?((s.enteras+s.part_grandes+s.part_chicas+s.danadas)/s.kg_cascara*100).toFixed(1)+'%':'—';
@@ -3581,7 +3581,7 @@ window.cargarPanelMaquila=async function(){
   if(retirosLista.length){
     html+=`<div style="font-weight:700;color:var(--brown2);font-size:.88rem;text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px;">Retiros realizados</div>
     <div class="table-wrap"><table>
-      <thead><tr><th>Fecha</th><th>N° Remito</th><th>Pecan Entero</th><th>Pecan Partido Grande</th><th>Pecan Partido Chico</th><th>Pecan Dañado</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>`;
+      <thead><tr><th>Fecha</th><th>N° Remito</th><th>Pecan Entero</th><th>Pecan Partido Grande</th><th>Pecan Partido Chico</th><th>Pecan Grado 2</th><th>Total</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>`;
     retirosLista.forEach(r=>{
       const tot=(r.enteras||0)+(r.part_grandes||0)+(r.part_chicas||0)+(r.danadas||0);
       html+=`<tr>
@@ -3650,7 +3650,7 @@ window.abrirRetiro=function(cliente){
   document.getElementById('ret-saldo-pc').value=Math.round((saldo.part_chicas||0)*10)/10;
   document.getElementById('ret-saldo-dan').value=Math.round((saldo.danadas||0)*10)/10;
   document.getElementById('ret-info-cliente').textContent=cliente;
-  const catL={enteras:'Pecan Entero',part_grandes:'Pecan Partido Grande',part_chicas:'Pecan Partido Chico',danadas:'Pecan Dañado'};
+  const catL={enteras:'Pecan Entero',part_grandes:'Pecan Partido Grande',part_chicas:'Pecan Partido Chico',danadas:'Pecan Grado 2'};
   document.getElementById('ret-stock-info').innerHTML=
     Object.entries(catL).map(([k,l])=>`${l}: <strong>${(saldo[k]||0).toFixed(1)} kg</strong>`).join(' | ');
   document.getElementById('ret-fecha').value=today();
@@ -3684,7 +3684,7 @@ window.guardarRetiro=async function(){
   if(ent>sEnt+tol) errores.push(`• Pecan Entero: ingresaste <strong>${ent.toFixed(1)} kg</strong> pero hay <strong>${sEnt.toFixed(1)} kg</strong> disponibles`);
   if(pg>sPG+tol)   errores.push(`• Pecan Partido Grande: ingresaste <strong>${pg.toFixed(1)} kg</strong> pero hay <strong>${sPG.toFixed(1)} kg</strong> disponibles`);
   if(pc>sPC+tol)   errores.push(`• Pecan Partido Chico: ingresaste <strong>${pc.toFixed(1)} kg</strong> pero hay <strong>${sPC.toFixed(1)} kg</strong> disponibles`);
-  if(dan>sDan+tol) errores.push(`• Pecan Dañado: ingresaste <strong>${dan.toFixed(1)} kg</strong> pero hay <strong>${sDan.toFixed(1)} kg</strong> disponibles`);
+  if(dan>sDan+tol) errores.push(`• Pecan Grado 2: ingresaste <strong>${dan.toFixed(1)} kg</strong> pero hay <strong>${sDan.toFixed(1)} kg</strong> disponibles`);
   if(errores.length){
     const div=document.createElement('div');
     div.id='ret-error';
@@ -4124,7 +4124,7 @@ function generarPDFLiquidacion(d, enviarWA=false){
   p.text('Entero',88,y+5.5,{align:'right'});
   p.text('P.Grande',109,y+5.5,{align:'right'});
   p.text('P.Chico',128,y+5.5,{align:'right'});
-  p.text('Dañado',147,y+5.5,{align:'right'});
+  p.text('Grado 2',147,y+5.5,{align:'right'});
   p.text('% Kernel',165,y+5.5,{align:'right'});
   p.text('% Partido',186,y+5.5,{align:'right'});
   y+=12;
@@ -4597,7 +4597,7 @@ window.cargarDashboard=async function(){
         {label:'Entero',data:fechas.map(f=>pct(f,'ent')),backgroundColor:'rgba(76,153,76,0.85)',stack:'k'},
         {label:'Partido Gde',data:fechas.map(f=>pct(f,'pg')),backgroundColor:'rgba(200,129,26,0.85)',stack:'k'},
         {label:'Partido Chico',data:fechas.map(f=>pct(f,'pc')),backgroundColor:'rgba(224,123,0,0.85)',stack:'k'},
-        {label:'Dañado',data:fechas.map(f=>pct(f,'dan')),backgroundColor:'rgba(192,57,43,0.75)',stack:'k'},
+        {label:'Grado 2',data:fechas.map(f=>pct(f,'dan')),backgroundColor:'rgba(192,57,43,0.75)',stack:'k'},
         {label:'Podridas',data:fechas.map(f=>pct(f,'pod')),backgroundColor:'rgba(100,100,100,0.5)',stack:'k'},
       ]
     },
@@ -4972,7 +4972,7 @@ window.cargarTandas=async function(){
   const catF=document.getElementById('f-coc-cat').value;
   const fechaF=document.getElementById('f-coc-fecha').value;
   const snap=await getDocs(query(collection(db,'tandas_cocina'),orderBy('fecha','desc')));
-  const catLabel={enteras:'🟢 Pecan Entero',part_grandes:'🟡 Pecan Partido Grande',part_chicas:'🟠 Pecan Partido Chico',danadas:'🔴 Pecan Dañado'};
+  const catLabel={enteras:'🟢 Pecan Entero',part_grandes:'🟡 Pecan Partido Grande',part_chicas:'🟠 Pecan Partido Chico',danadas:'🔴 Pecan Grado 2'};
 
   // Agrupar por lote_id
   const lotes={};
@@ -5112,7 +5112,7 @@ window.cargarListaRecetas=async function(){
   const snap=await getDocs(collection(db,'recetas'));
   recetasCache=[];snap.forEach(d=>recetasCache.push({id:d.id,...d.data()}));
   if(!recetasCache.length){cont.innerHTML='<p style="color:var(--text2);padding:20px;text-align:center;">No hay recetas aún.</p>';return;}
-  const catLabel={enteras:'Pecan Entero',part_grandes:'Pecan Partido Grande',part_chicas:'Pecan Partido Chico',danadas:'Pecan Dañado'};
+  const catLabel={enteras:'Pecan Entero',part_grandes:'Pecan Partido Grande',part_chicas:'Pecan Partido Chico',danadas:'Pecan Grado 2'};
   cont.innerHTML=recetasCache.map(r=>`
     <div style="border:1.5px solid var(--border);border-radius:10px;padding:14px 18px;margin-bottom:12px;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;">
@@ -5289,7 +5289,7 @@ window.generarIdLote=async function(tipo){
 
 // Sufijos por categoría — se agregan al lote base para el código de barras
 const _catSufijo={enteras:'ENT',part_grandes:'PG',part_chicas:'PC',danadas:'DAN'};
-const _catLabelEtq={enteras:'Pecan Entero',part_grandes:'Pecan Partido Grande',part_chicas:'Pecan Partido Chico',danadas:'Pecan Dañado'};
+const _catLabelEtq={enteras:'Pecan Entero',part_grandes:'Pecan Partido Grande',part_chicas:'Pecan Partido Chico',danadas:'Pecan Grado 2'};
 
 let _etqData={};      // datos de la etiqueta activa
 let _etqCatsDisp=[];  // categorías disponibles en el lote de fábrica
@@ -6439,6 +6439,10 @@ const FRACCIONADOS=[
   {key:'frac_choco_80',  label:'🍫 Pecan Chocolate Doypack 80g',  base:'receta_nombre:Pecan con Chocolate Semiamargo', kg:0.080, insumo:'Doypack 80g',  unidad:'u', grupo:'Fraccionados'},
   {key:'frac_choco_250', label:'🍫 Pecan Chocolate Doypack 250g', base:'receta_nombre:Pecan con Chocolate Semiamargo', kg:0.250, insumo:'Doypack 250g', unidad:'u', grupo:'Fraccionados'},
   {key:'frac_choco_500', label:'🍫 Pecan Chocolate Doypack 500g', base:'receta_nombre:Pecan con Chocolate Semiamargo', kg:0.500, insumo:'Doypack 500g', unidad:'u', grupo:'Fraccionados'},
+  // Pecan Picante
+  {key:'frac_picante_80',  label:'🌶️ Pecan Picante Doypack 80g',  base:'receta_nombre:Pecan Picante', kg:0.080, insumo:'Doypack 80g',  unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_picante_250', label:'🌶️ Pecan Picante Doypack 250g', base:'receta_nombre:Pecan Picante', kg:0.250, insumo:'Doypack 250g', unidad:'u', grupo:'Fraccionados'},
+  {key:'frac_picante_500', label:'🌶️ Pecan Picante Doypack 500g', base:'receta_nombre:Pecan Picante', kg:0.500, insumo:'Doypack 500g', unidad:'u', grupo:'Fraccionados'},
   // Pasta de Pecan
   {key:'frac_pasta_200', label:'🥜 Pasta de Pecan Frasco 200g', base:'receta_nombre:Pasta de Pecan', kg:0.200, insumo:'Frasco 200g', unidad:'u', grupo:'Fraccionados'},
   {key:'frac_pasta_300', label:'🥜 Pasta de Pecan Frasco 300g', base:'receta_nombre:Pasta de Pecan', kg:0.300, insumo:'Frasco 300g', unidad:'u', grupo:'Fraccionados'},
@@ -6450,7 +6454,7 @@ const FRACCIONADOS=[
 const PACKAGING_INSUMOS=['Doypack 80g','Doypack 250g','Doypack 500g','Frasco 200g','Frasco 300g'];  // {producto_key: precio}
 let _ventaClientesCache=[];
 
-const _catLabelV={enteras:'Pecan Entero',part_grandes:'Pecan Partido Grande',part_chicas:'Pecan Partido Chico',danadas:'Pecan Dañado'};
+const _catLabelV={enteras:'Pecan Entero',part_grandes:'Pecan Partido Grande',part_chicas:'Pecan Partido Chico',danadas:'Pecan Grado 2'};
 const KG_POR_CAJA=10;
 
 // ---- TABS ----
@@ -7928,7 +7932,7 @@ window.initResumen=async function initResumen(){
 
   // ── STOCK VENDIBLE — igual lógica que calcStockVendible() ───────────────
   const _cats=['enteras','part_grandes','part_chicas','danadas'];
-  const _catLbl={enteras:'Pecan entero',part_grandes:'Partido grande',part_chicas:'Partido chico',danadas:'Dañado'};
+  const _catLbl={enteras:'Pecan entero',part_grandes:'Partido grande',part_chicas:'Partido chico',danadas:'Grado 2'};
   const _catCol={enteras:'var(--green)',part_grandes:'var(--amber)',part_chicas:'#e07b00',danadas:'var(--red)'};
 
   // Producción fábrica propia (excluir salidas de fraccionados)
@@ -8251,7 +8255,7 @@ window.initResumen=async function initResumen(){
     type:'doughnut',
     plugins:[ChartDataLabels],
     data:{
-      labels:['Entero','Partido Gde','Partido Chico','Dañado','Elaborados'],
+      labels:['Entero','Partido Gde','Partido Chico','Grado 2','Elaborados'],
       datasets:[{data:[vEnt,vPG,vPC,vDan,vElabTotal],backgroundColor:['#3a6b35','#c8811a','#e07b00','#8b2e2e','#6b4226'],borderWidth:2,borderColor:'#fff9f0'}]
     },
     options:{responsive:true,plugins:{
