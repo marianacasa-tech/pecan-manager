@@ -2244,6 +2244,12 @@ async function cargarInicialApp(){
   cargarCatGastos();
   cargarConfigEnvasado();
   cargarPrecios();
+  // Precargar colecciones principales en caché
+  Promise.all([
+    _getVentas(),_getCompras(),_getCobros(),_getTandas(),
+    _getEntradas(),_getSalidas(),_getInsumos(),_getPagosProv(),
+    _getLiquidaciones(),_getRetiros(),_getComprasNuez()
+  ]).then(()=>console.log('✅ Caché precargado')).catch(e=>console.warn('Cache preload:',e));
   // Poblar todos los selects de variedad con la lista cargada desde Firestore
   actualizarTodosSelectsVariedad();
 }
@@ -2366,7 +2372,7 @@ window.cargarUsuarios=async function(){
   const cont=document.getElementById('usuarios-lista');
   cont.innerHTML='<div class="loading">Cargando...</div>';
   try{
-    const snap=await getDocsFromServer(collection(db,'usuarios'));
+    const snap=await getDocs(collection(db,'usuarios'));
     const usuarios=[];
     snap.forEach(d=>usuarios.push({id:d.id,...d.data()}));
     usuarios.sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||''));
@@ -2912,8 +2918,8 @@ window.consultarStockCascara=async function(){
   panel.innerHTML='<span style="color:var(--text2);">Consultando stock...</span>';
 
   const [snapEnt,snapSal]=await Promise.all([
-    getDocsFromServer(query(collection(db,'entradas_fabrica'),where('propietario','==',prop),where('variedad','==',variedad))),
-    getDocsFromServer(query(collection(db,'salidas_fabrica'),where('propietario','==',prop),where('variedad','==',variedad)))
+    getDocs(query(collection(db,'entradas_fabrica'),where('propietario','==',prop),where('variedad','==',variedad))),
+    getDocs(query(collection(db,'salidas_fabrica'),where('propietario','==',prop),where('variedad','==',variedad)))
   ]);
 
   let ingresado=0,procesado=0;
@@ -3146,9 +3152,9 @@ window.calcStockFabrica=async function(){
   const catPel=document.getElementById('sf-cat-pelada').value;
 
   const [snapEnt,snapSal,snapRet]=await Promise.all([
-    getDocsFromServer(collection(db,'entradas_fabrica')),
-    getDocsFromServer(collection(db,'salidas_fabrica')),
-    getDocsFromServer(collection(db,'retiros_maquila'))
+    getDocs(collection(db,'entradas_fabrica')),
+    getDocs(collection(db,'salidas_fabrica')),
+    getDocs(collection(db,'retiros_maquila'))
   ]);
 
   // ---- BLOQUE 1: Pecan con cascara ----
@@ -3286,10 +3292,10 @@ window.calcStockVendible=async function(){
   const catF=document.getElementById('sv-cat').value;
 
   const [snapSal, snapTandas, snapComprasNuez, snapVentas]=await Promise.all([
-    getDocsFromServer(collection(db,'salidas_fabrica')),
-    getDocsFromServer(collection(db,'tandas_cocina')),
-    getDocsFromServer(collection(db,'compras_nuez')),
-    getDocsFromServer(collection(db,'ventas'))
+    getDocs(collection(db,'salidas_fabrica')),
+    getDocs(collection(db,'tandas_cocina')),
+    getDocs(collection(db,'compras_nuez')),
+    getDocs(collection(db,'ventas'))
   ]);
 
   const cats=['enteras','part_grandes','part_chicas','danadas'];
@@ -3443,10 +3449,10 @@ window.cargarPanelMaquila=async function(){
 
   // Traer entradas, salidas y retiros del cliente
   const [snapEnt,snapSal,snapRet,snapLiq]=await Promise.all([
-    getDocsFromServer(query(collection(db,'entradas_fabrica'),where('propietario','==',cliente))),
-    getDocsFromServer(query(collection(db,'salidas_fabrica'),where('propietario','==',cliente))),
-    getDocsFromServer(query(collection(db,'retiros_maquila'),where('cliente','==',cliente))),
-    getDocsFromServer(query(collection(db,'liquidaciones_maquila'),where('cliente','==',cliente)))
+    getDocs(query(collection(db,'entradas_fabrica'),where('propietario','==',cliente))),
+    getDocs(query(collection(db,'salidas_fabrica'),where('propietario','==',cliente))),
+    getDocs(query(collection(db,'retiros_maquila'),where('cliente','==',cliente))),
+    getDocs(query(collection(db,'liquidaciones_maquila'),where('cliente','==',cliente)))
   ]);
 
   // Calcular totales
@@ -3918,8 +3924,8 @@ window.guardarLiquidacion=async function(){
   try{
     // Traer salidas SIN liquidar del cliente + entradas + retiros
     const [snapEnt,snapSal]=await Promise.all([
-      getDocsFromServer(query(collection(db,'entradas_fabrica'),where('propietario','==',cliente))),
-      getDocsFromServer(query(collection(db,'salidas_fabrica'),where('propietario','==',cliente))),
+      getDocs(query(collection(db,'entradas_fabrica'),where('propietario','==',cliente))),
+      getDocs(query(collection(db,'salidas_fabrica'),where('propietario','==',cliente))),
     ]);
 
     const entradas=[];snapEnt.forEach(d=>entradas.push(d.data()));
@@ -4256,8 +4262,8 @@ window.cargarLiquidaciones=async function(){
   const anioF=document.getElementById('f-liq-anio')?.value||'';
 
   const [snapLiqs, snapCob]=await Promise.all([
-    getDocsFromServer(query(collection(db,'liquidaciones_maquila'),orderBy('fecha','desc'))),
-    getDocsFromServer(collection(db,'cobros'))
+    getDocs(query(collection(db,'liquidaciones_maquila'),orderBy('fecha','desc'))),
+    getDocs(collection(db,'cobros'))
   ]);
 
   // Poblar selector de clientes con los que existen
@@ -4393,8 +4399,8 @@ window.reimprimirLiquidacion=async function(id, enviarWA=false){
   const l=snapLiq.data();
 
   const [snapEnt,snapSal]=await Promise.all([
-    getDocsFromServer(query(collection(db,'entradas_fabrica'),where('propietario','==',l.cliente))),
-    getDocsFromServer(query(collection(db,'salidas_fabrica'),where('propietario','==',l.cliente)))
+    getDocs(query(collection(db,'entradas_fabrica'),where('propietario','==',l.cliente))),
+    getDocs(query(collection(db,'salidas_fabrica'),where('propietario','==',l.cliente)))
   ]);
   const entradas=[];snapEnt.forEach(d=>entradas.push(d.data()));
   entradas.sort((a,b)=>(a.fecha||'').localeCompare(b.fecha||''));
@@ -4700,14 +4706,14 @@ window.eliminarLiquidacion=async function(id){
     if(!liqSnap.exists()){showAlert('No se encontró la liquidación','error');return;}
 
     // 2) Revertir salidas_fabrica: quitar liquidacion_id a las que apunten a este id
-    const snapSal=await getDocsFromServer(
+    const snapSal=await getDocs(
       query(collection(db,'salidas_fabrica'),where('liquidacion_id','==',id))
     );
     const batch=writeBatch(db);
     snapSal.forEach(d=>batch.update(d.ref,{liquidacion_id:deleteField()}));
 
     // 3) Eliminar cobros asociados (liq_id === id)
-    const snapCob=await getDocsFromServer(
+    const snapCob=await getDocs(
       query(collection(db,'cobros'),where('liq_id','==',id))
     );
     snapCob.forEach(d=>batch.delete(d.ref));
@@ -4770,9 +4776,9 @@ window.seleccionarReceta=async function(){
 
   // Calcular stock real de insumos (igual que calcStockInsumos)
   const [snapCompR, snapTandasR, snapSalidasR]=await Promise.all([
-    getDocsFromServer(collection(db,'compras')),
-    getDocsFromServer(collection(db,'tandas_cocina')),
-    getDocsFromServer(collection(db,'salidas_fabrica')),
+    getDocs(collection(db,'compras')),
+    getDocs(collection(db,'tandas_cocina')),
+    getDocs(collection(db,'salidas_fabrica')),
   ]);
   const insEnt={}, insCoc={}, insFab={};
   snapCompR.forEach(d=>{
@@ -4812,11 +4818,11 @@ window.verificarStockNuez=async function(){
   if(!cat){if(panel)panel.style.display='none';return;}
   // Calcular stock PROPIO de esa categoría (salidas - retiros maquila)
   const [snapSal,snapRet]=await Promise.all([
-    getDocsFromServer(query(collection(db,'salidas_fabrica'),where('propietario','==','PROPIO'))),
-    getDocsFromServer(query(collection(db,'retiros_maquila')))
+    getDocs(query(collection(db,'salidas_fabrica'),where('propietario','==','PROPIO'))),
+    getDocs(query(collection(db,'retiros_maquila')))
   ]);
   // También descontar tandas cocina ya registradas
-  const snapTandas=await getDocsFromServer(query(collection(db,'tandas_cocina'),where('categoria_nuez','==',cat)));
+  const snapTandas=await getDocs(query(collection(db,'tandas_cocina'),where('categoria_nuez','==',cat)));
   let prod=0;
   snapSal.forEach(d=>prod+=d.data()[cat]||0);
   let usado=0;
@@ -4901,9 +4907,9 @@ window.guardarLoteCocina=async function(){
 
   // Validar stock insumos con stock calculado dinámicamente
   const [_snapCmpV,_snapTanV,_snapSalV]=await Promise.all([
-    getDocsFromServer(collection(db,'compras')),
-    getDocsFromServer(collection(db,'tandas_cocina')),
-    getDocsFromServer(collection(db,'salidas_fabrica')),
+    getDocs(collection(db,'compras')),
+    getDocs(collection(db,'tandas_cocina')),
+    getDocs(collection(db,'salidas_fabrica')),
   ]);
   const _iEnt={},_iCoc={},_iFab={};
   _snapCmpV.forEach(d=>{(d.data().items||[]).forEach(it=>{if(it.tipo==='insumo'&&it.insumo_id) _iEnt[it.insumo_id]=(_iEnt[it.insumo_id]||0)+it.cantidad;});});
@@ -5231,7 +5237,7 @@ function actualizarSelectsPackaging(){
 window.calcStockCocina=async function(){
   const cont=document.getElementById('coc-stock-container');
   cont.innerHTML='<div class="loading">Calculando...</div>';
-  const snap=await getDocsFromServer(collection(db,'tandas_cocina'));
+  const snap=await getDocs(collection(db,'tandas_cocina'));
   const porReceta={};
   snap.forEach(d=>{
     const t=d.data();
@@ -5598,15 +5604,15 @@ window.guardarEdicionProveedor=async function(){
       let count=0;
 
       // Actualizar compras
-      const snapComp=await getDocsFromServer(query(collection(db,'compras'),where('proveedor','==',nombreViejo)));
+      const snapComp=await getDocs(query(collection(db,'compras'),where('proveedor','==',nombreViejo)));
       snapComp.forEach(d=>{batch.update(doc(db,'compras',d.id),{proveedor:nombre});count++;});
 
       // Actualizar pagos_proveedores
-      const snapPagos=await getDocsFromServer(query(collection(db,'pagos_proveedores'),where('proveedor','==',nombreViejo)));
+      const snapPagos=await getDocs(query(collection(db,'pagos_proveedores'),where('proveedor','==',nombreViejo)));
       snapPagos.forEach(d=>{batch.update(doc(db,'pagos_proveedores',d.id),{proveedor:nombre});count++;});
 
       // Actualizar compras_nuez si aplica
-      const snapNuez=await getDocsFromServer(query(collection(db,'compras_nuez'),where('proveedor','==',nombreViejo)));
+      const snapNuez=await getDocs(query(collection(db,'compras_nuez'),where('proveedor','==',nombreViejo)));
       snapNuez.forEach(d=>{batch.update(doc(db,'compras_nuez',d.id),{proveedor:nombre});count++;});
 
       if(count>0) await batch.commit();
@@ -6030,7 +6036,7 @@ window.abrirPagosUSD=async function(compraId, proveedor, totalUSD){
 }
 
 async function cargarPagosUSD(compraId, totalUSD){
-  const snap=await getDocsFromServer(query(collection(db,'pagos_usd'),where('compra_id','==',compraId)));
+  const snap=await getDocs(query(collection(db,'pagos_usd'),where('compra_id','==',compraId)));
   const pagos=[];
   snap.forEach(d=>pagos.push({id:d.id,...d.data()}));
   pagos.sort((a,b)=>(a.fecha||'').localeCompare(b.fecha||''));
@@ -6337,7 +6343,7 @@ window.calcStockInsumos=async function(){
   container.innerHTML='<div class="loading">Calculando stock...</div>';
 
   // Compras de insumos (suman)
-  const snapCompras=await getDocsFromServer(collection(db,'compras'));
+  const snapCompras=await getDocs(collection(db,'compras'));
   const entradas={};
   snapCompras.forEach(d=>{
     (d.data().items||[]).forEach(it=>{
@@ -6348,7 +6354,7 @@ window.calcStockInsumos=async function(){
   });
 
   // Tandas cocina (restan)
-  const snapTandas=await getDocsFromServer(collection(db,'tandas_cocina'));
+  const snapTandas=await getDocs(collection(db,'tandas_cocina'));
   const salidaCocina={};
   snapTandas.forEach(d=>{
     (d.data().insumos_usados||[]).forEach(it=>{
@@ -6357,7 +6363,7 @@ window.calcStockInsumos=async function(){
   });
 
   // Salidas fábrica (restan bolsas/cajas via config envasado — guardado en campo insumos_usados)
-  const snapSalidas=await getDocsFromServer(collection(db,'salidas_fabrica'));
+  const snapSalidas=await getDocs(collection(db,'salidas_fabrica'));
   const salidaFab={};
   snapSalidas.forEach(d=>{
     (d.data().insumos_usados||[]).forEach(it=>{
@@ -6366,7 +6372,7 @@ window.calcStockInsumos=async function(){
   });
 
   // Salidas por ventas de fraccionados (por nombre de insumo)
-  const snapVentasFrac=await getDocsFromServer(collection(db,'ventas'));
+  const snapVentasFrac=await getDocs(collection(db,'ventas'));
   const salidaVenta={}; // {nombre_insumo: unidades}
   snapVentasFrac.forEach(d=>{
     (d.data().items||[]).forEach(it=>{
@@ -6419,6 +6425,52 @@ const EMPRESA={
 
 let _ventaItemIdx=0;
 let _preciosCache={};
+
+// ── CACHÉ EN MEMORIA ─────────────────────────────────────────────────────────
+// Datos cargados una vez al inicio y reutilizados en toda la app
+const _cache={
+  ventas:null, compras:null, cobros:null,
+  tandas:null, entradas:null, salidas:null,
+  insumos:null, pagos_proveedores:null,
+  liquidaciones:null, retiros:null, compras_nuez:null,
+  _loading:{},
+};
+
+// Cargar una colección en caché (evita cargas duplicadas)
+async function _cacheLoad(key, queryFn){
+  if(_cache[key]) return _cache[key];
+  if(_cache._loading[key]) {
+    // Esperar si ya está cargando
+    await new Promise(r=>setTimeout(r,300));
+    return _cache[key]||[];
+  }
+  _cache._loading[key]=true;
+  try{
+    const snap=await getDocs(queryFn());
+    _cache[key]=[];
+    snap.forEach(d=>_cache[key].push({id:d.id,...d.data()}));
+  }catch(e){console.warn('Cache load error:',key,e);_cache[key]=[];}
+  _cache._loading[key]=false;
+  return _cache[key];
+}
+
+// Invalidar caché cuando se guarda algo nuevo
+function _cacheInvalidar(...keys){
+  keys.forEach(k=>{_cache[k]=null;});
+}
+
+// Helpers para acceder al caché
+const _getVentas=()=>_cacheLoad('ventas',()=>query(collection(db,'ventas'),orderBy('fecha','desc')));
+const _getCompras=()=>_cacheLoad('compras',()=>query(collection(db,'compras'),orderBy('fecha','desc')));
+const _getCobros=()=>_cacheLoad('cobros',()=>query(collection(db,'cobros'),orderBy('fecha','desc')));
+const _getTandas=()=>_cacheLoad('tandas',()=>query(collection(db,'tandas_cocina'),orderBy('fecha','desc')));
+const _getEntradas=()=>_cacheLoad('entradas',()=>query(collection(db,'entradas_fabrica'),orderBy('fecha','desc')));
+const _getSalidas=()=>_cacheLoad('salidas',()=>query(collection(db,'salidas_fabrica'),orderBy('fecha','desc')));
+const _getInsumos=()=>_cacheLoad('insumos',()=>collection(db,'insumos'));
+const _getPagosProv=()=>_cacheLoad('pagos_proveedores',()=>collection(db,'pagos_proveedores'));
+const _getLiquidaciones=()=>_cacheLoad('liquidaciones',()=>collection(db,'liquidaciones_maquila'));
+const _getRetiros=()=>_cacheLoad('retiros',()=>collection(db,'retiros_maquila'));
+const _getComprasNuez=()=>_cacheLoad('compras_nuez',()=>collection(db,'compras_nuez'));
 
 // ── FRACCIONADOS CONFIG ──────────────────────────────────────────────────────
 // Definición de todos los SKUs fraccionados
@@ -6774,6 +6826,7 @@ window.guardarVenta=async function(){
       _registrarCobroAutomatico(clienteNombre, fecha, total, formaPago, nroRemito);
     }
 
+    _cacheInvalidar('ventas','salidas','tandas','insumos');
     showAlert(`✅ Venta registrada — ${nroRemito}`);
 
     // Limpiar
@@ -6941,7 +6994,9 @@ window.cargarVentas=async function(){
   const clienteF=document.getElementById('f-vent-cliente')?.value||'';
   const productoF=document.getElementById('f-vent-producto')?.value||'';
   const fechaF=document.getElementById('f-vent-fecha')?.value||'';
-  const snap=await getDocs(query(collection(db,'ventas'),orderBy('fecha','desc')));
+  await _getVentas(); // precargar
+  const _ventasArr=_cache.ventas||[];
+  const snap={forEach:cb=>_ventasArr.forEach(d=>cb({id:d.id,data:()=>d}))};
   // Poblar selector de productos
   const selProd=document.getElementById('f-vent-producto');
   if(selProd){
@@ -7099,8 +7154,8 @@ async function cargarCobroKPIs(){
   const el=document.getElementById('cobros-kpis');
   if(!el) return;
   const [snapC, snapV]=await Promise.all([
-    getDocsFromServer(collection(db,'cobros')),
-    getDocsFromServer(collection(db,'ventas'))
+    getDocs(collection(db,'cobros')),
+    getDocs(collection(db,'ventas'))
   ]);
   const mes=today().slice(0,7);
   let cobradoMes=0, totalVentas=0, totalCobrado=0, totalNC=0;
@@ -7269,7 +7324,9 @@ window.cargarListaCobros=async function(){
   const clienteF=document.getElementById('f-cob-cliente')?.value||'';
   const mesF=document.getElementById('f-cob-mes')?.value||'';
   const tipoF=document.getElementById('f-cob-tipo')?.value||'';
-  const snap=await getDocsFromServer(query(collection(db,'cobros'),orderBy('fecha','desc')));
+  await _getCobros();
+  const _cobrosArr=(_cache.cobros||[]).sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||''));
+  const snap={forEach:cb=>_cobrosArr.forEach(d=>cb({id:d.id,data:()=>d}))};
   const tipoLabel={cobro:'Cobro',cobro_automatico:'Cobro automático',nota_credito:'Nota de crédito',nota_debito:'Nota de débito'};
   const motivoLabel={devolucion:'Devolución',descuento:'Descuento',correccion:'Corrección',ajuste:'Ajuste',otro:'Otro'};
   let rows='', total=0, cnt=0;
@@ -7416,9 +7473,9 @@ window.imprimirComprobante=function(){
 // ---- CUENTA CORRIENTE ----
 async function calcSaldoCliente(cliente){
   const [snapV,snapL,snapC]=await Promise.all([
-    getDocsFromServer(query(collection(db,'ventas'))),
-    getDocsFromServer(query(collection(db,'liquidaciones_maquila'),where('cliente','==',cliente))),
-    getDocsFromServer(query(collection(db,'cobros')))
+    getDocs(query(collection(db,'ventas'))),
+    getDocs(query(collection(db,'liquidaciones_maquila'),where('cliente','==',cliente))),
+    getDocs(query(collection(db,'cobros')))
   ]);
   let debe=0, haber=0;
   snapV.forEach(d=>{const v=d.data();if(v.cliente===cliente)debe+=v.monto_total||0;});
@@ -7454,9 +7511,9 @@ window.cargarCtaCte=async function(){
   const tipoF=document.getElementById('f-cta-tipo')?.value||'';
 
   const [snapV,snapL,snapC]=await Promise.all([
-    getDocsFromServer(query(collection(db,'ventas'),orderBy('fecha','asc'))),
-    getDocsFromServer(query(collection(db,'liquidaciones_maquila'),where('cliente','==',cliente))),
-    getDocsFromServer(query(collection(db,'cobros'),orderBy('fecha','asc')))
+    getDocs(query(collection(db,'ventas'),orderBy('fecha','asc'))),
+    getDocs(query(collection(db,'liquidaciones_maquila'),where('cliente','==',cliente))),
+    getDocs(query(collection(db,'cobros'),orderBy('fecha','asc')))
   ]);
 
   // Construir movimientos completos (sin filtro tipo/fecha para calcular saldo correcto)
@@ -7630,9 +7687,9 @@ window.imprimirCtaCte=async function(){
   if(!fmt) return;
 
   const [snapV,snapC,snapLiq]=await Promise.all([
-    getDocsFromServer(query(collection(db,'ventas'),orderBy('fecha','asc'))),
-    getDocsFromServer(query(collection(db,'cobros'),orderBy('fecha','asc'))),
-    getDocsFromServer(query(collection(db,'liquidaciones_maquila'),orderBy('fecha','asc')))
+    getDocs(query(collection(db,'ventas'),orderBy('fecha','asc'))),
+    getDocs(query(collection(db,'cobros'),orderBy('fecha','asc'))),
+    getDocs(query(collection(db,'liquidaciones_maquila'),orderBy('fecha','asc')))
   ]);
   let movs=[];
   // Ventas de nueces
@@ -7890,18 +7947,17 @@ window.initResumen=async function initResumen(){
   };
 
   // Cargar todo en paralelo
-  const [snapEnt,snapSal,snapVent,snapCob,snapComp,snapInsumos,snapTandas,snapComprasNuez,snapLiqsMaq,snapPagosProvRes]=await Promise.all([
-    getDocsFromServer(collection(db,'entradas_fabrica')),
-    getDocsFromServer(collection(db,'salidas_fabrica')),
-    getDocsFromServer(collection(db,'ventas')),
-    getDocsFromServer(collection(db,'cobros')),
-    getDocsFromServer(collection(db,'compras')),
-    getDocsFromServer(collection(db,'insumos')),
-    getDocsFromServer(collection(db,'tandas_cocina')),
-    getDocsFromServer(collection(db,'compras_nuez')),
-    getDocsFromServer(collection(db,'liquidaciones_maquila')),
-    getDocsFromServer(collection(db,'pagos_proveedores')),
+  const [_ent,_sal,_vent,_cob,_comp,_ins,_tan,_cn,_liq,_pp]=await Promise.all([
+    _getEntradas(),_getSalidas(),_getVentas(),_getCobros(),
+    _getCompras(),_getInsumos(),_getTandas(),_getComprasNuez(),
+    _getLiquidaciones(),_getPagosProv()
   ]);
+  // Convertir a formato snap-like para compatibilidad
+  const toSnap=arr=>({forEach:cb=>arr.forEach(d=>cb({id:d.id,data:()=>d}))});
+  const snapEnt=toSnap(_ent),snapSal=toSnap(_sal),snapVent=toSnap(_vent);
+  const snapCob=toSnap(_cob),snapComp=toSnap(_comp),snapInsumos=toSnap(_ins);
+  const snapTandas=toSnap(_tan),snapComprasNuez=toSnap(_cn);
+  const snapLiqsMaq=toSnap(_liq),snapPagosProvRes=toSnap(_pp);
 
   // ── FÁBRICA — todo lo procesado (propio + maquila) ─────────────────────
   let kgEnt=0, kgSal=0, kernelSum=0, kernelCnt=0;
@@ -8459,7 +8515,7 @@ window.initResumen=async function initResumen(){
   const ventasPorCliente={}; // para calcular fecha primer debe real después
 
   // Sumar DEBE: ventas en cta cte
-  const snapVentAll=await getDocsFromServer(collection(db,'ventas'));
+  const snapVentAll=await getDocs(collection(db,'ventas'));
   snapVentAll.forEach(d=>{
     const v=d.data();
     if(v.estado==='cuenta_corriente'){
@@ -8473,7 +8529,7 @@ window.initResumen=async function initResumen(){
   // Sumar DEBE: liquidaciones en cta cte
   // estado_cobro='cuenta_corriente' es el campo correcto (nuevas liquidaciones)
   // forma_pago='Pendiente' era el campo viejo — migramos automáticamente
-  const snapLiqAll=await getDocsFromServer(collection(db,'liquidaciones_maquila'));
+  const snapLiqAll=await getDocs(collection(db,'liquidaciones_maquila'));
   const migBatch=writeBatch(db);
   let migCount=0;
   snapLiqAll.forEach(d=>{
@@ -8499,7 +8555,7 @@ window.initResumen=async function initResumen(){
   }
 
   // Restar HABER: cobros, notas de crédito, débito
-  const snapCobAll=await getDocsFromServer(collection(db,'cobros'));
+  const snapCobAll=await getDocs(collection(db,'cobros'));
   snapCobAll.forEach(d=>{
     const c=d.data();
     const cli=c.cliente||'Sin nombre';
@@ -8931,7 +8987,7 @@ window.cargarCotizaciones=async function(){
   const estadoF=document.getElementById('f-cot-estado').value;
   const hoy=today();
   try{
-    const snap=await getDocsFromServer(query(collection(db,'cotizaciones'),orderBy('fecha','desc')));
+    const snap=await getDocs(query(collection(db,'cotizaciones'),orderBy('fecha','desc')));
     const rows=[];
     snap.forEach(d=>rows.push({id:d.id,...d.data()}));
     const filtradas=rows.filter(c=>{
@@ -9105,7 +9161,7 @@ async function cargarEstadoDB(){
   const resultados = await Promise.all(
     COLECCIONES_BACKUP.map(async col=>{
       try{
-        const snap=await getDocsFromServer(collection(db,col));
+        const snap=await getDocs(collection(db,col));
         return {col, count: snap.size};
       }catch(e){
         return {col, count: 0};
@@ -9171,7 +9227,7 @@ window.exportarBackup=async function(){
     for(const col of COLECCIONES_BACKUP){
       addLog(`  📂 Exportando ${col}...`);
       try{
-        const snap=await getDocsFromServer(collection(db,col));
+        const snap=await getDocs(collection(db,col));
         backup.colecciones[col]=[];
         snap.forEach(d=>{
           const data=d.data();
@@ -9304,8 +9360,8 @@ window.filtrarProveedoresCta=async function(){
 
   // Cargar todas las compras para saber quién tiene saldo
   const [snapComp, snapPagos]=await Promise.all([
-    getDocsFromServer(collection(db,'compras')),
-    getDocsFromServer(collection(db,'pagos_proveedores'))
+    getDocs(collection(db,'compras')),
+    getDocs(collection(db,'pagos_proveedores'))
   ]);
 
   // Calcular saldo por proveedor
@@ -9408,7 +9464,7 @@ window.cargarCtaCteProveedor=async function(){
 
   const [snapComp, snapPagos]=await Promise.all([
     getDocsFromServer(query(collection(db,'compras'),orderBy('fecha','asc'))),
-    getDocsFromServer(query(collection(db,'pagos_proveedores'),orderBy('fecha','asc')))
+    getDocs(query(collection(db,'pagos_proveedores'),orderBy('fecha','asc')))
   ]);
 
   const movs=[];
@@ -9690,7 +9746,7 @@ window.cargarRegistroPagos=async function(){
   const mesF=document.getElementById('f-pagprov-mes')?.value||'';
   const anioF=document.getElementById('f-pagprov-anio')?.value||'';
 
-  const snap=await getDocsFromServer(query(collection(db,'pagos_proveedores'),orderBy('fecha','desc')));
+  const snap=await getDocs(query(collection(db,'pagos_proveedores'),orderBy('fecha','desc')));
 
   // Poblar filtros
   const provs=new Set(),anios=new Set();
