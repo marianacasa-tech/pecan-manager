@@ -3059,6 +3059,7 @@ window.cargarSalidas=async function(){
   tbody.innerHTML='';let count=0;
   snap.forEach(d=>{
     const s=d.data();
+    if(s.tipo==='fraccionado') return; // salidas internas por fraccionados — no mostrar
     if(prop&&s.propietario!==prop)return;
     if(varF&&s.variedad!==varF)return;
     if(mesF&&(s.fecha||'').slice(5,7)!==mesF)return;
@@ -7970,6 +7971,7 @@ window.initResumen=async function initResumen(){
   });
   snapSal.forEach(d=>{
     const s=d.data();
+    if(s.tipo==='fraccionado') return; // excluir salidas internas de fraccionados
     totSalAll+=s.kg_cascara||0;
     if(s.fecha>=desdeStr&&s.fecha<=hastaStr){
       kgSal+=s.kg_cascara||0;
