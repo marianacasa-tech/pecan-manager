@@ -7159,7 +7159,7 @@ async function cargarCobroKPIs(){
     getDocs(collection(db,'ventas'))
   ]);
   const mes=today().slice(0,7);
-  let cobradoMes=0, totalVentas=0, totalCobrado=0, totalNC=0;
+  let cobradoMes=0, totalVentas=0, totalCobrado=0, totalNC=0, totalND=0;
   snapC.forEach(d=>{
     const c=d.data();
     if(c.tipo==='cobro'||c.tipo==='cobro_automatico'){
@@ -7532,7 +7532,20 @@ window.cargarCtaCte=async function(){
     const c=d.data();
     if(c.cliente!==cliente||c.tipo==='liquidacion_maquila') return;
     const esNC=c.tipo==='nota_credito';
-    allMovs.push({fecha:c.fecha,tipo:esNC?'nota_credito':'cobro',concepto:esNC?`Nota de crédito${c.motivo?' — '+c.motivo:''}`:`Cobro${c.medio?' — '+c.medio:''}`,ref:c.nro_cobro||'',debe:0,haber:c.importe||0,obs:c.obs||'',id:d.id});
+    const esND=c.tipo==='nota_debito';
+    const esCobroAuto=c.tipo==='cobro_automatico';
+    // NC → HABER (reduce deuda), ND → DEBE (suma deuda), cobro → HABER
+    allMovs.push({
+      fecha:c.fecha,
+      tipo:esNC?'nota_credito':esND?'nota_debito':esCobroAuto?'cobro_automatico':'cobro',
+      concepto:esNC?`Nota de crédito${c.motivo?' — '+c.motivo:''}`:
+                esND?`Nota de débito${c.obs?' — '+c.obs:''}`:
+                `Cobro${c.medio?' — '+c.medio:''}${esCobroAuto?' — Cobro automático por venta cobrada en el momento':''}`,
+      ref:c.nro_cobro||'',
+      debe:esND?c.importe||0:0,
+      haber:esND?0:c.importe||0,
+      obs:c.obs||'',id:d.id
+    });
   });
   allMovs.sort((a,b)=>a.fecha.localeCompare(b.fecha));
 
