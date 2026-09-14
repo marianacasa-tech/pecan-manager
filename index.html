@@ -7160,6 +7160,10 @@ async function cargarCobroKPIs(){
   ]);
   const mes=today().slice(0,7);
   let cobradoMes=0, totalVentas=0, totalCobrado=0, totalNC=0, totalND=0;
+  snapV.forEach(d=>{
+    const v=d.data();
+    totalVentas+=v.monto_total||0;
+  });
   snapC.forEach(d=>{
     const c=d.data();
     if(c.tipo==='cobro'||c.tipo==='cobro_automatico'){
@@ -7167,14 +7171,13 @@ async function cargarCobroKPIs(){
       if((c.fecha||'').slice(0,7)===mes) cobradoMes+=c.importe||0;
     }
     if(c.tipo==='nota_credito') totalNC+=c.importe||0;
-    if(c.tipo==='nota_debito'){totalVentas+=c.importe||0;totalND+=c.importe||0;} // ND suma al DEBE
+    if(c.tipo==='nota_debito') totalND+=c.importe||0;
   });
-  snapV.forEach(d=>{ totalVentas+=(d.data().monto_total||0); });
   const saldoGlobal=totalVentas-totalCobrado-totalNC;
   const fmt=v=>'$ '+parseFloat(v).toLocaleString('es-AR',{minimumFractionDigits:1});
   el.innerHTML=`
-    <div class="metric-card"><div class="val" style="color:var(--green);">${fmt(cobradoMes)}</div><div class="lbl">Cobrado este mes</div></div>
-    <div class="metric-card"><div class="val" style="color:${saldoGlobal>0?'var(--amber)':'var(--green)'};">${fmt(Math.abs(saldoGlobal))}</div><div class="lbl">${saldoGlobal>0?'Saldo pendiente total':'Saldo a favor clientes'}</div></div>
+    <div class="metric-card"><div class="val" style="color:var(--green);">${fmt(totalVentas)}</div><div class="lbl">Total ventas</div></div>
+    <div class="metric-card"><div class="val" style="color:var(--green);">${fmt(totalCobrado)}</div><div class="lbl">Total cobrado</div></div>
     <div class="metric-card"><div class="val" style="color:var(--text2);">${fmt(totalNC)}</div><div class="lbl">Notas de crédito emitidas</div></div>`;
 }
 
@@ -7479,12 +7482,24 @@ async function calcSaldoCliente(cliente){
     getDocs(query(collection(db,'cobros')))
   ]);
   let debe=0, haber=0;
-  snapV.forEach(d=>{const v=d.data();if(v.cliente===cliente)debe+=v.monto_total||0;});
-  snapL.forEach(d=>debe+=d.data().total_servicio||0);
+  // Solo ventas en cuenta corriente
+  snapV.forEach(d=>{
+    const v=d.data();
+    if(v.cliente!==cliente) return;
+    if(v.estado==='cuenta_corriente') debe+=v.monto_total||0;
+  });
+  // Liquidaciones maquila en cta cte
+  snapL.forEach(d=>{
+    const l=d.data();
+    if(l.estado==='cuenta_corriente') debe+=l.total_servicio||0;
+  });
+  // Solo cobros manuales (no automáticos) + NC resta + ND suma
   snapC.forEach(d=>{
     const c=d.data();
     if(c.cliente!==cliente||c.tipo==='liquidacion_maquila') return;
-    haber+=c.importe||0;
+    if(c.tipo==='cobro') haber+=c.importe||0;
+    if(c.tipo==='nota_credito') haber+=c.importe||0;
+    if(c.tipo==='nota_debito') debe+=c.importe||0;
   });
   return debe-haber;
 }
