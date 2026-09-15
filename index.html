@@ -1329,7 +1329,7 @@
           <select id="res-sel-anio" onchange="setResPeriodoMesAnio()" style="padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--card);font-size:.85rem;cursor:pointer;">
           </select>
         </div>
-        <button class="btn btn-secondary btn-sm" onclick="initResumen()" title="Actualizar">🔄</button>
+        <button class="btn btn-primary btn-sm" onclick="initResumen()" title="Cargar resumen" id="btn-cargar-resumen" style="display:flex;align-items:center;gap:6px;"><span>🔄</span> Actualizar</button>
       </div>
     </div>
 
@@ -1469,6 +1469,14 @@
       </div>
     </div>
 
+  </div>
+
+  <!-- Placeholder resumen -->
+  <div id="res-placeholder" style="display:none;text-align:center;padding:60px 20px;color:var(--text2);">
+    <div style="font-size:2.5rem;margin-bottom:16px;">📊</div>
+    <div style="font-size:1.1rem;font-weight:600;margin-bottom:8px;">Presioná <strong style="color:var(--brown);">Actualizar</strong> para cargar el resumen</div>
+    <div style="font-size:.85rem;">El resumen consume créditos de Firestore — cargalo cuando lo necesitás</div>
+    <button class="btn btn-primary" onclick="initResumen()" style="margin-top:20px;">🔄 Cargar resumen</button>
   </div>
 
   <!-- COTIZADOR -->
@@ -2363,7 +2371,11 @@ window.showSection=function(id,btn){
   if(id==='backup'){initBackup();}
   if(id==='usuarios'){cargarUsuarios();}
   if(id==='cotizador'){initCotizador();}
-  if(id==='resumen'){initResumen();}
+  if(id==='resumen'){
+    // No cargar automáticamente — esperar que el usuario presione Actualizar
+    const placeholder=document.getElementById('res-placeholder');
+    if(placeholder) placeholder.style.display='block';
+  }
   if(id==='cotizador'){calcCotizador();}
 }
 
@@ -7943,6 +7955,8 @@ window.irCtaCteCliente=function(cli){
 }
 
 window.initResumen=async function initResumen(){
+  const placeholder=document.getElementById('res-placeholder');
+  if(placeholder) placeholder.style.display='none';
   poblarAniosResumen();
   const hoy=new Date();
   const hoyStr=hoy.toISOString().split('T')[0];
