@@ -7154,15 +7154,18 @@ window.cobrosTab=function(tab){
 async function cargarCobroKPIs(){
   const el=document.getElementById('cobros-kpis');
   if(!el) return;
-  const [snapC, snapV]=await Promise.all([
+  const [snapC, snapV, snapLiq]=await Promise.all([
     getDocs(collection(db,'cobros')),
-    getDocs(collection(db,'ventas'))
+    getDocs(collection(db,'ventas')),
+    getDocs(collection(db,'liquidaciones_maquila'))
   ]);
   const mes=today().slice(0,7);
   let cobradoMes=0, totalVentas=0, totalCobrado=0, totalNC=0, totalND=0;
   snapV.forEach(d=>{
-    const v=d.data();
-    totalVentas+=v.monto_total||0;
+    totalVentas+=d.data().monto_total||0;
+  });
+  snapLiq.forEach(d=>{
+    totalVentas+=d.data().total_servicio||0;
   });
   snapC.forEach(d=>{
     const c=d.data();
@@ -7338,7 +7341,7 @@ window.cargarListaCobros=async function(){
     const c={id:d.id,...d.data()};
     if(clienteF&&c.cliente!==clienteF) return;
     if(mesF&&(c.fecha||'').slice(0,7)!==mesF) return;
-    if(tipoF==='cobro'&&(c.tipo==='nota_credito'||c.tipo==='nota_debito')) return;
+    if(tipoF==='cobro'&&c.tipo!=='cobro'&&c.tipo!=='cobro_automatico') return;
     if(tipoF==='nota_credito'&&c.tipo!=='nota_credito') return;
     if(tipoF==='nota_debito'&&c.tipo!=='nota_debito') return;
     cnt++; total+=c.importe||0;
