@@ -7497,22 +7497,21 @@ async function calcSaldoCliente(cliente){
     getDocs(query(collection(db,'cobros')))
   ]);
   let debe=0, haber=0;
-  // Solo ventas en cuenta corriente
+  // Todas las ventas del cliente al DEBE (igual que cargarCtaCte)
   snapV.forEach(d=>{
     const v=d.data();
     if(v.cliente!==cliente) return;
-    if(v.estado==='cuenta_corriente') debe+=v.monto_total||0;
+    debe+=v.monto_total||0;
   });
-  // Liquidaciones maquila en cta cte
+  // Liquidaciones maquila al DEBE
   snapL.forEach(d=>{
-    const l=d.data();
-    if(l.estado==='cuenta_corriente') debe+=l.total_servicio||0;
+    debe+=d.data().total_servicio||0;
   });
-  // Solo cobros manuales (no automáticos) + NC resta + ND suma
+  // Cobros al HABER (todos los tipos)
   snapC.forEach(d=>{
     const c=d.data();
     if(c.cliente!==cliente||c.tipo==='liquidacion_maquila') return;
-    if(c.tipo==='cobro') haber+=c.importe||0;
+    if(c.tipo==='cobro'||c.tipo==='cobro_automatico') haber+=c.importe||0;
     if(c.tipo==='nota_credito') haber+=c.importe||0;
     if(c.tipo==='nota_debito') debe+=c.importe||0;
   });
