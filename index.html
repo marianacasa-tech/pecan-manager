@@ -9272,26 +9272,36 @@ window.enviarMensajeIA=async function(){
     // Agregar al historial
     _iaMsgs.push({role:'user',content:texto});
 
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:1000,
-        system:`Sos el asistente de Pecan Manager, la app de gestión de Tecnocrop S.A., una empresa procesadora y comercializadora de nueces pecán en Tucumán, Argentina.
-Respondés preguntas sobre el negocio usando los datos actuales que se te proveen como contexto.
-Usás español rioplatense, sos conciso y directo. Formateás números con separadores argentinos.
-Cuando mostrás montos usás el signo $ y miles con puntos (ej: $1.234.567).
-Cuando no sabés algo o el dato no está en el contexto, lo decís claramente.
+    const GEMINI_KEY='AQ.Ab8RN6JpJadnUxIi1H-5K-6goAEkSotC3o53dgJdSVdydsovzw';
+    const sysLines=[
+      'Sos el asistente de Pecan Manager de Tecnocrop S.A., empresa procesadora de nueces pecan en Tucuman, Argentina.',
+      'Respondas preguntas usando los datos actuales del negocio que te paso como contexto.',
+      'Usas espanol rioplatense, sos conciso y directo.',
+      'Los montos los mostras con $ y separador de miles con punto (ej: $1.234.567).',
+      'Si no sabes algo o el dato no esta en el contexto, lo decis claramente.',
+      'DATOS ACTUALES DEL NEGOCIO:',ctxStr
+    ];
+    const systemPrompt=sysLines.join('\n');
+    const geminiContents=[];
+    geminiContents.push({role:'user',parts:[{text:systemPrompt+'\n\nEntendido?'}]});
+    geminiContents.push({role:'model',parts:[{text:'Entendido, tengo el contexto. En que te ayudo?'}]});
+    _iaMsgs.slice(-10).forEach(m=>{
+      geminiContents.push({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]});
+    });
+    // Agregar historial de conversación
+    _iaMsgs.slice(-10).forEach(m=>{
+      geminiContents.push({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]});
+    });
 
-DATOS ACTUALES DEL NEGOCIO (${new Date().toLocaleDateString('es-AR')}):
-${ctxStr}`,
-        messages:_iaMsgs.slice(-10) // últimos 10 mensajes para contexto
-      })
+    // Intentar con la nueva Interactions API de Gemini (junio 2026)
+    const resp=await fetch(`https://generativelanguage.googleapis.com/v1beta2/models/gemini-2.0-flash-lite:generateContent`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-goog-api-key':GEMINI_KEY},
+      body:JSON.stringify({contents:geminiContents,generationConfig:{maxOutputTokens:1000,temperature:0.7}})
     });
 
     const data=await resp.json();
-    const respTexto=data.content?.[0]?.text||'No pude obtener una respuesta.';
+    const respTexto=data.candidates?.[0]?.content?.parts?.[0]?.text||'No pude obtener una respuesta.';
 
     // Agregar respuesta al historial
     _iaMsgs.push({role:'assistant',content:respTexto});
